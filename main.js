@@ -2,4 +2,5 @@ alert('hi');
 
 alert('bye');
 
-var leet = 'sabrina';
+let x = 10;
+console.log(x);
