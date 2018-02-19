@@ -1,1 +1,3 @@
-alert('hi');
+alert('bye');
+
+console.log('hello world');
