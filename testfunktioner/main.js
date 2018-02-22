@@ -41,6 +41,10 @@ function queryApi(){
       let currency = event.priceRanges[0].currency;
       let onsale = 'nej';
       let city = event._embedded.venues[0].city.name;
+
+      let coordinates = event._embedded.venues[0].location;
+      let latitude = coordinates.latitude;
+      let longitude = coordinates.longitude;
       if(event.dates.status.code == 'onsale'){
         onsale = 'ja';
       }
@@ -50,6 +54,7 @@ function queryApi(){
       console.log(`Datum: ${event.dates.start.localDate}`);
       console.log(`Tillgängliga biljetter finns? ${onsale}`);
       console.log(`Stad: ${city}`)
+      console.log(`Koordinater\nLatitude: ${latitude}\nLongitude: ${longitude}`);
     }
   });
 
