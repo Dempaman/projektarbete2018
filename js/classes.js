@@ -29,7 +29,7 @@ class MeetupClass {
   }
 
   push(){
-    this.key = db.ref('meetups/').push(this).key;
+    return db.ref('meetups/').push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
   }
 
   removeSelf(){
@@ -42,14 +42,6 @@ class MeetupClass {
 
 }
 
-
-let meetup = new MeetupClass(1, 'Öl för fan', 'Mölndalsvägen 81', '58.124123', '11.12949123', '2018' ,'19:00', '5', [11,65], 'Detta är ett jävligt gött meetup', 'John Svensson (id222222)', 'hej', 'hej');
-
-meetup.push();
-
-console.log(meetup.key);
-
-meetup.save();
 
 // db.ref('chatter/'+id).on('child_added', function(snapshot){
 //
