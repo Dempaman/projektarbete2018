@@ -3,13 +3,20 @@
   <head>
   	<meta charset="utf-8" name="viewport" content="Width=device-width, initial-scale=1.0">
     <title>Api-Tester: MeWent</title>
-
   	<link href="https://fonts.googleapis.com/css?family=Oswald|Montserrat" rel="stylesheet">
 
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
   	<link rel="stylesheet" type="text/css" href="main.css">
   	<script src="main.js"></script>
+
+    <style>
+     #map {
+      height: 400px;
+      width: 100%;
+     }
+     </style>
+
   </head>
   <body>
     <h1> Api-Tester </h1>
@@ -18,6 +25,39 @@
     <div id="content">
 
     </div>
+
+    <div id="map"></div>
+    <script>
+
+          var map;
+          var infowindow;
+
+          function initMap() {
+            var pyrmont = {lat: 58.867, lng: 15.195};
+
+            map = new google.maps.Map(document.getElementById('map'), {
+              center: pyrmont,
+              zoom: 7
+            });
+          }
+
+          function createMarker(lat, lng) {
+            var marker = new google.maps.Marker({
+              map: map,
+              position: {lat: lat, lng: lng}
+            });
+
+            google.maps.event.addListener(marker, 'click', function() {
+              infowindow.setContent('hi');
+              infowindow.open(map, this);
+            });
+          }
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR0Q48zo-fhU5VaVeL0QGFdt7ZNLLB5lE&libraries=places&callback=initMap">
+    </script>
+
   </body>
 
 </html>
