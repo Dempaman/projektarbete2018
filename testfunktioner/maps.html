@@ -104,6 +104,8 @@
           }
           marker.setPosition(place.geometry.location);
           marker.setVisible(true);
+          console.log(place.geometry.location.lat());
+          console.log(place.geometry.location.lng());
 
           var address = '';
           if (place.address_components) {
@@ -114,10 +116,7 @@
             ].join(' ');
           }
 
-          infowindowContent.children['place-icon'].src = place.icon;
-          infowindowContent.children['place-name'].textContent = place.name;
-          infowindowContent.children['place-address'].textContent = address;
-          infowindow.open(map, marker);
+
         });
       }
     </script>
