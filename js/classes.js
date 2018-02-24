@@ -6,19 +6,19 @@ var config = {
     storageBucket: "projekt-2018-mewent.appspot.com",
     messagingSenderId: "42705428709"
   };
+
   firebase.initializeApp(config);
 
   const db = firebase.database();
 
 class MeetupClass {
 
-  constructor(eventid, name, address, latitude, longitude, date, time, spots, ageInterval, information, creator, members, admins){
+  constructor(eventid, name, address, latitude, longitude, time, spots, ageInterval, information, creator, members, admins){
     this.eventID = eventid;
     this.name = name;
     this.address = address;
     this.latitude = latitude;
     this.longitude = longitude;
-    this.date = date;
     this.time = time;
     this.spots = spots;
     this.ageInterval = ageInterval;
@@ -29,7 +29,7 @@ class MeetupClass {
   }
 
   push(){
-    return db.ref('meetups/').push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
+    return db.ref('meetups/' + this.eventID).push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
   }
 
   removeSelf(){

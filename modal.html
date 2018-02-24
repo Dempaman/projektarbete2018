@@ -3,14 +3,23 @@
 <html lang="en">
   <head>
   	<meta charset="utf-8" name="viewport" content="Width=device-width, initial-scale=1.0">
-  	<title>Leetup</title>
+  	<title>MeWent</title>
+
+    <!-- Fonts & Icons -->
   	<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto" rel="stylesheet">
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+
+    <!-- Stylesheets -->
   	<link rel="stylesheet" type="text/css" href="css/meetupModal.css">
-  	<!-- <script src="js/classes.js"></script> -->
     <link rel="stylesheet" href="slider/css/rSlider.min.css">
+
+    <!-- FireBase -->
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+
+    <!-- JavaScript -->
+  	<script src="js/classes.js"></script>
     <script src="slider/js/rSlider.min.js"></script>
     <script src="js/meetupModal.js"></script>
   </head>
@@ -31,6 +40,9 @@
             <input type="text" id="ageSlider" class="slider"/>
           </div>
 
+          <!-- Debug -->
+          <span id="map" lat="59" lng="12"></span>
+
           <div id="ageIntervalDisplayer"> <!-- Printar ut vilka år slidern står på med JavaScript -->
           </div>
 
@@ -41,7 +53,7 @@
             <textarea placeholder="Skriv lite information om ditt meetup här!"></textarea>
           </div>
 
-          <button> Skapa Meetup</button>
+          <button id="createMeetupButton"> Skapa Meetup</button>
 
         </div>
       </div>

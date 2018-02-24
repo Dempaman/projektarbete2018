@@ -22,7 +22,7 @@ window.onload = function(){
         let valueArray = getValues(values);
         let val1 = valueArray[0], val2 = valueArray[1];
 
-        displayDiv.innerHTML = `<div>${val1} år</div><div>${val2} år</div>`
+        displayDiv.innerHTML = `<div val1="${val1}" val2="${val2}">${val1} år</div><div>${val2} år</div>`
 
         displayDiv.children[0].addEventListener('click', function(event){
           makeInput(event.target, values, val1, 'start');
@@ -61,7 +61,53 @@ window.onload = function(){
           displayAgeInterval(val1 + ',' + val2);
         });
       }
+
+      // EventListener för att lägga till ett meetup
+      initCreateMeetupListeners(ageSlider);
+
   //end of callback
+}
+
+function initCreateMeetupListeners(ageSlider){
+  let createBtn = document.getElementById('createMeetupButton');
+
+  // Vad gör vi när man trycker på skapa meetup. (eventid, name, address, latitude, longitude, time, spots, ageInterval, information, creator, members, admins)
+  createBtn.addEventListener('click', function(){
+
+    /* Börja med att hämta alla variabler */
+    let eventid = 'eventID';
+    let name = document.getElementById('nameInput').value;
+    let address = document.getElementById('addressInput').value;
+    let time = document.getElementById('timeInput').value;
+
+    // Koordinater
+    let latitude = document.getElementById('map').getAttribute('lat');
+    let longitude = document.getElementById('map').getAttribute('lng');
+
+    // ageInterval
+    let ageInterval = ageSlider.getValue().split(',');
+
+    // Antal platser
+    let spots = document.getElementById('spotsInput').value;
+
+    // Information
+    let information = document.getElementsByTagName('textarea')[0].value;
+
+    // Skaparens användarID som vi får genom autentiseringen!
+    let creator = 'unikt användarID här';
+
+    // Medlemmar - Lägger skaparen av meetupet som medlem direkt i en LISTA.
+    let members = [creator];
+
+    // Admins - Lägger skaparen av meetupet som admin direkt i en LISTA.
+    let admins = [creator];
+
+    // Skapa meetupet.
+    let meetup = new MeetupClass(eventid, name, address, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
+    meetup.push();
+    console.log('Meetup: ',meetup);
+  });
+
 }
 
 
