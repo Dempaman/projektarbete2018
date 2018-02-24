@@ -42,7 +42,7 @@ function displayEventInfo(event){
   // <div id="eventInfoText">
   //   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum iaculis vehicula. Praesent venenatis sem vulputate neque dictum, vel gravida magna rutrum. Aenean faucibus gravida ligula et vestibulum. Phasellus blandit finibus odio at pellentesque. Nam blandit viverra libero, nec fringilla nibh luctus a. Integer nisl leo, auctor quis interdum ut, interdum vel sapien. Sed et erat a purus pharetra ultrices non ut nisi. Pellentesque mi odio, dapibus sit amet aliquam ut, congue a urna. Nam eu risus vitae purus malesuada aliquam non ac sem. Etiam semper tortor et mi ullamcorper molestie in nec mauris. Nullam in orci neque. Sed vestibulum, lorem at vestibulum maximus, eros enim mollis eros, ut consectetur tellus ex pulvinar turpis. Quisque ornare metus id enim mattis porttitor. Donec ultrices nisl a nibh volutpat pretium. </p>
   // </div>
-  
+
   document.getElementById('eventDate').innerText = event.date;
   document.getElementById('eventTitle').innerText = event.name;
 
@@ -61,76 +61,81 @@ function retrieveEventInfo(){
 
   let eventid = getLocationInfo()[0];
 
-  fetch(`https://app.ticketmaster.com/discovery/v2/events/${eventid}?apikey=${ticketMasterApiKey}`)
-  .then(function(response){
+  if(eventid != undefined){
+    fetch(`https://app.ticketmaster.com/discovery/v2/events/${eventid}?apikey=${ticketMasterApiKey}`)
+    .then(function(response){
 
-    console.log(response);
-    return response.json();
-  })
-  .then(function(json){
-    let latitude = 58, longitude = 15;
-    let event = json;
-      console.log(json);
-      let currency = event.priceRanges[0].currency;
-      let onsale = false;
-      let venue = event._embedded.venues[0];
-      let city = venue.city.name;
+      console.log(response);
+      return response.json();
+    })
+    .then(function(json){
+        let latitude = 58, longitude = 15;
+        let event = json;
+        let venue = event._embedded.venues[0];
+        let onsale = false;
+        let coordinates = event._embedded.venues[0].location;
+        latitude = Number.parseFloat(coordinates.latitude);
+        longitude = Number.parseFloat(coordinates.longitude);
 
-      let coordinates = event._embedded.venues[0].location;
-      latitude = Number.parseFloat(coordinates.latitude);
-      longitude = Number.parseFloat(coordinates.longitude);
-      if(event.dates.status.code == 'onsale'){
-        onsale = true;
-      }
+        if(event.dates.status.code == 'onsale'){
+          onsale = true;
+        }
+        // createMarker(latitude, longitude);
 
-      console.log(`Eventnamn: ${event.name}`);
-      console.log(`Prisintervall: ${event.priceRanges[0].min + currency} - ${event.priceRanges[0].max + currency}`)
-      console.log(`Datum: ${event.dates.start.localDate}`);
-      console.log(`Tillgängliga biljetter finns? ${onsale}`);
-      console.log(`Stad: ${city}`)
-      console.log(`Koordinater\nLatitude: ${latitude}\nLongitude: ${longitude}`);
-      // createMarker(latitude, longitude);
+        let eventObject = new EventClass(eventid, event.name, event.dates.start.localDate, event.dates.start.localTime, venue.name, venue.city.name, latitude, longitude, onsale, [event.priceRanges[0].min, event.priceRanges[0].max], event.priceRanges[0].currency);
 
-      let eventObject = new EventClass(eventid, event.name, event.dates.start.localDate, event.dates.start.localTime, venue.name, city, latitude, longitude, onsale, [event.priceRanges[0].min, event.priceRanges[0].max], currency);
+        console.log('EVENTOBJECT: ',eventObject);
 
-      console.log('EVENTOBJECT: ',eventObject);
+        displayEventInfo(eventObject);
 
-      displayEventInfo(eventObject);
-
-  })
-  .catch(function(error){
-    console.log('Eventet hittades inte! Här är en sökruta du kan använda för att söka efter ett event :)');
-    console.log('Felmeddelande:',error);
-  })
-
+    })
+    .catch(function(error){
+      console.log('Eventet hittades inte! Här är en sökruta du kan använda för att söka efter ett event :)');
+      console.log('Felmeddelande:',error);
+    })
+  }
 }
 
 function getLocationInfo(){
-  let href = window.location.href;
-  href = href.split('?')[1];
+  let href = window.location.href, stopcode = false;
 
-  href = href.split('&');
+    if(href.includes('?event')){
+      href = href.split('?')[1];
+
+      href = href.split('&');
+
+    } else {
+      console.warn('This page should only be reached with a event specified in the address field.');
+      console.log('Om man ändå hamnar här kan vi redirecta till alla event / lägga en sökruta här');
+      //window.location.href = 'events.html';
+      stopcode = true;
+    }
+
+
   let eventID = 0, meetupID = 0;
 
   // Innehåller platsen för många antal setters?
-  if(href.length > 2){
-    console.log('Invalid href!');
-  } else {
-      for(let loc of href){
+  if(!stopcode){
+    if(href.length > 2 || href.length <= 0){
+      console.warn('Invalid href!');
+    } else {
+        for(let loc of href){
 
-        // Loopa igenom adressen!
-        if(loc.includes('event')){
+          // Loopa igenom adressen!
+          if(loc.includes('event')){
 
-          // Om det är eventdelen av adressen ta fram eventID:et!
-          eventID = loc.split('=')[1];
-        } else {
-
-          // Annars tar vi fram meetupID:et!
-          meetupID = loc.split('=')[1];
+            // Om det är eventdelen av adressen ta fram eventID:et!
+            eventID = loc.split('=')[1];
+          } else {
+            // Annars tar vi fram meetupID:et!
+            meetupID = loc.split('=')[1];
+          }
         }
-      }
+    }
+    return [eventID, meetupID];
+  } else {
+    return false;
   }
-  return [eventID, meetupID];
 }
 
 function updateEventInfo(eventName, priceRange, currency, onsale){
