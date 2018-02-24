@@ -40,7 +40,7 @@ function queryApi(){
     let latitude = 58, longitude = 15;
     for(let event of json._embedded.events){
       console.log(event);
-      let currency = event.priceRanges[0].currency;
+      let currency = ' '+event.priceRanges[0].currency;
       let onsale = 'nej';
       let city = event._embedded.venues[0].city.name;
 
