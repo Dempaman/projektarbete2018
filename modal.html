@@ -22,6 +22,13 @@
   	<script src="js/classes.js"></script>
     <script src="slider/js/rSlider.min.js"></script>
     <script src="js/meetupModal.js"></script>
+
+    <!-- Google Map Api -->
+
+    <script src="js/googleMapApi.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo&libraries=places&callback=initMap"
+        async defer></script>
+
   </head>
   <body>
     <div id="modalWrapper">
@@ -40,10 +47,11 @@
             <input type="text" id="ageSlider" class="slider"/>
           </div>
 
-          <!-- Debug -->
-          <span id="map" lat="59" lng="12"></span>
-
           <div id="ageIntervalDisplayer"> <!-- Printar ut vilka år slidern står på med JavaScript -->
+          </div>
+
+          <div id=mapWrap>
+            <div id="map"></div>
           </div>
 
           <input id="spotsInput" placeholder="Antal platser" type="text"> <!-- Input för antal platser -->
