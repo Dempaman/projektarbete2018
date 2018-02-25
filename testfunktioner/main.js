@@ -27,8 +27,10 @@ window.onload = function(){
 
 
 function queryApi(){
+  let city = document.getElementById('stadInput').value;
+  let antal = Number.parseInt(document.getElementById('antalInput').value);
 
-  fetch(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=${ticketMasterApiKey}&size=5&countryCode=SE`)
+  fetch(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=${ticketMasterApiKey}&city=${city}&size=${antal}&countryCode=SE`)
   .then(function(response){
 
     console.log(response);
@@ -38,7 +40,7 @@ function queryApi(){
     let latitude = 58, longitude = 15;
     for(let event of json._embedded.events){
       console.log(event);
-      let currency = event.priceRanges[0].currency;
+      let currency = ' '+event.priceRanges[0].currency;
       let onsale = 'nej';
       let city = event._embedded.venues[0].city.name;
 

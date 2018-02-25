@@ -1,0 +1,130 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #222;
+  font-family: 'Roboto', sans-serif;
+}
+#modalWrapper {
+  width: 100%;
+  height: 100%;
+  background-color: #222;
+}
+#modalContent {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+
+#modalContent > .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  width: 100%;
+  height: 60px;
+  background-color: #222;
+  color: #fff;
+}
+
+#modalContent > .header h2 {
+  margin: 0;
+  padding: 13px 18px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.7em;
+  font-weight: 100;
+}
+#modalContent > .header i {
+  align-self: center;
+  padding: 15px;
+}
+#modalContent > .content {
+  position: relative;
+  width: 100%;
+}
+#modalContent input[type="text"]{
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #777;
+  padding: 20px 0px 20px 15px;
+  width: calc(100% - 15px);
+}
+
+#modalContent .sliderHolder {
+  width: 80%;
+  margin: 25px auto 0px;
+}
+
+/* Slider Styles */
+.sliderHolder .rs-container .rs-scale span ins{
+  display: none;
+}
+.sliderHolder .rs-container .rs-scale span::before {
+  background-color: inherit;
+}
+
+#ageIntervalDisplayer {
+  color: #666;
+  font-size: 0.9em;
+  display: flex;
+  width: 85%;
+  min-height: 50px;
+  margin: -15px auto 0;
+  justify-content: space-between;
+}
+#ageIntervalDisplayer > div {
+  padding: 7px;
+  z-index: 20;
+  cursor: pointer;
+  max-width: 23%;
+}
+#ageIntervalDisplayer > div > input[type="text"] {
+  border-bottom: none;
+  background: #ddd;
+  color: #222;
+  font-size: 1.4em;
+  border-radius: 5px;
+
+  padding: 5px 10px;
+}
+#textareaDiv {
+  width: 90%;
+  margin: 0px auto 50px auto;
+  height: 230px;
+}
+#textareaDiv > textarea {
+  resize: none;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  background-color: #efefef;
+  width: 100%;
+  height: 100%;
+  padding: 12px 15px;
+  box-sizing: border-box;
+}
+
+.content > button {
+  border: none;
+  margin: 0;
+  padding: 10px 25px;
+  cursor: pointer;
+  margin: 5px auto 0;
+  width: 100%;
+  height: 60px;
+  display: inline-block;
+  text-align: center;
+}
+.content > button:hover {
+  background-color: #ddd;
+}
+
+#map {
+  width: 300px;
+  height: 400px;
+  border-radius: 8px;
+}
+#mapWrap{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
