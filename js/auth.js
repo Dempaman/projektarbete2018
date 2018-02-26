@@ -1,29 +1,18 @@
 window.addEventListener('load', function(event){
 
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBISgoM6Nlg9SMg8mwki7SmYCj2wsrbMzY",
-    authDomain: "projekt-2018-mewent.firebaseapp.com",
-    databaseURL: "https://projekt-2018-mewent.firebaseio.com",
-    projectId: "projekt-2018-mewent",
-    storageBucket: "projekt-2018-mewent.appspot.com",
-    messagingSenderId: "42705428709"
-  };
-  firebase.initializeApp(config);
-
   //** FACEBOOK LOGIN SCRIPT **//
   var providerFB = new firebase.auth.FacebookAuthProvider();
 
   //** POPUP FACEBOOK LOGIN **//
-  let loginBtn = document.getElementsByClassName('loginBtn')[0];
-  loginBtn.addEventListener('click', function(event){
+  let loginFb = document.getElementsByClassName('loginBtn--facebook')[0];
+  loginFb.addEventListener('click', function(event){
 
   firebase.auth().signInWithPopup(providerFB).then(function(result) {
     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
     var token = result.credential.accessToken;
     // The signed-in user info.
     var user = result.user;
-    console.log('Popup result: logged in as ', user.displayName);
+
 
   }).catch(function(error) {
     // Handle Errors here.
@@ -37,8 +26,75 @@ window.addEventListener('load', function(event){
   });
   });
 
+  //*** GOOGLE SIGN IN SCRIPT***//
+  var providerGoogle = new firebase.auth.GoogleAuthProvider();
+
+  //** POPUP GOOGLE LOGIN**//
+  let popupButtonGoogle = document.getElementsByClassName('loginBtn--google')[0];
+  popupButtonGoogle.addEventListener('click', function(event){
+
+  firebase.auth().signInWithPopup(providerGoogle).then(function(result) {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    var token = result.credential.accessToken;
+    // The signed-in user info.
+    var user = result.user;
+    console.log('Popup result: logged in as ', result.user.uid);
+
+
+
+    db.ref("users/" + user.uid).once("value", function(snapshot){
+
+      let result = snapshot.val();
+
+      if(result){
+        // Print this if the user exists in the database.
+        console.log(result);
+
+        // Put the user information into the localStorage db
+        localStorage.setItem('loggedInUser', JSON.stringify(result));
+
+
+      } else {
+        console.log(user);
+        //(uniqueID, fullname, mail, verified, age, sex, avatarURL, admin, meetups, information)
+        let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
+        console.log('IS THIS SHIT UPDATED?!?!??!?! AGIN AGIN AIAIGNIAINGAINGNIAINGNIGINNIGANIAGNIGAIN');
+        console.log('No user here. Creating user in database.');
+
+        newUser.push();
+
+        localStorage.setItem('loggedInUser', JSON.stringify(newUser));
+
+      }
+
+    });
+
+
+    //** LOGGING OUT OTHERS IF ANY **//
+      firebase.auth().signOut().then(function(result) {
+        console.log('Signed out Github user success');
+      })
+      .catch(function(error) {
+        console.log('Signout failed');
+      });
+      firebase.auth().signOut().then(function() {
+        console.log("Facebook sign out was successful")
+      }).catch(function(error) {
+        // An error happened.
+      });
+
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
+    });
+
 
 
 })//window.load
-
-console.log('Popup result: logged in as ');
