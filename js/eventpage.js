@@ -103,10 +103,16 @@ function retrieveMeetupInfo(eventDate){
 
 
     // Åldersgräns
+    let ageDiv = document.createElement('div');
+    ageDiv.className = 'infoDiv';
+
     let ageIntervalLabel = document.createElement('p');
     ageIntervalLabel.innerText = 'Åldersgräns';
     let ageInterval = document.createElement('p');
     ageInterval.innerText = obj.ageInterval[0] + ' - ' + obj.ageInterval[1];
+
+    ageDiv.appendChild(ageIntervalLabel);
+    ageDiv.appendChild(ageInterval);
 
 
 
@@ -135,11 +141,10 @@ function retrieveMeetupInfo(eventDate){
     md.appendChild(meetupDivDate);
     md.appendChild(creatorDiv);
     md.appendChild(creatorMailDiv);
+    md.appendChild(ageDiv);
     md.appendChild(antalDiv);
     md.appendChild(adressLabel);
     md.appendChild(adress);
-    md.appendChild(ageIntervalLabel);
-    md.appendChild(ageInterval);
     md.appendChild(googleMap);
     md.appendChild(infoDiv);
 
