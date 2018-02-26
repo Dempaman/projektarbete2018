@@ -45,6 +45,11 @@
       }
       marker.setPosition(place.geometry.location);
       marker.setVisible(true);
+
+      // Sätt attributen på kartan.
+      document.getElementById('map').setAttribute('lat', place.geometry.location.lat());
+      document.getElementById('map').setAttribute('lng', place.geometry.location.lng());
+
       console.log(place.geometry.location.lat());
       console.log(place.geometry.location.lng());
 
