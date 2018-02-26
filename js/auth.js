@@ -37,7 +37,6 @@ window.addEventListener('load', function(event){
   });
   });
   
-  signoutButtonfb.addEventListener('click', function(event){
   firebase.auth().signOut().then(function() {
     let userInfoWrapperShow = document.getElementsByClassName('userInfoWrapperShow')[0]; //HIDES THE USER INFO
     userInfoWrapperShow.className = "userInfoWrapper";
