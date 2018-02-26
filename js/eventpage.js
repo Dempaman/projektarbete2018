@@ -1,10 +1,8 @@
 // Globala variabler
 const ticketMasterApiKey = '7elxdku9GGG5k8j0Xm8KWdANDgecHMV0';
 
+// Initalize the page based on window location.
 window.onload = function(){
-
-
-  // Initalize the page based on window location.
 
 
 
@@ -16,32 +14,98 @@ window.onload = function(){
   // end of callbacl
 }
 
-class EventClass {
-  constructor(eventid, eventName, date, time, place, city, latitude, longitude, onsale, priceRange, currency, eventInformation){
-    this.eventid = eventid;
-    this.name = eventName;
-    this.date = date;
-    this.time = time;
-    this.place = place;
-    this.city = city
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.onsale = onsale;
-    this.priceRange = priceRange;
-    this.currency = currency;
-    this.information = eventInformation;
-  }
+function retrieveMeetupInfo(eventDate){
+  console.log('hi');
+  db.ref('meetups/'+getLocationInfo()[0]).on('child_added', function(snapshot){
+
+    let obj = snapshot.val();
+    console.log(obj);
+
+    // Skapa funktion här som lägger till ett meetupkort!
+    let md = document.createElement('div');
+
+    let meetupDivTitle = document.createElement('h2');
+    meetupDivTitle.innerText = obj.name;
+
+    let meetupDivDate = document.createElement('p');
+    meetupDivDate.innerText = eventDate + ' - ' + obj.time;
+
+    // Skaparen
+    let creatorNameLabel = document.createElement('p');
+    creatorNameLabel.innerText = 'Skapare';
+    let creatorName = document.createElement('p');
+    creatorName.innerText = obj.creator.name;
+
+    // ProfilbildsURL
+    let creatorAvatarURL = document.createElement('img');
+    creatorAvatarURL.setAttribute('alt', obj.creator.name + '\'s avatar.');
+    creatorAvatarURL.setAttribute('src', obj.creator.avatarURL);
+
+    // Skapare
+    let creatorMailLabel = document.createElement('p');
+    creatorMailLabel.innerText = 'Skaparens email';
+    let creatorMail = document.createElement('p');
+    creatorMail.innerText = obj.creator.mail;
+
+    // Deltagare
+    let antalLabel = document.createElement('p');
+    antalLabel.innerText = 'Deltagare';
+    let antal = document.createElement('p');
+    antal.innerText = obj.members.length + '/' + obj.spots;
+
+    // Adress
+    let adressLabel = document.createElement('p');
+    adressLabel.innerText = 'Adress';
+    let adress = document.createElement('p');
+    adress.innerText = obj.address;
+
+
+    // Åldersgräns
+    let ageIntervalLabel = document.createElement('p');
+    ageIntervalLabel.innerText = 'Åldersgräns';
+    let ageInterval = document.createElement('p');
+    ageInterval.innerText = obj.ageInterval[0] + ' - ' + obj.ageInterval[1];
+
+
+
+    // Splice latitude and longitude
+    let latitude = obj.latitude.substring(0,9);
+    let longitude = obj.longitude.substring(0,9);
+    console.log('LATITUDE!!', latitude);
+    console.log('LONGITUDE!!', longitude);
+
+
+    let googleMap = document.createElement('img');
+    googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+
+    let infoDiv = document.createElement('p');
+    infoDiv.innerText = obj.info;
+
+
+    let meetupWrapper = document.getElementById('meetupWrapper');
+
+    md.appendChild(meetupDivTitle);
+    md.appendChild(meetupDivDate);
+    md.appendChild(creatorAvatarURL);
+    md.appendChild(creatorNameLabel);
+    md.appendChild(creatorName);
+    md.appendChild(creatorMailLabel);
+    md.appendChild(creatorMail);
+    md.appendChild(antalLabel);
+    md.appendChild(antal);
+    md.appendChild(adressLabel);
+    md.appendChild(adress);
+    md.appendChild(ageIntervalLabel);
+    md.appendChild(ageInterval);
+    md.appendChild(googleMap);
+    md.appendChild(infoDiv);
+
+    meetupWrapper.appendChild(md);
+
+  });
 }
 
 function displayEventInfo(event){
-
-  // <p id="eventDate">23/6 2018</p>
-  // <h2 id="eventTitle">Summerburst 2018</h2>
-  // <p id="eventPlace">Göteborg, Ullevi</p>
-  // <p>Information</p>
-  // <div id="eventInfoText">
-  //   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum iaculis vehicula. Praesent venenatis sem vulputate neque dictum, vel gravida magna rutrum. Aenean faucibus gravida ligula et vestibulum. Phasellus blandit finibus odio at pellentesque. Nam blandit viverra libero, nec fringilla nibh luctus a. Integer nisl leo, auctor quis interdum ut, interdum vel sapien. Sed et erat a purus pharetra ultrices non ut nisi. Pellentesque mi odio, dapibus sit amet aliquam ut, congue a urna. Nam eu risus vitae purus malesuada aliquam non ac sem. Etiam semper tortor et mi ullamcorper molestie in nec mauris. Nullam in orci neque. Sed vestibulum, lorem at vestibulum maximus, eros enim mollis eros, ut consectetur tellus ex pulvinar turpis. Quisque ornare metus id enim mattis porttitor. Donec ultrices nisl a nibh volutpat pretium. </p>
-  // </div>
 
   document.getElementById('eventDate').innerText = event.date;
   document.getElementById('eventTitle').innerText = event.name;
@@ -53,7 +117,7 @@ function displayEventInfo(event){
     document.getElementById('eventPlace').innerText = event.place;
   }
 
-
+  retrieveMeetupInfo(event.date);
   updateEventInfo(event.name, event.priceRange, event.currency, event.onsale);
 }
 
