@@ -2,7 +2,7 @@
 
 window.onload = function(){
   displayAgeInterval('0,100');
-
+  getLocationInfo();
   var ageSlider = new rSlider({
           target: '#ageSlider',
           values: {min: 0, max: 100},
@@ -14,10 +14,9 @@ window.onload = function(){
           onChange: displayAgeInterval
       });
 
+/* Functions that require the DOM to be laoded */
 
-      /* Functions that require the DOM to be laoded */
-
-      function displayAgeInterval(values){
+function displayAgeInterval(values){
         let displayDiv = document.getElementById('ageIntervalDisplayer');
         let valueArray = getValues(values);
         let val1 = valueArray[0], val2 = valueArray[1];
@@ -32,7 +31,7 @@ window.onload = function(){
         });
       }
 
-      function makeInput(target, oldValues, val, pos){
+function makeInput(target, oldValues, val, pos){
         let ageInput = document.createElement('input');
         console.log(pos);
         ageInput.className = 'ageInput';
@@ -79,8 +78,6 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
 //end of callback
 }
 
-
-
 function initCreateMeetupListeners(ageSlider){
   let createBtn = document.getElementById('createMeetupButton');
 
@@ -88,15 +85,15 @@ function initCreateMeetupListeners(ageSlider){
   createBtn.addEventListener('click', function(event){
     console.log('HALLÅ!!!');
     /* Börja med att hämta alla variabler */
-    let eventid = 'Z698xZq2Z17fvZ9';
+    let eventid = getLocationInfo()[0];
     let name = document.getElementById('nameInput').value;
     let address = document.getElementById('addressInput').value;
     let placeName = document.getElementById('placeNameInput').value;
     let time = document.getElementById('timeInput').value;
 
     // Koordinater
-    let latitude = document.getElementById('map').getAttribute('lat');
-    let longitude = document.getElementById('map').getAttribute('lng');
+    let latitude = document.getElementById('map').getAttribute('lat').substring(0,9);
+    let longitude = document.getElementById('map').getAttribute('lng').substring(0,9);
 
     // ageInterval
     let ageInterval = ageSlider.getValue().split(',');
@@ -134,7 +131,7 @@ function initCreateMeetupListeners(ageSlider){
       let admins = [creator.uniqueID];
 
       // Skapa meetupet.
-      let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator.uniqueID, members, admins);
+      let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
       meetup.push();
       console.log('Meetup: ',meetup);
     } else {
@@ -143,6 +140,46 @@ function initCreateMeetupListeners(ageSlider){
   });
 }
 
+function getLocationInfo(){
+    let href = window.location.href, stopcode = false;
+
+      if(href.includes('?event')){
+        href = href.split('?')[1];
+
+        href = href.split('&');
+
+      } else {
+        console.warn('This page should only be reached with a event specified in the address field.');
+        console.log('Om man ändå hamnar här kan vi redirecta till alla event / lägga en sökruta här');
+        //window.location.href = 'events.html';
+        stopcode = true;
+      }
+
+
+    let eventID = 0, meetupID = 0;
+
+    // Innehåller platsen för många antal setters?
+    if(!stopcode){
+      if(href.length > 2 || href.length <= 0){
+        console.warn('Invalid href!');
+      } else {
+          for(let loc of href){
+            // Loopa igenom adressen!
+            if(loc.includes('event')){
+
+              // Om det är eventdelen av adressen ta fram eventID:et!
+              eventID = loc.split('=')[1];
+            } else {
+              // Annars tar vi fram meetupID:et!
+              meetupID = loc.split('=')[1];
+            }
+          }
+      }
+      return [eventID, meetupID];
+    } else {
+      return false;
+    }
+  }
 
 function getValues(values){
   console.log('VALUES BEFORE SPLIT: ', values);
