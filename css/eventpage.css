@@ -90,3 +90,12 @@ button.purple {
 button:last-child {
   margin-bottom: 50px;
 }
+
+
+
+/* MEETUP CSS */
+#meetupWrapper > div {
+  background-color: #222;
+  color: #fff;
+  
+}
