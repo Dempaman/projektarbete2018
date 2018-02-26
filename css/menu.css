@@ -13,6 +13,7 @@ a {
 }
 #navigation {
 	background-color: #232323;
+	position: absolute;
 	width: 100%;
 	height: 60px;
 }
@@ -58,7 +59,8 @@ a {
 	border-radius: 3px;
 	z-index: 1;
 	transform-origin: 4px 0px;
-	transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0), background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0), opacity 0.55s ease;
+	transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
+	background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0), opacity 0.55s ease;
 }
 /*Hamburger to crossmark*/
 
