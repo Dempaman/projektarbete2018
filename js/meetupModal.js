@@ -47,26 +47,40 @@ window.onload = function(){
         ageInput.focus();
         // Add eventListener for when the input gets blurred.
         ageInput.addEventListener('blur', function(event){
-        let val1 = oldValues.split(',')[0];
-        let val2 = oldValues.split(',')[1];
-        console.log(oldValues);
-          // Kolla position
-          if(pos == 'start'){
-            val1 = Number.parseInt(event.target.value);
-            ageSlider.setValues(val1,val2);
-          } else {
-            val2 = Number.parseInt(event.target.value);
-            ageSlider.setValues(val1,val2);
-          }
-          displayAgeInterval(val1 + ',' + val2);
+          setAgeInterval(event, oldValues, pos, ageSlider);
         });
-      }
+        ageInput.addEventListener('keypress', function(event){
+          if(event.keyCode == 13){
+            setAgeInterval(event, oldValues, pos, ageSlider);
+          }
+
+        });
 
       // EventListener för att lägga till ett meetup
       initCreateMeetupListeners(ageSlider);
 
-  //end of callback
+
 }
+
+function setAgeInterval(event, oldValues, pos, ageSlider){
+  let val1 = oldValues.split(',')[0];
+  let val2 = oldValues.split(',')[1];
+  console.log(oldValues);
+    // Kolla position
+    if(pos == 'start'){
+      val1 = Number.parseInt(event.target.value);
+      ageSlider.setValues(val1,val2);
+    } else {
+      val2 = Number.parseInt(event.target.value);
+      ageSlider.setValues(val1,val2);
+    }
+    displayAgeInterval(val1 + ',' + val2);
+  };
+
+//end of callback
+}
+
+
 
 function initCreateMeetupListeners(ageSlider){
   let createBtn = document.getElementById('createMeetupButton');
@@ -75,9 +89,10 @@ function initCreateMeetupListeners(ageSlider){
   createBtn.addEventListener('click', function(){
 
     /* Börja med att hämta alla variabler */
-    let eventid = 'eventID';
+    let eventid = 'Z698xZq2Z17fvZ9';
     let name = document.getElementById('nameInput').value;
     let address = document.getElementById('addressInput').value;
+    let placeName = document.getElementById('placeNameInput').value;
     let time = document.getElementById('timeInput').value;
 
     // Koordinater
@@ -103,7 +118,7 @@ function initCreateMeetupListeners(ageSlider){
     let admins = [creator];
 
     // Skapa meetupet.
-    let meetup = new MeetupClass(eventid, name, address, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
+    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
     meetup.push();
     console.log('Meetup: ',meetup);
   });
