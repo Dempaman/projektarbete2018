@@ -1,0 +1,92 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  width: 100%;
+  height: 60px;
+  background-color: #222;
+  color: #fff;
+}
+
+.header h2 {
+  margin: 0;
+  padding: 13px 18px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.7em;
+  font-weight: 100;
+}
+
+.header i {
+  align-self: center;
+  padding: 15px;
+}
+
+.imageHolder {
+  background-color: #eee;
+  height: 150px;
+}
+
+/* Real shit below */
+
+#userHolder > div > p {
+  font-family: 'Roboto', sans-serif;
+  padding: 0px;
+  margin: 0px 20px 0px;
+}
+#userHolder > div:first-child > p:first-child {
+  color: #aaa;
+  font-size: 0.9em;
+  font-weight: 100;
+  margin: 25px 22px -6px;
+}
+#userHolder > p {
+  font-family: 'Roboto', sans-serif;
+  padding: 0px;
+  margin: 25px 20px 0px;
+  color: #aaa;
+  font-size: 0.9em;
+  font-weight: 100;
+}
+
+
+#userHolder h2 {
+  margin: 25px 20px 0px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8em;
+  font-weight: 100;
+}
+
+#eventInfoText {
+  margin: 5px 0px 40px;
+}
+#eventDivButtons {
+  text-align: center;
+}
+button.green, button.purple {
+  display: inline-block;
+  margin: 5px auto;
+  width: 140px;
+  outline: 0;
+  border-radius: 5px;
+  padding: 9px 20px;
+  font-family: 'Questrial', sans-serif;
+}
+button.green {
+  border: 2px solid green;
+  color: green;
+  padding: 7px 20px;
+  background-color: #fff;
+}
+button.purple {
+  border: none;
+  color: #fff;
+  background-color: #6C0CCC;
+}
+button:last-child {
+  margin-bottom: 50px;
+}
