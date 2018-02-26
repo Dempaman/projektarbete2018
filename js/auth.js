@@ -37,19 +37,6 @@ window.addEventListener('load', function(event){
   });
   });
   
-  firebase.auth().signOut().then(function() {
-    let userInfoWrapperShow = document.getElementsByClassName('userInfoWrapperShow')[0]; //HIDES THE USER INFO
-    userInfoWrapperShow.className = "userInfoWrapper";
-    let hideButtons = document.getElementsByClassName("hideButtons")[0]; //SHOWS THE LOGIN BUTTONS
-    hideButtons.className = "containerLoginButtons";
-    let so3Show = document.getElementsByClassName("so3Show")[0];
-    so3Show.className = "so3";
-    console.log("Facebook sign out was successful")// Sign-out successful.
-  }).catch(function(error) {
-    // An error happened.
-  });
-
-
 
 })//window.load
 
