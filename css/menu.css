@@ -5,6 +5,7 @@ body {
 	background: #fff;
 	color: #cdcdcd;
 	font-family: "Montserrat", "Arial", sans-serif;
+	overflow: hidden;
 }
 a {
 	text-decoration: none;
