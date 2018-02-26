@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<meta charset="utf-8" name="viewport" content="Width=device-width, initial-scale=1.0">
+  	<title>MeWent</title>
+
+    <!-- Fonts & Icons -->
+  	<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Questrial" rel="stylesheet">
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+
+    <!-- Stylesheet libraries -->
+    <link href="animations.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="slider/css/rSlider.min.css">
+
+    <!-- Stylesheet -->
+  	<link rel="stylesheet" type="text/css" href="css/menu.css">
+
+    <!-- FireBase -->
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+
+    <!-- JavaScript -->
+    <script src="js/eventpage.js"></script>
+  	<script src="js/classes.js"></script>
+    <script src="slider/js/rSlider.min.js"></script>
+
+  </head>
+  <body>
+<nav id="navigation">
+  <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
+  <div id="menuToggle">
+    <!--
+    A fake / hidden checkbox is used as click reciever,
+    so you can use the :checked selector on it.
+    -->
+    <input type="checkbox"/>
+
+    <!--
+    Some spans to act as a hamburger.
+    -->
+    <span></span>
+    <span></span>
+    <span></span>
+
+    <!--
+    Too bad the menu has to be inside of the button
+    but hey, it's pure CSS magic.
+    -->
+    <ul id="menu">
+      <a href="#" class="active"><li>HEM</li></a>
+      <a href="#"><li>MIN PROFIL</li></a>
+      <a href="#"><li>ALLA EVENTS</li></a>
+      <a href="#"><li>KONTAKTA OSS</li></a>
+      <a href="#"><li>LOGGA IN</li></a>
+    </ul>
+  </div>
+</nav>
+  </body>
+</html>

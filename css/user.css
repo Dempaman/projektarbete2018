@@ -33,18 +33,18 @@ html, body {
 
 /* Real shit below */
 
-#eventHolder > div > p {
+#userHolder > div > p {
   font-family: 'Roboto', sans-serif;
   padding: 0px;
   margin: 0px 20px 0px;
 }
-#eventHolder > div:first-child > p:first-child {
+#userHolder > div:first-child > p:first-child {
   color: #aaa;
   font-size: 0.9em;
   font-weight: 100;
   margin: 25px 22px -6px;
 }
-#eventHolder > p {
+#userHolder > p {
   font-family: 'Roboto', sans-serif;
   padding: 0px;
   margin: 25px 20px 0px;
@@ -54,8 +54,8 @@ html, body {
 }
 
 
-#eventHolder h2 {
-  margin: 0 20px;
+#userHolder h2 {
+  margin: 25px 20px 0px;
   font-family: 'Montserrat', sans-serif;
   font-size: 1.8em;
   font-weight: 100;
@@ -89,13 +89,4 @@ button.purple {
 }
 button:last-child {
   margin-bottom: 50px;
-}
-
-
-
-/* MEETUP CSS */
-#meetupWrapper > div {
-  background-color: #222;
-  color: #fff;
-  
 }
