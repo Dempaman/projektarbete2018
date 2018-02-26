@@ -1,3 +1,6 @@
+// Global Variables
+let googleApiKey = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
+
 var config = {
     apiKey: "AIzaSyBISgoM6Nlg9SMg8mwki7SmYCj2wsrbMzY",
     authDomain: "projekt-2018-mewent.firebaseapp.com",
@@ -13,10 +16,11 @@ var config = {
 
 class MeetupClass {
 
-  constructor(eventid, name, address, latitude, longitude, time, spots, ageInterval, information, creator, members, admins){
+  constructor(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins){
     this.eventID = eventid;
     this.name = name;
     this.address = address;
+    this.placeName = placeName;
     this.latitude = latitude;
     this.longitude = longitude;
     this.time = time;
@@ -61,9 +65,10 @@ class EventClass {
 
 class UserClass {
 
-  constructor(uniqueID, fullname, age, sex, mail, avatarURL, admin, meetups, information){
+  constructor(uniqueID, fullname, mail, verified, age, sex, avatarURL, admin, meetups, information){
     this.uniqueID = uniqueID;
     this.fullname = fullname;
+    this.verified = verified;
     this.age = age;
     this.sex = sex;
     this.mail = mail;
@@ -74,7 +79,7 @@ class UserClass {
   }
 
   push(){
-    return db.ref('users/').push(this).key;
+    db.ref('users/'+this.uniqueID).set(this);
   }
 
   removeSelf(){
@@ -94,6 +99,7 @@ class UserClass {
   }
 
 }
+
 
 
 // db.ref('chatter/'+id).on('child_added', function(snapshot){
