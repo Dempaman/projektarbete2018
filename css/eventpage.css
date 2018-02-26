@@ -39,14 +39,18 @@ html, body {
   margin: 0px 20px 0px;
 }
 #eventHolder > div:first-child > p:first-child {
-  color: #bbb;
+  color: #aaa;
   font-size: 0.9em;
+  font-weight: 100;
   margin: 25px 22px -6px;
 }
 #eventHolder > p {
   font-family: 'Roboto', sans-serif;
   padding: 0px;
   margin: 25px 20px 0px;
+  color: #aaa;
+  font-size: 0.9em;
+  font-weight: 100;
 }
 
 
@@ -58,8 +62,7 @@ html, body {
 }
 
 #eventInfoText {
-  background-color: #222;
-  color: #eee;
+  margin: 5px 0px 40px;
 }
 #eventDivButtons {
   text-align: center;
@@ -83,4 +86,7 @@ button.purple {
   border: none;
   color: #fff;
   background-color: #6C0CCC;
+}
+button:last-child {
+  margin-bottom: 50px;
 }
