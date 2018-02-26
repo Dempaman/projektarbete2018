@@ -16,23 +16,6 @@ window.onload = function(){
   // end of callbacl
 }
 
-class EventClass {
-  constructor(eventid, eventName, date, time, place, city, latitude, longitude, onsale, priceRange, currency, eventInformation){
-    this.eventid = eventid;
-    this.name = eventName;
-    this.date = date;
-    this.time = time;
-    this.place = place;
-    this.city = city
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.onsale = onsale;
-    this.priceRange = priceRange;
-    this.currency = currency;
-    this.information = eventInformation;
-  }
-}
-
 function displayEventInfo(event){
 
   // <p id="eventDate">23/6 2018</p>

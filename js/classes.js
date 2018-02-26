@@ -42,6 +42,59 @@ class MeetupClass {
 
 }
 
+class EventClass {
+  constructor(eventid, eventName, date, time, place, city, latitude, longitude, onsale, priceRange, currency, eventInformation){
+    this.eventid = eventid;
+    this.name = eventName;
+    this.date = date;
+    this.time = time;
+    this.place = place;
+    this.city = city
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.onsale = onsale;
+    this.priceRange = priceRange;
+    this.currency = currency;
+    this.information = eventInformation;
+  }
+}
+
+class UserClass {
+
+  constructor(uniqueID, fullname, age, sex, mail, avatarURL, admin, meetups, information){
+    this.uniqueID = uniqueID;
+    this.fullname = fullname;
+    this.age = age;
+    this.sex = sex;
+    this.mail = mail;
+    this.avatarURL = avatarURL;
+    this.admin = admin;
+    this.meetups = meetups;
+    this.information = information;
+  }
+
+  push(){
+    return db.ref('users/').push(this).key;
+  }
+
+  removeSelf(){
+    db.ref('users/'+this.key).remove();
+  }
+
+  save(){
+    db.ref('users/'+this.key).set(this);
+  }
+
+  setAdmin(){
+    this.admin = true;
+  }
+
+  removeAdmin(){
+    this.admin = false;
+  }
+
+}
+
 
 // db.ref('chatter/'+id).on('child_added', function(snapshot){
 //
