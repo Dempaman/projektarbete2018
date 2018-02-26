@@ -4,7 +4,7 @@ body {
 	/* make it look decent enough */
 	background: #fff;
 	color: #cdcdcd;
-	font-family: "Questrial", "Arial", sans-serif;
+	font-family: "Montserrat", "Arial", sans-serif;
 }
 a {
 	text-decoration: none;
@@ -14,19 +14,19 @@ a {
 #navigation {
 	background-color: #232323;
 	width: 100%;
-	height: 80px;
+	height: 60px;
 }
 #navigation img {
-	margin-top: 15px;
-	margin-left: 15px;
-	width: 45px;
+	margin-top: 7px;
+	margin-left: 10px;
+	width: 40px;
 	border: 1px solid #232323; /*Behöver vara där för att logga inte ska bli avskuren i botten*/
 	border-radius: 100px;
 }
 #menuToggle {
 	display: block;
 	position: absolute;
-	top: 27px;
+	top: 20px;
 	right: 20px;
 	z-index: 1;
 	-webkit-user-select: none;
@@ -92,12 +92,11 @@ a {
 #menu {
 	position: absolute;
 	width: 250px;
-	margin: -100px 0 0 90px;
+	margin: -110px 0 0 90px;
 	right: -30px;
 	padding: 40px;
 	padding-top: 125px;
-	background: rgba(35, 35, 35, 1);
-	/*ändra opacity på menu*/
+	background: rgba(35, 35, 35, 1); /*ändra opacity på menu när det finns bakgrund*/
 	list-style-type: none;
 	-webkit-font-smoothing: antialiased;
 	transform-origin: 0% 0%;
@@ -107,9 +106,16 @@ a {
 #menu li {
 	color: white;
 	padding: 15px 0;
-	font-size: 1.1em;
+	font-size: 1em;
 	border-bottom: 1px solid white;
+	letter-spacing: 1px;
+	margin-left: -6px;
 }
 #menu li:hover {
-	color: darkgray;
+	transition: 0.3s;
+	color: #6C0CCC;
+}
+.active {
+	font-weight: bold;
+	font-size: 1.1em;
 }
