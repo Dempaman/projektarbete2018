@@ -4,7 +4,8 @@ const ticketMasterApiKey = '7elxdku9GGG5k8j0Xm8KWdANDgecHMV0';
 // Initalize the page based on window location.
 window.onload = function(){
 
-
+chatMessageTimeStamp(1519755958554);
+chatMessageTimeStamp(1519758062943);
 
   // Turned off for debug purposes
   document.getElementById('eventTitle').addEventListener('click', retrieveEventInfo);
@@ -198,6 +199,7 @@ function retrieveMeetupInfo(eventDate){
     // Display button based on if the user is in the meetup or not.
     let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
+
     db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
 
       let data = snap.val();
@@ -251,7 +253,6 @@ function retrieveMeetupInfo(eventDate){
           let memberDiv = document.createElement('div');
           memberDiv.className = 'memberDiv';
           let memberDivAvatar = document.createElement('img');
-          console.log(data[comingUser]);
           memberDivAvatar.setAttribute('alt', 'User picture');
           memberDivAvatar.setAttribute('src', data[comingUser].avatarURL);
 
@@ -278,20 +279,97 @@ function retrieveMeetupInfo(eventDate){
         let inputBox = document.createElement('input');
         inputBox.setAttribute('placeholder', 'Skriv ett meddelande');
 
-        db.ref('chatter/'+meetupKey).on('child_added', function(snapshot){
+        // Variables for the message
+        let senderID = currentUser.uniqueID;
+        let avatarURL = currentUser.avatarURL;
+
+        // Add Eventlistener for the inputBox
+
+        inputBox.addEventListener('keypress', function(event){
+          if(event.keyCode == 13){
+
+            // Some easy checks.
+            if(event.target.value == "" || event.target.value == undefined || event.target.value == " "){
+              console.log('No message specified!');
+            } else if(event.target.value.length < 3){
+              console.log('Message too short!');
+            } else {
+              // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
+              let textmessage = event.target.value;
+
+              let newMessage = new MessageClass(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
+
+              newMessage.push();
+
+              // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
+              chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+
+              // Clear Inputbox
+              event.target.value = '';
+            }
+          }
+        });
+
+        let noMessage = document.createElement('p');
+        noMessage.innerText = 'Inga meddelande att visa';
+        noMessage.className = 'noMessage';
+
+        chattWrapperDiv.appendChild(noMessage);
+        chattWrapperDiv.setAttribute('id', 'chat' + meetupKey);
+        let first = true;
+        db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
+
+          if(first){
+            chattWrapperDiv.removeChild(noMessage);
+            first = false;
+          } else {
+            console.log('retdan borttagen');
+          }
+
           console.log('ATLEAST ONE MESSAGE HERE!!');
           let message = snapshot.val();
 
           console.log(message.sender);
           console.log(message.time);
-          console.log(message.text);
+          console.log(message.textmessage);
 
           // Create the message DIV to be printed on the DOM
-
           let messageDiv = document.createElement('div');
+          messageDiv.className = 'chattMessageDiv';
 
 
-          document.getElementById('chattWrapperDiv').appendChild(messageDiv);
+
+          // Create the avatar picture
+          let avatarImg = document.createElement('img');
+          avatarImg.setAttribute('src', message.avatarURL);
+          messageDiv.appendChild(avatarImg);
+
+          // Create the timeStamp
+          let timeStamp = document.createElement('p');
+          timeStamp.innerText = chatMessageTimeStamp(message.time);
+          timeStamp.className = 'timeStamp';
+
+          // Create the fullname
+          let fullname = document.createElement('p');
+          fullname.innerText = message.fullname;
+
+          // Create the actual message
+          let textmessage = document.createElement('p');
+          textmessage.innerText = message.textmessage;
+
+          // Create a div to hold name + timeStamp
+          let messageWrapper = document.createElement('div');
+          messageWrapper.className = 'messageWrapper';
+
+          messageWrapper.appendChild(fullname);
+          messageWrapper.appendChild(timeStamp);
+          messageWrapper.appendChild(textmessage);
+
+          // Append everything into the messageDiv
+          messageDiv.appendChild(avatarImg);
+          messageDiv.appendChild(messageWrapper);
+
+          document.getElementById('chat' + meetupKey).appendChild(messageDiv);
         })
 
 
@@ -412,6 +490,46 @@ function retrieveEventInfo(){
       console.log('Eventet hittades inte! Här är en sökruta du kan använda för att söka efter ett event :)');
       console.log('Felmeddelande:',error);
     })
+  }
+}
+
+function chatMessageTimeStamp(timeStamp){
+  let currTime = new Date().getTime()
+  //console.log('Current time is: ', currTime);
+  let difference = currTime - timeStamp;
+  //console.log('Difference:', difference);
+  let seconds = Math.floor((difference / 1000));
+  let minutes = Math.floor((difference / 1000 / 60));
+  let hours = Math.floor((difference / 1000 / 60 / 60));
+  console.log('Divided by 1000 then 60:', difference / 1000 / 60);
+  console.log('Current date: ', new Date(currTime));
+  console.log('Timestamp date:', new Date(timeStamp));
+  //console.log(timeStamp);
+
+  console.log('Sekunder: ' + seconds);
+  console.log('Minuter: ' + minutes);
+  console.log('Timmar: ' + hours);
+
+  if(hours > 0){
+    if(hours == 1){
+      return hours + ' timme sedan';
+    } else {
+      return hours + ' timmar sedan';
+    }
+  } else if(minutes > 0){
+      if(minutes == 1){
+        return minutes + ' minut sedan';
+      } else {
+        return minutes + ' timmar sedan';
+      }
+  } else if (seconds > 0){
+      if(seconds == 1){
+        return seconds + ' sekund sedan';
+      } else {
+        return seconds + ' sekunder sedan';
+      }
+  } else {
+    return 'nu';
   }
 }
 

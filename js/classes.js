@@ -38,6 +38,9 @@ class MeetupClass {
 
   removeSelf(){
     db.ref('meetups/'+this.key).remove();
+    
+    // Remove the messages for this aswell!
+    db.ref('chats/'+this.key).remove();
   }
 
   save(){
@@ -100,7 +103,32 @@ class UserClass {
 
 }
 
+class MessageClass {
 
+  constructor(senderID, avatarURL, meetupID, fullname, textmessage){
+    this.sender = senderID;
+    this.textmessage = textmessage;
+    this.fullname = fullname;
+    this.avatarURL = avatarURL;
+    this.time = firebase.database.ServerValue.TIMESTAMP;
+    this.meetupID = meetupID;
+  }
+
+  push(){
+    db.ref('chats/' + this.meetupID).push(this);
+    console.log('Message sent to the database with information: ', this);
+  }
+
+  removeSelf(){
+    db.ref('users/'+this.key).remove();
+  }
+
+  save(){
+    db.ref('users/'+this.key).set(this);
+  }
+
+
+}
 
 // db.ref('chatter/'+id).on('child_added', function(snapshot){
 //
