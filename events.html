@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,7 +11,6 @@
     <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
 
     <!-- Stylesheet libraries -->
-    <link href="animations.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="slider/css/rSlider.min.css">
 
     <!-- Stylesheet -->
@@ -30,9 +28,9 @@
 
   </head>
   <body>
-    <!--NAVIGATION MENU-->
+    <!--------------------Menu-------------------->
     <nav id="navigation">
-      <a href="#"><img src="./img/logo-design3.png"></a>
+      <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
       <div id="menuToggle">
         <!--
         A fake / hidden checkbox is used as click reciever,
@@ -60,11 +58,46 @@
         </ul>
       </div>
     </nav>
+    <!--------------------Menu End-------------------->
 
     <!--Korten innehåller: Datum, evenemangsnamn, bild samt antal meetups för detta event. -->
-    <div id="all-events-main"><img src="./img/alleventsmain.png" alt="event" style="width:100%"></div>
+    <div id="all-events-main">
+      <div class="big-photo-wrapper">
+          <div class="events-search">
+               <h1>meWent</h1>
+               <!--SEARCH WITH INPUT VALUE-->
+                <form class="search-events" style="margin:auto;max-width:400px">
+                  <input type="text" name="searchevent" placeholder="Sök..">
+                  <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+                
+                <!--SELECT DEFAULT OPTIONS-->
+                <div class="select-default">
+                <select class="all-events-search"> 
+                  <option value="all-events">Alla events </option>
+                  <option value="concerts">Konsert</option>
+                  <option value="festivals">Festival</option>
+                  <option value="theatre">Teater</option>
+                </select>
+                <span style="color: #12A356">i</span>
+                <select class="all-events-search">
+                  <option value="home-city">Stockholm</option>
+                  <option value="city1">Göteborg</option>
+                  <option value="city2">Malmö</option>
+                  <option value="city3">Uppsala</option>
+                </select>
+                <select class="all-events-search">
+                  <option value="today">Denna månaden</option>
+                  <option value="tomorrow">Denna veckan</option>
+                  <option value="week">Imorgon</option>
+                  <option value="month">Idag</option>
+                </select>
+                </div>
+          </div>
+      </div>
+    </div>
 
-<!--FOOTER-->
+<!--FOOTER
   <footer class="footer-box">
       <div class="adress">
         <img id="footer-logo" src="img/logo-design4.png" alt="meWent logo">
@@ -114,6 +147,6 @@
         <h4 >Copyright &copy; 2018 meWent.All rigths reserved </h4>
       </div>
 
-  </footer>
+  </footer>-->
   </body>
 </html>
