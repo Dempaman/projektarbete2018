@@ -126,7 +126,10 @@ a {
   padding-left: 1rem;
   color:#FFFFFF;
 }
-
+.contact-form>input:focus,
+.contact-form>textarea:focus {
+ outline-color: #6C0CCC;
+}
 .contact-form>textarea {
   background-color: #606060;
   border: none;
