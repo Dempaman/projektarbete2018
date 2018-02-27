@@ -1,3 +1,6 @@
+// Global Variables
+let googleApiKey = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
+
 var config = {
     apiKey: "AIzaSyBISgoM6Nlg9SMg8mwki7SmYCj2wsrbMzY",
     authDomain: "projekt-2018-mewent.firebaseapp.com",
@@ -13,10 +16,11 @@ var config = {
 
 class MeetupClass {
 
-  constructor(eventid, name, address, latitude, longitude, time, spots, ageInterval, information, creator, members, admins){
+  constructor(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins){
     this.eventID = eventid;
     this.name = name;
     this.address = address;
+    this.placeName = placeName;
     this.latitude = latitude;
     this.longitude = longitude;
     this.time = time;
@@ -41,6 +45,61 @@ class MeetupClass {
   }
 
 }
+
+class EventClass {
+  constructor(eventid, eventName, date, time, place, city, latitude, longitude, onsale, priceRange, currency, eventInformation){
+    this.eventid = eventid;
+    this.name = eventName;
+    this.date = date;
+    this.time = time;
+    this.place = place;
+    this.city = city
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.onsale = onsale;
+    this.priceRange = priceRange;
+    this.currency = currency;
+    this.information = eventInformation;
+  }
+}
+
+class UserClass {
+
+  constructor(uniqueID, fullname, mail, verified, age, sex, avatarURL, admin, meetups, information){
+    this.uniqueID = uniqueID;
+    this.fullname = fullname;
+    this.verified = verified;
+    this.age = age;
+    this.sex = sex;
+    this.mail = mail;
+    this.avatarURL = avatarURL;
+    this.admin = admin;
+    this.meetups = meetups;
+    this.information = information;
+  }
+
+  push(){
+    db.ref('users/'+this.uniqueID).set(this);
+  }
+
+  removeSelf(){
+    db.ref('users/'+this.key).remove();
+  }
+
+  save(){
+    db.ref('users/'+this.key).set(this);
+  }
+
+  setAdmin(){
+    this.admin = true;
+  }
+
+  removeAdmin(){
+    this.admin = false;
+  }
+
+}
+
 
 
 // db.ref('chatter/'+id).on('child_added', function(snapshot){
