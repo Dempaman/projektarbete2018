@@ -32,11 +32,13 @@ function createEventListenersForBtns(eventid, url){
 
 function retrieveMeetupInfo(eventDate){
 
-  console.log('hi');
   db.ref('meetups/'+getLocationInfo()[0]).on('child_added', function(snapshot){
 
+    let eventID = getLocationInfo()[0];
     let obj = snapshot.val();
-    console.log(obj);
+    let meetupKey = snapshot.key;
+    //console.log('NYCKEL:', meetupKey);
+    //console.log(obj);
 
     // Skapa funktion här som lägger till ett meetupkort!
     let md = document.createElement('div');
@@ -89,13 +91,23 @@ function retrieveMeetupInfo(eventDate){
     ageAntalWrapper.className = 'infoDivWrapper';
 
     // Deltagare
+
+    let currentMembers = 0;
+
+    for(let thisisnotused in obj.members){
+      currentMembers++;
+    }
+
+
     let antalDiv = document.createElement('div');
     antalDiv.className = 'infoDiv';
 
     let antalLabel = document.createElement('p');
     antalLabel.innerText = 'Deltagare';
     let antal = document.createElement('p');
-    antal.innerText = obj.members.length + '/' + obj.spots;
+    antal.innerText = currentMembers + '/' + obj.spots;
+
+
 
     antalDiv.appendChild(antalLabel);
     antalDiv.appendChild(antal);
@@ -132,26 +144,43 @@ function retrieveMeetupInfo(eventDate){
     // Splice latitude and longitude
     let latitude = obj.latitude.substring(0,9);
     let longitude = obj.longitude.substring(0,9);
-    console.log('LATITUDE!!', latitude);
-    console.log('LONGITUDE!!', longitude);
+    //console.log('LATITUDE!!', latitude);
+    //console.log('LONGITUDE!!', longitude);
 
 
     let googleMapDiv = document.createElement('div');
     let googleMap = document.createElement('img');
     googleMapDiv.className = 'googleMapDiv';
     // Just src
-    googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+    googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
 
     // Data-src
-    googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+    googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
 
     googleMapDiv.appendChild(googleMap);
 
-    let infoDiv = document.createElement('p');
-    infoDiv.innerText = obj.info;
+    let infoDiv = document.createElement('div');
+    infoDiv.className = 'meetupInfo';
 
+    let infoTextLabel = document.createElement('p')
+    infoTextLabel.innerText = 'Information';
+    let infoText = document.createElement('p');
+    infoText.innerText = obj.info;
+
+    infoDiv.appendChild(infoTextLabel);
+    infoDiv.appendChild(infoText);
 
     let meetupWrapper = document.getElementById('meetupWrapper');
+
+    // Gå med knapp
+    let btnDiv = document.createElement('div');
+    btnDiv.className = 'btnHolder';
+    let joinMeetupBtn = document.createElement('button');
+
+    joinMeetupBtn.className = 'purple';
+    joinMeetupBtn.innerText = 'Gå med i meetup';
+
+    btnDiv.appendChild(joinMeetupBtn);
 
     md.appendChild(meetupDivTitle);
     md.appendChild(meetupDivDate);
@@ -162,8 +191,112 @@ function retrieveMeetupInfo(eventDate){
     md.appendChild(googleMapDiv);
     md.appendChild(infoDiv);
 
+
+
+
+
+    // Display button based on if the user is in the meetup or not.
+    let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+    db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
+
+      let data = snap.val();
+      let userIsInMeetup = false;
+
+        // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
+        if(data != null){
+          console.log('Data: ',data);
+
+          // Gå igenom användaregenskaperna under denna medlem
+          for(let user in data){
+            // Om användaren som är inloggad finns i detta meetup så sätter vi userIsInMeetup till true
+            if(data[user].uniqueID == currentUser.uniqueID){
+              userIsInMeetup = true;
+            }
+          }
+        } else {
+          console.warn('Data is null for the members of this meeup!');
+        }
+
+
+
+      if(!userIsInMeetup){
+        console.log('this btn should be appended!?');
+        // Om användaren inte är med i meetupet visa joinMeetupBtn
+        md.appendChild(btnDiv);
+
+      } else {
+        // Annars visa chatt och medlemmar!
+        console.log('Du är redan med i detta meetup!');
+
+        let moreMeetupInfoDiv = document.createElement('div');
+        moreMeetupInfoDiv.className = 'moreMeetupInfoDiv';
+
+        // Loopa igenom och skapa användarna.
+        let membersComingDiv = document.createElement('div');
+        for(let comingUser in data){
+          let memberDiv = document.createElement('div');
+          memberDiv.className = 'memberDiv';
+          let memberDivAvatar = document.createElement('img');
+          console.log(data[comingUser]);
+          memberDivAvatar.setAttribute('alt', 'User picture');
+          memberDivAvatar.setAttribute('src', data[comingUser].avatarURL);
+
+          memberDiv.appendChild(memberDivAvatar);
+          membersComingDiv.appendChild(memberDiv);
+        }
+        // Append the members inside a div into the wrapper.
+
+        let chattWrapperDiv = document.createElement('div');
+
+        // Append the members and chat into the moreMeetupInfoDiv
+        moreMeetupInfoDiv.appendChild(membersComingDiv);
+        moreMeetupInfoDiv.appendChild(chattWrapperDiv);
+
+        //Append moreMeetupInfoDiv into the MAINDIV
+        md.appendChild(moreMeetupInfoDiv);
+
+      }
+    });
+
+
+    // Append MAINDIV (md)
     meetupWrapper.appendChild(md);
 
+    // Create Eventlistener for the joinMeetupBtn
+    joinMeetupBtn.addEventListener('click', function(event){
+      let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+      //console.log('FULLNAME OF USER IS: ', currentUser);
+      joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
+      console.log('joined meetup!');
+    });
+
+  });
+}
+
+function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
+
+  db.ref('meetups/' + eventID + '/' + meetupID + '/members').once('value', function(snap){
+
+    let data = snap.val();
+    let userIsNotComing = true;
+    for(let comingUser in data){
+      if(data[comingUser] == userID) {
+        userIsNotComing = false;
+      }
+    }
+
+    let userObject = {
+      uniqueID: userID,
+      fullname: fullname,
+      avatarURL: avatarURL
+    }
+
+    if(userIsNotComing){
+      db.ref('meetups/' + eventID + '/' + meetupID + '/members').push(userObject);
+    } else {
+      console.log('Du är redan med i detta meetup!');
+    }
   });
 }
 
