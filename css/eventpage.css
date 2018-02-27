@@ -192,14 +192,30 @@ div.googleMapDiv > img {
 
 
 /* When user is in the meetup */
+
+/* Display Members */
+#meetupWrapper > div > div.moreMeetupInfoDiv p:first-child {
+  margin-left: 20px;
+}
 .moreMeetupInfoDiv {
-  background-color: #333;
-  color: #fff;
-  height: 200px;
   display: flex;
+  flex-direction: column;
+}
+.membersWrappingDiv {
+  margin: 9px 15px;
+  display: flex;
+  flex-wrap: wrap;
 }
 .moreMeetupInfoDiv > div > div.memberDiv > img {
-  width: 50px;
-  height: 50px;
+  margin: 0px 4px 4px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+}
+
+/* Chatt css */
+.chattWrapperDiv {
+  height: 200px;
+  background-color: #222;
+  color: #fff;
 }
