@@ -1,6 +1,6 @@
 # projektarbete2018
 
 
-Check out the project on GitHub pages!
+Check out the project on GitHub pages! This is the develop branch.
 
-GitHub pages: https://github.com/Dempaman/projektarbete2018-meWent
+GitHub pages: https://dempaman.github.io/projektarbete2018-meWent/
