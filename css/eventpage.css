@@ -79,8 +79,9 @@ button.green, button.purple {
 button.green {
   border: 2px solid green;
   color: green;
-  padding: 7px 20px;
+  padding: 8px 20px;
   background-color: #fff;
+  box-sizing: border-box;
 }
 button.purple {
   border: none;
@@ -91,11 +92,63 @@ button:last-child {
   margin-bottom: 50px;
 }
 
+/* Hover CSS för knapparna på EVENTPAGE, BÖR ÄNDRAS TACK :PpppPPp */
+button.green:hover {
+  border: 3px solid #258f00;
+  color: #258f00;
+  padding: 7px 20px;
+  box-sizing: border-box;
+}
+button.purple:hover {
+  background-color: #56139a;
+}
+
 
 
 /* MEETUP CSS */
 #meetupWrapper > div {
-  background-color: #222;
-  color: #fff;
-  
+  background-color: #eee;
+}
+#meetupWrapper > div > h2 {
+  color: #222;
+  margin: 0 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8em;
+  font-weight: 100;
+  padding: 20px 0px 0px;
+}
+#meetupWrapper > div > h2 + p {
+  margin: -3px 22px;
+  font-weight: 100;
+  font-family: 'Roboto', sans-serif;
+  color: #9D9D9D;
+  font-size: 0.95em;
+}
+#meetupWrapper > div > div > img.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 10px 20px;
+}
+#meetupWrapper > div > div.creatorDiv {
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9em;
+  color: #333;
+  margin: 5px auto -22px;
+}
+#meetupWrapper > div > div p {
+  margin: -1px;
+  font-family: 'Roboto',sans-serif;
+  color: #333;
+}
+#meetupWrapper > div > div p:first-child{
+  margin-top: 19px;
+  margin-left: 0px;
+  font-size: 0.8em;
+  color: #777;
+}
+
+#meetupWrapper > div > div.infoDiv {
+  margin: -3px 90px;
 }
