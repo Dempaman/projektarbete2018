@@ -287,7 +287,7 @@ function retrieveMeetupInfo(eventDate){
 
         inputBox.addEventListener('keypress', function(event){
           if(event.keyCode == 13){
-
+            updateTimeStamps();
             // Some easy checks.
             if(event.target.value == "" || event.target.value == undefined || event.target.value == " "){
               console.log('No message specified!');
@@ -323,15 +323,11 @@ function retrieveMeetupInfo(eventDate){
             chattWrapperDiv.removeChild(noMessage);
             first = false;
           } else {
-            console.log('retdan borttagen');
+            //onsole.log('redan borttagen');
           }
 
-          console.log('ATLEAST ONE MESSAGE HERE!!');
+          //console.log('ATLEAST ONE MESSAGE HERE!!');
           let message = snapshot.val();
-
-          console.log(message.sender);
-          console.log(message.time);
-          console.log(message.textmessage);
 
           // Create the message DIV to be printed on the DOM
           let messageDiv = document.createElement('div');
@@ -347,6 +343,7 @@ function retrieveMeetupInfo(eventDate){
           // Create the timeStamp
           let timeStamp = document.createElement('p');
           timeStamp.innerText = chatMessageTimeStamp(message.time);
+          timeStamp.setAttribute('timeStamp', message.time);
           timeStamp.className = 'timeStamp';
 
           // Create the fullname
@@ -370,6 +367,8 @@ function retrieveMeetupInfo(eventDate){
           messageDiv.appendChild(messageWrapper);
 
           document.getElementById('chat' + meetupKey).appendChild(messageDiv);
+
+          chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
         })
 
 
@@ -431,6 +430,15 @@ function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
       console.log('Du är redan med i detta meetup!');
     }
   });
+}
+
+function updateTimeStamps(){
+  let timestamps = document.getElementsByClassName('timeStamp');
+
+  for(let stamp of timestamps){
+    let messageTime = stamp.getAttribute('timeStamp');
+    stamp.innerText = chatMessageTimeStamp(messageTime);
+  }
 }
 
 function displayEventInfo(event){
@@ -501,14 +509,14 @@ function chatMessageTimeStamp(timeStamp){
   let seconds = Math.floor((difference / 1000));
   let minutes = Math.floor((difference / 1000 / 60));
   let hours = Math.floor((difference / 1000 / 60 / 60));
-  console.log('Divided by 1000 then 60:', difference / 1000 / 60);
-  console.log('Current date: ', new Date(currTime));
-  console.log('Timestamp date:', new Date(timeStamp));
+  // console.log('Divided by 1000 then 60:', difference / 1000 / 60);
+  // console.log('Current date: ', new Date(currTime));
+  // console.log('Timestamp date:', new Date(timeStamp));
   //console.log(timeStamp);
 
-  console.log('Sekunder: ' + seconds);
-  console.log('Minuter: ' + minutes);
-  console.log('Timmar: ' + hours);
+  // console.log('Sekunder: ' + seconds);
+  // console.log('Minuter: ' + minutes);
+  // console.log('Timmar: ' + hours);
 
   if(hours > 0){
     if(hours == 1){
