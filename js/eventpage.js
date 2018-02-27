@@ -4,8 +4,8 @@ const ticketMasterApiKey = '7elxdku9GGG5k8j0Xm8KWdANDgecHMV0';
 // Initalize the page based on window location.
 window.onload = function(){
 
-chatMessageTimeStamp(1519755958554);
-chatMessageTimeStamp(1519758062943);
+console.log(chatMessageTimeStamp(1519755958554));
+console.log(chatMessageTimeStamp(1519758062943));
 
   // Turned off for debug purposes
   document.getElementById('eventTitle').addEventListener('click', retrieveEventInfo);
@@ -520,7 +520,7 @@ function chatMessageTimeStamp(timeStamp){
       if(minutes == 1){
         return minutes + ' minut sedan';
       } else {
-        return minutes + ' timmar sedan';
+        return minutes + ' minuter sedan';
       }
   } else if (seconds > 0){
       if(seconds == 1){
