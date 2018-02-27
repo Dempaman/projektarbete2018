@@ -11,10 +11,27 @@ window.onload = function(){
   //retrieveEventInfo();
 
 
-  // end of callbacl
+  // end of callback
+}
+
+function createEventListenersForBtns(eventid, url){
+  let buyBtn = document.getElementById('eventDivButtons').children[0];
+  let createMeetupBtn = document.getElementById('eventDivButtons').children[2];
+
+  buyBtn.addEventListener('click', function(){
+    window.open(url);
+    console.log('Köp biljett hos Ticketmaster!');
+  });
+
+  createMeetupBtn.addEventListener('click', function(){
+    window.location.href = "modal.html?event=" + eventid;
+    console.log('Skapa ett meetup för event:',eventid);
+  });
+
 }
 
 function retrieveMeetupInfo(eventDate){
+
   console.log('hi');
   db.ref('meetups/'+getLocationInfo()[0]).on('child_added', function(snapshot){
 
@@ -30,28 +47,53 @@ function retrieveMeetupInfo(eventDate){
     let meetupDivDate = document.createElement('p');
     meetupDivDate.innerText = eventDate + ' - ' + obj.time;
 
-    // Skaparen
+
+    // Namn på skaparen av meetup och label med bild.
+
+    let creatorDiv = document.createElement('div');
+    creatorDiv.className = 'creatorDiv';
+    let insideCreatorDiv = document.createElement('div');
+
     let creatorNameLabel = document.createElement('p');
     creatorNameLabel.innerText = 'Skapare';
     let creatorName = document.createElement('p');
     creatorName.innerText = obj.creator.name;
 
+
+    insideCreatorDiv.appendChild(creatorNameLabel);
+    insideCreatorDiv.appendChild(creatorName);
+
     // ProfilbildsURL
     let creatorAvatarURL = document.createElement('img');
     creatorAvatarURL.setAttribute('alt', obj.creator.name + '\'s avatar.');
     creatorAvatarURL.setAttribute('src', obj.creator.avatarURL);
+    creatorAvatarURL.className = 'avatar';
 
-    // Skapare
+    creatorDiv.appendChild(creatorAvatarURL);
+    creatorDiv.appendChild(insideCreatorDiv);
+
+    // Skaparns mail
+    let creatorMailDiv = document.createElement('div');
+    creatorMailDiv.className = 'infoDiv';
     let creatorMailLabel = document.createElement('p');
-    creatorMailLabel.innerText = 'Skaparens email';
+    creatorMailLabel.innerText = 'Kontaktinformation';
     let creatorMail = document.createElement('p');
     creatorMail.innerText = obj.creator.mail;
 
+    creatorMailDiv.appendChild(creatorMailLabel);
+    creatorMailDiv.appendChild(creatorMail);
+
     // Deltagare
+    let antalDiv = document.createElement('div');
+    antalDiv.className = 'infoDiv';
+
     let antalLabel = document.createElement('p');
     antalLabel.innerText = 'Deltagare';
     let antal = document.createElement('p');
     antal.innerText = obj.members.length + '/' + obj.spots;
+
+    antalDiv.appendChild(antalLabel);
+    antalDiv.appendChild(antal);
 
     // Adress
     let adressLabel = document.createElement('p');
@@ -61,10 +103,16 @@ function retrieveMeetupInfo(eventDate){
 
 
     // Åldersgräns
+    let ageDiv = document.createElement('div');
+    ageDiv.className = 'infoDiv';
+
     let ageIntervalLabel = document.createElement('p');
     ageIntervalLabel.innerText = 'Åldersgräns';
     let ageInterval = document.createElement('p');
     ageInterval.innerText = obj.ageInterval[0] + ' - ' + obj.ageInterval[1];
+
+    ageDiv.appendChild(ageIntervalLabel);
+    ageDiv.appendChild(ageInterval);
 
 
 
@@ -76,7 +124,12 @@ function retrieveMeetupInfo(eventDate){
 
 
     let googleMap = document.createElement('img');
+
+    // Just src
     googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+
+    // Data-src
+    googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
 
     let infoDiv = document.createElement('p');
     infoDiv.innerText = obj.info;
@@ -86,17 +139,12 @@ function retrieveMeetupInfo(eventDate){
 
     md.appendChild(meetupDivTitle);
     md.appendChild(meetupDivDate);
-    md.appendChild(creatorAvatarURL);
-    md.appendChild(creatorNameLabel);
-    md.appendChild(creatorName);
-    md.appendChild(creatorMailLabel);
-    md.appendChild(creatorMail);
-    md.appendChild(antalLabel);
-    md.appendChild(antal);
+    md.appendChild(creatorDiv);
+    md.appendChild(creatorMailDiv);
+    md.appendChild(ageDiv);
+    md.appendChild(antalDiv);
     md.appendChild(adressLabel);
     md.appendChild(adress);
-    md.appendChild(ageIntervalLabel);
-    md.appendChild(ageInterval);
     md.appendChild(googleMap);
     md.appendChild(infoDiv);
 
@@ -133,6 +181,7 @@ function retrieveEventInfo(){
       return response.json();
     })
     .then(function(json){
+      console.log('EVENTOBJECT without formatting:',json);
         let latitude = 58, longitude = 15;
         let event = json;
         let venue = event._embedded.venues[0];
@@ -150,7 +199,11 @@ function retrieveEventInfo(){
 
         console.log('EVENTOBJECT: ',eventObject);
 
+        // Eventet hittades, information visas!
         displayEventInfo(eventObject);
+
+        // Skapa eventListeners för knapparna!
+        createEventListenersForBtns(eventid, event.url);
 
     })
     .catch(function(error){
@@ -202,6 +255,7 @@ function getLocationInfo(){
   }
 }
 
+// Wikipedia api retriever
 function updateEventInfo(eventName, priceRange, currency, onsale){
 
   fetch(`https://sv.wikipedia.org/w/api.php?action=opensearch&search=${eventName}&limit=1&format=json`)
