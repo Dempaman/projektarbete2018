@@ -70,7 +70,7 @@ html, body {
 button.green, button.purple {
   display: inline-block;
   margin: 5px auto;
-  width: 140px;
+  width: 150px;
   outline: 0;
   border-radius: 5px;
   padding: 9px 20px;
@@ -195,6 +195,7 @@ div.googleMapDiv > img {
 
 /* Display Members */
 #meetupWrapper > div > div.moreMeetupInfoDiv p:first-child {
+  width: 50%;
   margin-left: 20px;
 }
 .moreMeetupInfoDiv {
@@ -206,6 +207,13 @@ div.googleMapDiv > img {
   display: flex;
   flex-wrap: wrap;
 }
+#meetupWrapper > div .membersWrappingDiv + p {
+  margin-top: 12px;
+  margin-left: 20px;
+  margin: 12px 20px 5px;
+  font-size: 0.8em;
+  color: #777;
+}
 .moreMeetupInfoDiv > div > div.memberDiv > img {
   margin: 0px 4px 4px;
   width: 40px;
@@ -216,6 +224,101 @@ div.googleMapDiv > img {
 /* Chatt css */
 .chattWrapperDiv {
   height: 200px;
-  background-color: #222;
+  overflow: auto;
+  width: calc(100% - 40px);
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  align-self: center;
+  background-color: #d1d1d1;
   color: #fff;
+  margin: 5px 0px 0px;
+}
+
+/* Actual chatmessage */
+.chattMessageDiv {
+  display: flex;
+  color: #fff;
+  margin: 10px 14px 0px 0px;
+}
+.chattMessageDiv:last-child {
+  margin: 10px 14px 10px 0px;
+}
+
+.chattMessageDiv > img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin: 0px 14px;
+  align-self: center;
+}
+#meetupWrapper > div div.chattMessageDiv > p {
+  font-size: 0.8em;
+  color: #fff;
+}
+#meetupWrapper > div div.chattMessageDiv > p.timeStamp {
+  color: red;
+}
+
+.messageWrapper {
+  width: 100%;
+  position: relative;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 5px;
+}
+
+#meetupWrapper > div > div p.timeStamp {
+  position: absolute;
+  margin: 6px;
+  top: 0;
+  right: 0;
+  font-size: 0.7em;
+  color: #b6b6b6;
+}
+
+#meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:first-child {
+  width: 0;
+  margin: 0px 4px;
+  width: 100%;
+}
+#meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:last-child {
+  margin: 0px 3px;
+  font-size: 0.9em;
+  color: #565656;
+}
+
+/* No Message */
+#meetupWrapper > div > div.moreMeetupInfoDiv p.noMessage {
+  font-size: 1.3em;
+  color: #f4f4f4;
+  width: auto;
+  margin: 62px auto;
+  text-align: center;
+}
+
+/* Inputbox */
+
+.chattWrapperDiv + input {
+  border: none;
+  color: #4A4A4A;
+  border-top: 3px solid #cccc;
+  box-sizing: border-box;
+  height: 45px;
+  padding: 10px 15px;
+  margin: 0px 20px 20px;
+  width: calc(100% - 40px);
+  align-self: center;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #ABABAB;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #ABABAB;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #ABABAB;
 }
