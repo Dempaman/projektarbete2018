@@ -125,7 +125,7 @@ function initCreateMeetupListeners(ageSlider){
 
       console.log('CREATOR LOGGED IN ATM: ', creator);
       // Medlemmar - Lägger skaparen av meetupet som medlem direkt i en LISTA.
-      let members = [creator.uniqueID];
+      let members = {creator.uniqueID};
 
       // Admins - Lägger skaparen av meetupet som admin direkt i en LISTA.
       let admins = [creator.uniqueID];
