@@ -83,6 +83,11 @@ function retrieveMeetupInfo(eventDate){
     creatorMailDiv.appendChild(creatorMailLabel);
     creatorMailDiv.appendChild(creatorMail);
 
+
+    //Deltagare + Åldersgräns wrapper
+    let ageAntalWrapper = document.createElement('div');
+    ageAntalWrapper.className = 'infoDivWrapper';
+
     // Deltagare
     let antalDiv = document.createElement('div');
     antalDiv.className = 'infoDiv';
@@ -94,6 +99,21 @@ function retrieveMeetupInfo(eventDate){
 
     antalDiv.appendChild(antalLabel);
     antalDiv.appendChild(antal);
+
+    // Åldersgräns
+    let ageDiv = document.createElement('div');
+    ageDiv.className = 'infoDiv';
+
+    let ageIntervalLabel = document.createElement('p');
+    ageIntervalLabel.innerText = 'Åldersgräns';
+    let ageInterval = document.createElement('p');
+    ageInterval.innerText = obj.ageInterval[0] + ' - ' + obj.ageInterval[1];
+
+    ageDiv.appendChild(ageIntervalLabel);
+    ageDiv.appendChild(ageInterval);
+
+    ageAntalWrapper.appendChild(ageDiv);
+    ageAntalWrapper.appendChild(antalDiv);
 
     // Adress
     let adressDiv = document.createElement('div');
@@ -108,19 +128,6 @@ function retrieveMeetupInfo(eventDate){
     adressDiv.appendChild(adress);
 
 
-    // Åldersgräns
-    let ageDiv = document.createElement('div');
-    ageDiv.className = 'infoDiv';
-
-    let ageIntervalLabel = document.createElement('p');
-    ageIntervalLabel.innerText = 'Åldersgräns';
-    let ageInterval = document.createElement('p');
-    ageInterval.innerText = obj.ageInterval[0] + ' - ' + obj.ageInterval[1];
-
-    ageDiv.appendChild(ageIntervalLabel);
-    ageDiv.appendChild(ageInterval);
-
-
 
     // Splice latitude and longitude
     let latitude = obj.latitude.substring(0,9);
@@ -129,13 +136,16 @@ function retrieveMeetupInfo(eventDate){
     console.log('LONGITUDE!!', longitude);
 
 
+    let googleMapDiv = document.createElement('div');
     let googleMap = document.createElement('img');
-
+    googleMapDiv.className = 'googleMapDiv';
     // Just src
-    googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+    googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
 
     // Data-src
-    googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+    googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=15&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+
+    googleMapDiv.appendChild(googleMap);
 
     let infoDiv = document.createElement('p');
     infoDiv.innerText = obj.info;
@@ -147,10 +157,9 @@ function retrieveMeetupInfo(eventDate){
     md.appendChild(meetupDivDate);
     md.appendChild(creatorDiv);
     md.appendChild(creatorMailDiv);
-    md.appendChild(ageDiv);
-    md.appendChild(antalDiv);
+    md.appendChild(ageAntalWrapper);
     md.appendChild(adressDiv);
-    md.appendChild(googleMap);
+    md.appendChild(googleMapDiv);
     md.appendChild(infoDiv);
 
     meetupWrapper.appendChild(md);

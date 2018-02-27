@@ -121,7 +121,7 @@ button.purple:hover {
   margin: -3px 22px;
   font-weight: 100;
   font-family: 'Roboto', sans-serif;
-  color: #9D9D9D;
+  color: #878787;
   font-size: 0.95em;
 }
 #meetupWrapper > div > div > img.avatar {
@@ -133,8 +133,7 @@ button.purple:hover {
 #meetupWrapper > div > div.creatorDiv {
   display: flex;
   font-family: 'Roboto', sans-serif;
-  font-size: 0.9em;
-  color: #333;
+  color: #525252;
   margin: 5px auto -22px;
 }
 #meetupWrapper > div > div p {
@@ -151,4 +150,22 @@ button.purple:hover {
 
 #meetupWrapper > div > div.infoDiv {
   margin: -3px 90px;
+}
+
+div.googleMapDiv > img {
+  margin: 25px auto;
+}
+.googleMapDiv {
+  margin: 0px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.infoDivWrapper {
+  display: flex;
+  margin: 0px 70px;
+}
+
+.infoDivWrapper > div {
+  margin: 0px 20px;
 }
