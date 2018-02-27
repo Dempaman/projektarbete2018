@@ -1,14 +1,15 @@
-html>* {
+html * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  background-color: #f4f4f4;
 }
 
-p {
+p,a {
   font-family: 'Roboto', sans-serif;
 }
 
-h1 {
+h1, h2, h3 {
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -24,27 +25,64 @@ main {
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .user {
-  width: 80%;
+  margin: 1rem;
+  padding: 1rem;
+  width: 95%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+}
+
+.user, .user * {
+  background-color: #fff;
 }
 
 .photo-menu {
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .photo-menu>img {
   width: auto;
-  max-width: 150px;
+  max-width: 100px;
   height: auto;
   max-height: 100px;
 }
 
-.change {
+.user-name {
+  width: 90%;
+  text-align: center;
+  padding: 1rem 1rem 2rem 1rem;
+  border-bottom: solid 2px #606060;
+  margin-bottom: 1rem
+}
+
+.user-info {
+  white-space: nowrap;
+  width: 90%;
+  height: 3rem;
+  max-height: 3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#user-info-more{
+  text-decoration: none;
+  color: #232323;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+}
+
+.change {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
 }
