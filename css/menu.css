@@ -4,12 +4,14 @@ body {
 	/* make it look decent enough */
 	background: #fff;
 	font-family: "Montserrat", "Arial", sans-serif;
+    overflow-x: hidden; /*Fungerar bara på webb, ej på mobil*/
 }
 a {
 	text-decoration: none;
 	color: #333;
 	transition: color 0.3s ease;
 }
+
 #navigation {
 	background-color: #232323;
 	/*position: absolute;*/
@@ -93,7 +95,7 @@ a {
 	transform: none;
 }
 #menu {
-	display: ; /*display none under utveckling av alla events*/
+	display: ; 
 	position: absolute;
 	width: 250px;
 	margin: -110px 0 0 90px;
