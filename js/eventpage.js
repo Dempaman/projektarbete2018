@@ -274,9 +274,10 @@ function retrieveMeetupInfo(eventDate){
         let chattWrapperDiv = document.createElement('div');
         chattWrapperDiv.className = 'chattWrapperDiv';
 
+        // Inputbox box
         let inputBox = document.createElement('input');
+        inputBox.setAttribute('placeholder', 'Skriv ett meddelande');
 
-        meetupKey
         db.ref('chatter/'+meetupKey).on('child_added', function(snapshot){
           console.log('ATLEAST ONE MESSAGE HERE!!');
           let message = snapshot.val();
@@ -290,18 +291,22 @@ function retrieveMeetupInfo(eventDate){
           let messageDiv = document.createElement('div');
 
 
-          document.getElementById('chattWrapperDiv').appendChild(messageDiv)
+          document.getElementById('chattWrapperDiv').appendChild(messageDiv);
         })
 
 
         // Append the members and chat into the moreMeetupInfoDiv
         moreMeetupInfoDiv.appendChild(membersWrappingDiv);
 
+
         // Append label
         moreMeetupInfoDiv.appendChild(chattLabel);
 
         //Append the chatt
         moreMeetupInfoDiv.appendChild(chattWrapperDiv);
+
+        //Append inputBox
+        moreMeetupInfoDiv.appendChild(inputBox);
 
         //Append moreMeetupInfoDiv into the MAINDIV
         md.appendChild(moreMeetupInfoDiv);
