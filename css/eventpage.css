@@ -67,7 +67,7 @@ html, body {
 #eventDivButtons {
   text-align: center;
 }
-button.green, button.purple {
+button.green, button.purple, button.leaveMeetupBtn {
   display: inline-block;
   margin: 5px auto;
   width: 150px;
@@ -88,8 +88,18 @@ button.purple {
   color: #fff;
   background-color: #6C0CCC;
 }
+
+button.leaveMeetupBtn {
+  color: #fff4f4;
+  border: none;
+  background-color: #ff8181;
+}
+button.leaveMeetupBtn:hover {
+  background-color: #da9393;
+}
+
 button:last-child {
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 /* Hover CSS för knapparna på EVENTPAGE, BÖR ÄNDRAS TACK :PpppPPp */
@@ -290,7 +300,7 @@ div.googleMapDiv > img {
 /* No Message */
 #meetupWrapper > div > div.moreMeetupInfoDiv p.noMessage {
   font-size: 1.3em;
-  color: #f4f4f4;
+  color: #ececec;
   width: auto;
   margin: 62px auto;
   text-align: center;
