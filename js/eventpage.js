@@ -96,10 +96,16 @@ function retrieveMeetupInfo(eventDate){
     antalDiv.appendChild(antal);
 
     // Adress
+    let adressDiv = document.createElement('div');
+    adressDiv.className = 'infoDiv';
+
     let adressLabel = document.createElement('p');
     adressLabel.innerText = 'Adress';
     let adress = document.createElement('p');
     adress.innerText = obj.address;
+
+    adressDiv.appendChild(adressLabel);
+    adressDiv.appendChild(adress);
 
 
     // Åldersgräns
@@ -143,8 +149,7 @@ function retrieveMeetupInfo(eventDate){
     md.appendChild(creatorMailDiv);
     md.appendChild(ageDiv);
     md.appendChild(antalDiv);
-    md.appendChild(adressLabel);
-    md.appendChild(adress);
+    md.appendChild(adressDiv);
     md.appendChild(googleMap);
     md.appendChild(infoDiv);
 
