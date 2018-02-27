@@ -1,7 +1,6 @@
 # projektarbete2018
 
-GitHub pages: dempaman.github.io/projektarbete2018leetup.html
 
-Developer branch.
+Check out the project on GitHub pages!
 
-This is the development branch for our project MeWent!
+GitHub pages: https://dempaman.github.io/projektarbete2018-meWent/
