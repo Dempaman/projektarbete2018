@@ -3,4 +3,4 @@
 
 Check out the project on GitHub pages!
 
-GitHub pages: https://github.com/Dempaman/projektarbete2018-meWent
+GitHub pages: https://dempaman.github.io/projektarbete2018-meWent/
