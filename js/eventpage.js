@@ -59,7 +59,7 @@ function retrieveMeetupInfo(eventDate){
     let creatorNameLabel = document.createElement('p');
     creatorNameLabel.innerText = 'Skapare';
     let creatorName = document.createElement('p');
-    creatorName.innerText = obj.creator.name;
+    creatorName.innerText = obj.creator.fullname;
 
 
     insideCreatorDiv.appendChild(creatorNameLabel);
@@ -229,11 +229,24 @@ function retrieveMeetupInfo(eventDate){
         // Annars visa chatt och medlemmar!
         console.log('Du är redan med i detta meetup!');
 
+
+        // Börja med att skapa wrappern för allting som ska visas när man är med i ett meetup!
         let moreMeetupInfoDiv = document.createElement('div');
         moreMeetupInfoDiv.className = 'moreMeetupInfoDiv';
 
+
+        // Visa medlemmar här!
+
+
+        // Skapa label för medlemmar
+        let membersLabel = document.createElement('p');
+        membersLabel.innerText = 'Personer som kommer';
+        moreMeetupInfoDiv.appendChild(membersLabel);
+
         // Loopa igenom och skapa användarna.
-        let membersComingDiv = document.createElement('div');
+        let membersWrappingDiv = document.createElement('div');
+
+        membersWrappingDiv.className = 'membersWrappingDiv';
         for(let comingUser in data){
           let memberDiv = document.createElement('div');
           memberDiv.className = 'memberDiv';
@@ -243,14 +256,51 @@ function retrieveMeetupInfo(eventDate){
           memberDivAvatar.setAttribute('src', data[comingUser].avatarURL);
 
           memberDiv.appendChild(memberDivAvatar);
-          membersComingDiv.appendChild(memberDiv);
+          membersWrappingDiv.appendChild(memberDiv);
         }
         // Append the members inside a div into the wrapper.
 
+
+
+
+
+        // Dags för chatten här!
+
+        // Börja med att skapa label för chatten
+        let chattLabel = document.createElement('p');
+        chattLabel.innerText = 'Meetup Chatt';
+
+        // Skapa wrapper för chatten
         let chattWrapperDiv = document.createElement('div');
+        chattWrapperDiv.className = 'chattWrapperDiv';
+
+        let inputBox = document.createElement('input');
+
+        meetupKey
+        db.ref('chatter/'+meetupKey).on('child_added', function(snapshot){
+          console.log('ATLEAST ONE MESSAGE HERE!!');
+          let message = snapshot.val();
+
+          console.log(message.sender);
+          console.log(message.time);
+          console.log(message.text);
+
+          // Create the message DIV to be printed on the DOM
+
+          let messageDiv = document.createElement('div');
+
+
+          document.getElementById('chattWrapperDiv').appendChild(messageDiv)
+        })
+
 
         // Append the members and chat into the moreMeetupInfoDiv
-        moreMeetupInfoDiv.appendChild(membersComingDiv);
+        moreMeetupInfoDiv.appendChild(membersWrappingDiv);
+
+        // Append label
+        moreMeetupInfoDiv.appendChild(chattLabel);
+
+        //Append the chatt
         moreMeetupInfoDiv.appendChild(chattWrapperDiv);
 
         //Append moreMeetupInfoDiv into the MAINDIV
