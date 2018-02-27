@@ -1,0 +1,50 @@
+html>* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/*Tillfällig header Ta bort vid sammanslagning*/
+
+header {
+  height: 60px;
+  background-color: #232323;
+  width: 100%;
+}
+
+main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.user {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-menu {
+  display: flex;
+}
+
+.photo-menu>img {
+  width: auto;
+  max-width: 150px;
+  height: auto;
+  max-height: 100px;
+}
+
+.change {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
