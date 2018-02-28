@@ -15,6 +15,9 @@ https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&apikey=wRf3oq4Feo
 
 Städer:
 https://app.ticketmaster.eu/mfxapi/v1/cities?domain_id=sweden&apikey=wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq
+
+Images ex:
+https://app.ticketmaster.eu/discovery/v2/events/Z698xZq2Z17fvZ9/images.json?apikey=wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq
 */
 
 
