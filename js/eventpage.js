@@ -1,11 +1,11 @@
 // Globala variabler
-const ticketMasterApiKey = '7elxdku9GGG5k8j0Xm8KWdANDgecHMV0';
+const ticketMasterApiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
 
 // Initalize the page based on window location.
 window.onload = function(){
 
 console.log(chatMessageTimeStamp(1519755958554));
-console.log(chatMessageTimeStamp(1519758062943));
+console.log(chatMessageTimeStamp(1516758062943));
 
   // Turned off for debug purposes
   document.getElementById('eventTitle').addEventListener('click', retrieveEventInfo);
@@ -200,39 +200,36 @@ function retrieveMeetupInfo(eventDate){
     // Display button based on if the user is in the meetup or not.
     let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
+    if(currentUser){
 
-    db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
+      db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
 
-      let data = snap.val();
-      let userIsInMeetup = false;
+        let data = snap.val();
+          // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
+          if(data != null){
+            console.log('Data: ',data);
 
-        // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
-        if(data != null){
-          console.log('Data: ',data);
+            // Gå igenom användaregenskaperna under denna medlem
+            for(let user in data){
+              // Om användaren som är inloggad finns i detta meetup så sätter vi userIsInMeetup till true
+              if(data[user].uniqueID == currentUser.uniqueID){
 
-          // Gå igenom användaregenskaperna under denna medlem
-          for(let user in data){
-            // Om användaren som är inloggad finns i detta meetup så sätter vi userIsInMeetup till true
-            if(data[user].uniqueID == currentUser.uniqueID){
-              userIsInMeetup = true;
+                // Visa medlemmar samt chatt
+                displayMembersAndChat(md, meetupKey);
+                break;
+              } else {
+                md.appendChild(btnDiv);
+                break;
+              }
             }
+          } else {
+            console.warn('Data is null for the members of this meeup!');
           }
-        } else {
-          console.warn('Data is null for the members of this meeup!');
-        }
-
-
-
-      if(!userIsInMeetup){
-        console.log('this btn should be appended!?');
-
-        // Om användaren inte är med i meetupet visa joinMeetupBtn
-        md.appendChild(btnDiv);
-
-      } else {
-        displayMembersAndChat(md, meetupKey);
-      }
-    });
+      });
+    } else {
+      md.appendChild(btnDiv);
+      console.log('NO EFFING USER');
+    }
 
 
     // Append MAINDIV (md)
@@ -241,11 +238,17 @@ function retrieveMeetupInfo(eventDate){
     // Create Eventlistener for the joinMeetupBtn
     joinMeetupBtn.addEventListener('click', function(event){
       let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
-      //console.log('FULLNAME OF USER IS: ', currentUser);
-      joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
-      console.log('joined meetup!');
+
+      if(currentUser){
+        joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
+      } else {
+        console.log('Setup login modal here?');
+        displayLoginModal();
+      }
+
       event.target.style.backgroundColor = '#606060';
       event.target.disabled = true;
+
     });
 
   });
@@ -356,17 +359,22 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
     } else if(memberOrButton.className == 'btnHolder'){
         console.log('This is a button.');
 
+
         // Now check if the logged in user just got added to the database!
         for(let member in meetup.members){
           let userStr = localStorage.getItem('loggedInUser');
           let user = JSON.parse(userStr);
-
-          if(user.uniqueID == meetup.members[member].uniqueID){
-            console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
-            memberOrButton.parentNode.removeChild(memberOrButton);
-            displayMembersAndChat(null, meetupKey);
-
+          if(user){
+            if(user.uniqueID == meetup.members[member].uniqueID){
+              console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
+              memberOrButton.parentNode.removeChild(memberOrButton);
+              displayMembersAndChat(null, meetupKey);
+            }
+          } else {
+            console.log('No user logged in!');
           }
+
+
         }
     }
   });
@@ -530,6 +538,8 @@ function listenToChat(meetupKey){
 
   let first = true;
 
+
+
   db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
     let chattWrapperDiv = document.getElementById('chat' + meetupKey);
 
@@ -673,7 +683,7 @@ function displayEventInfo(event){
   if(event.place == undefined){
     document.getElementById('eventPlace').innerText = event.city;
   } else {
-    document.getElementById('eventPlace').innerText = event.place;
+    document.getElementById('eventPlace').innerText = event.place + ', ' + event.city;
   }
 
   retrieveMeetupInfo(event.date);
@@ -683,9 +693,10 @@ function displayEventInfo(event){
 function retrieveEventInfo(){
 
   let eventid = getLocationInfo()[0];
+  console.log('EVENTID IS', eventid);
 
   if(eventid != undefined){
-    fetch(`https://app.ticketmaster.com/discovery/v2/events/${eventid}?apikey=${ticketMasterApiKey}`)
+    fetch(`https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_id=sweden&apikey=${ticketMasterApiKey}`)
     .then(function(response){
 
       console.log(response);
@@ -695,18 +706,15 @@ function retrieveEventInfo(){
       console.log('EVENTOBJECT without formatting:',json);
         let latitude = 58, longitude = 15;
         let event = json;
-        let venue = event._embedded.venues[0];
-        let onsale = false;
-        let coordinates = event._embedded.venues[0].location;
-        latitude = Number.parseFloat(coordinates.latitude);
-        longitude = Number.parseFloat(coordinates.longitude);
+        let venue = event.venue;
+        let priceRanges = event.price_ranges;
+        let address = venue.location.address;
+        latitude = Number.parseFloat(address.latitude);
+        longitude = Number.parseFloat(address.longitude);
 
-        if(event.dates.status.code == 'onsale'){
-          onsale = true;
-        }
         // createMarker(latitude, longitude);
 
-        let eventObject = new EventClass(eventid, event.name, event.dates.start.localDate, event.dates.start.localTime, venue.name, venue.city.name, latitude, longitude, onsale, [event.priceRanges[0].min, event.priceRanges[0].max], event.priceRanges[0].currency);
+        let eventObject = new EventClass(eventid, event.name, event.localeventdate, venue.name, address.city, latitude, longitude, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency);
 
         console.log('EVENTOBJECT: ',eventObject);
 
@@ -726,13 +734,14 @@ function retrieveEventInfo(){
 
 // Denna funktion beräknar vad som ska visas som tid på varje chattmeddelande!
 function chatMessageTimeStamp(timeStamp){
-  let currTime = new Date().getTime()
+  let currTime = new Date().getTime();
   //console.log('Current time is: ', currTime);
   let difference = currTime - timeStamp;
   //console.log('Difference:', difference);
   let seconds = Math.floor((difference / 1000));
   let minutes = Math.floor((difference / 1000 / 60));
   let hours = Math.floor((difference / 1000 / 60 / 60));
+  let days = Math.floor((difference / 1000 / 60 / 60 / 24));
   // console.log('Divided by 1000 then 60:', difference / 1000 / 60);
   // console.log('Current date: ', new Date(currTime));
   // console.log('Timestamp date:', new Date(timeStamp));
@@ -742,7 +751,13 @@ function chatMessageTimeStamp(timeStamp){
   // console.log('Minuter: ' + minutes);
   // console.log('Timmar: ' + hours);
 
-  if(hours > 0){
+  if(days > 0){
+    if(days == 1){
+      return ' en dag sedan';
+    } else {
+      return days + ' dagar sedan';
+    }
+  } else if(hours > 0){
     if(hours == 1){
       return hours + ' timme sedan';
     } else {
