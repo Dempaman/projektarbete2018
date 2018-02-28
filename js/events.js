@@ -35,7 +35,8 @@ function retrieveSearchEventInfo(){
     
     //bara lite test skit just nu
     if(userSearchValue == 'Sverige' || userSearchValue == 'sverige') {
-        userSearchValue = 'sweden';
+        //for the luls
+        userSearchValue = 'germany';
         
         //fetchar api från input
         fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=${userSearchValue}&apikey=${apiKey}`)
@@ -58,18 +59,31 @@ function retrieveSearchEventInfo(){
                 let eventPlace = event.venue.name;
                 let eventCity = event.venue.location.address.city;
                 let eventTime = event.localeventdate;
+                let eventImg = event.images;
+                let eImg;
                 
-                console.log(eventCity);
+                console.log(eventImg);
                 
-                eventTime = eventTime.slice(0, 10);
+                if (eventImg !== undefined) {
+                    eImg = eventImg[0].url;
+                    
+                } else {
+                    eImg = `http://cdn-01.hymn.se/wp-content/uploads/2017/09/IMG-142.jpg`;
+                }
                 
+                
+                if (eventTime == undefined) {
+                    eventTime = '';
+                } else {
+                    eventTime = eventTime.slice(0, 10);
+                }
 
-                console.log(`ID: ${eventId}`);
-                console.log(`Namn: ${eventName}`);
-                console.log(`Plats: ${eventPlace}`);
-                console.log(`Datum: ${eventTime}`);
+                //console.log(`ID: ${eventId}`);
+                //console.log(`Namn: ${eventName}`);
+                //console.log(`Plats: ${eventPlace}`);
+                //console.log(`Datum: ${eventTime}`);
                 
-                getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity);
+                getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
 
             })
             
@@ -89,9 +103,11 @@ function retrieveSearchEventInfo(){
 /********************TYPE OUT INFO IN SOME RANDOM DIV FUNCTION********************/
 
 
-function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity){
+function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg){
     
     let eventDiv = document.createElement('div');
+    let eUrlImg = document.createElement('img');
+    eUrlImg.src = eImg;
     let eID = document.createElement('h5');
     let eName = document.createElement('h4');
     let ePlace = document.createElement('p');
@@ -104,6 +120,7 @@ function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity){
     ePlace.innerText = `${eventPlace}, ${eventCity}`;
     eTime.innerText = `${eventTime}`;
     
+    eventDiv.appendChild(eUrlImg);
     eventDiv.appendChild(eName);
     eventDiv.appendChild(ePlace);
     eventDiv.appendChild(eTime);
