@@ -25,7 +25,6 @@ window.addEventListener('load', function(event){
     // ...
   });
   });
-
   //*** GOOGLE SIGN IN SCRIPT***//
   var providerGoogle = new firebase.auth.GoogleAuthProvider();
 
@@ -33,66 +32,85 @@ window.addEventListener('load', function(event){
   let popupButtonGoogle = document.getElementsByClassName('loginBtn--google')[0];
   popupButtonGoogle.addEventListener('click', function(event){
 
-  firebase.auth().signInWithPopup(providerGoogle).then(function(result) {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    var token = result.credential.accessToken;
-    // The signed-in user info.
-    var user = result.user;
-    console.log('Popup result: logged in as ', result.user.uid);
+    firebase.auth().signInWithPopup(providerGoogle).then(function(result) {
+
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = result.credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      console.log('Popup result: logged in as ', result.user.uid);
+
+
+      db.ref("users/" + user.uid).once("value", function(snapshot){
+
+        let result = snapshot.val();
+
+        if(result){
+          // Print this if the user exists in the database.
+          console.log(result);
+
+          // Put the user information into the localStorage db
+          localStorage.setItem('loggedInUser', JSON.stringify(result));
 
 
 
-    db.ref("users/" + user.uid).once("value", function(snapshot){
+        } else {
+          console.log(user);
+          //(uniqueID, fullname, mail, verified, age, sex, avatarURL, admin, meetups, information)
+          let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
+          console.log('IS THIS SHIT UPDATED?!?!??!?! AGIN AGIN AIAIGNIAINGAINGNIAINGNIGINNIGANIAGNIGAIN');
+          console.log('No user here. Creating user in database.');
 
-      let result = snapshot.val();
+          newUser.push();
 
-      if(result){
-        // Print this if the user exists in the database.
-        console.log(result);
+          localStorage.setItem('loggedInUser', JSON.stringify(newUser));
 
-        // Put the user information into the localStorage db
-        localStorage.setItem('loggedInUser', JSON.stringify(result));
+        }
+
+        // Function to hide the login modal
+        console.log('THE USER IS NOOOOOOW LOGGED IN');
+        let loginWrapShow = document.getElementsByClassName('loginWrapShow')[0];
+        loginWrapShow.className = 'loginWrap';
+
+        /*//Funktion som rensar input fälten
+        document.getElementById('nameInput').value = '';
+        document.getElementById('addressInput').value = '';
+        document.getElementById('timeInput').value = '';
+        document.getElementById('spotsInput').value = '';
+        document.getElementById('placeNameInput').value = ''; */
+
+        document.getElementById('createMeetupButton').innerText = 'Skicka'
+        document.getElementById('createMeetupButton').className = 'verifySend';
+
+        let sendApproveWrapDiv = document.createElement('div');
+        let sendApproveText = document.createElement('p');
 
 
-      } else {
-        console.log(user);
-        //(uniqueID, fullname, mail, verified, age, sex, avatarURL, admin, meetups, information)
-        let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
-        console.log('IS THIS SHIT UPDATED?!?!??!?! AGIN AGIN AIAIGNIAINGAINGNIAINGNIGINNIGANIAGNIGAIN');
-        console.log('No user here. Creating user in database.');
-
-        newUser.push();
-
-        localStorage.setItem('loggedInUser', JSON.stringify(newUser));
-
-      }
-
-    });
-
-
-    //** LOGGING OUT OTHERS IF ANY **//
-      firebase.auth().signOut().then(function(result) {
-        console.log('Signed out Github user success');
-      })
-      .catch(function(error) {
-        console.log('Signout failed');
+        sendApproveText.innerText = 'Ditt Meetup är nu skapat!'
+        sendApproveText.className = 'approvedBlockText'
+        sendApproveWrapDiv.className = 'approvedBlock'
+        document.getElementById('putApproveWrapHere').appendChild(sendApproveWrapDiv);
+        sendApproveWrapDiv.appendChild(sendApproveText);
       });
-      firebase.auth().signOut().then(function() {
-        console.log("Facebook sign out was successful")
+
+
+      //** LOGGING OUT OTHERS IF ANY **//
+        firebase.auth().signOut().then(function() {
+          console.log("Facebook sign out was successful")
+        }).catch(function(error) {
+          // An error happened.
+        });
+
       }).catch(function(error) {
-        // An error happened.
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
       });
-
-    }).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
-    });
     });
 
 

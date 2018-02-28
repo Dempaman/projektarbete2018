@@ -33,16 +33,22 @@ html, body {
 
 /* Real shit below */
 
+
+
 #eventHolder > div > p {
   font-family: 'Roboto', sans-serif;
   padding: 0px;
   margin: 0px 20px 0px;
 }
+#eventHolder #eventPlace {
+  margin: 2px 21px 0px;
+}
+
 #eventHolder > div:first-child > p:first-child {
-  color: #aaa;
+  color: #c0c0c0;
   font-size: 0.9em;
   font-weight: 100;
-  margin: 25px 22px -6px;
+  margin: 25px 22px -5px;
 }
 #eventHolder > p {
   font-family: 'Roboto', sans-serif;
