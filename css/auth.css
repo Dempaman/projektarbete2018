@@ -3,28 +3,55 @@
 /* Shared */
 
 #fbCont, #googleCont{
-  display: flex;
   justify-content: center;
+  display: flex;
 }
 
-#loginWrap{
-  margin: 100px 0 100px 0;
+.approvedBlock{
+  display: block;
+  left: 2%;
+  margin-top: 200px;
+  padding: 100px 60px 100px;
+  position: absolute;
+  z-index: 21;
+  background: #f8f8f8;
+  border: 2px solid #c9c9c999;
+  border-radius: 5px;
+}
+
+.approvedBlockText{
+  font-size: 1.5em;
+}
+
+.loginWrap{
+  display: none;
+}
+.loginWrapShow{
+  display: block;
+  left: 2%;
+  margin-top: 200px;
+  padding: 200px 60px 200px;
+  position: absolute;
+  z-index: 21;
+  background: #f8f8f8;
+  border: 2px solid #c9c9c999;
+  border-radius: 5px;
 }
 
 .loginBtn {
   box-sizing: border-box;
   position: relative;
-  /* width: 13em;  - apply for fixed size */
   margin: 0.2em;
   padding: 0 15px 0 46px;
   border: none;
-  text-align: left;
+  text-align: center;
   line-height: 34px;
   white-space: nowrap;
   border-radius: 0.2em;
   font-size: 16px;
   color: #FFF;
   cursor: pointer;
+  width: 225px;
 }
 .loginBtn:before {
   content: "";
