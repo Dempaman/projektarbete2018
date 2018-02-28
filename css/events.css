@@ -13,10 +13,8 @@ body {
 }
 
 .events-search > h1 {
-    font-family: 'Impact', Arial, sans-serif;
-    letter-spacing: 1px;;
-    font-size: 3.7em;
-    font-weight: 100;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 3em;
 }
 
 .events-search {
@@ -38,7 +36,6 @@ form.search-events input[type=text] {
     width: 80%;
     background: #f1f1f1;
     opacity: 0.9;
-    outline-color: #6C0CCC;
 }
 
 form.search-events button {
@@ -67,7 +64,6 @@ form.search-events:focus {
 
 .all-events-search {
     margin-top: 5px;
-    outline: none;
     background-color: transparent;
     font-family: Roboto;
     font-size: 1.1em;
