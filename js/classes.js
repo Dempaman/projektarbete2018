@@ -37,8 +37,8 @@ class MeetupClass {
   }
 
   removeSelf(){
-    db.ref('meetups/'+this.key).remove();
-    
+    db.ref('meetups/'+ this.eventID + '/' + this.key).remove();
+
     // Remove the messages for this aswell!
     db.ref('chats/'+this.key).remove();
   }

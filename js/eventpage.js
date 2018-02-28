@@ -287,7 +287,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
     let meetup = snapshot.val();
     let meetupKey = snapshot.key;
     // Definiera dom-objektet.
-    let meetupWrapper = document.getElementById('meetup-'+snapshot.key);
+    let meetupWrapper = document.getElementById('meetup-' + meetupKey);
     console.log(meetupWrapper);
 
     // Dags att uppdatera det appropriatly.
@@ -374,7 +374,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 }
 
 function displayMembersAndChat(md, meetupKey){
-  let eventID = getLocationInfo()[0];
+    let eventID = getLocationInfo()[0];
 
     if(md == null){
       md = document.getElementById('meetup-' + meetupKey);
@@ -385,8 +385,7 @@ function displayMembersAndChat(md, meetupKey){
     let moreMeetupInfoDiv = document.createElement('div');
     moreMeetupInfoDiv.className = 'moreMeetupInfoDiv';
 
-    // Visa medlemmar här!
-
+    // Visa medlemmar här nedan
 
     // Skapa label för medlemmar
     let membersLabel = document.createElement('p');
@@ -471,68 +470,34 @@ function displayMembersAndChat(md, meetupKey){
     chattWrapperDiv.appendChild(noMessage);
     chattWrapperDiv.setAttribute('id', 'chat' + meetupKey);
     let first = true;
-    db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
 
-      if(first){
-        chattWrapperDiv.removeChild(noMessage);
-        first = false;
-      }
-
-      //console.log('ATLEAST ONE MESSAGE HERE!!');
-      let message = snapshot.val();
-
-      // Create the message DIV to be printed on the DOM
-      let messageDiv = document.createElement('div');
-      messageDiv.className = 'chattMessageDiv';
-
-
-
-      // Create the avatar picture
-      let avatarImg = document.createElement('img');
-      avatarImg.setAttribute('src', message.avatarURL);
-      messageDiv.appendChild(avatarImg);
-
-      // Create the timeStamp
-      let timeStamp = document.createElement('p');
-      timeStamp.innerText = chatMessageTimeStamp(message.time);
-      timeStamp.setAttribute('timeStamp', message.time);
-      timeStamp.className = 'timeStamp';
-
-      // Create the fullname
-      let fullname = document.createElement('p');
-      fullname.innerText = message.fullname;
-
-      // Create the actual message
-      let textmessage = document.createElement('p');
-      textmessage.innerText = message.textmessage;
-
-      // Create a div to hold name + timeStamp
-      let messageWrapper = document.createElement('div');
-      messageWrapper.className = 'messageWrapper';
-
-      messageWrapper.appendChild(fullname);
-      messageWrapper.appendChild(timeStamp);
-      messageWrapper.appendChild(textmessage);
-
-      // Append everything into the messageDiv
-      messageDiv.appendChild(avatarImg);
-      messageDiv.appendChild(messageWrapper);
-
-      document.getElementById('chat' + meetupKey).appendChild(messageDiv);
-
-      chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
-    })
+    // start to listen to chat messages on this meetupKey
+    listenToChat(meetupKey);
 
     // End of chat
+
+
+    // Create leaveMeetupBtn if the user isn't the creator!
+    let appendBtn = false;
     let leaveMeetupBtn = document.createElement('button');
-    leaveMeetupBtn.innerText = 'Lämna meetup';
-    leaveMeetupBtn.className = 'leaveMeetupBtn';
+    db.ref('meetups/' + eventID + '/' + meetupKey + '/creator').once('value', function(snapshot){
+      let data = snapshot.val();
 
-    leaveMeetupBtn.addEventListener('click', function(event){
-      event.target.style.backgroundColor = '#444';
-      leaveMeetup(meetupKey);
+      if(data.uniqueID == currentUser.uniqueID){
+        console.log('Lets not show leave meetup button :)');
+      } else {
+        appendBtn = true;
+
+        leaveMeetupBtn.innerText = 'Lämna meetup';
+        leaveMeetupBtn.className = 'leaveMeetupBtn';
+
+        leaveMeetupBtn.addEventListener('click', function(event){
+          event.target.style.backgroundColor = '#444';
+          leaveMeetup(meetupKey);
+        });
+      }
+
     });
-
 
     // Append the members and chat into the moreMeetupInfoDiv
     moreMeetupInfoDiv.appendChild(membersWrappingDiv);
@@ -546,13 +511,78 @@ function displayMembersAndChat(md, meetupKey){
     //Append inputBox
     moreMeetupInfoDiv.appendChild(inputBox);
 
-    //Append leave meetup button
-    moreMeetupInfoDiv.appendChild(leaveMeetupBtn);
+    //Append leave meetup button if the User isn't the creator
+    if(appendBtn) moreMeetupInfoDiv.appendChild(leaveMeetupBtn);
 
     //Append moreMeetupInfoDiv into the MAINDIV and listen for the leave event
     md.appendChild(moreMeetupInfoDiv);
 
     restoreJoinBtn(meetupKey);
+}
+
+// Stop listenting to chat messages on this meetupKey
+function stopListenToChat(meetupKey){
+  db.ref('chats/' + meetupKey).off();
+}
+
+// Start to listen to chat messages on this meetupKey
+function listenToChat(meetupKey){
+
+  let first = true;
+
+  db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
+    let chattWrapperDiv = document.getElementById('chat' + meetupKey);
+
+    if(first){
+      while(chattWrapperDiv.firstChild){
+        chattWrapperDiv.removeChild(chattWrapperDiv.firstChild);
+      }
+      first = false;
+    }
+
+    //console.log('ATLEAST ONE MESSAGE HERE!!');
+    let message = snapshot.val();
+
+    // Create the message DIV to be printed on the DOM
+    let messageDiv = document.createElement('div');
+    messageDiv.className = 'chattMessageDiv';
+
+    // Create the avatar picture
+    let avatarImg = document.createElement('img');
+    avatarImg.setAttribute('src', message.avatarURL);
+    messageDiv.appendChild(avatarImg);
+
+    // Create the timeStamp
+    let timeStamp = document.createElement('p');
+    timeStamp.innerText = chatMessageTimeStamp(message.time);
+    timeStamp.setAttribute('timeStamp', message.time);
+    timeStamp.className = 'timeStamp';
+
+    // Create the fullname
+    let fullname = document.createElement('p');
+    fullname.innerText = message.fullname;
+
+    // Create the actual message
+    let textmessage = document.createElement('p');
+    textmessage.innerText = message.textmessage;
+
+    // Create a div to hold name + timeStamp
+    let messageWrapper = document.createElement('div');
+    messageWrapper.className = 'messageWrapper';
+
+    messageWrapper.appendChild(fullname);
+    messageWrapper.appendChild(timeStamp);
+    messageWrapper.appendChild(textmessage);
+
+    // Append everything into the messageDiv
+    messageDiv.appendChild(avatarImg);
+    messageDiv.appendChild(messageWrapper);
+
+
+    chattWrapperDiv.appendChild(messageDiv);
+
+    chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+  });
 }
 
 // Denna funktion uppdaterar tiden på meddelanden!
@@ -569,6 +599,7 @@ function updateTimeStamps(){
 // Denna funktion lyssnar på ifall någonting plockas bort ur databasen!
 function restoreJoinBtn(meetupKey){
   let eventid = getLocationInfo()[0];
+
   db.ref('meetups/'+eventid+'/'+meetupKey).on('child_removed', function(snapshot){
     let data = snapshot.val();
     let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -611,6 +642,7 @@ function restoreJoinBtn(meetupKey){
 
 // Lämna ett meetup!
 function leaveMeetup(meetupKey){
+  stopListenToChat(meetupKey);
   let user = JSON.parse(localStorage.getItem('loggedInUser'));
   let eventID = getLocationInfo()[0];
 
