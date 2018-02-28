@@ -134,8 +134,13 @@ function initCreateMeetupListeners(ageSlider){
       let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
       meetup.push();
       console.log('Meetup: ',meetup);
+
     } else {
+      let loginWrap = document.getElementsByClassName('loginWrap')[0];
+      loginWrap.className = 'loginWrapShow';
       console.log('No user logged in!!!');
+
+
     }
   });
 }
