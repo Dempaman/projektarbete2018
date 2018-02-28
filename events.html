@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
   	<meta charset="utf-8" name="viewport" content="Width=device-width, initial-scale=1.0">
-  	<title>MeWent | Alla evenemang</title>
+  	<title>MeWent | Alla event</title>
 
     <!-- Fonts & Icons -->
   	<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Questrial" rel="stylesheet">
@@ -20,11 +20,12 @@
     <!-- FireBase
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>-->
 
-    <!-- JavaScript
-    <script src="js/eventpage.js"></script>
-  	<script src="js/classes.js"></script>
+    <!-- JavaScript 
+   <script src="js/classes.js"></script>
+    -->
+    <script src="js/events.js"></script>
     <script src="slider/js/rSlider.min.js"></script>
-  -->
+
 
   </head>
   <body>
@@ -66,9 +67,9 @@
           <div class="events-search">
                <h1>meWent</h1>
                <!--SEARCH WITH INPUT VALUE-->
-                <form class="search-events" style="margin:auto;max-width:400px">
+                <form class="search-events" style="margin:auto;max-width:405px">
                   <input type="text" name="searchevent" placeholder="Sök..">
-                  <button type="submit"><i class="fa fa-search"></i></button>
+                  <button id="search-button" type="submit"><i class="fa fa-search"></i></button>
                 </form>
 
                 <!--SELECT DEFAULT OPTIONS-->
@@ -81,10 +82,10 @@
                 </select>
                 <span style="color: #12A356"><strong>i</strong></span>
                 <select class="all-events-search">
-                  <option value="home-city">Stockholm</option>
-                  <option value="city1">Göteborg</option>
-                  <option value="city2">Malmö</option>
-                  <option value="city3">Uppsala</option>
+                  <option value="home-city">hela Sverige</option>
+                  <option value="city1">Stockholm</option>
+                  <option value="city2">Göteborg</option>
+                  <option value="city3">Malmö</option>
                 </select>
                 <select class="all-events-search">
                   <option value="today">Denna månaden</option>
