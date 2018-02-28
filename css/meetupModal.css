@@ -4,6 +4,26 @@ html, body {
   background-color: #222;
   font-family: 'Roboto', sans-serif;
 }
+
+button.verifySend {
+  display: inline-block;
+  margin: 5px auto;
+  width: 150px;
+  outline: 0;
+  border-radius: 5px;
+  padding: 9px 20px;
+  font-family: 'Questrial', sans-serif;
+}
+
+button.verifySend {
+  color: #fff4f4;
+  border: none;
+  background-color: #6C0CCC;
+}
+button.verifySend:hover {
+  background-color: #da9393;
+}
+
 #modalWrapper {
   width: 100%;
   height: 100%;
