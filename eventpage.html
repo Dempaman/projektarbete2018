@@ -16,7 +16,9 @@
     <link rel="stylesheet" href="slider/css/rSlider.min.css">
 
     <!-- Stylesheet -->
-  	<link rel="stylesheet" type="text/css" href="css/eventpage.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" type="text/css" href="css/eventpage.css">
+    <link rel="stylesheet" type="text/css" href="css/meetupModal.css">
 
     <!-- FireBase -->
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
@@ -25,6 +27,13 @@
     <script src="js/eventpage.js"></script>
   	<script src="js/classes.js"></script>
     <script src="slider/js/rSlider.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/meetupmodal.js"></script>
+
+    <!-- Google Map Api -->
+    <script src="js/googleMapApi.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo&libraries=places&callback=initMap"
+        async defer></script>
 
   </head>
   <body>
@@ -43,7 +52,7 @@
       </div>
       <p>Information</p>
       <div id="eventInfoText">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum iaculis vehicula. Praesent venenatis sem vulputate neque dictum, vel gravida magna rutrum. Aenean faucibus gravida ligula et vestibulum. Phasellus blandit finibus odio at pellentesque. Nam blandit viverra libero, nec fringilla nibh luctus a. Integer nisl leo, auctor quis interdum ut, interdum vel sapien. Sed et erat a purus pharetra ultrices non ut nisi. Pellentesque mi odio, dapibus sit amet aliquam ut, congue a urna. Nam eu risus vitae purus malesuada aliquam non ac sem. Etiam semper tortor et mi ullamcorper molestie in nec mauris. Nullam in orci neque. Sed vestibulum, lorem at vestibulum maximus, eros enim mollis eros, ut consectetur tellus ex pulvinar turpis. Quisque ornare metus id enim mattis porttitor. Donec ultrices nisl a nibh volutpat pretium. </p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum iaculis vehicula. Praesent venenatis sem vulputate neque dictum, vel graa. </p>
       </div>
       <div id="eventDivButtons">
         <button class="green">Köp Biljett </button>
@@ -52,9 +61,58 @@
       </div>
     </div>
     <div id="meetupWrapper">
+    </div>
 
+    <div id="modalWrapper" class="">
+      <div id="modalContent">
+        <div class="header">
+          <h2>Skapa meetup</h2>
+          <i class="mdi mdi-close mdi-36px"></i>
+        </div>
 
+        <div id="putApproveWrapHere"></div>
+        <div class="loginWrap">
 
+        <!-- Knappar för att logga in -->
+        <div id="googleCont"><!--Google login knapp -->
+          <button class="loginBtn loginBtn--google">Logga in med Google</button>
+        </div>
+
+          <div id="fbCont"><!--FAcebook login knapp -->
+            <button class="loginBtn loginBtn--facebook">Logga in med facebook</button>
+          </div>
+
+        </div>
+
+        <div class="content"> <!-- Innehåller allt som ska finnas i modalen -->
+          <input id="nameInput" placeholder="Namn" type="text">
+          <input id="addressInput" placeholder="Adress" type="text">
+          <input id="placeNameInput" placeholder="Platsnamn" type="text">
+          <input id="timeInput" placeholder="Tid" type="text">
+
+          <div class="sliderHolder"> <!-- Själva wrappern för slidern -->
+            <input type="text" id="ageSlider" class="slider"/>
+          </div>
+
+          <div id="ageIntervalDisplayer"> <!-- Printar ut vilka år slidern står på med JavaScript -->
+          </div>
+
+          <div id=mapWrap>
+            <div id="map"></div>
+          </div>
+
+          <input id="spotsInput" placeholder="Antal platser" type="text"> <!-- Input för antal platser -->
+
+          <div id="textareaDiv" maxlength="25">
+            <p>Information</p>
+            <textarea placeholder="Skriv lite information om ditt meetup här!"></textarea>
+          </div>
+
+          <button id="createMeetupButton"> Skapa Meetup</button>
+
+        </div>
+
+      </div>
     </div>
 
   </body>

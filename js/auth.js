@@ -16,6 +16,7 @@ window.addEventListener('load', function(event){
 
   }).catch(function(error) {
     // Handle Errors here.
+    console.log(error);
     var errorCode = error.code;
     var errorMessage = error.message;
     // The email of the user's account used.
@@ -31,9 +32,10 @@ window.addEventListener('load', function(event){
   //** POPUP GOOGLE LOGIN**//
   let popupButtonGoogle = document.getElementsByClassName('loginBtn--google')[0];
   popupButtonGoogle.addEventListener('click', function(event){
+    console.log('Atleast we clicked something');
 
     firebase.auth().signInWithPopup(providerGoogle).then(function(result) {
-
+      console.log(result);
       // This gives you a Google Access Token. You can use it to access the Google API.
       var token = result.credential.accessToken;
       // The signed-in user info.
@@ -103,6 +105,7 @@ window.addEventListener('load', function(event){
 
       }).catch(function(error) {
         // Handle Errors here.
+        console.log(error);
         var errorCode = error.code;
         var errorMessage = error.message;
         // The email of the user's account used.

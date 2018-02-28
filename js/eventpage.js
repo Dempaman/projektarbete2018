@@ -1,4 +1,5 @@
 // Globala variabler
+
 const ticketMasterApiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
 
 // Initalize the page based on window location.
@@ -698,6 +699,8 @@ function retrieveEventInfo(){
   if(eventid != undefined){
     fetch(`https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_id=sweden&apikey=${ticketMasterApiKey}`)
     .then(function(response){
+
+      'https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_ids=sweden&apikey=${ticketMasterApiKey}'
 
       console.log(response);
       return response.json();
