@@ -2,6 +2,10 @@ html, body {
   margin: 0;
   padding: 0;
 }
+.hidden {
+  display: none;
+  opacity: 0;
+}
 .header {
   display: flex;
   flex-direction: row;
