@@ -131,10 +131,6 @@ class MessageClass {
   }
 }
 
-function displayLoginModal(){
-  console.log('This is printed from the displayLoginModal function');
-}
-
 // db.ref('chatter/'+id).on('child_added', function(snapshot){
 //
 //   let values = snapshot.val();

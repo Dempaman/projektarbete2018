@@ -23,9 +23,6 @@
   font-size: 1.5em;
 }
 
-.loginWrap{
-  display: none;
-}
 .loginWrapShow{
   display: block;
   left: 2%;
