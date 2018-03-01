@@ -23,13 +23,13 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
   //Tar bort användern från localStorage och loggar ut från google i Firebase.
   loginInMenu.addEventListener('click', function(event){
     if(localStorage.getItem('loggedInUser')){
-
       localStorage.removeItem('loggedInUser');
       loginInMenu.innerText = "LOGGA UT!!!";
 
       firebase.auth().signOut().then(function() {
         // Sign-out successful.
         moreMeetupInfoDiv.remove();
+
         console.log('Google sign-out successful')
 
       }).catch(function(error) {
