@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="slider/css/rSlider.min.css">
 
     <!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="css/menu.css">
     <link rel="stylesheet" href="css/auth.css">
     <link rel="stylesheet" type="text/css" href="css/eventpage.css">
     <link rel="stylesheet" type="text/css" href="css/meetupModal.css">
@@ -36,12 +37,43 @@
 
   </head>
   <body>
-    <div class="header">
-      <h2> Event </h2>
-      <i class="mdi mdi-menu mdi-36px"></i>
-    </div>
-    <div class="imageHolder">
+    <!--------------------Menu-------------------->
+    <nav id="navigation">
+      <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
+      <div class="header">
+        <h2> Event </h2>
+      </div>
+      <div id="menuToggle">
+        <!--
+        A fake / hidden checkbox is used as click reciever,
+        so you can use the :checked selector on it.
+        -->
+        <input type="checkbox"/>
 
+        <!--
+        Some spans to act as a hamburger.
+        -->
+        <span></span>
+        <span></span>
+        <span></span>
+
+        <!--
+        Too bad the menu has to be inside of the button
+        but hey, it's pure CSS magic.
+        -->
+        <ul id="menu">
+          <a href="#" class="active"><li>HEM</li></a>
+          <a href="#"><li>MIN PROFIL</li></a>
+          <a href="#"><li>ALLA EVENTS</li></a>
+          <a href="#"><li>KONTAKTA OSS</li></a>
+          <a href="#"><li id="loginInMenu">LOGGA IN</li></a>
+        </ul>
+      </div>
+    </nav>
+    <!--------------------Menu End-------------------->
+
+    <div class="imageHolder">
+      <!-- Här ska bild var för eventet (tex Summerburst 2018) -->
     </div>
     <div id="eventHolder">
       <div>
@@ -62,11 +94,14 @@
     <div id="meetupWrapper">
     </div>
 
+    <!-- Hidden modal för att skapa ett meetup -->
     <div id="modalWrapper" class="hidden">
       <div id="modalContent">
         <div class="header">
           <h2>Skapa meetup</h2>
-          <i class="mdi mdi-close mdi-36px"></i>
+          <div id="menuDiv">
+            <i class="mdi mdi-close mdi-36px"></i>
+          </div>
         </div>
 
         <div id="putApproveWrapHere"></div>
