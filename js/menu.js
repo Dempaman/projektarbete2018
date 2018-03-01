@@ -10,11 +10,12 @@ window.addEventListener('load', function(event){
 
   //Tar bort användern från localStorage
   loginInMenu.addEventListener('click', function(event){
-
     if(localStorage.getItem('loggedInUser')){
       localStorage.removeItem('loggedInUser');
       loginInMenu.innerText = "LOGGA IN!!!";
     }else if(!localStorage.getItem('loggedInUser')){
+      navigation.className = 'hidden';
+      toggleLoginModal();
       console.log('HÄR SKA VI LOGGA IN ANVÄNDAREN');
     }
     });
@@ -34,5 +35,7 @@ window.addEventListener('load', function(event){
       navigation.className = '';
       meetupWrapper.className = '';
     })
+
+
 
 });

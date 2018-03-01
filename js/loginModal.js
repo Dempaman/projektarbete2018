@@ -135,7 +135,9 @@ function addBtnListeners(googleButton, facebookButton, closeButton){
 
   closeButton.addEventListener('click', function(){
     toggleLoginModal();
+    navigation.className = '';
     console.log('closed!');
+
   });
 
 }
