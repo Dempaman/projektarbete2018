@@ -1,5 +1,43 @@
 // This document holds the loginModal to be displayed on any page that uses this function!
 
+//Eventlistener to authStateChange
+firebase.auth().onAuthStateChanged(user => {
+  console.log('AUTH STATE CHANGE FOUND!');
+  if(user) {
+    //window.location = 'eventpage.html'; //After successful login, user will be redirected to home.html
+
+    // The user is logged in.
+    console.log('User data:',user);
+
+    db.ref("users/" + user.uid).once("value", function(snapshot){
+
+      let result = snapshot.val();
+
+      if(result){
+        // Print this if the user exists in the database.
+        console.log(result);
+
+        // Put the user information into the localStorage db
+        localStorage.setItem('loggedInUser', JSON.stringify(result));
+
+      } else {
+
+        let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
+        console.log('No user here. Creating user in database.');
+
+        newUser.push();
+
+        localStorage.setItem('loggedInUser', JSON.stringify(newUser));
+      }
+      console.log('THE USER IS NOOOOOOW LOGGED IN');
+    });
+
+  } else {
+    console.log('wubalubadub dub');
+    localStorage.removeItem('loggedInUser');
+  }
+});
+
 function toggleLoginModal(){
 
   let lmw = document.getElementById('lmw');
@@ -103,9 +141,13 @@ function addBtnListeners(googleButton, facebookButton, closeButton){
 }
 
 function loginGoogle(){
+  var providerGoogle = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithRedirect(providerGoogle)
   console.log('Google button pressed!');
 }
 function loginFacebook(){
+  var providerGoogle = new firebase.auth.FacebookAuthProvider();
+  firebase.auth().signInWithRedirect(providerFacebook)
   console.log('Facebook button pressed!');
 }
 
