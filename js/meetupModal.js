@@ -1,7 +1,9 @@
 // Initialize a new plugin instance for one element or NodeList of elements.
 
-window.onload = function(){
+function initSliderAndMoreShit() {
+
   displayAgeInterval('0,100');
+
   getLocationInfo();
   var ageSlider = new rSlider({
           target: '#ageSlider',
@@ -74,8 +76,6 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
     }
     displayAgeInterval(val1 + ',' + val2);
   };
-
-//end of callback
 }
 
 function initCreateMeetupListeners(ageSlider){
@@ -83,7 +83,6 @@ function initCreateMeetupListeners(ageSlider){
 
   // Vad gör vi när man trycker på skapa meetup. (eventid, name, address, latitude, longitude, time, spots, ageInterval, information, creator, members, admins)
   createBtn.addEventListener('click', function(event){
-    console.log('HALLÅ!!!');
     /* Börja med att hämta alla variabler */
     let eventid = getLocationInfo()[0];
     let name = document.getElementById('nameInput').value;
@@ -135,11 +134,22 @@ function initCreateMeetupListeners(ageSlider){
       meetup.push();
       console.log('Meetup: ',meetup);
 
+      // Empty the fields
+        document.getElementById('nameInput').value = '';
+        document.getElementById('addressInput').value = '';
+        document.getElementById('timeInput').value = '';
+        document.getElementById('spotsInput').value = '';
+        document.getElementById('placeNameInput').value = '';
+
+      // Init the skapa meetup modal HERE
+      document.getElementById('modalWrapper').className = 'hidden';
+      document.getElementById('meetupWrapper').className = 'show';
+      window.scrollTop = window.scrollHeight;
+
     } else {
       let loginWrap = document.getElementsByClassName('loginWrap')[0];
       loginWrap.className = 'loginWrapShow';
       console.log('No user logged in!!!');
-
 
     }
   });
