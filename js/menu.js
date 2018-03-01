@@ -40,7 +40,6 @@ window.addEventListener('load', function(event){
     //Gömmer hela navigation sidan och skickar dig vidare till login-modal.
     purple.addEventListener('click', function(event){
       navigation.className = 'hidden';
-      toggleLoginModal();
     });
 
 
