@@ -146,8 +146,8 @@ function initCreateMeetupListeners(ageSlider){
       window.scrollTop = window.scrollHeight;
 
     } else {
-      let loginWrap = document.getElementsByClassName('loginWrap')[0];
-      loginWrap.className = 'loginWrapShow';
+      modalWrapper.className = 'hidden'
+      toggleLoginModal();
       console.log('No user logged in!!!');
 
     }
