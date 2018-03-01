@@ -8,7 +8,7 @@ window.addEventListener('load', function(event){
   let navigation = document.getElementById('navigation');
   let loginInMenu = document.getElementsByClassName('loginInMenu')[0];
 
-  //Tar bort användern från localStorage
+  //Tar bort användern från localStorage och loggar ut från google i Firebase.
   loginInMenu.addEventListener('click', function(event){
     if(localStorage.getItem('loggedInUser')){
 
@@ -30,12 +30,14 @@ window.addEventListener('load', function(event){
       toggleLoginModal();
       console.log('HÄR SKA VI LOGGA IN ANVÄNDAREN');
     }
-    });
+  });//Tar bort användern från localStorage --- slut
 
+
+    //Om du är inloggad så står de "logga ut" i menu
     if(localStorage.getItem('loggedInUser')){
       loginInMenu.innerText = "LOGGA UT!!!";
     }
-
+    //Gömmer hela navigation sidan och skickar dig vidare till login-modal.
     purple.addEventListener('click', function(event){
       navigation.className = 'hidden';
     });
@@ -47,7 +49,4 @@ window.addEventListener('load', function(event){
       navigation.className = '';
       meetupWrapper.className = '';
     })
-
-
-
 });

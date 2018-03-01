@@ -110,6 +110,7 @@ function initCreateMeetupListeners(ageSlider){
     // Skaparens användarID som vi får genom autentiseringen!
     if(localStorage.getItem('loggedInUser')){
 
+
       let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
       let creator = {
@@ -132,6 +133,11 @@ function initCreateMeetupListeners(ageSlider){
       let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
       meetup.push();
       console.log('Meetup: ',meetup);
+
+      //visa navigation och menu.... igen!!.
+        document.getElementById('navigation').className = 'show';
+        document.getElementById('menuToggle').className = 'show';
+
 
       // Empty the fields
         document.getElementById('nameInput').value = '';

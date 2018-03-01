@@ -30,6 +30,11 @@ firebase.auth().onAuthStateChanged(user => {
         localStorage.setItem('loggedInUser', JSON.stringify(newUser));
       }
       console.log('THE USER IS NOOOOOOW LOGGED IN');
+      //Efter som google sign-in redirect'ar oss så kollar vi om vi är inloggade eller inte. Kan de göras bättre????
+      let loginInMenu = document.getElementsByClassName('loginInMenu')[0];
+      if(localStorage.getItem('loggedInUser')){
+        loginInMenu.innerText = "LOGGA UT!!!";
+      }
     });
 
   } else {
