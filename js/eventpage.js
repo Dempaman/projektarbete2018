@@ -14,14 +14,23 @@ console.log(chatMessageTimeStamp(1516758062943));
 
 }
 
-function createEventListenersForBtns(eventid, url){
+function createEventListenersForBtns(eventid, url, onsale){
   let buyBtn = document.getElementById('eventDivButtons').children[0];
+  onsale = false;
+
   let createMeetupBtn = document.getElementById('eventDivButtons').children[2];
 
-  buyBtn.addEventListener('click', function(){
-    window.open(url);
-    console.log('Köp biljett hos Ticketmaster!');
-  });
+  if(onsale){
+    buyBtn.addEventListener('click', function(){
+      window.open(url);
+      console.log('Köp biljett hos Ticketmaster!');
+    });
+  } else {
+    buyBtn.disabled = true;
+    buyBtn.innerText = 'Inga biljetter finns';
+    buyBtn.className = 'noTicketsBtn';
+  }
+
 
   createMeetupBtn.addEventListener('click', function(){
 
@@ -689,13 +698,22 @@ function leaveMeetup(meetupKey){
 
 function displayEventInfo(event){
 
-  let imgHolder = document.getElementsByClassName('imageHolder')[0];
+  let imgHolder = document.getElementsByClassName('imageHolder')[0].children[0];
   imgHolder.style.background = 'url("'+event.imageURL+'")';
   imgHolder.style.backgroundRepeat =  'no-repeat';
   imgHolder.style.backgroundSize = 'cover';
   imgHolder.style.backgroundPosition = 'center';
 
-  document.getElementById('eventDate').innerText = event.date;
+  // Add google map!
+  let googleMapImg = document.getElementsByClassName('imageHolder')[0].children[1];
+  let googleMapImgURL = `https://maps.googleapis.com/maps/api/staticmap?center=${event.address}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${event.address}&key=${googleApiKey2}`;
+  googleMapImg.style.background = 'url("'+googleMapImgURL+'")';
+  googleMapImg.style.backgroundRepeat =  'no-repeat';
+  googleMapImg.style.backgroundSize = 'cover';
+  googleMapImg.style.backgroundPosition = 'center';
+
+  // Set the Date
+  document.getElementById('eventDate').innerText = displayDate(event.date, event.weekDay, event.offsale);
   document.getElementById('eventTitle').innerText = event.name;
   console.log('Event is:',event);
 
@@ -733,13 +751,13 @@ function retrieveEventInfo(){
         let venue = event.venue;
         let priceRanges = event.price_ranges;
         let address = venue.location.address;
-        latitude = Number.parseFloat(address.latitude);
-        longitude = Number.parseFloat(address.longitude);
+        let date = event.localeventdate;
+        let offsale = event.offsale.value;
 
         // createMarker(latitude, longitude);
         console.log('ImageUrl', imageURL);
 
-        let eventObject = new EventClass(eventid, event.name, event.localeventdate, venue.name, address.city, latitude, longitude, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url);
+        let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale);
 
         console.log('EVENTOBJECT: ',eventObject);
 
@@ -747,11 +765,11 @@ function retrieveEventInfo(){
         displayEventInfo(eventObject);
 
         // Skapa eventListeners för knapparna!
-        createEventListenersForBtns(eventid, event.url);
+        createEventListenersForBtns(eventid, event.url, event.properties.seats_avail);
 
     })
     .catch(function(error){
-      console.log('Eventet hittades inte! Här är en sökruta du kan använda för att söka efter ett event :)');
+      console.log('Här skedde det ett fel! Försöker vi plocka fram något som inte skickas med?');
       console.log('Felmeddelande:',error);
     })
   }
@@ -802,6 +820,63 @@ function chatMessageTimeStamp(timeStamp){
       }
   } else {
     return 'nu';
+  }
+}
+
+//Funktion för att visa datumet lite finare :)
+function displayDate(dateStr, weekDay, offsale){
+
+  let date, time, year, month, day;
+
+  if(!dateStr && offsale){
+    dateStr = offsale;
+  }
+
+  // Make the checks
+  if(dateStr.includes('T')){
+    dateStr = dateStr.split('T');
+
+    console.log('datestr: ',dateStr)
+
+  } else {
+    console.log('DateSTRING: ',dateStr);
+    dateStr = dateStr.split('-');
+
+    year = dateStr[0];
+    month = dateStr[1];
+    day = dateStr[2];
+
+  }
+
+  // Om tiden finns, plocka bort millisekunder samt Z
+  if(time){
+    time = time.substring(0, time.length-4);
+  } else if(offsale){ // Annars försöker vi hämta tiden ifrån offsale datumet ifall det är samma dag. (Risky)
+    date = offsale.split('T')[0];
+    date = date.split('-');
+    if(year == date[0] && month == date[1] && day == date[2]){
+      console.log('It\'s the same day!');
+      time = offsale.split('T')[1];
+      time = time.substring(0, time.length-4);
+    } else{
+      console.log('Date:', date);
+      console.log(year, month, day);
+    }
+  }
+
+  // Ifall dagen / månaden börjar med 0 så plocka bort nollan!
+  if(day.startsWith('0')){
+    day = day.replace(0, '');
+  }
+  if(month.startsWith('0')){
+    month = month.replace(0, '');
+  }
+  
+  console.log(date + ' - ' + time);
+  if(weekDay){
+    return weekDay + ', ' + day + '/' + month + ' kl ' + time;
+  } else {
+    return day + '/' + month + ' - ' + year + ' kl ' + time;
   }
 }
 

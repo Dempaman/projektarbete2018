@@ -53,20 +53,21 @@ class MeetupClass {
 
 
 class EventClass {
-  constructor(eventid, eventName, date, place, city, latitude, longitude, onsale, minage, priceRange, currency, eventInformation, imageURL){
+  constructor(eventid, eventName, date, place, address, city, onsale, minage, priceRange, currency, eventInformation, imageURL, weekDay, offsale){
     this.eventid = eventid;
     this.name = eventName;
     this.date = date;
     this.place = place;
+    this.address = address;
     this.city = city
-    this.latitude = latitude;
-    this.longitude = longitude;
     this.onsale = onsale;
     this.minage = minage;
     this.priceRange = priceRange;
     this.currency = currency;
     this.information = eventInformation;
     this.imageURL = imageURL;
+    this.weekDay = weekDay;
+    this.offsale = offsale;
   }
 }
 

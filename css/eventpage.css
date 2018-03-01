@@ -32,8 +32,27 @@ html, body {
 
 .imageHolder {
   background-color: #eee;
-  height: 250px;
+  display: flex;
+  height: 200px;
 }
+
+.eventImage {
+  height: 100%;
+  width: 100%;
+}
+
+@media screen and (min-width: 500px){
+  .eventImage, .googleMapImg {
+    height: 100%;
+    width: 50%;
+  }
+  .imageHolder {
+    background-color: #eee;
+    display: flex;
+    height: 230px;
+  }
+}
+
 
 /* Real shit below */
 
@@ -77,8 +96,9 @@ html, body {
 #eventDivButtons {
   text-align: center;
 }
-button.green, button.purple, button.leaveMeetupBtn {
+button.green, button.purple, button.leaveMeetupBtn, button.noTicketsBtn {
   display: inline-block;
+  border: none;
   margin: 5px auto;
   width: 150px;
   outline: 0;
@@ -94,9 +114,12 @@ button.green {
   box-sizing: border-box;
 }
 button.purple {
-  border: none;
   color: #fff;
   background-color: #6C0CCC;
+}
+button.noTicketsBtn {
+  color: #fff;
+  background-color: #e47130;
 }
 
 button.leaveMeetupBtn {
