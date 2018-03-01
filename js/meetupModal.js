@@ -1,7 +1,6 @@
 // Initialize a new plugin instance for one element or NodeList of elements.
 
-
-function initSliderAndMoreShit(){
+function initSliderAndMoreShit() {
 
   displayAgeInterval('0,100');
 
@@ -145,7 +144,6 @@ function initCreateMeetupListeners(ageSlider){
       // Init the skapa meetup modal HERE
       document.getElementById('modalWrapper').className = 'hidden';
       document.getElementById('meetupWrapper').className = 'show';
-      ageSlider.destroy();
       window.scrollTop = window.scrollHeight;
 
     } else {
