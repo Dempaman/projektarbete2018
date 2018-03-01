@@ -1,6 +1,7 @@
 // Globala variabler
 console.log('this should be printed');
 const ticketMasterApiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
+const googleApiKey2 = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
 
 // Initalize the page based on window location.
 window.onload = function(){
@@ -161,10 +162,10 @@ function retrieveMeetupInfo(eventDate){
     let googleMap = document.createElement('img');
     googleMapDiv.className = 'googleMapDiv';
     // Just src
-    googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+    googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
 
-    // Data-src
-    googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+    // Data-src - Debug shit
+    // googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
 
     googleMapDiv.appendChild(googleMap);
 
@@ -280,6 +281,7 @@ function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
 
     if(userIsNotComing){
       db.ref('meetups/' + eventID + '/' + meetupID + '/members').push(userObject);
+      new SystemMessage(meetupID, userObject.fullname + ' gick med i meetupet').push();
     } else {
       console.log('Du är redan med i detta meetup!');
     }
@@ -463,8 +465,9 @@ function displayMembersAndChat(md, meetupKey){
           // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
           let textmessage = event.target.value;
 
-          let newMessage = new MessageClass(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
+          let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
 
+          console.log(newMessage);
           newMessage.push();
 
           // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
@@ -620,7 +623,7 @@ function restoreJoinBtn(meetupKey){
     let data = snapshot.val();
     let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
     console.log('This was removed: ',data);
-    
+
         if(currentUser.uniqueID == data.uniqueID){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
@@ -668,6 +671,8 @@ function leaveMeetup(meetupKey){
           console.log('Du kan inte lämna detta meetup då du har skapat det! Radera det istället.');
         } else {
           db.ref('meetups/' + eventID + '/' + meetupKey + '/members/'+member).remove();
+
+          new SystemMessage(meetupKey, user.fullname + ' lämnade meetupet').push();
           console.log('Raderade användaren ifrån meetupet i databasen?');
         }
       }
