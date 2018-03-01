@@ -1,0 +1,69 @@
+#lmw {
+  background-color: #dadada;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+span.loginModalCloseButton {
+  position: absolute;
+  right: 0;
+  margin: 8px -4px;
+}
+
+#lmw > div > div.header + div {
+  width: 100%;
+  margin-top: 50%;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2em;
+  padding: 10px 0px;
+}
+
+#lmw button {
+  transition: 0.2s ease;
+  margin: 10px auto;
+  padding: 12px 57px;
+  border: none;
+  border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Questrial',sans-serif;
+  color: #515151;
+  font-size: 0.8em;
+  background-color: #b9b9b966;
+  font-weight: 100;
+}
+#lmw button > span {
+  margin: 6px 10px 0px 13px;
+  color: #393939;
+}
+#lmw button > i {
+  transition: 0.8s ease;
+}
+
+/* Focus Effects for Mobile */
+
+#lmw button:focus {
+  background-color: #ececec;
+}
+
+#lmw button:focus > i.mdi-facebook-box {
+  color: #7fb2d8;
+}
+
+#lmw button:focus > i.mdi-google {
+  color: #269e5a;
+}
+
+/* Hover Effects for the WEB */
+
+/* #lmw button:hover {
+  background-color: #ececec;
+}
+#lmw button:hover > i.mdi-facebook-box {
+  color: #7fb2d8;
+}
+#lmw button:hover > i.mdi-google {
+  color: #269e5a;
+} */
