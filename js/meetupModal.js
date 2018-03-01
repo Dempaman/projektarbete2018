@@ -228,12 +228,3 @@ function toggleCreateMeetupModal(){
     btn.className = 'createMeetupBtn leaveMeetupBtn';
   }
 }
-
-function toggleLoginModal(){
-  let loginWrap = document.getElementById('loginWrap');
-  if(loginWrap.className = 'hidden'){
-    loginWrap.className = ''
-  } else {
-    loginWrap.className = 'hidden'
-  }
-}

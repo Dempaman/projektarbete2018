@@ -36,8 +36,6 @@ function profilFunction(event) {
             userInfo.style.transition = '0.4s';
         }, 400);
 
-
-
     }
     console.log(event.type);
   });
