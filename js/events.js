@@ -343,12 +343,6 @@ function getMostPopularEvents() {
 
 
 
-
-
-
-
-
-
 /********************TYPE OUT INFO IN SOME RANDOM DIV FUNCTION********************/
 
 
