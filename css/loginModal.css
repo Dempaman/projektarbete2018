@@ -75,7 +75,7 @@ span.loginModalCloseButton {
 
 /* MEDIA QUERIES FOR LOGINMODAL*/
 
-@media screen and (min-width: 375px){
+@media screen and (min-width: 667px){
   #lmw {
     background-color: rgba(17,17,17, 0.53);
   }
