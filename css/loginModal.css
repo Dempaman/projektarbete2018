@@ -12,9 +12,15 @@ span.loginModalCloseButton {
   margin: 8px -4px;
 }
 
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 #lmw > div > div.header + div {
   width: 100%;
-  margin-top: 50%;
   font-family: 'Roboto', sans-serif;
   font-size: 1.2em;
   padding: 10px 0px;
@@ -57,8 +63,7 @@ span.loginModalCloseButton {
 }
 
 /* Hover Effects for the WEB */
-
-/* #lmw button:hover {
+#lmw button:hover {
   background-color: #ececec;
 }
 #lmw button:hover > i.mdi-facebook-box {
@@ -66,4 +71,28 @@ span.loginModalCloseButton {
 }
 #lmw button:hover > i.mdi-google {
   color: #269e5a;
-} */
+}
+
+/* MEDIA QUERIES FOR LOGINMODAL*/
+
+@media screen and (min-width: 375px){
+  #lmw {
+    background-color: rgba(17,17,17, 0.53);
+  }
+
+  #lmw > div > div.header + div {
+    width: 40%;
+    height: 45%;
+    background-color: #e4e4e4;
+    box-shadow: 3px 3px 3px #636363;
+  }
+
+  #lmw > div > div.header + div > div {
+    position: fixed;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+}

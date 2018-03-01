@@ -71,6 +71,8 @@ function retrieveLoginModalContent(){
   let lmw = document.createElement('div'); // LoginModalWrapper
   let lmc = document.createElement('div'); // LoginModalContent
   let btnHolder = document.createElement('div'); // ButtonHolder div
+  let btnHolderInside = document.createElement('div'); // ButtonHolderInside div.
+  btnHolder.className = 'centered';
 
   let headerDiv = document.createElement('div');
   headerDiv.className = 'header';
@@ -105,9 +107,11 @@ function retrieveLoginModalContent(){
   googleButtonWrapper.appendChild(googleButton);
   facebookButtonWrapper.appendChild(facebookButton);
 
-  // Append the buttonWrappers into the ButtonHolder
-  btnHolder.appendChild(googleButtonWrapper);
-  btnHolder.appendChild(facebookButtonWrapper);
+  // Append the buttonWrappers into the ButtonHolder & inside
+  btnHolderInside.appendChild(googleButtonWrapper);
+  btnHolderInside.appendChild(facebookButtonWrapper);
+
+  btnHolder.appendChild(btnHolderInside);
 
 
 
