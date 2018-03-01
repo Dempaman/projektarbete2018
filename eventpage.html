@@ -17,9 +17,10 @@
 
     <!-- Stylesheet -->
     <link rel="stylesheet" type="text/css" href="css/menu.css">
-    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" type="text/css" href="css/auth.css">
     <link rel="stylesheet" type="text/css" href="css/eventpage.css">
     <link rel="stylesheet" type="text/css" href="css/meetupModal.css">
+    <link rel="stylesheet" type="text/css" href="css/loginModal.css">
 
     <!-- FireBase -->
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
@@ -29,6 +30,8 @@
     <script src="slider/js/rSlider.min.js"></script>
     <script src="js/meetupModal.js"></script>
     <script src="js/eventpage.js"></script>
+    <script src="js/loginModal.js"></script>
+    <script src="js/menu.js"></script>
 
     <!-- Google Map Api -->
     <script src="js/googleMapApi.js"></script>
@@ -66,7 +69,7 @@
           <a href="#"><li>MIN PROFIL</li></a>
           <a href="#"><li>ALLA EVENTS</li></a>
           <a href="#"><li>KONTAKTA OSS</li></a>
-          <a href="#"><li id="loginInMenu">LOGGA IN</li></a>
+          <a href="#"><li class="loginInMenu">LOGGA IN</li></a>
         </ul>
       </div>
     </nav>
@@ -104,20 +107,6 @@
           </div>
         </div>
 
-        <div id="putApproveWrapHere"></div>
-        <div class="loginWrap">
-
-        <!-- Knappar för att logga in -->
-        <div id="googleCont"><!--Google login knapp -->
-          <button class="loginBtn loginBtn--google">Logga in med Google</button>
-        </div>
-
-          <div id="fbCont"><!--FAcebook login knapp -->
-            <button class="loginBtn loginBtn--facebook">Logga in med facebook</button>
-          </div>
-
-        </div>
-
         <div class="content"> <!-- Innehåller allt som ska finnas i modalen -->
           <input id="nameInput" placeholder="Namn" type="text">
           <input id="addressInput" placeholder="Adress" type="text">
@@ -148,6 +137,18 @@
 
       </div>
     </div>
+
+    <div id="loginWrap" class="hidden">
+      <!-- Knappar för att logga in -->
+      <div id="googleCont"><!--Google login knapp -->
+        <button class="loginBtn loginBtn--google">Logga in med Google</button>
+      </div>
+
+        <div id="fbCont"><!--FAcebook login knapp -->
+          <button class="loginBtn loginBtn--facebook">Logga in med facebook</button>
+        </div>
+    </div>
+
 
   </body>
 </html>

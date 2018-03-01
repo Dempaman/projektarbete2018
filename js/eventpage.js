@@ -99,23 +99,10 @@ function createEventListenersForBtns(eventid, url){
   createMeetupBtn.addEventListener('click', function(){
 
     // Init the skapa meetup modal HERE
-    document.getElementById('modalWrapper').className = '';
-    document.getElementById('meetupWrapper').className = 'hidden';
+    toggleCreateMeetupModal();
     initSliderAndMoreShit();
     console.log('DOES THIS EVEN FIRE?!');
     // Create meetup btn Function
-
-    //Check if user is logged in and set btn correctly
-    let btn = document.getElementById('createMeetupButton')
-
-    if(localStorage.getItem('loggedInUser')){
-      btn.innerText = 'Skapa Meetup';
-      btn.className = 'createMeetupBtn purple';
-    } else {
-      btn.innerText = 'Logga In';
-      btn.className = 'createMeetupBtn leaveMeetupBtn';
-    }
-
 
   });
 
@@ -333,7 +320,7 @@ function retrieveMeetupInfo(eventDate){
         joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
       } else {
         console.log('Setup login modal here?');
-        displayLoginModal();
+        toggleLoginModal();
       }
 
       event.target.style.backgroundColor = '#606060';
