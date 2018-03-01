@@ -210,20 +210,21 @@ function retrieveMeetupInfo(eventDate){
         let data = snap.val();
           // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
           if(data != null){
-            console.log('Data: ',data);
+            console.log('Members coming to this Meetup: ',data);
 
             // Gå igenom användaregenskaperna under denna medlem
+            let show = null;
             for(let user in data){
               // Om användaren som är inloggad finns i detta meetup så sätter vi userIsInMeetup till true
-              if(data[user].uniqueID == currentUser.uniqueID){
 
-                // Visa medlemmar samt chatt
-                displayMembersAndChat(md, meetupKey);
-                break;
-              } else {
-                md.appendChild(btnDiv);
-                break;
+              if(data[user].uniqueID == currentUser.uniqueID){
+                show = true;
               }
+            }
+            if(show){
+              displayMembersAndChat(md, meetupKey);
+            } else {
+              md.appendChild(btnDiv);
             }
           } else {
             console.warn('Data is null for the members of this meeup!');
@@ -292,6 +293,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
     // DatabaseObject
     let meetup = snapshot.val();
     let meetupKey = snapshot.key;
+    let currentUser = localStorage.getItem('loggedInUser');
     // Definiera dom-objektet.
     let meetupWrapper = document.getElementById('meetup-' + meetupKey);
     console.log(meetupWrapper);
@@ -339,8 +341,10 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
     let memberOrButton = meetupWrapper.children[8];
 
-
+    // Display members and shit!
     if(memberOrButton.className == 'moreMeetupInfoDiv'){
+        // If the user that is logged in isn't in the meetup anymore. Hide this.
+        let found = false;
         console.log('Members are displayed!');
 
         let membersWrapper = memberOrButton.children[1]; // Emptying the members list with this method: https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
@@ -350,6 +354,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
         // Update the member list!
         for(let member in meetup.members){
+          if(currentUser.uniqueID == meetup.members[member].uniqueID) { found = true; }
           console.log('Updated member:', member);
           let memberDiv = document.createElement('div');
           memberDiv.className = 'memberDiv';
@@ -360,8 +365,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
         }
 
     } else if(memberOrButton.className == 'btnHolder'){
-        console.log('This is a button.');
-
+        console.log('This is a button.'); // This is the btn to join the meetup.
 
         // Now check if the logged in user just got added to the database!
         for(let member in meetup.members){
@@ -376,8 +380,6 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
           } else {
             console.log('No user logged in!');
           }
-
-
         }
     }
   });
@@ -491,9 +493,10 @@ function displayMembersAndChat(md, meetupKey){
     // Create leaveMeetupBtn if the user isn't the creator!
     let appendBtn = false;
     let leaveMeetupBtn = document.createElement('button');
+
     db.ref('meetups/' + eventID + '/' + meetupKey + '/creator').once('value', function(snapshot){
       let data = snapshot.val();
-
+      console.log('Compare', currentUser.uniqueID, data.uniqueID);
       if(data.uniqueID == currentUser.uniqueID){
         console.log('Lets not show leave meetup button :)');
       } else {
@@ -507,7 +510,6 @@ function displayMembersAndChat(md, meetupKey){
           leaveMeetup(meetupKey);
         });
       }
-
     });
 
     // Append the members and chat into the moreMeetupInfoDiv
@@ -528,6 +530,7 @@ function displayMembersAndChat(md, meetupKey){
     //Append moreMeetupInfoDiv into the MAINDIV and listen for the leave event
     md.appendChild(moreMeetupInfoDiv);
 
+    //Lägg till en lyssnare ifall någon lämnar detta meetup!
     restoreJoinBtn(meetupKey);
 }
 
@@ -613,14 +616,12 @@ function updateTimeStamps(){
 function restoreJoinBtn(meetupKey){
   let eventid = getLocationInfo()[0];
 
-  db.ref('meetups/'+eventid+'/'+meetupKey).on('child_removed', function(snapshot){
+  db.ref('meetups/'+eventid+'/'+meetupKey + '/members').on('child_removed', function(snapshot){
     let data = snapshot.val();
-    let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
     console.log('This was removed: ',data);
-
-    for(let member in data){
-      if(data[member].uniqueID){
-        if(localUser.uniqueID == data[member].uniqueID){
+    
+        if(currentUser.uniqueID == data.uniqueID){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
 
@@ -648,8 +649,6 @@ function restoreJoinBtn(meetupKey){
 
           md.appendChild(btnDiv);
         }
-      }
-    }
   });
 }
 
