@@ -689,8 +689,16 @@ function leaveMeetup(meetupKey){
 
 function displayEventInfo(event){
 
+  let imgHolder = document.getElementsByClassName('imageHolder')[0];
+  imgHolder.style.background = 'url("'+event.imageURL+'")';
+  imgHolder.style.backgroundRepeat =  'no-repeat';
+  imgHolder.style.backgroundSize = 'cover';
+  imgHolder.style.backgroundPosition = 'center';
+
   document.getElementById('eventDate').innerText = event.date;
   document.getElementById('eventTitle').innerText = event.name;
+  console.log('Event is:',event);
+
 
   // Om platsen inte finns (Göteborg - Ullevi) så skriver vi bara ut staden.
   if(event.place == undefined){
@@ -721,6 +729,7 @@ function retrieveEventInfo(){
       console.log('EVENTOBJECT without formatting:',json);
         let latitude = 58, longitude = 15;
         let event = json;
+        let imageURL = event.images[0].url;
         let venue = event.venue;
         let priceRanges = event.price_ranges;
         let address = venue.location.address;
@@ -728,8 +737,9 @@ function retrieveEventInfo(){
         longitude = Number.parseFloat(address.longitude);
 
         // createMarker(latitude, longitude);
+        console.log('ImageUrl', imageURL);
 
-        let eventObject = new EventClass(eventid, event.name, event.localeventdate, venue.name, address.city, latitude, longitude, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency);
+        let eventObject = new EventClass(eventid, event.name, event.localeventdate, venue.name, address.city, latitude, longitude, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url);
 
         console.log('EVENTOBJECT: ',eventObject);
 
