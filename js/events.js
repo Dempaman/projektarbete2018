@@ -21,15 +21,37 @@ const apiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
 let testOutPut = document.getElementById('testOutPut');
 let searchBtn = document.getElementById('search-button');
 let searchValue = document.querySelectorAll('input[name="searchevent"]');
+    
+let allEventsSearchDefault = document.getElementsByClassName('all-events-search');
+
+let selectedEvents = allEventsSearchDefault[0];
+let selectedCity = allEventsSearchDefault[1];
+let selectedWhen = allEventsSearchDefault[2];
 
 
+
+getMostPopularEvents();
 
 searchBtn.addEventListener('click', function(event){
     testOutPut.innerHTML = '';
     retrieveSearchEventInfo();
 })
 
-getMostPopularEvents();
+selectedEvents.addEventListener('change', function(event){
+    testOutPut.innerHTML = '';
+    defaultSearchEventInfo();
+    
+})
+selectedCity.addEventListener('change', function(event){
+    testOutPut.innerHTML = '';
+    defaultSearchEventInfo();
+    
+})
+selectedWhen.addEventListener('change', function(event){
+    testOutPut.innerHTML = '';
+    defaultSearchEventInfo();
+    
+})
     
 
 
@@ -151,29 +173,7 @@ function retrieveSearchEventInfo(){
 
 https://app.ticketmaster.eu/mfxapi/v1/categories?subcategories=true&city_ids=${userSearchValue}&rows=10&sort_by=popularity&apikey=wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq
 */
-    
-let allEventsSearchDefault = document.getElementsByClassName('all-events-search');
-    
 
-let selectedEvents = allEventsSearchDefault[0];
-let selectedCity = allEventsSearchDefault[1];
-let selectedWhen = allEventsSearchDefault[2];
-
-selectedEvents.addEventListener('change', function(event){
-    testOutPut.innerHTML = '';
-    defaultSearchEventInfo();
-    
-})
-selectedCity.addEventListener('change', function(event){
-    testOutPut.innerHTML = '';
-    defaultSearchEventInfo();
-    
-})
-selectedWhen.addEventListener('change', function(event){
-    testOutPut.innerHTML = '';
-    defaultSearchEventInfo();
-    
-})
     
 /*
 ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=popularity&apikey=wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq
@@ -186,11 +186,67 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 function defaultSearchEventInfo() {
     
+    let ISO = 'T10:00:00Z';
+    
     let selCategory = selectedEvents.value;
     let selCity = selectedCity.value;
     let selWhen = selectedWhen.value;
+
     
-    fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&category_ids=${selCategory}&city_ids=${selCity}&rows=15&sort_by=popularity&apikey=${apiKey}`)
+    //DAGENS DATUM
+    let currentDate = new Date();
+    let curentDateISO = currentDate.toISOString();
+    curentDateISO = curentDateISO.slice(0, 10) + ISO;
+
+    
+    //DENNA MÅNADEN
+    let nextDate = new Date(Date.now() + (30 * 24 * 60 * 60 * 1000));
+    let nextDateISO = nextDate.toISOString(); 
+    nextDateISO = nextDateISO.slice(0, 10) + ISO;
+
+
+    //DENNA VECKAN
+    let nextDateWeek = new Date(Date.now() + (7 * 24 * 60 * 60 * 1000));
+    let nextDateWeekISO = nextDateWeek.toISOString();
+    nextDateWeekISO = nextDateWeekISO.slice(0, 10) + ISO;
+    
+
+    //IMORGON
+    let tomorrowDate = new Date(Date.now() + (1 * 24 * 60 * 60 * 1000));
+    let tomorrowDateISO = tomorrowDate.toISOString();
+    tomorrowDateISO = tomorrowDateISO.slice(0, 10) + ISO;
+
+
+    let today = curentDateISO;
+    let week = nextDateWeekISO;
+    let month = nextDateISO;
+    let tomorrow = tomorrowDateISO;
+
+
+    
+    console.log(selWhen);
+    
+    if (selWhen == 'month') {
+        
+        selWhen = month;
+        
+    } else if (selWhen == 'week') {
+        
+        selWhen = week;
+        
+    } else if (selWhen == 'tomorrow') {
+        
+        selWhen = tomorrow;
+        
+    } else if (selWhen == 'today') {
+        
+        selWhen == 'today';
+    }
+    
+    console.log(selWhen);
+    
+    
+    fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&category_ids=${selCategory}&city_ids=${selCity}&eventdate_from=${curentDateISO}&eventdate_to=${selWhen}rows=15&sort_by=popularity&apikey=${apiKey}`)
     .then (function(response){
         return response.json();
     })
