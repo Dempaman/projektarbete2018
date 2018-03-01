@@ -1,6 +1,7 @@
 body {
 	margin: 10px;
 	box-sizing: border-box;
+    background-color: black;   
 }
 .big-photo-wrapper {
 	background-image: url(../img/alleventsmain.png);

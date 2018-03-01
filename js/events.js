@@ -17,16 +17,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const apiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
 
+
 let testOutPut = document.getElementById('testOutPut');
 let searchBtn = document.getElementById('search-button');
 let searchValue = document.querySelectorAll('input[name="searchevent"]');
+
 
 
 searchBtn.addEventListener('click', function(event){
     testOutPut.innerHTML = '';
     retrieveSearchEventInfo();
 })
+
+getMostPopularEvents();
     
+
 
 /********************TESTFUNKTION/********************/
 /********************FETCH FROM TICKETMASTER API/********************/
@@ -95,9 +100,6 @@ function retrieveSearchEventInfo(){
         })
         .then(function(json){
             
-            //kolla objektet i konsolen
-            console.log(json);
-            
             //spara objektet
             let event = json.events;
             
@@ -112,7 +114,6 @@ function retrieveSearchEventInfo(){
                 let eventImg = event.images;
                 let eImg;
                 
-                console.log(eventImg);
                 
                 if (eventImg !== undefined) {
                     eImg = eventImg[0].url;
@@ -127,11 +128,6 @@ function retrieveSearchEventInfo(){
                 } else {
                     eventTime = eventTime.slice(0, 10);
                 }
-
-                //console.log(`ID: ${eventId}`);
-                //console.log(`Namn: ${eventName}`);
-                //console.log(`Plats: ${eventPlace}`);
-                //console.log(`Datum: ${eventTime}`);
                 
                 getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
             
@@ -141,44 +137,10 @@ function retrieveSearchEventInfo(){
         })
         .catch(function(error){
           console.log('Error');
-          console.log('Felmeddelande:',error);
+          console.log('Felmeddelande:', error.message);
         })
         
 };
-
-
-
-/********************TYPE OUT INFO IN SOME RANDOM DIV FUNCTION********************/
-
-
-function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg){
-    
-    while(testOutPut.firstchild){
-    testOutPut.removeChild(testOutPut.firstChild);
-    }
-    
-    let eventDiv = document.createElement('div');
-    let eUrlImg = document.createElement('img');
-    eUrlImg.src = eImg;
-    let eID = document.createElement('h5');
-    let eName = document.createElement('h4');
-    let ePlace = document.createElement('p');
-    let eTime = document.createElement('p');
-    
-    eventDiv.classList.add('event-card');
-    
-    eID.innerText = `ID: ${eventId}`;
-    eName.innerText = `${eventName}`;
-    ePlace.innerText = `${eventPlace}, ${eventCity}`;
-    eTime.innerText = `${eventTime}`;
-    
-    eventDiv.appendChild(eUrlImg);
-    eventDiv.appendChild(eName);
-    eventDiv.appendChild(ePlace);
-    eventDiv.appendChild(eTime);
-    eventDiv.appendChild(eID);
-    testOutPut.appendChild(eventDiv);
-}
 
 
 
@@ -228,18 +190,11 @@ function defaultSearchEventInfo() {
     let selCity = selectedCity.value;
     let selWhen = selectedWhen.value;
     
-    console.log(selCategory)
-    console.log(selCity)
-    console.log(selWhen)
-    
-    fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&category_id=${selCategory}&city_ids=${selCity}&rows=15&sort_by=popularity&apikey=${apiKey}`)
+    fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&category_ids=${selCategory}&city_ids=${selCity}&rows=15&sort_by=popularity&apikey=${apiKey}`)
     .then (function(response){
         return response.json();
     })
     .then(function(json){
-        
-        //Checka objekt
-        console.log(json)
         
         let event = json.events;
         
@@ -253,7 +208,6 @@ function defaultSearchEventInfo() {
                 let eventImg = event.images;
                 let eImg;
                 
-                console.log(eventImg);
                 
                 if (eventImg !== undefined) {
                     eImg = eventImg[0].url;
@@ -271,14 +225,59 @@ function defaultSearchEventInfo() {
                 
                 getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
             
-                searchValue[0].value = '';
             })
-        .catch(function(error){
+        
+        
+    })
+    .catch(function(error){
             console.log('Error');
-            console.log('Felmeddelande:',error);
+            console.log('Felmeddelande:', error.message);
         })
+}
+
+
+
+
+function getMostPopularEvents() {
+    
+    fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&rows=15&sort_by=popularity&apikey=${apiKey}`)
+    .then(function(response){
+        return response.json();
+    })
+    .then(function(json){
         
+        let event = json.events;
         
+        event.forEach(function(event){
+            
+            let eventId = event.id;
+                let eventName = event.name;
+                let eventPlace = event.venue.name;
+                let eventCity = event.venue.location.address.city;
+                let eventTime = event.localeventdate;
+                let eventImg = event.images;
+                let eImg;
+            
+                
+                if (eventImg !== undefined) {
+                    eImg = eventImg[0].url;
+                    
+                } else {
+                    eImg = `http://cdn-01.hymn.se/wp-content/uploads/2017/09/IMG-142.jpg`;
+                }
+  
+                if (eventTime == undefined) {
+                    eventTime = '';
+                } else {
+                    eventTime = eventTime.slice(0, 10);
+                }
+                
+                getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
+        })
+    })
+    .catch(function(error){
+        console.log('Error');
+        console.log('Felmeddelande: ', error.message);
     })
 }
 
@@ -294,14 +293,37 @@ function defaultSearchEventInfo() {
 
 
 
+/********************TYPE OUT INFO IN SOME RANDOM DIV FUNCTION********************/
 
 
-
-
-
-
-
-
+function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg){
+    
+    while(testOutPut.firstchild){
+    testOutPut.removeChild(testOutPut.firstChild);
+    }
+    
+    let eventDiv = document.createElement('div');
+    let eUrlImg = document.createElement('img');
+    eUrlImg.src = eImg;
+    let eID = document.createElement('h5');
+    let eName = document.createElement('h4');
+    let ePlace = document.createElement('p');
+    let eTime = document.createElement('p');
+    
+    eventDiv.classList.add('event-card');
+    
+    eID.innerText = `ID: ${eventId}`;
+    eName.innerText = `${eventName}`;
+    ePlace.innerText = `${eventPlace}, ${eventCity}`;
+    eTime.innerText = `${eventTime}`;
+    
+    eventDiv.appendChild(eUrlImg);
+    eventDiv.appendChild(eName);
+    eventDiv.appendChild(ePlace);
+    eventDiv.appendChild(eTime);
+    eventDiv.appendChild(eID);
+    testOutPut.appendChild(eventDiv);
+}
 
 
 
