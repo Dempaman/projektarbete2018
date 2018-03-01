@@ -286,7 +286,8 @@ function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
     let userObject = {
       uniqueID: userID,
       fullname: fullname,
-      avatarURL: avatarURL
+      avatarURL: avatarURL,
+      joined: firebase.database.ServerValue.TIMESTAMP
     }
 
     if(userIsNotComing){
@@ -390,9 +391,8 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
               displayMembersAndChat(null, meetupKey);
 
               // Lets add a SystemMessage!
-              setTimeout(function(){
-                new SystemMessage(meetupKey, user.fullname + ' gick med i meetupet.').push();
-              }, 500);
+              new SystemMessage(meetupKey, user.fullname + ' gick med i meetupet.').push();
+
 
             }
           } else {
@@ -428,16 +428,32 @@ function displayMembersAndChat(md, meetupKey){
 
     membersWrappingDiv.className = 'membersWrappingDiv';
 
+    // Spara nuvarande användare i databaseUser.
+    let joinedTime = null;
+    let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
     db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
 
       let data = snap.val();
-
       for(let comingUser in data){
         let memberDiv = document.createElement('div');
         memberDiv.className = 'memberDiv';
         let memberDivAvatar = document.createElement('img');
         memberDivAvatar.setAttribute('alt', 'User picture');
         memberDivAvatar.setAttribute('src', data[comingUser].avatarURL);
+
+        if(comingUser != 'creator'){
+          if(data[comingUser].uniqueID == currentUser.uniqueID){
+            console.log('This is the user right now! Set the joinedTime');
+            joinedTime = data[comingUser].joined;
+          } else {
+            console.log('This is not the current user. This person joined the meetup at: ' + data[comingUser].joined);
+          }
+        } else {
+          console.log('This is the creator.. No joined time here :/');
+        }
+
+
 
         memberDiv.appendChild(memberDivAvatar);
         membersWrappingDiv.appendChild(memberDiv);
@@ -447,7 +463,7 @@ function displayMembersAndChat(md, meetupKey){
 
     // Append the members inside a div into the wrapper.
 
-    let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
 
     // Dags för chatten här!
 
@@ -508,7 +524,7 @@ function displayMembersAndChat(md, meetupKey){
     let first = true;
 
     // start listening to chat messages on this meetupKey
-    listenToChat(meetupKey);
+    listenToChat(meetupKey, joinedTime);
     // End of chat
 
 
@@ -562,62 +578,67 @@ function stopListenToChat(meetupKey){
 }
 
 // Start to listen to chat messages on this meetupKey
-function listenToChat(meetupKey, user){
-
+function listenToChat(meetupKey, joinedTime){
   let first = true;
 
   db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
     let chattWrapperDiv = document.getElementById('chat' + meetupKey);
+    let message = snapshot.val();
+    // Should we display the message? If the message was made before the player joined we don't show it.
+    if(joinedTime > message.time){
+      console.log('You cannot see this message.');
+    } else {
 
-    if(first){
-      while(chattWrapperDiv.firstChild){
-        chattWrapperDiv.removeChild(chattWrapperDiv.firstChild);
+      if(first){
+        while(chattWrapperDiv.firstChild){
+          chattWrapperDiv.removeChild(chattWrapperDiv.firstChild);
+        }
+        first = false;
       }
-      first = false;
+
+      // Create the message DIV to be printed on the DOM
+      let messageDiv = document.createElement('div');
+      messageDiv.className = 'chattMessageDiv';
+
+      // Create the avatar picture
+      let avatarImg = document.createElement('img');
+      avatarImg.setAttribute('src', message.avatarURL);
+      messageDiv.appendChild(avatarImg);
+
+      // Create the timeStamp
+      let timeStamp = document.createElement('p');
+      timeStamp.innerText = chatMessageTimeStamp(message.time);
+      timeStamp.setAttribute('timeStamp', message.time);
+      timeStamp.className = 'timeStamp';
+
+      // Create the fullname
+      let fullname = document.createElement('p');
+      fullname.innerText = message.fullname;
+
+      // Create the actual message
+      let textmessage = document.createElement('p');
+      textmessage.innerText = message.textmessage;
+
+      // Create a div to hold name + timeStamp
+      let messageWrapper = document.createElement('div');
+      messageWrapper.className = 'messageWrapper';
+
+      messageWrapper.appendChild(fullname);
+      messageWrapper.appendChild(timeStamp);
+      messageWrapper.appendChild(textmessage);
+
+      // Append everything into the messageDiv
+      messageDiv.appendChild(avatarImg);
+      messageDiv.appendChild(messageWrapper);
+
+
+      chattWrapperDiv.appendChild(messageDiv);
+
+      chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+
+
     }
 
-    //console.log('ATLEAST ONE MESSAGE HERE!!');
-    let message = snapshot.val();
-
-    // Create the message DIV to be printed on the DOM
-    let messageDiv = document.createElement('div');
-    messageDiv.className = 'chattMessageDiv';
-
-    // Create the avatar picture
-    let avatarImg = document.createElement('img');
-    avatarImg.setAttribute('src', message.avatarURL);
-    messageDiv.appendChild(avatarImg);
-
-    // Create the timeStamp
-    let timeStamp = document.createElement('p');
-    timeStamp.innerText = chatMessageTimeStamp(message.time);
-    timeStamp.setAttribute('timeStamp', message.time);
-    timeStamp.className = 'timeStamp';
-
-    // Create the fullname
-    let fullname = document.createElement('p');
-    fullname.innerText = message.fullname;
-
-    // Create the actual message
-    let textmessage = document.createElement('p');
-    textmessage.innerText = message.textmessage;
-
-    // Create a div to hold name + timeStamp
-    let messageWrapper = document.createElement('div');
-    messageWrapper.className = 'messageWrapper';
-
-    messageWrapper.appendChild(fullname);
-    messageWrapper.appendChild(timeStamp);
-    messageWrapper.appendChild(textmessage);
-
-    // Append everything into the messageDiv
-    messageDiv.appendChild(avatarImg);
-    messageDiv.appendChild(messageWrapper);
-
-
-    chattWrapperDiv.appendChild(messageDiv);
-
-    chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
   });
 }
 
@@ -871,7 +892,7 @@ function displayDate(dateStr, weekDay, offsale){
   if(month.startsWith('0')){
     month = month.replace(0, '');
   }
-  
+
   console.log(date + ' - ' + time);
   if(weekDay){
     return weekDay + ', ' + day + '/' + month + ' kl ' + time;

@@ -30,6 +30,7 @@ class MeetupClass {
     this.creator = creator;
     this.members = members;
     this.admins = admins;
+    this.created = firebase.database.ServerValue.TIMESTAMP;
   }
 
   push(){
@@ -84,6 +85,7 @@ class UserClass {
     this.admin = admin;
     this.meetups = meetups;
     this.information = information;
+    this.created = firebase.database.ServerValue.TIMESTAMP;
   }
 
   push(){
