@@ -32,6 +32,7 @@ console.log(chatMessageTimeStamp(1516758062943));
             // Put the user information into the localStorage db
             localStorage.setItem('loggedInUser', JSON.stringify(result));
 
+
           } else {
 
             let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
