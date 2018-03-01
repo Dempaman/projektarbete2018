@@ -154,10 +154,10 @@ button.purple:hover {
 
 /* MEETUP CSS */
 #meetupWrapper > div:nth-child(odd) {
-  background-color: #eee;
+  background-color: #eaeaea
 }
 #meetupWrapper > div:nth-child(even) {
-  background-color: #ddd;
+  background-color: #f5f5f5;
 }
 #meetupWrapper > div > h2 {
   color: #222;
@@ -270,7 +270,7 @@ div.googleMapDiv > img {
 
 /* Chatt css */
 .chattWrapperDiv {
-  height: 200px;
+  height: 230px;
   overflow: auto;
   width: calc(100% - 40px);
   border-top-right-radius: 5px;

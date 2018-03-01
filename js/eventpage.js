@@ -291,7 +291,7 @@ function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
 
     if(userIsNotComing){
       db.ref('meetups/' + eventID + '/' + meetupID + '/members').push(userObject);
-
+      new SystemMessage(meetupID, userObject.fullname + ' gick med i meetupet.').push();
     } else {
       console.log('Du är redan med i detta meetup!');
     }
@@ -389,10 +389,6 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
               memberOrButton.parentNode.removeChild(memberOrButton);
               displayMembersAndChat(null, meetupKey);
 
-              // Lets add a SystemMessage!
-              new SystemMessage(meetupKey, user.fullname + ' gick med i meetupet.').push();
-
-
             }
           } else {
             console.log('No user logged in!');
@@ -462,10 +458,6 @@ function displayMembersAndChat(md, meetupKey){
 
     // Append the members inside a div into the wrapper.
 
-
-
-    // Dags för chatten här!
-
     // Börja med att skapa label för chatten
     let chattLabel = document.createElement('p');
     chattLabel.innerText = 'Meetup Chatt';
@@ -483,36 +475,8 @@ function displayMembersAndChat(md, meetupKey){
     let avatarURL = currentUser.avatarURL;
 
     // Add Eventlistener for the inputBox
-
-    inputBox.addEventListener('keypress', function(event){
-        if(event.keyCode == 13){
-          if(localStorage.getItem('loggedInUser')){
-            updateTimeStamps();
-            // Some easy checks.
-            if(event.target.value == "" || event.target.value == undefined || event.target.value == " "){
-              console.log('No message specified!');
-            } else if(event.target.value.length < 3){
-              console.log('Message too short!');
-            } else {
-              // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
-              let textmessage = event.target.value;
-
-              let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
-
-              console.log(newMessage);
-              newMessage.push();
-
-              // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
-              chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
-
-              // Clear Inputbox
-              event.target.value = '';
-          }
-        } else {
-          console.log('You are not logged in');
-        }
-      }
-    });
+    console.log('ADDING EVENTLISTENER FOR KEYPRESS');
+    inputBox.addEventListener('keypress', createMessage);
 
     let noMessage = document.createElement('p');
     noMessage.innerText = 'Inga meddelanden ännu.';
@@ -576,9 +540,49 @@ function stopListenToChat(meetupKey){
   db.ref('chats/' + meetupKey).off();
 }
 
+function createMessage(event){
+  if(event.keyCode == 13){
+    if(localStorage.getItem('loggedInUser')){
+      updateTimeStamps();
+      // Some easy checks.
+      if(event.target.value == "" || event.target.value == undefined || event.target.value == " "){
+        console.log('No message specified!');
+      } else if(event.target.value.length < 3){
+        console.log('Message too short!');
+      } else if(event.target.value.length > 200){
+        console.log('Message too long!');
+      } else {
+        // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
+        let textmessage = event.target.value;
+        let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        let md = event.target.parentNode.parentNode; // Meetup Div
+        let ms = md.getAttribute('id'); // meetup String
+
+        let meetupKey = ms.replace('-', '&').split('&')[1]
+
+        let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
+
+        newMessage.push();
+
+        let chattWrapperDiv = event.target.previousSibling;
+        // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
+        chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+
+        // Clear Inputbox
+        event.target.value = '';
+      }
+    } else {
+      console.log('You are not logged in');
+    }
+  }
+}
+
 // Start to listen to chat messages on this meetupKey
 function listenToChat(meetupKey, joinedTime){
   let first = true;
+  for(let wrapperDiv in document.getElementsByClassName('chattWrapperDiv')){
+    wrapperDiv.scrollTop = wrapperDiv.scrollHeight;
+  }
 
   db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
     let chattWrapperDiv = document.getElementById('chat' + meetupKey);
@@ -664,9 +668,17 @@ function restoreJoinBtn(meetupKey){
         if(currentUser.uniqueID == data.uniqueID){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
+          stopListenToChat(meetupKey);
+          // Remove the eventListener for inputBox here for this user. DEBUG CODE, Might be useful.
+          // let inputBox = document.getElementById('chat'+meetupKey).nextSibling;
+          // console.log(inputBox);
+          //
+          // inputBox.removeEventListener('keypress', createMessage);
+          // inputBox.setAttribute('placeholder', 'You got kicked :(');
 
           // Remove the mainDiv and append a join btn!
           md.removeChild(md.children[8]);
+
 
           // Gå med knapp
           let btnDiv = document.createElement('div');

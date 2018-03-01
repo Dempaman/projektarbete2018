@@ -67,7 +67,7 @@ function toggleLoginModal(){
 // Set the body scroll
 function setBodyScroll(value){
   let body = document.getElementsByTagName('body')[0];
-  body.style.overflow = value;
+  body.style.overflowY = value;
 }
 
 // Retrieve the modal content!
@@ -146,7 +146,11 @@ function addBtnListeners(googleButton, facebookButton, closeButton){
     toggleLoginModal();
     navigation.className = '';
     console.log('closed!');
-
+    let btns= document.getElementsByClassName('purple');
+    for(let btn of btns){
+      btn.disabled = false;
+      btn.style.backgroundColor = '';
+    }
   });
 
 }
