@@ -5,6 +5,7 @@
   	<title>MeWent | Alla evenemang</title>
 
     <!-- Fonts & Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="img/logo-design2.png">
   	<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Questrial" rel="stylesheet">
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
@@ -14,17 +15,16 @@
     <link rel="stylesheet" href="slider/css/rSlider.min.css">
 
     <!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="css/loginModal.css">
   	<link rel="stylesheet" type="text/css" href="css/events.css">
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/menu.css">
     <!-- FireBase
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>-->
 
-    <!-- JavaScript
-    <script src="js/eventpage.js"></script>
-  	<script src="js/classes.js"></script>
-    <script src="slider/js/rSlider.min.js"></script>
-  -->
+    <!-- JavaScript -->
+    <script src="js/events.js"></script>
+    <!--<script src="js/loginModal.js"></script>-->
 
   </head>
   <body>
@@ -67,37 +67,40 @@
                <h1>meWent</h1>
                <!--SEARCH WITH INPUT VALUE-->
                 <form class="search-events" style="margin:auto;max-width:400px">
-                  <input type="text" name="searchevent" placeholder="Sök..">
-                  <button type="submit"><i class="fa fa-search"></i></button>
+                  <input type="text" name="searchevent" placeholder="Sök stad..">
+                  <button id="search-button"><i class="fa fa-search"></i></button>
                 </form>
                 
                 <!--SELECT DEFAULT OPTIONS-->
                 <div class="select-default">
                 <select class="all-events-search"> 
-                  <option value="all-events">Alla events </option>
-                  <option value="concerts">Konsert</option>
-                  <option value="festivals">Festival</option>
-                  <option value="theatre">Teater</option>
+                  <option value="">Alla events </option>
+                  <option value="10001">Musik</option>
+                  <option value="10101">Festival</option>
+                  <option value="10004">Sports</option>
+                  <option value="10002">Teater</option>
                 </select>
                 <span style="color: #12A356">i</span>
                 <select class="all-events-search">
-                  <option value="home-city">Stockholm</option>
-                  <option value="city1">Göteborg</option>
-                  <option value="city2">Malmö</option>
-                  <option value="city3">Uppsala</option>
+                     <option value="">Hela Sverige</option>
+                  <option value="50001">Stockholm</option>
+                  <option value="50482">Göteborg</option>
+                  <option value="50111">Malmö</option>
                 </select>
                 <select class="all-events-search">
-                  <option value="today">Denna månaden</option>
-                  <option value="tomorrow">Denna veckan</option>
-                  <option value="week">Imorgon</option>
-                  <option value="month">Idag</option>
+                  <option value="month">Denna månaden</option>
+                  <option value="week">Denna veckan</option>
+                  <option value="tomorrow">Imorgon</option>
+                  <option value="today">Idag</option>
                 </select>
                 </div>
           </div>
       </div>
+      <div id="testOutPut">
+      </div>
     </div>
 
-<!--FOOTER
+
   <footer class="footer-box">
       <div class="adress">
         <img id="footer-logo" src="img/logo-design4.png" alt="meWent logo">
@@ -147,6 +150,6 @@
         <h4 >Copyright &copy; 2018 meWent.All rigths reserved </h4>
       </div>
 
-  </footer>-->
+  </footer>
   </body>
 </html>

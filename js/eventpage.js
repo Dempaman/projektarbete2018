@@ -1,6 +1,7 @@
 // Globala variabler
 console.log('this should be printed');
 const ticketMasterApiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
+const googleApiKey2 = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
 
 // Initalize the page based on window location.
 window.onload = function(){
@@ -11,110 +12,33 @@ console.log(chatMessageTimeStamp(1516758062943));
   document.getElementById('eventTitle').addEventListener('click', retrieveEventInfo);
   //retrieveEventInfo();
 
-  // Log in user:
-
-    // DO THIS TO LOG IN
-    firebase.auth().getRedirectResult()
-    .then(function(result) {
-      if (result.credential) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var user = result.user;
-        console.log('Google user hittades');
-
-        db.ref("users/" + user.uid).once("value", function(snapshot){
-
-          let result = snapshot.val();
-
-          if(result){
-            // Print this if the user exists in the database.
-            console.log(result);
-
-            // Put the user information into the localStorage db
-            localStorage.setItem('loggedInUser', JSON.stringify(result));
-
-          } else {
-
-            let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
-            console.log('No user here. Creating user in database.');
-
-            newUser.push();
-
-            localStorage.setItem('loggedInUser', JSON.stringify(newUser));
-          }
-          console.log('THE USER IS NOOOOOOW LOGGED IN');
-        });
-
-      }
-      // The signed-in user info.
-      var user = result.user;
-    }).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
-    });
-
-    // END OF LOG IN SHIT -----
-
-
-
-
-    //** FACEBOOK LOGIN SCRIPT **//
-    var providerFB = new firebase.auth.FacebookAuthProvider();
-
-    //** POPUP FACEBOOK LOGIN **//
-    let loginFb = document.getElementsByClassName('loginBtn--facebook')[0];
-
-    loginFb.addEventListener('click', function(event){
-      firebase.auth().signInWithRedirect(providerFB)
-    });
-
-
-    //*** GOOGLE SIGN IN SCRIPT***//
-    var providerGoogle = new firebase.auth.GoogleAuthProvider();
-
-    //** POPUP GOOGLE LOGIN**//
-    let popupButtonGoogle = document.getElementsByClassName('loginBtn--google')[0];
-
-    popupButtonGoogle.addEventListener('click', function(){
-      firebase.auth().signInWithRedirect(providerGoogle)
-    });
-  // end of callback
 }
 
-function createEventListenersForBtns(eventid, url){
+function createEventListenersForBtns(eventid, url, onsale){
   let buyBtn = document.getElementById('eventDivButtons').children[0];
+  onsale = false;
+
   let createMeetupBtn = document.getElementById('eventDivButtons').children[2];
 
-  buyBtn.addEventListener('click', function(){
-    window.open(url);
-    console.log('Köp biljett hos Ticketmaster!');
-  });
+  if(onsale){
+    buyBtn.addEventListener('click', function(){
+      window.open(url);
+      console.log('Köp biljett hos Ticketmaster!');
+    });
+  } else {
+    buyBtn.disabled = true;
+    buyBtn.innerText = 'Inga biljetter finns';
+    buyBtn.className = 'noTicketsBtn';
+  }
+
 
   createMeetupBtn.addEventListener('click', function(){
 
     // Init the skapa meetup modal HERE
-    document.getElementById('modalWrapper').className = '';
-    document.getElementById('meetupWrapper').className = 'hidden';
+    toggleCreateMeetupModal();
     initSliderAndMoreShit();
     console.log('DOES THIS EVEN FIRE?!');
     // Create meetup btn Function
-
-    //Check if user is logged in and set btn correctly
-    let btn = document.getElementById('createMeetupButton')
-
-    if(localStorage.getItem('loggedInUser')){
-      btn.innerText = 'Skapa Meetup';
-      btn.className = 'createMeetupBtn purple';
-    } else {
-      btn.innerText = 'Logga In';
-      btn.className = 'createMeetupBtn leaveMeetupBtn';
-    }
-
 
   });
 
@@ -247,10 +171,10 @@ function retrieveMeetupInfo(eventDate){
     let googleMap = document.createElement('img');
     googleMapDiv.className = 'googleMapDiv';
     // Just src
-    googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+    googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
 
-    // Data-src
-    googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}`);
+    // Data-src - Debug shit
+    // googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
 
     googleMapDiv.appendChild(googleMap);
 
@@ -296,20 +220,21 @@ function retrieveMeetupInfo(eventDate){
         let data = snap.val();
           // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
           if(data != null){
-            console.log('Data: ',data);
+            console.log('Members coming to this Meetup: ',data);
 
             // Gå igenom användaregenskaperna under denna medlem
+            let show = null;
             for(let user in data){
               // Om användaren som är inloggad finns i detta meetup så sätter vi userIsInMeetup till true
-              if(data[user].uniqueID == currentUser.uniqueID){
 
-                // Visa medlemmar samt chatt
-                displayMembersAndChat(md, meetupKey);
-                break;
-              } else {
-                md.appendChild(btnDiv);
-                break;
+              if(data[user].uniqueID == currentUser.uniqueID){
+                show = true;
               }
+            }
+            if(show){
+              displayMembersAndChat(md, meetupKey);
+            } else {
+              md.appendChild(btnDiv);
             }
           } else {
             console.warn('Data is null for the members of this meeup!');
@@ -330,9 +255,10 @@ function retrieveMeetupInfo(eventDate){
 
       if(currentUser){
         joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
+
       } else {
         console.log('Setup login modal here?');
-        displayLoginModal();
+        toggleLoginModal();
       }
 
       event.target.style.backgroundColor = '#606060';
@@ -360,11 +286,13 @@ function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
     let userObject = {
       uniqueID: userID,
       fullname: fullname,
-      avatarURL: avatarURL
+      avatarURL: avatarURL,
+      joined: firebase.database.ServerValue.TIMESTAMP
     }
 
     if(userIsNotComing){
       db.ref('meetups/' + eventID + '/' + meetupID + '/members').push(userObject);
+
     } else {
       console.log('Du är redan med i detta meetup!');
     }
@@ -378,6 +306,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
     // DatabaseObject
     let meetup = snapshot.val();
     let meetupKey = snapshot.key;
+    let currentUser = localStorage.getItem('loggedInUser');
     // Definiera dom-objektet.
     let meetupWrapper = document.getElementById('meetup-' + meetupKey);
     console.log(meetupWrapper);
@@ -425,8 +354,10 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
     let memberOrButton = meetupWrapper.children[8];
 
-
+    // Display members and shit!
     if(memberOrButton.className == 'moreMeetupInfoDiv'){
+        // If the user that is logged in isn't in the meetup anymore. Hide this.
+        let found = false;
         console.log('Members are displayed!');
 
         let membersWrapper = memberOrButton.children[1]; // Emptying the members list with this method: https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
@@ -436,6 +367,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
         // Update the member list!
         for(let member in meetup.members){
+          if(currentUser.uniqueID == meetup.members[member].uniqueID) { found = true; }
           console.log('Updated member:', member);
           let memberDiv = document.createElement('div');
           memberDiv.className = 'memberDiv';
@@ -446,8 +378,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
         }
 
     } else if(memberOrButton.className == 'btnHolder'){
-        console.log('This is a button.');
-
+        console.log('This is a button.'); // This most likely the btn to join the meetup.
 
         // Now check if the logged in user just got added to the database!
         for(let member in meetup.members){
@@ -458,12 +389,15 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
               console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
               memberOrButton.parentNode.removeChild(memberOrButton);
               displayMembersAndChat(null, meetupKey);
+
+              // Lets add a SystemMessage!
+              new SystemMessage(meetupKey, user.fullname + ' gick med i meetupet.').push();
+
+
             }
           } else {
             console.log('No user logged in!');
           }
-
-
         }
     }
   });
@@ -494,16 +428,32 @@ function displayMembersAndChat(md, meetupKey){
 
     membersWrappingDiv.className = 'membersWrappingDiv';
 
+    // Spara nuvarande användare i databaseUser.
+    let joinedTime = null;
+    let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
     db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
 
       let data = snap.val();
-
       for(let comingUser in data){
         let memberDiv = document.createElement('div');
         memberDiv.className = 'memberDiv';
         let memberDivAvatar = document.createElement('img');
         memberDivAvatar.setAttribute('alt', 'User picture');
         memberDivAvatar.setAttribute('src', data[comingUser].avatarURL);
+
+        if(comingUser != 'creator'){
+          if(data[comingUser].uniqueID == currentUser.uniqueID){
+            console.log('This is the user right now! Set the joinedTime');
+            joinedTime = data[comingUser].joined;
+          } else {
+            console.log('This is not the current user. This person joined the meetup at: ' + data[comingUser].joined);
+          }
+        } else {
+          console.log('This is the creator.. No joined time here :/');
+        }
+
+
 
         memberDiv.appendChild(memberDivAvatar);
         membersWrappingDiv.appendChild(memberDiv);
@@ -513,7 +463,7 @@ function displayMembersAndChat(md, meetupKey){
 
     // Append the members inside a div into the wrapper.
 
-    let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
 
     // Dags för chatten här!
 
@@ -536,26 +486,31 @@ function displayMembersAndChat(md, meetupKey){
     // Add Eventlistener for the inputBox
 
     inputBox.addEventListener('keypress', function(event){
-      if(event.keyCode == 13){
-        updateTimeStamps();
-        // Some easy checks.
-        if(event.target.value == "" || event.target.value == undefined || event.target.value == " "){
-          console.log('No message specified!');
-        } else if(event.target.value.length < 3){
-          console.log('Message too short!');
+        if(event.keyCode == 13){
+          if(localStorage.getItem('loggedInUser')){
+            updateTimeStamps();
+            // Some easy checks.
+            if(event.target.value == "" || event.target.value == undefined || event.target.value == " "){
+              console.log('No message specified!');
+            } else if(event.target.value.length < 3){
+              console.log('Message too short!');
+            } else {
+              // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
+              let textmessage = event.target.value;
+
+              let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
+
+              console.log(newMessage);
+              newMessage.push();
+
+              // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
+              chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+
+              // Clear Inputbox
+              event.target.value = '';
+          }
         } else {
-          // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
-          let textmessage = event.target.value;
-
-          let newMessage = new MessageClass(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
-
-          newMessage.push();
-
-          // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
-          chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
-
-          // Clear Inputbox
-          event.target.value = '';
+          console.log('You are not logged in');
         }
       }
     });
@@ -568,18 +523,18 @@ function displayMembersAndChat(md, meetupKey){
     chattWrapperDiv.setAttribute('id', 'chat' + meetupKey);
     let first = true;
 
-    // start to listen to chat messages on this meetupKey
-    listenToChat(meetupKey);
-
+    // start listening to chat messages on this meetupKey
+    listenToChat(meetupKey, joinedTime);
     // End of chat
 
 
     // Create leaveMeetupBtn if the user isn't the creator!
     let appendBtn = false;
     let leaveMeetupBtn = document.createElement('button');
+
     db.ref('meetups/' + eventID + '/' + meetupKey + '/creator').once('value', function(snapshot){
       let data = snapshot.val();
-
+      console.log('Compare', currentUser.uniqueID, data.uniqueID);
       if(data.uniqueID == currentUser.uniqueID){
         console.log('Lets not show leave meetup button :)');
       } else {
@@ -593,7 +548,6 @@ function displayMembersAndChat(md, meetupKey){
           leaveMeetup(meetupKey);
         });
       }
-
     });
 
     // Append the members and chat into the moreMeetupInfoDiv
@@ -614,6 +568,7 @@ function displayMembersAndChat(md, meetupKey){
     //Append moreMeetupInfoDiv into the MAINDIV and listen for the leave event
     md.appendChild(moreMeetupInfoDiv);
 
+    //Lägg till en lyssnare ifall någon lämnar detta meetup!
     restoreJoinBtn(meetupKey);
 }
 
@@ -623,64 +578,67 @@ function stopListenToChat(meetupKey){
 }
 
 // Start to listen to chat messages on this meetupKey
-function listenToChat(meetupKey){
-
+function listenToChat(meetupKey, joinedTime){
   let first = true;
-
-
 
   db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
     let chattWrapperDiv = document.getElementById('chat' + meetupKey);
+    let message = snapshot.val();
+    // Should we display the message? If the message was made before the player joined we don't show it.
+    if(joinedTime > message.time){
+      console.log('You cannot see this message.');
+    } else {
 
-    if(first){
-      while(chattWrapperDiv.firstChild){
-        chattWrapperDiv.removeChild(chattWrapperDiv.firstChild);
+      if(first){
+        while(chattWrapperDiv.firstChild){
+          chattWrapperDiv.removeChild(chattWrapperDiv.firstChild);
+        }
+        first = false;
       }
-      first = false;
+
+      // Create the message DIV to be printed on the DOM
+      let messageDiv = document.createElement('div');
+      messageDiv.className = 'chattMessageDiv';
+
+      // Create the avatar picture
+      let avatarImg = document.createElement('img');
+      avatarImg.setAttribute('src', message.avatarURL);
+      messageDiv.appendChild(avatarImg);
+
+      // Create the timeStamp
+      let timeStamp = document.createElement('p');
+      timeStamp.innerText = chatMessageTimeStamp(message.time);
+      timeStamp.setAttribute('timeStamp', message.time);
+      timeStamp.className = 'timeStamp';
+
+      // Create the fullname
+      let fullname = document.createElement('p');
+      fullname.innerText = message.fullname;
+
+      // Create the actual message
+      let textmessage = document.createElement('p');
+      textmessage.innerText = message.textmessage;
+
+      // Create a div to hold name + timeStamp
+      let messageWrapper = document.createElement('div');
+      messageWrapper.className = 'messageWrapper';
+
+      messageWrapper.appendChild(fullname);
+      messageWrapper.appendChild(timeStamp);
+      messageWrapper.appendChild(textmessage);
+
+      // Append everything into the messageDiv
+      messageDiv.appendChild(avatarImg);
+      messageDiv.appendChild(messageWrapper);
+
+
+      chattWrapperDiv.appendChild(messageDiv);
+
+      chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+
+
     }
 
-    //console.log('ATLEAST ONE MESSAGE HERE!!');
-    let message = snapshot.val();
-
-    // Create the message DIV to be printed on the DOM
-    let messageDiv = document.createElement('div');
-    messageDiv.className = 'chattMessageDiv';
-
-    // Create the avatar picture
-    let avatarImg = document.createElement('img');
-    avatarImg.setAttribute('src', message.avatarURL);
-    messageDiv.appendChild(avatarImg);
-
-    // Create the timeStamp
-    let timeStamp = document.createElement('p');
-    timeStamp.innerText = chatMessageTimeStamp(message.time);
-    timeStamp.setAttribute('timeStamp', message.time);
-    timeStamp.className = 'timeStamp';
-
-    // Create the fullname
-    let fullname = document.createElement('p');
-    fullname.innerText = message.fullname;
-
-    // Create the actual message
-    let textmessage = document.createElement('p');
-    textmessage.innerText = message.textmessage;
-
-    // Create a div to hold name + timeStamp
-    let messageWrapper = document.createElement('div');
-    messageWrapper.className = 'messageWrapper';
-
-    messageWrapper.appendChild(fullname);
-    messageWrapper.appendChild(timeStamp);
-    messageWrapper.appendChild(textmessage);
-
-    // Append everything into the messageDiv
-    messageDiv.appendChild(avatarImg);
-    messageDiv.appendChild(messageWrapper);
-
-
-    chattWrapperDiv.appendChild(messageDiv);
-
-    chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
   });
 }
 
@@ -699,14 +657,12 @@ function updateTimeStamps(){
 function restoreJoinBtn(meetupKey){
   let eventid = getLocationInfo()[0];
 
-  db.ref('meetups/'+eventid+'/'+meetupKey).on('child_removed', function(snapshot){
+  db.ref('meetups/'+eventid+'/'+meetupKey + '/members').on('child_removed', function(snapshot){
     let data = snapshot.val();
-    let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
     console.log('This was removed: ',data);
 
-    for(let member in data){
-      if(data[member].uniqueID){
-        if(localUser.uniqueID == data[member].uniqueID){
+        if(currentUser.uniqueID == data.uniqueID){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
 
@@ -727,15 +683,12 @@ function restoreJoinBtn(meetupKey){
             let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
             //console.log('FULLNAME OF USER IS: ', currentUser);
             joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventid);
-            console.log('joined meetup!');
             event.target.style.backgroundColor = '#606060';
             event.target.disabled = true;
           });
 
           md.appendChild(btnDiv);
         }
-      }
-    }
   });
 }
 
@@ -755,6 +708,7 @@ function leaveMeetup(meetupKey){
           console.log('Du kan inte lämna detta meetup då du har skapat det! Radera det istället.');
         } else {
           db.ref('meetups/' + eventID + '/' + meetupKey + '/members/'+member).remove();
+          new SystemMessage(meetupKey, user.fullname + ' lämnade meetupet.').push();
           console.log('Raderade användaren ifrån meetupet i databasen?');
         }
       }
@@ -765,8 +719,25 @@ function leaveMeetup(meetupKey){
 
 function displayEventInfo(event){
 
-  document.getElementById('eventDate').innerText = event.date;
+  let imgHolder = document.getElementsByClassName('imageHolder')[0].children[0];
+  imgHolder.style.background = 'url("'+event.imageURL+'")';
+  imgHolder.style.backgroundRepeat =  'no-repeat';
+  imgHolder.style.backgroundSize = 'cover';
+  imgHolder.style.backgroundPosition = 'center';
+
+  // Add google map!
+  let googleMapImg = document.getElementsByClassName('imageHolder')[0].children[1];
+  let googleMapImgURL = `https://maps.googleapis.com/maps/api/staticmap?center=${event.address}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${event.address}&key=${googleApiKey2}`;
+  googleMapImg.style.background = 'url("'+googleMapImgURL+'")';
+  googleMapImg.style.backgroundRepeat =  'no-repeat';
+  googleMapImg.style.backgroundSize = 'cover';
+  googleMapImg.style.backgroundPosition = 'center';
+
+  // Set the Date
+  document.getElementById('eventDate').innerText = displayDate(event.date, event.weekDay, event.offsale);
   document.getElementById('eventTitle').innerText = event.name;
+  console.log('Event is:',event);
+
 
   // Om platsen inte finns (Göteborg - Ullevi) så skriver vi bara ut staden.
   if(event.place == undefined){
@@ -797,15 +768,17 @@ function retrieveEventInfo(){
       console.log('EVENTOBJECT without formatting:',json);
         let latitude = 58, longitude = 15;
         let event = json;
+        let imageURL = event.images[0].url;
         let venue = event.venue;
         let priceRanges = event.price_ranges;
         let address = venue.location.address;
-        latitude = Number.parseFloat(address.latitude);
-        longitude = Number.parseFloat(address.longitude);
+        let date = event.localeventdate;
+        let offsale = event.offsale.value;
 
         // createMarker(latitude, longitude);
+        console.log('ImageUrl', imageURL);
 
-        let eventObject = new EventClass(eventid, event.name, event.localeventdate, venue.name, address.city, latitude, longitude, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency);
+        let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale);
 
         console.log('EVENTOBJECT: ',eventObject);
 
@@ -813,11 +786,11 @@ function retrieveEventInfo(){
         displayEventInfo(eventObject);
 
         // Skapa eventListeners för knapparna!
-        createEventListenersForBtns(eventid, event.url);
+        createEventListenersForBtns(eventid, event.url, event.properties.seats_avail);
 
     })
     .catch(function(error){
-      console.log('Eventet hittades inte! Här är en sökruta du kan använda för att söka efter ett event :)');
+      console.log('Här skedde det ett fel! Försöker vi plocka fram något som inte skickas med?');
       console.log('Felmeddelande:',error);
     })
   }
@@ -868,6 +841,63 @@ function chatMessageTimeStamp(timeStamp){
       }
   } else {
     return 'nu';
+  }
+}
+
+//Funktion för att visa datumet lite finare :)
+function displayDate(dateStr, weekDay, offsale){
+
+  let date, time, year, month, day;
+
+  if(!dateStr && offsale){
+    dateStr = offsale;
+  }
+
+  // Make the checks
+  if(dateStr.includes('T')){
+    dateStr = dateStr.split('T');
+
+    console.log('datestr: ',dateStr)
+
+  } else {
+    console.log('DateSTRING: ',dateStr);
+    dateStr = dateStr.split('-');
+
+    year = dateStr[0];
+    month = dateStr[1];
+    day = dateStr[2];
+
+  }
+
+  // Om tiden finns, plocka bort millisekunder samt Z
+  if(time){
+    time = time.substring(0, time.length-4);
+  } else if(offsale){ // Annars försöker vi hämta tiden ifrån offsale datumet ifall det är samma dag. (Risky)
+    date = offsale.split('T')[0];
+    date = date.split('-');
+    if(year == date[0] && month == date[1] && day == date[2]){
+      console.log('It\'s the same day!');
+      time = offsale.split('T')[1];
+      time = time.substring(0, time.length-4);
+    } else{
+      console.log('Date:', date);
+      console.log(year, month, day);
+    }
+  }
+
+  // Ifall dagen / månaden börjar med 0 så plocka bort nollan!
+  if(day.startsWith('0')){
+    day = day.replace(0, '');
+  }
+  if(month.startsWith('0')){
+    month = month.replace(0, '');
+  }
+
+  console.log(date + ' - ' + time);
+  if(weekDay){
+    return weekDay + ', ' + day + '/' + month + ' kl ' + time;
+  } else {
+    return day + '/' + month + ' - ' + year + ' kl ' + time;
   }
 }
 

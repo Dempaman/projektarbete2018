@@ -17,7 +17,6 @@ function initSliderAndMoreShit() {
       });
 
 /* Functions that require the DOM to be laoded */
-
 function displayAgeInterval(values){
         let displayDiv = document.getElementById('ageIntervalDisplayer');
         let valueArray = getValues(values);
@@ -147,8 +146,8 @@ function initCreateMeetupListeners(ageSlider){
       window.scrollTop = window.scrollHeight;
 
     } else {
-      let loginWrap = document.getElementsByClassName('loginWrap')[0];
-      loginWrap.className = 'loginWrapShow';
+      modalWrapper.className = 'hidden'
+      toggleLoginModal();
       console.log('No user logged in!!!');
 
     }
@@ -199,4 +198,33 @@ function getLocationInfo(){
 function getValues(values){
   console.log('VALUES BEFORE SPLIT: ', values);
   return values.split(',');
+}
+
+function toggleCreateMeetupModal(){
+
+  let modalWrapper = document.getElementById('modalWrapper');
+  let meetupWrapper = document.getElementById('meetupWrapper');
+  let menuToggleBtn = document.getElementById('menuToggle');
+
+  if(modalWrapper.className == 'hidden'){
+    modalWrapper.className = '';
+    meetupWrapper.className = 'hidden';
+    menuToggleBtn.className = 'hidden';
+
+  } else {
+    modalWrapper.className = 'hidden';
+    meetupWrapper.className = '';
+    menuToggleBtn.className = '';
+  }
+
+  //Check if user is logged in and set btn correctly
+  let btn = document.getElementById('createMeetupButton')
+
+  if(localStorage.getItem('loggedInUser')){
+    btn.innerText = 'Skapa Meetup';
+    btn.className = 'createMeetupBtn purple';
+  } else {
+    btn.innerText = 'Logga In';
+    btn.className = 'createMeetupBtn leaveMeetupBtn';
+  }
 }

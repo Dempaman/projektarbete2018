@@ -30,10 +30,13 @@ class MeetupClass {
     this.creator = creator;
     this.members = members;
     this.admins = admins;
+    this.created = firebase.database.ServerValue.TIMESTAMP;
   }
 
   push(){
-    return db.ref('meetups/' + this.eventID).push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
+
+    this.key = db.ref('meetups/' + this.eventID).push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
+    new SystemMessage(this.key, this.creator.fullname + ' skapade detta meetup!').push(); // Skapar ett meddelande i chatten direkt.
   }
 
   removeSelf(){
@@ -53,19 +56,21 @@ class MeetupClass {
 
 
 class EventClass {
-  constructor(eventid, eventName, date, place, city, latitude, longitude, onsale, minage, priceRange, currency, eventInformation){
+  constructor(eventid, eventName, date, place, address, city, onsale, minage, priceRange, currency, eventInformation, imageURL, weekDay, offsale){
     this.eventid = eventid;
     this.name = eventName;
     this.date = date;
     this.place = place;
+    this.address = address;
     this.city = city
-    this.latitude = latitude;
-    this.longitude = longitude;
     this.onsale = onsale;
     this.minage = minage;
     this.priceRange = priceRange;
     this.currency = currency;
     this.information = eventInformation;
+    this.imageURL = imageURL;
+    this.weekDay = weekDay;
+    this.offsale = offsale;
   }
 }
 
@@ -82,6 +87,7 @@ class UserClass {
     this.admin = admin;
     this.meetups = meetups;
     this.information = information;
+    this.created = firebase.database.ServerValue.TIMESTAMP;
   }
 
   push(){
@@ -108,13 +114,10 @@ class UserClass {
 
 class MessageClass {
 
-  constructor(senderID, avatarURL, meetupID, fullname, textmessage){
-    this.sender = senderID;
-    this.textmessage = textmessage;
-    this.fullname = fullname;
-    this.avatarURL = avatarURL;
-    this.time = firebase.database.ServerValue.TIMESTAMP;
+  constructor(meetupID, textmessage){
     this.meetupID = meetupID;
+    this.textmessage = textmessage;
+    this.time = firebase.database.ServerValue.TIMESTAMP;
   }
 
   push(){
@@ -131,9 +134,37 @@ class MessageClass {
   }
 }
 
-function displayLoginModal(){
-  console.log('This is printed from the displayLoginModal function');
+class UserMessage extends MessageClass {
+
+  constructor(senderID, avatarURL, meetupID, fullname, message){
+    super(meetupID, message);
+    this.sender = senderID;
+    this.fullname = fullname;
+    this.avatarURL = avatarURL;
+  }
 }
+
+class SystemMessage extends MessageClass {
+  constructor(meetupID, message){
+    super(meetupID, message);
+    this.avatarURL = 'img\\logo-design3.png';
+    this.fullname = 'Chattbot';
+  }
+}
+
+/*
+
+avatarURL: "https://lh3.googleusercontent.com/-AxgGHdqx1CM/AAAAAAAAAAI/AAAAAAAAABo/hrcuCx0tzAU/photo.jpg"
+fullname: "Anton Stjernquist"
+meetupID: "-L6R_WRczkx4zHm9RHBy"
+sender: "b6b5xMrqKKW0XA3hvExKoHvPbjm1"
+textmessage: "Hej igen"
+
+*/
+
+
+//new MessageClass(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
+
 
 // db.ref('chatter/'+id).on('child_added', function(snapshot){
 //
