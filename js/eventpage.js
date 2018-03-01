@@ -16,7 +16,6 @@ console.log(chatMessageTimeStamp(1516758062943));
 
 function createEventListenersForBtns(eventid, url, onsale){
   let buyBtn = document.getElementById('eventDivButtons').children[0];
-  onsale = false;
 
   let createMeetupBtn = document.getElementById('eventDivButtons').children[2];
 
