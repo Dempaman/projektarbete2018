@@ -246,6 +246,7 @@ function retrieveMeetupInfo(eventDate){
 
       if(currentUser){
         joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
+
       } else {
         console.log('Setup login modal here?');
         toggleLoginModal();
@@ -281,7 +282,7 @@ function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
 
     if(userIsNotComing){
       db.ref('meetups/' + eventID + '/' + meetupID + '/members').push(userObject);
-      new SystemMessage(meetupID, userObject.fullname + ' gick med i meetupet').push();
+
     } else {
       console.log('Du är redan med i detta meetup!');
     }
@@ -367,7 +368,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
         }
 
     } else if(memberOrButton.className == 'btnHolder'){
-        console.log('This is a button.'); // This is the btn to join the meetup.
+        console.log('This is a button.'); // This most likely the btn to join the meetup.
 
         // Now check if the logged in user just got added to the database!
         for(let member in meetup.members){
@@ -378,6 +379,12 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
               console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
               memberOrButton.parentNode.removeChild(memberOrButton);
               displayMembersAndChat(null, meetupKey);
+
+              // Lets add a SystemMessage!
+              setTimeout(function(){
+                new SystemMessage(meetupKey, user.fullname + ' gick med i meetupet.').push();
+              }, 500);
+
             }
           } else {
             console.log('No user logged in!');
@@ -454,27 +461,31 @@ function displayMembersAndChat(md, meetupKey){
     // Add Eventlistener for the inputBox
 
     inputBox.addEventListener('keypress', function(event){
-      if(event.keyCode == 13){
-        updateTimeStamps();
-        // Some easy checks.
-        if(event.target.value == "" || event.target.value == undefined || event.target.value == " "){
-          console.log('No message specified!');
-        } else if(event.target.value.length < 3){
-          console.log('Message too short!');
+        if(event.keyCode == 13){
+          if(localStorage.getItem('loggedInUser')){
+            updateTimeStamps();
+            // Some easy checks.
+            if(event.target.value == "" || event.target.value == undefined || event.target.value == " "){
+              console.log('No message specified!');
+            } else if(event.target.value.length < 3){
+              console.log('Message too short!');
+            } else {
+              // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
+              let textmessage = event.target.value;
+
+              let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
+
+              console.log(newMessage);
+              newMessage.push();
+
+              // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
+              chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+
+              // Clear Inputbox
+              event.target.value = '';
+          }
         } else {
-          // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
-          let textmessage = event.target.value;
-
-          let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
-
-          console.log(newMessage);
-          newMessage.push();
-
-          // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
-          chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
-
-          // Clear Inputbox
-          event.target.value = '';
+          console.log('You are not logged in');
         }
       }
     });
@@ -487,9 +498,8 @@ function displayMembersAndChat(md, meetupKey){
     chattWrapperDiv.setAttribute('id', 'chat' + meetupKey);
     let first = true;
 
-    // start to listen to chat messages on this meetupKey
+    // start listening to chat messages on this meetupKey
     listenToChat(meetupKey);
-
     // End of chat
 
 
@@ -543,11 +553,9 @@ function stopListenToChat(meetupKey){
 }
 
 // Start to listen to chat messages on this meetupKey
-function listenToChat(meetupKey){
+function listenToChat(meetupKey, user){
 
   let first = true;
-
-
 
   db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
     let chattWrapperDiv = document.getElementById('chat' + meetupKey);
@@ -645,7 +653,6 @@ function restoreJoinBtn(meetupKey){
             let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
             //console.log('FULLNAME OF USER IS: ', currentUser);
             joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventid);
-            console.log('joined meetup!');
             event.target.style.backgroundColor = '#606060';
             event.target.disabled = true;
           });
@@ -671,8 +678,7 @@ function leaveMeetup(meetupKey){
           console.log('Du kan inte lämna detta meetup då du har skapat det! Radera det istället.');
         } else {
           db.ref('meetups/' + eventID + '/' + meetupKey + '/members/'+member).remove();
-
-          new SystemMessage(meetupKey, user.fullname + ' lämnade meetupet').push();
+          new SystemMessage(meetupKey, user.fullname + ' lämnade meetupet.').push();
           console.log('Raderade användaren ifrån meetupet i databasen?');
         }
       }
