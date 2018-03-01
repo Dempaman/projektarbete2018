@@ -11,80 +11,6 @@ console.log(chatMessageTimeStamp(1516758062943));
   document.getElementById('eventTitle').addEventListener('click', retrieveEventInfo);
   //retrieveEventInfo();
 
-  // Log in user:
-
-    // DO THIS TO LOG IN
-    firebase.auth().getRedirectResult()
-    .then(function(result) {
-      if (result.credential) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var user = result.user;
-        console.log('Google user hittades');
-
-        db.ref("users/" + user.uid).once("value", function(snapshot){
-
-          let result = snapshot.val();
-
-          if(result){
-            // Print this if the user exists in the database.
-            console.log(result);
-
-            // Put the user information into the localStorage db
-            localStorage.setItem('loggedInUser', JSON.stringify(result));
-
-
-          } else {
-
-            let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
-            console.log('No user here. Creating user in database.');
-
-            newUser.push();
-
-            localStorage.setItem('loggedInUser', JSON.stringify(newUser));
-          }
-          console.log('THE USER IS NOOOOOOW LOGGED IN');
-        });
-
-      }
-      // The signed-in user info.
-      var user = result.user;
-    }).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
-    });
-
-    // END OF LOG IN SHIT -----
-
-
-
-
-    //** FACEBOOK LOGIN SCRIPT **//
-    var providerFB = new firebase.auth.FacebookAuthProvider();
-
-    //** POPUP FACEBOOK LOGIN **//
-    let loginFb = document.getElementsByClassName('loginBtn--facebook')[0];
-
-    loginFb.addEventListener('click', function(event){
-      firebase.auth().signInWithRedirect(providerFB)
-    });
-
-
-    //*** GOOGLE SIGN IN SCRIPT***//
-    var providerGoogle = new firebase.auth.GoogleAuthProvider();
-
-    //** POPUP GOOGLE LOGIN**//
-    let popupButtonGoogle = document.getElementsByClassName('loginBtn--google')[0];
-
-    popupButtonGoogle.addEventListener('click', function(){
-      firebase.auth().signInWithRedirect(providerGoogle)
-    });
-  // end of callback
 }
 
 function createEventListenersForBtns(eventid, url){
@@ -284,20 +210,21 @@ function retrieveMeetupInfo(eventDate){
         let data = snap.val();
           // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
           if(data != null){
-            console.log('Data: ',data);
+            console.log('Members coming to this Meetup: ',data);
 
             // Gå igenom användaregenskaperna under denna medlem
+            let show = null;
             for(let user in data){
               // Om användaren som är inloggad finns i detta meetup så sätter vi userIsInMeetup till true
-              if(data[user].uniqueID == currentUser.uniqueID){
 
-                // Visa medlemmar samt chatt
-                displayMembersAndChat(md, meetupKey);
-                break;
-              } else {
-                md.appendChild(btnDiv);
-                break;
+              if(data[user].uniqueID == currentUser.uniqueID){
+                show = true;
               }
+            }
+            if(show){
+              displayMembersAndChat(md, meetupKey);
+            } else {
+              md.appendChild(btnDiv);
             }
           } else {
             console.warn('Data is null for the members of this meeup!');
@@ -366,6 +293,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
     // DatabaseObject
     let meetup = snapshot.val();
     let meetupKey = snapshot.key;
+    let currentUser = localStorage.getItem('loggedInUser');
     // Definiera dom-objektet.
     let meetupWrapper = document.getElementById('meetup-' + meetupKey);
     console.log(meetupWrapper);
@@ -413,8 +341,10 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
     let memberOrButton = meetupWrapper.children[8];
 
-
+    // Display members and shit!
     if(memberOrButton.className == 'moreMeetupInfoDiv'){
+        // If the user that is logged in isn't in the meetup anymore. Hide this.
+        let found = false;
         console.log('Members are displayed!');
 
         let membersWrapper = memberOrButton.children[1]; // Emptying the members list with this method: https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
@@ -424,6 +354,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
         // Update the member list!
         for(let member in meetup.members){
+          if(currentUser.uniqueID == meetup.members[member].uniqueID) { found = true; }
           console.log('Updated member:', member);
           let memberDiv = document.createElement('div');
           memberDiv.className = 'memberDiv';
@@ -434,8 +365,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
         }
 
     } else if(memberOrButton.className == 'btnHolder'){
-        console.log('This is a button.');
-
+        console.log('This is a button.'); // This is the btn to join the meetup.
 
         // Now check if the logged in user just got added to the database!
         for(let member in meetup.members){
@@ -450,8 +380,6 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
           } else {
             console.log('No user logged in!');
           }
-
-
         }
     }
   });
@@ -565,9 +493,10 @@ function displayMembersAndChat(md, meetupKey){
     // Create leaveMeetupBtn if the user isn't the creator!
     let appendBtn = false;
     let leaveMeetupBtn = document.createElement('button');
+
     db.ref('meetups/' + eventID + '/' + meetupKey + '/creator').once('value', function(snapshot){
       let data = snapshot.val();
-
+      console.log('Compare', currentUser.uniqueID, data.uniqueID);
       if(data.uniqueID == currentUser.uniqueID){
         console.log('Lets not show leave meetup button :)');
       } else {
@@ -581,7 +510,6 @@ function displayMembersAndChat(md, meetupKey){
           leaveMeetup(meetupKey);
         });
       }
-
     });
 
     // Append the members and chat into the moreMeetupInfoDiv
@@ -602,6 +530,7 @@ function displayMembersAndChat(md, meetupKey){
     //Append moreMeetupInfoDiv into the MAINDIV and listen for the leave event
     md.appendChild(moreMeetupInfoDiv);
 
+    //Lägg till en lyssnare ifall någon lämnar detta meetup!
     restoreJoinBtn(meetupKey);
 }
 
@@ -687,14 +616,12 @@ function updateTimeStamps(){
 function restoreJoinBtn(meetupKey){
   let eventid = getLocationInfo()[0];
 
-  db.ref('meetups/'+eventid+'/'+meetupKey).on('child_removed', function(snapshot){
+  db.ref('meetups/'+eventid+'/'+meetupKey + '/members').on('child_removed', function(snapshot){
     let data = snapshot.val();
-    let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
     console.log('This was removed: ',data);
-
-    for(let member in data){
-      if(data[member].uniqueID){
-        if(localUser.uniqueID == data[member].uniqueID){
+    
+        if(currentUser.uniqueID == data.uniqueID){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
 
@@ -722,8 +649,6 @@ function restoreJoinBtn(meetupKey){
 
           md.appendChild(btnDiv);
         }
-      }
-    }
   });
 }
 
