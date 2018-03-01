@@ -11,8 +11,20 @@ window.addEventListener('load', function(event){
   //Tar bort användern från localStorage
   loginInMenu.addEventListener('click', function(event){
     if(localStorage.getItem('loggedInUser')){
+
       localStorage.removeItem('loggedInUser');
+      loginInMenu.innerText = "LOGGA UT!!!";
+
+      firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        console.log('Google sign-out successful')
+      }).catch(function(error) {
+        // An error happened.
+        console.log('No server response...')
+      });
+
       loginInMenu.innerText = "LOGGA IN!!!";
+
     }else if(!localStorage.getItem('loggedInUser')){
       navigation.className = 'hidden';
       toggleLoginModal();
