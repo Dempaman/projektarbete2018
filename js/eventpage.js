@@ -260,9 +260,6 @@ function retrieveMeetupInfo(eventDate){
         toggleLoginModal();
       }
 
-      event.target.style.backgroundColor = '#606060';
-      event.target.disabled = true;
-
     });
 
   });
