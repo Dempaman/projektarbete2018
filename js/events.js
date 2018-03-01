@@ -31,15 +31,63 @@ searchBtn.addEventListener('click', function(event){
 function retrieveSearchEventInfo(){
     event.preventDefault();
 
+    let userSearch;
     let userSearchValue = searchValue[0].value;
     
-    //bara lite test skit just nu
-    if(userSearchValue == 'Sverige' || userSearchValue == 'sverige') {
-        //for the luls
-        userSearchValue = 'germany';
+    //Switch för 10 största städer
+    switch(userSearchValue) {
+        case "Stockholm":
+        case "stockholm":
+            userSearchValue = '50001';
+            break;
+        case "Göteborg":
+        case "göteborg":
+            userSearchValue = '50482';
+            break;
+        case "Malmö":
+        case "malmö":
+            userSearchValue = '50111';
+            break;
+        case "Uppsala":
+        case "uppsala":
+            userSearchValue = '51166';
+            break;
+        case "Sollentuna":
+        case "sollentuna":
+            userSearchValue = '50103';
+            break;
+        case "Västerås":
+        case "västerås":
+            userSearchValue = '51109';
+            break;
+        case "Örebro":
+        case "örebro":
+            userSearchValue = '51082';
+            break;
+        case "Linköping":
+        case "linköping":
+            userSearchValue = '50869';
+            break;
+        case "Helsingborg": 
+        case "helsingborg":
+            userSearchValue = '50167';
+            break;
+        case "Norrköping": 
+        case "norrköping":
+            userSearchValue = '50906';
+            break;
+        case "Jönköping": 
+        case "jönköping":
+            userSearchValue = '50792';
+            break;
+        default:
+            userSearchValue = 'Your city sucks!'
+            alert(userSearchValue);
+    }
+        
         
         //fetchar api från input
-        fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=${userSearchValue}&apikey=${apiKey}`)
+        fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?&city_ids=${userSearchValue}&rows=10&apikey=${apiKey}`)
         .then(function(response){
           return response.json();
         })
@@ -93,9 +141,6 @@ function retrieveSearchEventInfo(){
           console.log('Felmeddelande:',error);
         })
         
-    } else {
-        console.log(`Skriv ett annat land!`)
-    }
 };
 
 
