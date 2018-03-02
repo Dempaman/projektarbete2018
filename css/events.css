@@ -74,7 +74,7 @@ form.search-events:focus {
 .select-default {
     clear: both;
     text-align: center;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
 .all-events-search {
@@ -143,3 +143,8 @@ form.search-events:focus {
 }
 
 
+@media only screen and (max-width: 405px) {
+    .all-events-search {
+    font-size: 0.9em;
+    }
+}
