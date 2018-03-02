@@ -1232,7 +1232,6 @@ function listenToRemovedMeetups(){
         overlay.className = 'meetupOverlayRemoved';
         meetup.className += ' overlayAnimation';
         meetup.appendChild(overlay);
-        window.scrollTo
         setTimeout(function(){
           meetup.parentNode.removeChild(meetup);
         },4500)
