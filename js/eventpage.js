@@ -835,10 +835,8 @@ function retrieveEventInfo(){
     //console.log('EVENTID IS', eventid);
 
     if(eventid != undefined){
-      fetch(`https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_id=sweden&apikey=${ticketMasterApiKey}`)
+      fetch(`https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_id=sweden&apikey=${ticketMasterApiKey}`, null)
       .then(function(response){
-
-        'https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_ids=sweden&apikey=${ticketMasterApiKey}'
 
         //console.log(response);
         return response.json();
