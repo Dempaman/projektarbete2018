@@ -96,7 +96,7 @@ firebase.auth().onAuthStateChanged(user => {
       }
     }
   }
-});
+}); //firebase.auth END...
 
 function toggleLoginModal(){
 
@@ -216,7 +216,7 @@ function loginGoogle(){
   console.log('Google button pressed!');
 }
 function loginFacebook(){
-  var providerGoogle = new firebase.auth.FacebookAuthProvider();
+  var providerFacebook = new firebase.auth.FacebookAuthProvider();
   firebase.auth().signInWithRedirect(providerFacebook)
   console.log('Facebook button pressed!');
 }
