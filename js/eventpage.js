@@ -148,18 +148,40 @@ function retrieveMeetupInfo(eventDate){
     ageAntalWrapper.appendChild(antalDiv);
 
     // Adress
-    let adressDiv = document.createElement('div');
-    adressDiv.className = 'infoDiv';
+    let addressDiv = document.createElement('div');
+    addressDiv.className = 'infoDiv';
 
-    let adressLabel = document.createElement('p');
-    adressLabel.innerText = 'Adress';
-    let adress = document.createElement('p');
-    adress.innerText = obj.address;
+    let addressLabel = document.createElement('p');
+    addressLabel.innerText = 'Adress';
+    let address = document.createElement('p');
+    address.innerText = obj.address;
 
-    adressDiv.appendChild(adressLabel);
-    adressDiv.appendChild(adress);
+    addressDiv.appendChild(addressLabel);
+    addressDiv.appendChild(address);
 
 
+    /* MAKE THE CARD HERE, PLACED RIGHT IN THE MEETUP */
+
+    // Kort wrapper!
+    let addressCard = document.createElement('div');
+    addressCard.className = 'addressCard';
+
+    // Plats
+    let placeNameLabel = document.createElement('p');
+    let placeName = document.createElement('p');
+    placeNameLabel.innerText = 'Plats';
+    placeName.innerText = obj.placeName;
+
+    //Address!
+    let cardAddressLabel = document.createElement('p');
+    let cardAddress = document.createElement('p');
+    cardAddress.innerText = obj.address;
+    cardAddressLabel.innerText = 'Adress';
+
+    let cardDateLabel = document.createElement('p');
+    let cardDate = document.createElement('p');
+    cardDateLabel.innerText = 'Datum & Tid';
+    cardDate.innerText = eventDate + ' kl ' + obj.time;
 
     // Splice latitude and longitude
     let latitude = obj.latitude.substring(0,9);
@@ -178,6 +200,19 @@ function retrieveMeetupInfo(eventDate){
     // googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
 
     googleMapDiv.appendChild(googleMap);
+
+    //Append into the card:
+
+    addressCard.appendChild(placeNameLabel);
+    addressCard.appendChild(placeName);
+
+    addressCard.appendChild(cardAddressLabel);
+    addressCard.appendChild(cardAddress);
+
+    addressCard.appendChild(cardDateLabel);
+    addressCard.appendChild(cardDate);
+
+    addressCard.appendChild(googleMapDiv);
 
     let infoDiv = document.createElement('div');
     infoDiv.className = 'meetupInfo';
@@ -207,8 +242,8 @@ function retrieveMeetupInfo(eventDate){
     md.appendChild(creatorDiv);
     md.appendChild(creatorMailDiv);
     md.appendChild(ageAntalWrapper);
-    md.appendChild(adressDiv);
-    md.appendChild(googleMapDiv);
+    md.appendChild(addressDiv);
+    md.appendChild(addressCard);
     md.appendChild(infoDiv);
 
     // Display button based on if the user is in the meetup or not.

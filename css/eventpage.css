@@ -451,3 +451,94 @@ div.googleMapDiv > img {
     -webkit-transform: scaleY(1.0);
   }
 }
+
+
+.addressCard > p {
+  display: none;
+  opacity: 0;
+}
+/* MEDIA QUERIES ENSKILT EVENT */
+@media screen and (min-width: 1000px){
+
+  #meetupWrapper > div div.meetupInfo p:nth-child(2){
+    max-width: 300px;
+  }
+  #meetupWrapper > div > div p {
+    max-width: 200px;
+  }
+
+  div.meetupInfo {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin: 84.3px -155px;
+  }
+  .btnHolder {
+    display: block;
+    margin: 30px 0px 50px 90px;
+  }
+  .btnHolder .purple {
+    width: 196px;
+  }
+  .addressCard {
+    display: inline-block;
+    opacity: 1;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 18%;
+    margin: 42px 50px;
+    background-color: #f3f3f3;
+    padding: 5px 20px 0px;
+    border-radius: 7px;
+  }
+  .addressCard > p {
+    display: block;
+    opacity: 1;
+  }
+
+  #meetupWrapper > div > div.addressCard p:nth-child(odd) {
+    margin-top: 19px;
+    margin-left: 0px;
+    font-size: 0.8em;
+    color: #777;
+  }
+  #meetupWrapper > div > div.addressCard p:nth-child(even) {
+    margin-left: 0px;
+    font-size: 0.9em;
+    color: #555;
+  }
+
+  #meetupWrapper > div > div.creatorDiv {
+    margin: 5px 0px -22px;
+    max-width: 30%;
+  }
+
+  .googleMapDiv {
+    /* position: absolute;
+    right: 0;
+    top: 0;
+    margin: 15px 30px 0px;
+    width: 40%;
+    max-width: 540px; */
+    margin: -7px -20px -28px;
+  }
+  .googleMapDiv > img {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+  #meetupWrapper > div {
+    position: relative;
+    padding: 15px 0px 15px 30px;
+  }
+
+  #meetupWrapper, #eventHolder {
+    max-width: 1200px;
+    margin: 0px auto 50px;
+  }
+
+  body {
+    background-color: #fafafa;
+  }
+
+}
