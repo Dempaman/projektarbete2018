@@ -18,13 +18,15 @@ window.addEventListener('load', function(event){
   let purple = document.getElementsByClassName('purple')[0];
   let modalWrapper = document.getElementById('modalWrapper');
   let navigation = document.getElementById('navigation');
-  let loginInMenu = document.getElementsByClassName('loginInMenu')[0];
+  //let loginInMenu = document.getElementsByClassName('loginInMenu')[0,1];
   let moreMeetupInfoDiv = document.getElementsByClassName('moreMeetupInfoDiv')
   //Tar bort användern från localStorage och loggar ut från google i Firebase.
-  loginInMenu.addEventListener('click', function(event){
+
+  for( let change of document.getElementsByClassName('loginInMenu')){
+  change.addEventListener('click', function(event){
     if(localStorage.getItem('loggedInUser')){
       localStorage.removeItem('loggedInUser');
-      loginInMenu.innerText = "LOGGA UT";
+      change.innerText = "LOGGA UT";
 
       firebase.auth().signOut().then(function() {
         // Sign-out successful.
@@ -36,7 +38,7 @@ window.addEventListener('load', function(event){
         console.log('No server response..')
       });
 
-      loginInMenu.innerText = "LOGGA IN";
+      change.innerText = "LOGGA IN";
 
     }else if(!localStorage.getItem('loggedInUser')){
       navigation.className = 'hidden';
@@ -48,7 +50,7 @@ window.addEventListener('load', function(event){
 
     //Om du är inloggad så står de "logga ut" i menu
     if(localStorage.getItem('loggedInUser')){
-      loginInMenu.innerText = "LOGGA UT";
+      change.innerText = "LOGGA UT";
     }
     //Gömmer hela navigation sidan och skickar dig vidare till login-modal.
     purple.addEventListener('click', function(event){
@@ -61,4 +63,5 @@ window.addEventListener('load', function(event){
       navigation.className = '';
       meetupWrapper.className = '';
     });
-});
+  };
+}); //window.load
