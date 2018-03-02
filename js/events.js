@@ -328,7 +328,41 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 
 
+    /********************Save down information about Cities*******************/
+    
+    let getMeWent = document.getElementsByTagName('h1');
+    let meWent = getMeWent[0];
+    let oXML = 'https://app.ticketmaster.eu/mfxapi/v1/cities?domain_id=sweden&apikey=wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq'
+    meWent.addEventListener('click', XMLToString, false);
 
+    function XMLToString() {
+    	var xmlhttp = new XMLHttpRequest();
+    	xmlhttp.onreadystatechange = function () {
+    		if (this.readyState == 4 && this.status == 200) {
+                
+    			let allCities = JSON.parse(this.responseText);
+    			allCities = allCities.cities;
+                
+    			//create new empty list
+    			let cities = [];
+                
+    			//loop trough allCities
+    			allCities.forEach(function (city) {
+                    
+    				//check country code
+    				if (city.country_id == 752) {
+    					let sweCity = {
+    						id: city.id,
+    						name: city.name
+    					}
+    					cities.push(sweCity);
+    				}
+    			})
+    		}
+    	};
+    	xmlhttp.open("GET", oXML, true);
+    	xmlhttp.send();
+    }
 
 
 
