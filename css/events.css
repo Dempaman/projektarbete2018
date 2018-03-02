@@ -1,7 +1,7 @@
 body {
 	margin: 10px;
 	box-sizing: border-box;
-    background-color: black;   
+    background: #F2F2F2;
 }
 .big-photo-wrapper {
 	background-image: url(../img/alleventsmain.png);
@@ -15,8 +15,19 @@ body {
 
 .events-search > h1 {
     font-family: 'Impact', Arial, sans-serif;
-    font-size: 7em;
+    font-size: 5em;
     font-weight: 100;
+    margin-top: 20px;
+}
+.title {
+    padding: 2px;
+    text-align: center;
+    color: #111;
+}
+.title > h1 {
+    margin: 10px;
+    border-bottom: 10px solid #6C0CCC;
+    display: inline-block;
 }
 
 .events-search {
