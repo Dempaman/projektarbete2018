@@ -19,6 +19,7 @@
   	<link rel="stylesheet" type="text/css" href="css/events.css">
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/menu.css">
+    <link rel="stylesheet" type="text/css" href="css/headstyle.css">
     
     <!-- FireBase 
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
@@ -35,6 +36,20 @@
     <!--------------------Menu-------------------->
     <nav id="navigation">
       <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
+      
+      <div class="header">
+      
+      <!-- HTML för desktopläge i nav -->
+        <ul class="deskNav">
+          <li>MIN PROFIL</li>
+          <li>ALLA EVENT</li>
+          <li>KONTAKTA OSS</li>
+          <li class= "loginInMenu">LOGGA IN</li>
+        </ul>
+      
+      </div>
+      
+      
       <div id="menuToggle">
         <!--A fake / hidden checkbox is used as click reciever, so you can use the :checked selector on it. -->
         <input type="checkbox"/>
@@ -56,6 +71,7 @@
       </div>
     </nav>
     <!--------------------Menu End-------------------->
+    
 
     <!--Korten innehåller: Datum, evenemangsnamn, bild samt antal meetups för detta event. -->
     <div id="all-events-main">
