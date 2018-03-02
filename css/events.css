@@ -26,7 +26,7 @@ body {
 }
 .title > h1 {
     margin: 10px;
-    border-bottom: 10px solid #6C0CCC;
+    border-bottom: 7px solid #6C0CCC;
     display: inline-block;
 }
 
@@ -54,7 +54,7 @@ form.search-events input[type=text] {
 
 form.search-events button {
     float: left;
-    width: 70px;
+    width: 16%;
     padding: 10px;
     background: #6C0CCC;
     color: white;
@@ -108,15 +108,21 @@ form.search-events:focus {
 }
 
 .event-card {
-    background-color: #111;
+    background-color: #F1F1F1;
     width: 360px;
-    color: white;
+    color: #111;
     margin: 10px;
     padding: 20px;
+}
+.event-card:hover {
+    transition: 0.3s;
+    background:#232323;
+    color: white;
 }
 .event-card h4 {
     font-size: 1.1em;
     margin: 5px auto;
+    font-family: Roboto;
 }
 .event-card h5 {
     margin-top: 10px;
@@ -128,6 +134,8 @@ form.search-events:focus {
 .event-card p {
     font-size: 0.8em;
     margin-top 10px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 .event-card img {
     width: 100%;

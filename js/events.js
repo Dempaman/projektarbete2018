@@ -309,7 +309,6 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		eventDiv.appendChild(eName);
 		eventDiv.appendChild(ePlace);
 		eventDiv.appendChild(eTime);
-		eventDiv.appendChild(eID);
 		testOutPut.appendChild(eventDiv);
 	}
     
