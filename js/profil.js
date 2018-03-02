@@ -9,7 +9,6 @@ function profilFunction(event) {
 
   more.addEventListener('click', function(event) {
       event.preventDefault();
-
       if (showMore.innerText === 'visa mer') {
 
           showMore.innerText = 'visa mindre';
@@ -19,10 +18,7 @@ function profilFunction(event) {
 
           userInfo.classList.add('transform');
           more.classList.add('move');
-
-
       } else {
-
             showMore.innerText = 'visa mer';
 
             let downImg = document.createElement('i');
@@ -34,4 +30,29 @@ function profilFunction(event) {
     }
 
   });
+
+  let smallMenu = document.getElementsByClassName('show-hidden-nav')[0];
+  let closeSmallMenu = document.getElementsByClassName('close-small-menu')[0];
+  let hiddenNav = document.getElementsByClassName('hidden-nav')[0];
+  let goToo = document.getElementsByClassName('go-too')[0];
+  let removeMeetup = document.getElementsByClassName('remove-meetup')[0];
+
+
+  smallMenu.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      if (hiddenNav.className === 'hidden-nav') {
+          hiddenNav.classList.add('show');
+      } else {
+              hiddenNav.classList.remove('show');
+    }
+  });
+closeSmallMenu.addEventListener('click', function(event) {
+    event.preventDefault();
+    if (hiddenNav.className === 'hidden-nav show') {
+        hiddenNav.classList.remove('show');
+    }
+});
+
+
 }
