@@ -2,16 +2,16 @@
 window.addEventListener('load', function(event){
 
 //function som hjälper till att ta bort Elements (Tar bort alla moreMeetupInfoDiv när man loggar ut.)
-Element.prototype.remove = function() {
-  this.parentElement.removeChild(this);
-}
-NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
-  for(var i = this.length - 1; i >= 0; i--) {
-      if(this[i] && this[i].parentElement) {
-          this[i].parentElement.removeChild(this[i]);
-      }
-  }
-}
+// Element.prototype.remove = function() {
+//   this.parentElement.removeChild(this);
+// }
+// NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+//   for(var i = this.length - 1; i >= 0; i--) {
+//       if(this[i] && this[i].parentElement) {
+//           this[i].parentElement.removeChild(this[i]);
+//       }
+//   }
+// }
 
   let meetupWrapper = document.getElementById('meetupWrapper');
   let menuDiv = document.getElementById('menuDiv');
@@ -57,9 +57,8 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
 
 
     menuDiv.addEventListener('click', function(event){
-      modalWrapper.className = 'hidden'
       menuToggle.className = '';
       navigation.className = '';
       meetupWrapper.className = '';
-    })
+    });
 });

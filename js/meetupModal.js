@@ -5,6 +5,7 @@ function initSliderAndMoreShit() {
   displayAgeInterval('0,100');
 
   getLocationInfo();
+
   var ageSlider = new rSlider({
           target: '#ageSlider',
           values: {min: 0, max: 100},
@@ -15,6 +16,21 @@ function initSliderAndMoreShit() {
           labels: false,
           onChange: displayAgeInterval
       });
+
+
+      let closeBtn = document.getElementById('menuDiv');
+      let modalWrapper = document.getElementById('modalWrapper');
+      let meetupWrapper = document.getElementById('meetupWrapper');
+      if(closeBtn){
+        closeBtn.addEventListener('click', function(){
+          console.log('Closed skapa meetup');
+          ageSlider.destroy();
+          modalWrapper.className = 'hidden';
+          meetupWrapper.className = 'show';
+        });
+      } else {
+        console.log('no btn');
+      }
 
 /* Functions that require the DOM to be laoded */
 function displayAgeInterval(values){
@@ -75,10 +91,14 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
     }
     displayAgeInterval(val1 + ',' + val2);
   };
+
 }
 
 function initCreateMeetupListeners(ageSlider){
   let createBtn = document.getElementById('createMeetupButton');
+
+
+
 
   // Vad gör vi när man trycker på skapa meetup. (eventid, name, address, latitude, longitude, time, spots, ageInterval, information, creator, members, admins)
   createBtn.addEventListener('click', function(event){
@@ -146,16 +166,17 @@ function initCreateMeetupListeners(ageSlider){
         document.getElementById('spotsInput').value = '';
         document.getElementById('placeNameInput').value = '';
 
-      // Init the skapa meetup modal HERE
-      document.getElementById('modalWrapper').className = 'hidden';
-      document.getElementById('meetupWrapper').className = 'show';
-      window.scrollTop = window.scrollHeight;
+      // Visa alla meetups igen!
+        document.getElementById('modalWrapper').className = 'hidden';
+        document.getElementById('meetupWrapper').className = 'show';
+        setTimeout(function(){
+          window.scrollTop = window.scrollHeight;
+        },1000)
 
     } else {
       modalWrapper.className = 'hidden'
       toggleLoginModal();
       console.log('No user logged in!!!');
-
     }
   });
 }
