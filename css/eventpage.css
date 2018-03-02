@@ -331,6 +331,9 @@ div.googleMapDiv > img {
 .textmessageWrapper {
   display: flex;
 }
+.textmessageWrapper span {
+  margin-bottom: -10px;
+}
 .likeCount {
   display: in
   color: #b6b6b6;

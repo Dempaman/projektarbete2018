@@ -143,6 +143,7 @@ main>h2 {
 }
 
 .user-meetups-container {
+  min-width: 240px;
   display: flex;
   flex-direction: column;
   width: 95%;
