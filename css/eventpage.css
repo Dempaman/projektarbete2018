@@ -338,7 +338,6 @@ div.googleMapDiv > img {
   margin-bottom: -10px;
 }
 .likeCount {
-  display: in
   color: #b6b6b6;
   font-size: 0.7em;
   margin: 3px 1px 0px;
@@ -464,22 +463,62 @@ div.googleMapDiv > img {
   opacity: 0;
 }
 
-.purple.editBtn {
-  margin: 35px 0px 50px 90px;
-  width: 196px;
+.meetupOverlayRemoved {
+  background-color: rgba(236, 236, 236, 0.61);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
 }
+.overlayAnimation {
+  scroll-behavior: smooth;
+  position: absolute;
+  z-index: -900000;
+  -webkit-animation-name: overlayFadeRemove;
+  -webkit-animation-duration: 3s;
+  animation-name: overlayFadeRemove;
+  animation-duration: 6s;
+}
+/* Animation for overlay */
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes overlayFadeRemove {
+    0%   {background-color:#d5d2d206; left:0px; top:0px;}
+    100% {background-color:#d5d2d2; left:0px; top:-467px;}
+}
+
+/* Standard syntax */
+@keyframes overlayFadeRemove {
+  0%   {background-color:#d5d2d206; left:0px; top:0px;}
+  100% {background-color:#d5d2d2; left:0px; top:-467px;}
+}
+
+
 @media screen and (max-width: 999px){
   .purple.editBtn {
     display: none;
   }
   .iconBtn.editBtn {
-    display: block;
+    margin: 14px 6px;
+    padding: 0px;
+    font-size: 2.8em;
+    color: #8c8c8c;
+    background-color: #fff0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    }
+    #meetupWrapper > div {
+      position: relative;
+    }
   }
-}
 
 
 /* MEDIA QUERIES ENSKILT EVENT */
 @media screen and (min-width: 1000px){
+
   .iconBtn.editBtn {
     display: none;
   }
@@ -505,8 +544,18 @@ div.googleMapDiv > img {
     width: 196px;
   }
   .purple.editBtn {
-    margin: 35px 0px 50px 90px;
-    width: 196px;
+    width: auto;
+    margin: 20px 0px 35px 88px;
+    box-shadow: 1px 1px 3px #cbcbcb;
+    padding: 9px 14px;
+    border-radius: 2px;
+    font-size: 0.9em;
+    color: #5a5a5a;
+    background-color: #f5f5f5;
+  }
+  .purple.editBtn:hover {
+    background-color: #fff;
+    color: #2d2d2d;
   }
   .addressCard {
     display: inline-block;
@@ -543,12 +592,6 @@ div.googleMapDiv > img {
   }
 
   .googleMapDiv {
-    /* position: absolute;
-    right: 0;
-    top: 0;
-    margin: 15px 30px 0px;
-    width: 40%;
-    max-width: 540px; */
     margin: -7px -20px -28px;
   }
   .googleMapDiv > img {
@@ -575,5 +618,4 @@ div.googleMapDiv > img {
   #meetupWrapper > div > div div.textmessageWrapper p {
     max-width: 100%;
   }
-
 }
