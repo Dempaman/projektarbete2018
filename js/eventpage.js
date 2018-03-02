@@ -825,7 +825,7 @@ function displayEventInfo(event){
   }
 
   retrieveMeetupInfo(event.date);
-  updateEventInfo(event.name, event.priceRange, event.currency, event.onsale);
+  //updateEventInfo(event.name, event.priceRange, event.currency, event.onsale);
 }
 
 function retrieveEventInfo(){
