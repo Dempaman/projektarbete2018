@@ -830,7 +830,7 @@ function displayEventInfo(event){
 
 function retrieveEventInfo(){
   console.log('HREF: '+window.location.pathname);
-  if(window.location.pathname == '/Desktop/FEU17/Projekt%202018%20meWent/projektarbete2018-meWent/eventpage.html'){
+  if(window.location.pathname.includes('eventpage.html')){
     let eventid = getLocationInfo()[0];
     //console.log('EVENTID IS', eventid);
 
