@@ -299,7 +299,7 @@ div.googleMapDiv > img {
 /* Actual chatmessage */
 .chattMessageDiv {
   display: flex;
-  color: #ffcece;
+  color: #ff9f9f;
   margin: 10px 14px 0px 0px;
 }
 .chattMessageDiv:last-child {

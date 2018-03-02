@@ -95,7 +95,7 @@ a {
 	transform: none;
 }
 #menu {
-	display: ; 
+	display: ;
 	position: absolute;
 	width: 250px;
 	margin: -110px 0 0 90px;
@@ -124,4 +124,10 @@ a {
 .active {
 	font-weight: bold;
 	font-size: 1.1em;
+}
+
+@media all and (min-width: 801px) {
+	#menuToggle {
+		display: none
+	}
 }
