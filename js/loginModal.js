@@ -46,8 +46,23 @@ firebase.auth().onAuthStateChanged(user => {
 
   } else {
     console.log('wubalubadub dub');
-    localStorage.removeItem('loggedInUser');
-    if(document.getElementsByClassName('creatorDiv').length == 0){
+
+
+
+
+
+    console.log('error:');
+    let localUser = localStorage.getItem('loggedInUser');
+    if(localUser != undefined){
+      localStorage.removeItem('loggedInUser');
+      console.log('Removed logged in user');
+    } else {
+      console.log('Nothing to remove');
+    }
+
+    let creatorDivArray = document.getElementsByClassName('creatorDiv');
+
+    if(creatorDivArray.length == 0){
       console.log('Length is 0! Posting!!!');
       retrieveEventInfo();
     } else {
@@ -81,7 +96,7 @@ firebase.auth().onAuthStateChanged(user => {
       }
     }
   }
-});
+}); //firebase.auth END...
 
 function toggleLoginModal(){
 
@@ -201,7 +216,7 @@ function loginGoogle(){
   console.log('Google button pressed!');
 }
 function loginFacebook(){
-  var providerGoogle = new firebase.auth.FacebookAuthProvider();
+  var providerFacebook = new firebase.auth.FacebookAuthProvider();
   firebase.auth().signInWithRedirect(providerFacebook)
   console.log('Facebook button pressed!');
 }
