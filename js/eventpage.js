@@ -367,12 +367,18 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
         // Update the member list!
         for(let member in meetup.members){
           if(currentUser.uniqueID == meetup.members[member].uniqueID) { found = true; }
-          console.log('Updated member:', member);
           let memberDiv = document.createElement('div');
           memberDiv.className = 'memberDiv';
+
           let memberImage = document.createElement('img');
           memberImage.setAttribute('src', meetup.members[member].avatarURL);
+
+          let hoverMessage = document.createElement('p');
+          hoverMessage.innerText = meetup.members[member].fullname;
+          hoverMessage.className = 'hoverMessage';
+
           memberDiv.appendChild(memberImage);
+          memberDiv.appendChild(hoverMessage);
           membersWrapper.appendChild(memberDiv);
         }
 
@@ -433,9 +439,14 @@ function displayMembersAndChat(md, meetupKey){
       for(let comingUser in data){
         let memberDiv = document.createElement('div');
         memberDiv.className = 'memberDiv';
+
         let memberDivAvatar = document.createElement('img');
         memberDivAvatar.setAttribute('alt', 'User picture');
         memberDivAvatar.setAttribute('src', data[comingUser].avatarURL);
+
+        let hoverMessage = document.createElement('p');
+        hoverMessage.innerText = data[comingUser].fullname;
+        hoverMessage.className = 'hoverMessage';
 
         if(comingUser != 'creator'){
           if(data[comingUser].uniqueID == currentUser.uniqueID){
@@ -451,6 +462,7 @@ function displayMembersAndChat(md, meetupKey){
 
 
         memberDiv.appendChild(memberDivAvatar);
+        memberDiv.appendChild(hoverMessage);
         membersWrappingDiv.appendChild(memberDiv);
       }
 
@@ -580,6 +592,7 @@ function createMessage(event){
 // Start to listen to chat messages on this meetupKey
 function listenToChat(meetupKey, joinedTime){
   let first = true;
+  let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
   for(let wrapperDiv in document.getElementsByClassName('chattWrapperDiv')){
     wrapperDiv.scrollTop = wrapperDiv.scrollHeight;
   }
@@ -587,10 +600,9 @@ function listenToChat(meetupKey, joinedTime){
   db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
     let chattWrapperDiv = document.getElementById('chat' + meetupKey);
     let message = snapshot.val();
+    let messageKey = snapshot.key;
     // Should we display the message? If the message was made before the player joined we don't show it.
-    if(joinedTime > message.time){
-      console.log('You cannot see this message.');
-    } else {
+    if(joinedTime <= message.time){
 
       if(first){
         while(chattWrapperDiv.firstChild){
@@ -628,7 +640,43 @@ function listenToChat(meetupKey, joinedTime){
 
       messageWrapper.appendChild(fullname);
       messageWrapper.appendChild(timeStamp);
-      messageWrapper.appendChild(textmessage);
+
+      //Create textmessage wrapperDiv
+      let textmessageWrapper = document.createElement('div');
+      textmessageWrapper.className = 'textmessageWrapper';
+
+      // Create Like Button and counter
+      let likeCount = document.createElement('span');
+      likeCount.className = 'likeCount ' + messageKey;
+      let likeBtn = document.createElement('span');
+
+      // If the current user has liked this message, put this as a filled heart already!
+      db.ref('likes/' + messageKey  + '/' + currentUser.uniqueID).once('value', function(newShot){
+        if(newShot.val()){
+          likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
+        } else {
+          likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+        }
+      });
+
+
+      // Add eventListener for the likeButton
+      likeBtn.addEventListener('click', function(event){
+        if(likeBtn.innerHTML == '<i class="mdi mdi-heart-outline"></i>'){
+          toggleLike(messageKey);
+          likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
+        } else {
+          toggleLike(messageKey);
+          likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+        }
+      });
+
+      likeListenerOn(messageKey);
+      // Append it into the textmessageWrapper
+      textmessageWrapper.appendChild(textmessage);
+      textmessageWrapper.appendChild(likeCount);
+      textmessageWrapper.appendChild(likeBtn);
+      messageWrapper.appendChild(textmessageWrapper);
 
       // Append everything into the messageDiv
       messageDiv.appendChild(avatarImg);
@@ -638,8 +686,6 @@ function listenToChat(meetupKey, joinedTime){
       chattWrapperDiv.appendChild(messageDiv);
 
       chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
-
-
     }
 
   });
@@ -982,4 +1028,60 @@ function updateEventInfo(eventName, priceRange, currency, onsale){
     console.log(json);
 
   });
+}
+
+function toggleLike(key){
+  let user = JSON.parse(localStorage.getItem('loggedInUser'));
+  db.ref('likes/' + key).once('value', function(snapshot){
+    let data = snapshot.val();
+    if(data){
+      let found = false;
+      for(let uid in data){
+        if(uid == user.uniqueID){
+          db.ref('likes/'+key+'/'+uid).remove();
+          found = true;
+          console.log('unlike');
+        }
+      }
+      if(!found){
+        db.ref('likes/' + key + '/' + user.uniqueID ).set(true);
+        console.log('like');
+      }
+    } else {
+      db.ref('likes/' + key + '/' + user.uniqueID ).set(true);
+      console.log('like');
+    }
+  });
+}
+
+function likeListenerOn(key){
+  //Listen for likes
+  db.ref('likes/' + key).on('child_added', function(){
+    console.log('New like!');
+    let likeCounters = document.getElementsByClassName('likeCount '+key);
+    for(let likeCount of likeCounters){
+      console.log(likeCount);
+      if(likeCount.innerText){
+        likeCount.innerText = (likeCount.innerText - 0) + 1;
+      } else {
+        likeCount.innerText = 1;
+      }
+    }
+  });
+  //Listen for unlikes
+  db.ref('likes/' + key).on('child_removed', function(){
+    console.log('Someone unliked :(');
+
+    let likeCounters = document.getElementsByClassName('likeCount '+key);
+
+    for(let likeCount of likeCounters){
+      console.log(likeCount);
+      if(likeCount.innerText != 1){
+        likeCount.innerText = (likeCount.innerText - 0) - 1;
+      } else if(likeCount.innerText == 1){
+        likeCount.innerText = '';
+      }
+    }
+  });
+
 }
