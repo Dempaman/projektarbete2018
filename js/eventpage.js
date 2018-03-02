@@ -829,7 +829,7 @@ function displayEventInfo(event){
 }
 
 function retrieveEventInfo(){
-  if(window.location.pathname == '/eventpage.html'){
+  if(window.location.pathname.includes('/eventpage.html')){
     let eventid = getLocationInfo()[0];
     //console.log('EVENTID IS', eventid);
 
