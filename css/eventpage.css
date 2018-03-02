@@ -463,8 +463,26 @@ div.googleMapDiv > img {
   display: none;
   opacity: 0;
 }
+
+.purple.editBtn {
+  margin: 35px 0px 50px 90px;
+  width: 196px;
+}
+@media screen and (max-width: 999px){
+  .purple.editBtn {
+    display: none;
+  }
+  .iconBtn.editBtn {
+    display: block;
+  }
+}
+
+
 /* MEDIA QUERIES ENSKILT EVENT */
 @media screen and (min-width: 1000px){
+  .iconBtn.editBtn {
+    display: none;
+  }
 
   #meetupWrapper > div div.meetupInfo p:nth-child(2){
     max-width: 300px;
@@ -484,6 +502,10 @@ div.googleMapDiv > img {
     margin: 30px 0px 50px 90px;
   }
   .btnHolder .purple {
+    width: 196px;
+  }
+  .purple.editBtn {
+    margin: 35px 0px 50px 90px;
     width: 196px;
   }
   .addressCard {
@@ -507,7 +529,7 @@ div.googleMapDiv > img {
     margin-top: 19px;
     margin-left: 0px;
     font-size: 0.8em;
-    color: #777;
+    color: #999;
   }
   #meetupWrapper > div > div.addressCard p:nth-child(even) {
     margin-left: 0px;

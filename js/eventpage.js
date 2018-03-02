@@ -235,6 +235,22 @@ function retrieveMeetupInfo(eventDate){
     joinMeetupBtn.className = 'purple';
     joinMeetupBtn.innerText = 'Gå med i meetup';
 
+    let editBtn = document.createElement('button');
+    editBtn.className = 'editBtn purple';
+    editBtn.innerHTML = 'Redigera Event';
+
+    let editSmallBtn = document.createElement('button');
+    editSmallBtn.className = 'editBtn iconBtn';
+    editSmallBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+
+
+    editBtn.addEventListener('click', function(){
+      editMeetup(meetupKey);
+    });
+    editSmallBtn.addEventListener('click', function(){
+      editMeetup(meetupKey);
+    });
+
     btnDiv.appendChild(joinMeetupBtn);
 
     md.appendChild(meetupDivTitle);
@@ -268,6 +284,8 @@ function retrieveMeetupInfo(eventDate){
               }
             }
             if(show){
+              md.appendChild(editBtn);
+              md.appendChild(editSmallBtn);
               displayMembersAndChat(md, meetupKey);
             } else {
               md.appendChild(btnDiv);
@@ -373,10 +391,15 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
     // Google map is meetupWrapper.children[6]
 
+
     let infoBox = meetupWrapper.children[7];
     infoBox.children[1].innerText = meetup.info;
 
     let memberOrButton = meetupWrapper.children[8];
+
+    if(memberOrButton.className.includes('purple')){
+      memberOrButton = meetupWrapper.children[10];
+    }
 
     // Display members and shit!
     if(memberOrButton.className == 'moreMeetupInfoDiv'){
@@ -417,6 +440,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
           if(user){
             if(user.uniqueID == meetup.members[member].uniqueID){
               console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
+              addEditBtns(meetupKey);
               if(memberOrButton.parentNode){
                 memberOrButton.parentNode.removeChild(memberOrButton);
               }
@@ -742,6 +766,7 @@ function restoreJoinBtn(meetupKey){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
           stopListenToChat(meetupKey);
+          removeEditBtn(meetupKey);
           // Remove the eventListener for inputBox here for this user. DEBUG CODE, Might be useful.
           // let inputBox = document.getElementById('chat'+meetupKey).nextSibling;
           // console.log(inputBox);
@@ -750,7 +775,8 @@ function restoreJoinBtn(meetupKey){
           // inputBox.setAttribute('placeholder', 'You got kicked :(');
 
           // Remove the mainDiv and append a join btn!
-          md.removeChild(md.children[8]);
+          md.removeChild(md.lastChild);
+
 
 
           // Gå med knapp
@@ -1141,5 +1167,50 @@ function pageLoaded(){
   document.getElementById('eventHolder').className = '';
   if(document.getElementsByClassName('spinner')[0]){
     document.getElementsByClassName('spinner')[0].className = 'hidden';
+  }
+}
+
+function addEditBtns(meetupKey){
+  let meetup = document.getElementById('meetup-' + meetupKey);
+  if(meetup){
+    let editBtn = document.createElement('button');
+    editBtn.className = 'editBtn purple';
+    editBtn.innerHTML = 'Redigera Event';
+
+    meetup.insertBefore(editBtn, meetup.lastChild);
+
+    let editSmallBtn = document.createElement('button');
+    editSmallBtn.className = 'editBtn iconBtn';
+    editSmallBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+
+    meetup.insertBefore(editSmallBtn, meetup.lastChild);
+
+    editBtn.addEventListener('click', function(){
+      editMeetup(meetupKey);
+    });
+    editSmallBtn.addEventListener('click', function(){
+      editMeetup(meetupKey);
+    });
+
+    } else {
+    console.log('Meetup not found!')
+  }
+}
+
+function editMeetup(meetupKey){
+  console.log('This meetup wants to be edited!! :(', meetupKey);
+}
+
+function removeEditBtn(meetupKey){
+  let meetup = document.getElementById('meetup-' + meetupKey);
+
+  for(let i = meetup.children.length-1; i >= 0; i--){
+    let node = meetup.children[i];
+
+    if(node.className == 'editBtn purple'){
+      meetup.removeChild(node);
+    } else if(node.className == 'editBtn iconBtn'){
+      meetup.removeChild(node);
+    }
   }
 }
