@@ -541,4 +541,11 @@ div.googleMapDiv > img {
     background-color: #fafafa;
   }
 
+  /* Css for the chatt and members */
+  /* start by fixing the heart */
+
+  #meetupWrapper > div > div div.textmessageWrapper p {
+    max-width: 100%;
+  }
+
 }

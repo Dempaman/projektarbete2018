@@ -7,7 +7,7 @@ firebase.auth().onAuthStateChanged(user => {
     //window.location = 'eventpage.html'; //After successful login, user will be redirected to home.html
 
     // The user is logged in.
-    //console.log('User data:',user);
+    console.log('User data:',user);
 
     db.ref("users/" + user.uid).once("value", function(snapshot){
 
@@ -16,8 +16,8 @@ firebase.auth().onAuthStateChanged(user => {
       if(result){
         // Print this if the user exists in the database.
         //console.log(result);
-
-        // Put the user information into the localStorage db
+        console.log('Setting the loggedInUser here #1!');
+        // Put the user information into the  localStorage db
         localStorage.setItem('loggedInUser', JSON.stringify(result));
 
       } else {
@@ -26,9 +26,11 @@ firebase.auth().onAuthStateChanged(user => {
         //console.log('No user here. Creating user in database.');
 
         newUser.push();
-
+        console.log('Setting the loggedInUser here!');
         localStorage.setItem('loggedInUser', JSON.stringify(newUser));
       }
+      // retrieveEventInfo after we've logged in!
+      retrieveEventInfo();
       //console.log('THE USER IS NOOOOOOW LOGGED IN');
     });
 
@@ -40,8 +42,14 @@ firebase.auth().onAuthStateChanged(user => {
     }
 
   } else {
-    //console.log('wubalubadub dub');
+    console.log('wubalubadub dub');
     localStorage.removeItem('loggedInUser');
+    if(document.getElementsByClassName('creatorDiv').length == 0){
+      console.log('Length is 0! Posting!!!');
+      retrieveEventInfo();
+    } else {
+      console.log('Nah I ain\'t posting that again!');
+    }
 
     // Om det existerar några meetups. Det vill säga personen loggade ut med sidan uppe.
 
@@ -69,10 +77,6 @@ firebase.auth().onAuthStateChanged(user => {
         console.log('We should not remove this joinMeetupBtn!');
       }
     }
-
-
-
-
   }
 });
 

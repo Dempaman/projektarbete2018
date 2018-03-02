@@ -12,7 +12,7 @@ console.log(chatMessageTimeStamp(1516758062943));
 
   // Turned off for debug purposes
   //document.getElementById('eventTitle').addEventListener('click', retrieveEventInfo);
-  retrieveEventInfo();
+
 
 }
 
@@ -298,10 +298,11 @@ function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
   db.ref('meetups/' + eventID + '/' + meetupID + '/members').once('value', function(snap){
 
     let data = snap.val();
-    let userIsNotComing = true;
+    let userIsNotComing = false;
+
     for(let comingUser in data){
-      if(data[comingUser] == userID) {
-        userIsNotComing = false;
+      if(data[comingUser].uniqueID == userID) {
+        userIsNotComing = true;
       }
     }
 
@@ -312,11 +313,12 @@ function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
       joined: firebase.database.ServerValue.TIMESTAMP
     }
 
-    if(userIsNotComing){
+    if(!userIsNotComing){
       db.ref('meetups/' + eventID + '/' + meetupID + '/members').push(userObject);
+      console.log('Vi la till dig i meetupet!');
       new SystemMessage(meetupID, userObject.fullname + ' gick med i meetupet.').push();
     } else {
-      console.log('Du är redan med i detta meetup!');
+      console.log('Du är redan med i detta meetup! Något måste gått fel!');
     }
   });
 }
@@ -415,7 +417,9 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
           if(user){
             if(user.uniqueID == meetup.members[member].uniqueID){
               console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
-              memberOrButton.parentNode.removeChild(memberOrButton);
+              if(memberOrButton.parentNode){
+                memberOrButton.parentNode.removeChild(memberOrButton);
+              }
               displayMembersAndChat(null, meetupKey);
 
             }
@@ -825,49 +829,53 @@ function displayEventInfo(event){
 }
 
 function retrieveEventInfo(){
+  if(window.location.pathname == '/eventpage.html'){
+    let eventid = getLocationInfo()[0];
+    //console.log('EVENTID IS', eventid);
 
-  let eventid = getLocationInfo()[0];
-  console.log('EVENTID IS', eventid);
+    if(eventid != undefined){
+      fetch(`https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_id=sweden&apikey=${ticketMasterApiKey}`)
+      .then(function(response){
 
-  if(eventid != undefined){
-    fetch(`https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_id=sweden&apikey=${ticketMasterApiKey}`)
-    .then(function(response){
+        'https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_ids=sweden&apikey=${ticketMasterApiKey}'
 
-      'https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_ids=sweden&apikey=${ticketMasterApiKey}'
+        //console.log(response);
+        return response.json();
+      })
+      .then(function(json){
+        //console.log('EVENTOBJECT without formatting:',json);
+          let latitude = 58, longitude = 15;
+          let event = json;
+          let imageURL = event.images[0].url;
+          let venue = event.venue;
+          let priceRanges = event.price_ranges;
+          let address = venue.location.address;
+          let date = event.localeventdate;
+          let offsale = event.offsale.value;
 
-      console.log(response);
-      return response.json();
-    })
-    .then(function(json){
-      console.log('EVENTOBJECT without formatting:',json);
-        let latitude = 58, longitude = 15;
-        let event = json;
-        let imageURL = event.images[0].url;
-        let venue = event.venue;
-        let priceRanges = event.price_ranges;
-        let address = venue.location.address;
-        let date = event.localeventdate;
-        let offsale = event.offsale.value;
+          // createMarker(latitude, longitude);
+          //console.log('ImageUrl', imageURL);
 
-        // createMarker(latitude, longitude);
-        console.log('ImageUrl', imageURL);
+          let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale);
 
-        let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale);
+          console.log('EVENTOBJECT: ',eventObject);
 
-        console.log('EVENTOBJECT: ',eventObject);
+          // Eventet hittades, information visas!
+          displayEventInfo(eventObject);
 
-        // Eventet hittades, information visas!
-        displayEventInfo(eventObject);
+          // Skapa eventListeners för knapparna!
+          createEventListenersForBtns(eventid, event.url, event.properties.seats_avail);
 
-        // Skapa eventListeners för knapparna!
-        createEventListenersForBtns(eventid, event.url, event.properties.seats_avail);
+          pageLoaded();
+      })
+      .catch(function(error){
+        console.log('Här skedde det ett fel! Försöker vi plocka fram något som inte skickas med?');
+        console.log('Felmeddelande:',error);
+      })
+    }
 
-        pageLoaded();
-    })
-    .catch(function(error){
-      console.log('Här skedde det ett fel! Försöker vi plocka fram något som inte skickas med?');
-      console.log('Felmeddelande:',error);
-    })
+  } else {
+    console.log('This function should not run on this page.');
   }
 }
 
@@ -1132,6 +1140,7 @@ function pageLoaded(){
   header.className = header.className.replace('hidden', '');
   document.getElementById('imageHolder').className = '';
   document.getElementById('eventHolder').className = '';
-  document.getElementsByClassName('spinner')[0].className = 'hidden';
-
+  if(document.getElementsByClassName('spinner')[0]){
+    document.getElementsByClassName('spinner')[0].className = 'hidden';
+  }
 }
