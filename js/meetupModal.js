@@ -122,11 +122,6 @@ function initCreateMeetupListeners(ageSlider){
     // Information
     let information = document.getElementsByTagName('textarea')[0].value;
 
-
-
-    //(uniqueID, fullname, mail, verified, age, sex, avatarURL, admin, meetups, information)
-
-
     // Skaparens användarID som vi får genom autentiseringen!
     if(localStorage.getItem('loggedInUser')){
 
@@ -252,6 +247,6 @@ function toggleCreateMeetupModal(){
     btn.className = 'createMeetupBtn purple';
   } else {
     btn.innerText = 'Logga In';
-    btn.className = 'createMeetupBtn leaveMeetupBtn';
+    btn.className = 'createMeetupBtn logInBtn leaveMeetupBtn';
   }
 }
