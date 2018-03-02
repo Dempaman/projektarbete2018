@@ -24,20 +24,19 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
   loginInMenu.addEventListener('click', function(event){
     if(localStorage.getItem('loggedInUser')){
       localStorage.removeItem('loggedInUser');
-      loginInMenu.innerText = "LOGGA UT!!!";
+      loginInMenu.innerText = "LOGGA UT";
 
       firebase.auth().signOut().then(function() {
         // Sign-out successful.
-        moreMeetupInfoDiv.remove();
-
+        //moreMeetupInfoDiv.remove();
         console.log('Google sign-out successful')
 
       }).catch(function(error) {
         // An error happened.
-        console.log('No server response...')
+        console.log('No server response..')
       });
 
-      loginInMenu.innerText = "LOGGA IN!!!";
+      loginInMenu.innerText = "LOGGA IN";
 
     }else if(!localStorage.getItem('loggedInUser')){
       navigation.className = 'hidden';
@@ -49,7 +48,7 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
 
     //Om du är inloggad så står de "logga ut" i menu
     if(localStorage.getItem('loggedInUser')){
-      loginInMenu.innerText = "LOGGA UT!!!";
+      loginInMenu.innerText = "LOGGA UT";
     }
     //Gömmer hela navigation sidan och skickar dig vidare till login-modal.
     purple.addEventListener('click', function(event){
