@@ -8,9 +8,11 @@ window.onload = function(){
 console.log(chatMessageTimeStamp(1519755958554));
 console.log(chatMessageTimeStamp(1516758062943));
 
+
+
   // Turned off for debug purposes
-  document.getElementById('eventTitle').addEventListener('click', retrieveEventInfo);
-  //retrieveEventInfo();
+  //document.getElementById('eventTitle').addEventListener('click', retrieveEventInfo);
+  retrieveEventInfo();
 
 }
 
@@ -249,21 +251,7 @@ function retrieveMeetupInfo(eventDate){
     meetupWrapper.appendChild(md);
 
     // Create Eventlistener for the joinMeetupBtn
-    joinMeetupBtn.addEventListener('click', function(event){
-      let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
-
-      if(currentUser){
-        joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
-
-      } else {
-        console.log('Setup login modal here?');
-        toggleLoginModal();
-      }
-
-      event.target.style.backgroundColor = '#606060';
-      event.target.disabled = true;
-
-    });
+    joinBtnListener(joinMeetupBtn, meetupKey);
 
   });
 }
@@ -736,13 +724,7 @@ function restoreJoinBtn(meetupKey){
 
           btnDiv.appendChild(joinMeetupBtn);
 
-          joinMeetupBtn.addEventListener('click', function(event){
-            let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
-            //console.log('FULLNAME OF USER IS: ', currentUser);
-            joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventid);
-            event.target.style.backgroundColor = '#606060';
-            event.target.disabled = true;
-          });
+          joinBtnListener(joinMeetupBtn, meetupKey);
 
           md.appendChild(btnDiv);
         }
@@ -776,14 +758,14 @@ function leaveMeetup(meetupKey){
 
 function displayEventInfo(event){
 
-  let imgHolder = document.getElementsByClassName('imageHolder')[0].children[0];
+  let imgHolder = document.getElementById('imageHolder').children[0];
   imgHolder.style.background = 'url("'+event.imageURL+'")';
   imgHolder.style.backgroundRepeat =  'no-repeat';
   imgHolder.style.backgroundSize = 'cover';
   imgHolder.style.backgroundPosition = 'center';
 
   // Add google map!
-  let googleMapImg = document.getElementsByClassName('imageHolder')[0].children[1];
+  let googleMapImg = document.getElementById('imageHolder').children[1];
   let googleMapImgURL = `https://maps.googleapis.com/maps/api/staticmap?center=${event.address}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${event.address}&key=${googleApiKey2}`;
   googleMapImg.style.background = 'url("'+googleMapImgURL+'")';
   googleMapImg.style.backgroundRepeat =  'no-repeat';
@@ -845,6 +827,7 @@ function retrieveEventInfo(){
         // Skapa eventListeners för knapparna!
         createEventListenersForBtns(eventid, event.url, event.properties.seats_avail);
 
+        pageLoaded();
     })
     .catch(function(error){
       console.log('Här skedde det ett fel! Försöker vi plocka fram något som inte skickas med?');
@@ -994,8 +977,11 @@ function getLocationInfo(){
             meetupID = loc.split('=')[1];
           }
         }
+
+        // Radera eventuella #
+        eventID = eventID.replace('#', '');
+        return [eventID, meetupID];
     }
-    return [eventID, meetupID];
   } else {
     return false;
   }
@@ -1083,5 +1069,34 @@ function likeListenerOn(key){
       }
     }
   });
+
+}
+
+function joinBtnListener(joinMeetupBtn, meetupKey){
+
+  joinMeetupBtn.addEventListener('click', function(event){
+    let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    let eventID = getLocationInfo()[0];
+
+    if(currentUser){
+      joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
+
+    } else {
+      console.log('Setup login modal here?');
+      toggleLoginModal();
+    }
+
+    event.target.style.backgroundColor = '#606060';
+    event.target.disabled = true;
+
+  });
+}
+
+function pageLoaded(){
+  let header = document.getElementById('navigation');
+  header.className = header.className.replace('hidden', '');
+  document.getElementById('imageHolder').className = '';
+  document.getElementById('eventHolder').className = '';
+  document.getElementsByClassName('spinner')[0].className = 'hidden';
 
 }

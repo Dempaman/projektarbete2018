@@ -7,7 +7,7 @@ firebase.auth().onAuthStateChanged(user => {
     //window.location = 'eventpage.html'; //After successful login, user will be redirected to home.html
 
     // The user is logged in.
-    console.log('User data:',user);
+    //console.log('User data:',user);
 
     db.ref("users/" + user.uid).once("value", function(snapshot){
 
@@ -15,7 +15,7 @@ firebase.auth().onAuthStateChanged(user => {
 
       if(result){
         // Print this if the user exists in the database.
-        console.log(result);
+        //console.log(result);
 
         // Put the user information into the localStorage db
         localStorage.setItem('loggedInUser', JSON.stringify(result));
@@ -23,23 +23,56 @@ firebase.auth().onAuthStateChanged(user => {
       } else {
 
         let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
-        console.log('No user here. Creating user in database.');
+        //console.log('No user here. Creating user in database.');
 
         newUser.push();
 
         localStorage.setItem('loggedInUser', JSON.stringify(newUser));
       }
-      console.log('THE USER IS NOOOOOOW LOGGED IN');
-      //Efter som google sign-in redirect'ar oss så kollar vi om vi är inloggade eller inte. Kan de göras bättre????
-      let loginInMenu = document.getElementsByClassName('loginInMenu')[0];
-      if(localStorage.getItem('loggedInUser')){
-        loginInMenu.innerText = "LOGGA UT!!!";
-      }
+      //console.log('THE USER IS NOOOOOOW LOGGED IN');
     });
 
+    //Efter som google sign-in redirect'ar oss så kollar vi om vi är inloggade eller inte. Kan de göras bättre????
+    let loginInMenu = document.getElementsByClassName('loginInMenu')[0];
+
+    if(loginInMenu){
+        loginInMenu.innerText = "LOGGA UT";
+    }
+
   } else {
-    console.log('wubalubadub dub');
+    //console.log('wubalubadub dub');
     localStorage.removeItem('loggedInUser');
+
+    // Om det existerar några meetups. Det vill säga personen loggade ut med sidan uppe.
+
+
+    for(let meetup of document.getElementById('meetupWrapper').children){
+      if(meetup.lastChild.className == 'moreMeetupInfoDiv'){
+
+        let btnDiv = document.createElement('div');
+        btnDiv.className = 'btnHolder';
+        let joinMeetupBtn = document.createElement('button');
+
+        joinMeetupBtn.className = 'purple';
+        joinMeetupBtn.innerText = 'Gå med i meetup';
+
+        btnDiv.appendChild(joinMeetupBtn);
+
+
+        meetup.removeChild(meetup.lastChild);
+        meetup.appendChild(btnDiv);
+        // Console.log('APPEND BTN');
+        let meetupKey = meetup.getAttribute('id').replace('-', '&');
+        meetupKey = meetupKey.split('&')[1];
+        joinBtnListener(joinMeetupBtn, meetupKey);
+      } else {
+        console.log('We should not remove this joinMeetupBtn!');
+      }
+    }
+
+
+
+
   }
 });
 
