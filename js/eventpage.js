@@ -195,6 +195,21 @@ function retrieveMeetupInfo(eventDate){
     googleMapDiv.className = 'googleMapDiv';
     // Just src
     googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+    googleMap.setAttribute('zoom', '16');
+
+    googleMap.addEventListener('click', function(){
+      let currentZoom = googleMap.getAttribute('zoom');
+      let newZoom = (currentZoom-0) + 1;
+      googleMap.setAttribute('zoom', newZoom);
+      googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+    });
+    googleMap.addEventListener('contextmenu', function(event){
+      event.preventDefault();
+      let currentZoom = googleMap.getAttribute('zoom');
+      let newZoom = (currentZoom-0) - 1;
+      googleMap.setAttribute('zoom', newZoom);
+      googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+    });
 
     // Data-src - Debug shit
     // googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
@@ -237,11 +252,11 @@ function retrieveMeetupInfo(eventDate){
 
     let editBtn = document.createElement('button');
     editBtn.className = 'editBtn purple';
-    editBtn.innerHTML = 'Redigera Event';
+    editBtn.innerHTML = 'Redigera Meetup';
 
     let editSmallBtn = document.createElement('button');
     editSmallBtn.className = 'editBtn iconBtn';
-    editSmallBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+    editSmallBtn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
 
 
     editBtn.addEventListener('click', function(){
@@ -766,7 +781,7 @@ function restoreJoinBtn(meetupKey){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
           stopListenToChat(meetupKey);
-          removeEditBtn(meetupKey);
+
           // Remove the eventListener for inputBox here for this user. DEBUG CODE, Might be useful.
           // let inputBox = document.getElementById('chat'+meetupKey).nextSibling;
           // console.log(inputBox);
@@ -775,23 +790,35 @@ function restoreJoinBtn(meetupKey){
           // inputBox.setAttribute('placeholder', 'You got kicked :(');
 
           // Remove the mainDiv and append a join btn!
-          md.removeChild(md.lastChild);
+          let moreMeetupInfoDiv = md.lastChild;
+          md.lastChild.className += ' overlayAnimation';
+
+          let inputBox = document.getElementById('chat' + meetupKey).nextSibling;
+          inputBox.disabled = true;
+          inputBox.style.backgroundColor = '#ABABAB';
+
+          setTimeout(function(){
+            removeEditBtn(meetupKey);
+            md.removeChild(moreMeetupInfoDiv);
+            // Gå med knapp
+            let btnDiv = document.createElement('div');
+            btnDiv.className = 'btnHolder';
+            let joinMeetupBtn = document.createElement('button');
+
+            joinMeetupBtn.className = 'purple';
+            joinMeetupBtn.innerText = 'Gå med i meetup';
+
+            btnDiv.appendChild(joinMeetupBtn);
+
+            joinBtnListener(joinMeetupBtn, meetupKey);
+
+            md.appendChild(btnDiv);
+          },800);
 
 
 
-          // Gå med knapp
-          let btnDiv = document.createElement('div');
-          btnDiv.className = 'btnHolder';
-          let joinMeetupBtn = document.createElement('button');
 
-          joinMeetupBtn.className = 'purple';
-          joinMeetupBtn.innerText = 'Gå med i meetup';
 
-          btnDiv.appendChild(joinMeetupBtn);
-
-          joinBtnListener(joinMeetupBtn, meetupKey);
-
-          md.appendChild(btnDiv);
         }
   });
 }
@@ -861,6 +888,9 @@ function retrieveEventInfo(){
     //console.log('EVENTID IS', eventid);
 
     if(eventid != undefined){
+      // Start to listen if meetups gets removed.
+      listenToRemovedMeetups();
+
       fetch(`https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_id=sweden&apikey=${ticketMasterApiKey}`, null)
       .then(function(response){
 
@@ -1175,13 +1205,13 @@ function addEditBtns(meetupKey){
   if(meetup){
     let editBtn = document.createElement('button');
     editBtn.className = 'editBtn purple';
-    editBtn.innerHTML = 'Redigera Event';
+    editBtn.innerHTML = 'Redigera Meetup';
 
     meetup.insertBefore(editBtn, meetup.lastChild);
 
     let editSmallBtn = document.createElement('button');
     editSmallBtn.className = 'editBtn iconBtn';
-    editSmallBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+    editSmallBtn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
 
     meetup.insertBefore(editSmallBtn, meetup.lastChild);
 
@@ -1199,6 +1229,19 @@ function addEditBtns(meetupKey){
 
 function editMeetup(meetupKey){
   console.log('This meetup wants to be edited!! :(', meetupKey);
+
+  //Get the Dom meetup.
+  let meetup = document.getElementById('meetup-'+meetupKey);
+
+  // Check if it exsits.
+  if(!meetup){
+    console.log('This does not exist :o');
+  } else {
+
+
+
+  }
+
 }
 
 function removeEditBtn(meetupKey){
@@ -1213,4 +1256,37 @@ function removeEditBtn(meetupKey){
       meetup.removeChild(node);
     }
   }
+}
+
+function listenToRemovedMeetups(){
+    let eventID = getLocationInfo()[0];
+
+    db.ref('meetups/'+eventID).on('child_removed', function(snapshot){
+      let data = snapshot.val();
+      let meetupKey = snapshot.key;
+
+      let meetup = document.getElementById('meetup-'+meetupKey);
+
+      if(meetup){
+        let overlay = document.createElement('div');
+        overlay.className = 'meetupOverlayRemoved';
+        meetup.className += ' overlayAnimation';
+        meetup.appendChild(overlay);
+        setTimeout(function(){
+          meetup.parentNode.removeChild(meetup);
+        },2200)
+
+        console.log('Successfully removed from the dom!');
+      }
+
+    });
+}
+
+function destroyMeetup(meetupKey, eventID){
+  if(!eventID){
+    eventID = getLocationInfo()[0];
+  }
+
+  console.log('Meetup with ID: '+meetupKey+' under eventID: '+eventID+'is being removed from the database...');
+  db.ref('meetups/' +eventID+ '/' +meetupKey).remove();
 }
