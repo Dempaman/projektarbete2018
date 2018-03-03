@@ -2,6 +2,10 @@ html, body {
   margin: 0;
   padding: 0;
 }
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .hidden {
   display: none;
   opacity: 0;
@@ -102,11 +106,11 @@ html, body {
 }
 button.green, button.purple, button.leaveMeetupBtn, button.noTicketsBtn {
   cursor: pointer;
+  outline: none;
   display: inline-block;
   border: none;
   margin: 5px auto;
   width: 150px;
-  outline: 0;
   border-radius: 5px;
   padding: 9px 20px;
   font-family: 'Questrial', sans-serif;
@@ -245,13 +249,16 @@ div.googleMapDiv > img {
 /* When user is in the meetup */
 
 /* Display Members */
-#meetupWrapper > div > div.moreMeetupInfoDiv p:first-child {
+#meetupWrapper > div > div.moreMeetupInfoDiv > div p:first-child {
   width: 50%;
   margin-left: 20px;
 }
-.moreMeetupInfoDiv {
+.moreMeetupInfoDiv, .chatWrapperWithLabel {
   display: flex;
   flex-direction: column;
+}
+.chatWrapperWithLabel {
+  margin-bottom: 20px;
 }
 .membersWrappingDiv {
   margin: 9px 15px;
@@ -265,13 +272,13 @@ div.googleMapDiv > img {
   font-size: 0.8em;
   color: #777;
 }
-.moreMeetupInfoDiv > div > div.memberDiv > img {
+.moreMeetupInfoDiv > div > div > div.memberDiv > img {
   margin: 0px 4px 4px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
-#meetupWrapper > div > div p.hoverMessage {
+#meetupWrapper > div > div > div p.hoverMessage {
   display: none;
   background-color: #454545;
   position: absolute;
@@ -282,7 +289,7 @@ div.googleMapDiv > img {
   font-size: 0.8em;
 }
 
-#meetupWrapper > div .moreMeetupInfoDiv > div > div.memberDiv > img:hover + .hoverMessage {
+#meetupWrapper > div .moreMeetupInfoDiv > div > div > div.memberDiv > img:hover + .hoverMessage {
   display: block;
   opacity: 1;
 }
@@ -382,12 +389,12 @@ div.googleMapDiv > img {
 
 .chattWrapperDiv + input {
   border: none;
+  outline: none;
   color: #4A4A4A;
   border-top: 3px solid #cccc;
   box-sizing: border-box;
   height: 45px;
   padding: 10px 15px;
-  margin: 0px 20px 20px;
   width: calc(100% - 40px);
   align-self: center;
 }
@@ -500,6 +507,7 @@ div.googleMapDiv > img {
     display: none;
   }
   .iconBtn.editBtn {
+    outline: none;
     margin: 14px 6px;
     padding: 0px;
     font-size: 2.8em;
@@ -601,11 +609,12 @@ div.googleMapDiv > img {
   #meetupWrapper > div {
     position: relative;
     padding: 15px 0px 15px 30px;
+    min-height: 485px;
   }
 
   #meetupWrapper, #eventHolder {
     max-width: 1200px;
-    margin: 0px auto 50px;
+    margin: 0px auto 0px;
   }
 
   body {

@@ -165,8 +165,27 @@ function initCreateMeetupListeners(ageSlider){
         document.getElementById('modalWrapper').className = 'hidden';
         document.getElementById('meetupWrapper').className = 'show';
         setTimeout(function(){
-          window.scrollTop = window.scrollHeight;
-        },1000)
+
+          // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+          let bodyScroll = document.getElementsByClassName('body')[0];
+          let htmlScroll = document.getElementsByTagName('html')[0];
+          
+          if(bodyScroll == 0){
+            console.log('Html scroll!!');
+            htmlScroll.className += ' smooth-scroll';
+            htmlScroll.scrollTop = htmlScroll.scrollHeight - newMeetup.scrollHeight;
+          } else {
+            console.log('Body scroll!!');
+            bodyScroll.className += ' smooth-scroll';
+            bodyScroll.scrollTop = bodyScroll.scrollHeight - newMeetup.scrollHeight;
+          }
+
+
+
+          let newMeetup = document.getElementById('meetupWrapper').lastChild;
+
+          console.log('Height is:', htmlScroll.scrollHeight - newMeetup.scrollHeight);
+        },300);
 
     } else {
       modalWrapper.className = 'hidden'

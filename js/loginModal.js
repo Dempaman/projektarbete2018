@@ -46,8 +46,7 @@ firebase.auth().onAuthStateChanged(user => {
 
   } else {
     console.log('wubalubadub dub');
-
-    console.log('error:');
+    removeEditBtn();
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
       localStorage.removeItem('loggedInUser');
@@ -67,28 +66,30 @@ firebase.auth().onAuthStateChanged(user => {
 
     // Om det existerar några meetups. Det vill säga personen loggade ut med sidan uppe.
 
+    let meetupArray = document.getElementById('meetupWrapper').children;
+    if(meetupArray){
+      for(let meetup of meetupArray){
+        if(meetup.lastChild.className.includes('moreMeetupInfoDiv')){
 
-    for(let meetup of document.getElementById('meetupWrapper').children){
-      if(meetup.lastChild.className == 'moreMeetupInfoDiv'){
+          let btnDiv = document.createElement('div');
+          btnDiv.className = 'btnHolder';
+          let joinMeetupBtn = document.createElement('button');
 
-        let btnDiv = document.createElement('div');
-        btnDiv.className = 'btnHolder';
-        let joinMeetupBtn = document.createElement('button');
+          joinMeetupBtn.className = 'purple';
+          joinMeetupBtn.innerText = 'Gå med i meetup';
 
-        joinMeetupBtn.className = 'purple';
-        joinMeetupBtn.innerText = 'Gå med i meetup';
-
-        btnDiv.appendChild(joinMeetupBtn);
+          btnDiv.appendChild(joinMeetupBtn);
 
 
-        meetup.removeChild(meetup.lastChild);
-        meetup.appendChild(btnDiv);
-        // Console.log('APPEND BTN');
-        let meetupKey = meetup.getAttribute('id').replace('-', '&');
-        meetupKey = meetupKey.split('&')[1];
-        joinBtnListener(joinMeetupBtn, meetupKey);
-      } else {
-        console.log('We should not remove this joinMeetupBtn!');
+          meetup.removeChild(meetup.lastChild);
+          meetup.appendChild(btnDiv);
+          // Console.log('APPEND BTN');
+          let meetupKey = meetup.getAttribute('id').replace('-', '&');
+          meetupKey = meetupKey.split('&')[1];
+          joinBtnListener(joinMeetupBtn, meetupKey);
+        } else {
+          console.log('We should not remove this joinMeetupBtn!');
+        }
       }
     }
   }
