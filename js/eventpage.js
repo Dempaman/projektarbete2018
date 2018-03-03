@@ -195,6 +195,21 @@ function retrieveMeetupInfo(eventDate){
     googleMapDiv.className = 'googleMapDiv';
     // Just src
     googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+    googleMap.setAttribute('zoom', '16');
+
+    googleMap.addEventListener('click', function(){
+      let currentZoom = googleMap.getAttribute('zoom');
+      let newZoom = (currentZoom-0) + 1;
+      googleMap.setAttribute('zoom', newZoom);
+      googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+    });
+    googleMap.addEventListener('contextmenu', function(event){
+      event.preventDefault();
+      let currentZoom = googleMap.getAttribute('zoom');
+      let newZoom = (currentZoom-0) - 1;
+      googleMap.setAttribute('zoom', newZoom);
+      googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+    });
 
     // Data-src - Debug shit
     // googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
@@ -766,7 +781,7 @@ function restoreJoinBtn(meetupKey){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
           stopListenToChat(meetupKey);
-          removeEditBtn(meetupKey);
+
           // Remove the eventListener for inputBox here for this user. DEBUG CODE, Might be useful.
           // let inputBox = document.getElementById('chat'+meetupKey).nextSibling;
           // console.log(inputBox);
@@ -775,23 +790,35 @@ function restoreJoinBtn(meetupKey){
           // inputBox.setAttribute('placeholder', 'You got kicked :(');
 
           // Remove the mainDiv and append a join btn!
-          md.removeChild(md.lastChild);
+          let moreMeetupInfoDiv = md.lastChild;
+          md.lastChild.className += ' overlayAnimation';
+
+          let inputBox = document.getElementById('chat' + meetupKey).nextSibling;
+          inputBox.disabled = true;
+          inputBox.style.backgroundColor = '#ABABAB';
+
+          setTimeout(function(){
+            removeEditBtn(meetupKey);
+            md.removeChild(moreMeetupInfoDiv);
+            // Gå med knapp
+            let btnDiv = document.createElement('div');
+            btnDiv.className = 'btnHolder';
+            let joinMeetupBtn = document.createElement('button');
+
+            joinMeetupBtn.className = 'purple';
+            joinMeetupBtn.innerText = 'Gå med i meetup';
+
+            btnDiv.appendChild(joinMeetupBtn);
+
+            joinBtnListener(joinMeetupBtn, meetupKey);
+
+            md.appendChild(btnDiv);
+          },800);
 
 
 
-          // Gå med knapp
-          let btnDiv = document.createElement('div');
-          btnDiv.className = 'btnHolder';
-          let joinMeetupBtn = document.createElement('button');
 
-          joinMeetupBtn.className = 'purple';
-          joinMeetupBtn.innerText = 'Gå med i meetup';
 
-          btnDiv.appendChild(joinMeetupBtn);
-
-          joinBtnListener(joinMeetupBtn, meetupKey);
-
-          md.appendChild(btnDiv);
         }
   });
 }
@@ -1202,6 +1229,19 @@ function addEditBtns(meetupKey){
 
 function editMeetup(meetupKey){
   console.log('This meetup wants to be edited!! :(', meetupKey);
+
+  //Get the Dom meetup.
+  let meetup = document.getElementById('meetup-'+meetupKey);
+
+  // Check if it exsits.
+  if(!meetup){
+    console.log('This does not exist :o');
+  } else {
+
+
+
+  }
+
 }
 
 function removeEditBtn(meetupKey){
@@ -1234,7 +1274,7 @@ function listenToRemovedMeetups(){
         meetup.appendChild(overlay);
         setTimeout(function(){
           meetup.parentNode.removeChild(meetup);
-        },4500)
+        },2200)
 
         console.log('Successfully removed from the dom!');
       }

@@ -472,26 +472,25 @@ div.googleMapDiv > img {
   top: 0;
 }
 .overlayAnimation {
-  scroll-behavior: smooth;
-  position: absolute;
-  z-index: -900000;
-  -webkit-animation-name: overlayFadeRemove;
-  -webkit-animation-duration: 3s;
-  animation-name: overlayFadeRemove;
-  animation-duration: 6s;
+  -webkit-animation: fade-out .5s ease-in;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-delay: .2s
 }
 /* Animation for overlay */
 
 /* Safari 4.0 - 8.0 */
-@-webkit-keyframes overlayFadeRemove {
-    0%   {background-color:#d5d2d206; left:0px; top:0px;}
-    100% {background-color:#d5d2d2; left:0px; top:-467px;}
+@-webkit-keyframes fade-out {
+0% { opacity: 1; -webkit-transform: scale(1);}
+85% {opacity: 1; -webkit-transform: scale(1.05);}
+100% {-webkit-transform: scale(.1); opacity: 0;}
 }
 
-/* Standard syntax */
-@keyframes overlayFadeRemove {
-  0%   {background-color:#d5d2d206; left:0px; top:0px;}
-  100% {background-color:#d5d2d2; left:0px; top:-467px;}
+.fade-out {
+    background-color: #000;
+    width: 100px;
+    height: 100px;
+    opacity: 1;
 }
 
 
