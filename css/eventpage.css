@@ -101,6 +101,7 @@ html, body {
   text-align: center;
 }
 button.green, button.purple, button.leaveMeetupBtn, button.noTicketsBtn {
+  cursor: pointer;
   display: inline-block;
   border: none;
   margin: 5px auto;

@@ -47,10 +47,6 @@ firebase.auth().onAuthStateChanged(user => {
   } else {
     console.log('wubalubadub dub');
 
-
-
-
-
     console.log('error:');
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
@@ -106,11 +102,12 @@ function toggleLoginModal(){
     if(lmw.className == 'hidden'){
       lmw.className = '';
       setBodyScroll('hidden');
-      addLoginModalListeners();
+      //addLoginModalListeners();
+      addWindowClosed();
     } else {
       lmw.className = 'hidden';
       setBodyScroll('auto');
-      removeLoginModalListeners();
+      //removeLoginModalListeners();
     }
   } else {
     retrieveLoginModalContent();
@@ -122,7 +119,12 @@ function toggleLoginModal(){
 // Set the body scroll
 function setBodyScroll(value){
   let body = document.getElementsByTagName('body')[0];
-  body.style.overflowY = value;
+  //body.style.overflowY = value;
+  if(value == 'hidden'){
+    body.className = 'hiddenBody';
+  } else {
+    body.className = '';
+  }
 }
 
 // Retrieve the modal content!
@@ -143,6 +145,10 @@ function retrieveLoginModalContent(){
   let closeButton = document.createElement('span');
   closeButton.className = 'loginModalCloseButton';
   closeButton.innerHTML = '<i class="mdi mdi-close mdi-36px"></i>';
+
+  let closeCenteredBtn = document.createElement('span');
+  closeCenteredBtn.className = 'loginModalCloseCenteredBtn';
+  closeCenteredBtn.innerHTML = '<i class="mdi mdi-close mdi-36px"></i>';
 
   headerDiv.appendChild(headerTitle);
   headerDiv.appendChild(closeButton);
@@ -166,16 +172,19 @@ function retrieveLoginModalContent(){
   // Append the buttons into the wrapper
   googleButtonWrapper.appendChild(googleButton);
   facebookButtonWrapper.appendChild(facebookButton);
+  googleButton.className = 'doNotCloseThis';
+  googleButton.className = 'doNotCloseThis';
 
   // Append the buttonWrappers into the ButtonHolder & inside
   btnHolderInside.appendChild(googleButtonWrapper);
   btnHolderInside.appendChild(facebookButtonWrapper);
 
   btnHolder.appendChild(btnHolderInside);
+  btnHolderInside.className = 'loginModalButtonHolder';
 
 
-
-  lmc.appendChild(headerDiv)
+  lmc.appendChild(headerDiv);
+  btnHolder.appendChild(closeCenteredBtn);
   lmc.appendChild(btnHolder);
 
   lmw.appendChild(lmc);
@@ -188,26 +197,57 @@ function retrieveLoginModalContent(){
   setBodyScroll('hidden');
 
   // add eventlisteners to the buttons!
-  addBtnListeners(googleButton, facebookButton, closeButton);
+  addBtnListeners(googleButton, facebookButton, closeButton, closeCenteredBtn);
 }
 
 
-function addBtnListeners(googleButton, facebookButton, closeButton){
+function addBtnListeners(googleButton, facebookButton){
 
   googleButton.addEventListener('click', loginGoogle);
   facebookButton.addEventListener('click', loginFacebook);
 
-  closeButton.addEventListener('click', function(){
-    toggleLoginModal();
-    navigation.className = '';
-    console.log('closed!');
-    let btns= document.getElementsByClassName('purple');
+  //closeButton.addEventListener('click', closeModal);
+  //closeCenteredBtn.addEventListener('click', closeModal);
+
+  // If you press outside the centered we close the modal!
+
+  addWindowClosed();
+
+}
+
+function addWindowClosed(){
+
+  function closeIfNotCenter(event){
+
+    console.log('This:', event.target);
+    console.log('The class name of target is: ' + event.target.className);
+    console.log('NodeName: ' + event.target.nodeName);
+
+    if(event.target.className != 'centered'){
+      if(event.target.className != 'loginModalButtonHolder'){
+        if(event.target.className != 'doNotCloseThis'){
+          closeModal();
+          window.removeEventListener('click', closeIfNotCenter);
+          console.log('Closeeed with closeIfNotCenter');
+        }
+      }
+    }
+  }
+
+  setTimeout(function(){
+    window.addEventListener('click', closeIfNotCenter);
+  },100);
+}
+
+function closeModal(){
+  toggleLoginModal();
+  let btns = document.getElementsByClassName('purple');
+  if(btns){
     for(let btn of btns){
       btn.disabled = false;
       btn.style.backgroundColor = '';
     }
-  });
-
+  }
 }
 
 function loginGoogle(){
@@ -215,6 +255,7 @@ function loginGoogle(){
   firebase.auth().signInWithRedirect(providerGoogle)
   console.log('Google button pressed!');
 }
+
 function loginFacebook(){
   var providerFacebook = new firebase.auth.FacebookAuthProvider();
   firebase.auth().signInWithRedirect(providerFacebook)

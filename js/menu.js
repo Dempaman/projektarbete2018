@@ -41,7 +41,7 @@ window.addEventListener('load', function(event){
       change.innerText = "LOGGA IN";
 
     }else if(!localStorage.getItem('loggedInUser')){
-      navigation.className = 'hidden';
+      //navigation.className = 'hidden';
       toggleLoginModal();
       console.log('HÄR SKA VI LOGGA IN ANVÄNDAREN');
     }
@@ -52,10 +52,10 @@ window.addEventListener('load', function(event){
     if(localStorage.getItem('loggedInUser')){
       change.innerText = "LOGGA UT";
     }
-    //Gömmer hela navigation sidan och skickar dig vidare till login-modal.
-    purple.addEventListener('click', function(event){
-      navigation.className = 'hidden';
-    });
+    // //Gömmer hela navigation sidan och skickar dig vidare till login-modal.
+    // purple.addEventListener('click', function(event){
+    //   navigation.className = 'hidden';
+    // });
 
 
     menuDiv.addEventListener('click', function(event){

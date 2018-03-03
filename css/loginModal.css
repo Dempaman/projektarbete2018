@@ -1,3 +1,7 @@
+body.hiddenBody {
+  overflow-y: hidden;
+}
+
 #lmw {
   background-color: #dadada;
   position: fixed;
@@ -40,6 +44,7 @@ span.loginModalCloseButton {
   font-size: 0.8em;
   background-color: #b9b9b966;
   font-weight: 100;
+  cursor: pointer;
 }
 #lmw button > span {
   margin: 6px 10px 0px 13px;
@@ -73,12 +78,30 @@ span.loginModalCloseButton {
 #lmw button:hover > i.mdi-google {
   color: #269e5a;
 }
-
+.loginModalCloseCenteredBtn {
+  display: none;
+}
 /* MEDIA QUERIES FOR LOGINMODAL*/
 
-@media screen and (min-width: 667px){
+@media screen and (min-width: 667px) and (min-height: 450px){
+  
+  body.hiddenBody {
+    width: 100%;
+    position: fixed;
+    overflow-y: scroll;
+  }
+  .loginModalCloseCenteredBtn {
+    color: #9c9c9c;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 7px 10px;
+    cursor: pointer;
+  }
   #lmw {
     background-color: rgba(17,17,17, 0.53);
+    width: 100%;
   }
 
   #lmw > div > div.header + div {
@@ -86,6 +109,9 @@ span.loginModalCloseButton {
     height: 45%;
     background-color: #e4e4e4;
     box-shadow: 3px 3px 3px #636363;
+  }
+  #lmw > div > div.header{
+    display: none;
   }
 
   #lmw > div > div.header + div > div {
