@@ -18,7 +18,8 @@ window.addEventListener('load', function(event){
   let purple = document.getElementsByClassName('purple')[0];
   let modalWrapper = document.getElementById('modalWrapper');
   let navigation = document.getElementById('navigation');
-  //let loginInMenu = document.getElementsByClassName('loginInMenu')[0,1];
+  let myProfile =  document.getElementById('myProfile');
+  let myProfileMob = document.getElementById('myProfileMob');
   let moreMeetupInfoDiv = document.getElementsByClassName('moreMeetupInfoDiv')
   //Tar bort användern från localStorage och loggar ut från google i Firebase.
 
@@ -32,7 +33,8 @@ window.addEventListener('load', function(event){
         // Sign-out successful.
         //moreMeetupInfoDiv.remove();
         console.log('sign-out successful')
-
+        myProfile.classList.add('hidden');
+        myProfileMob.classList.add('hidden');
       }).catch(function(error) {
         // An error happened.
         console.log('No server response..')
@@ -52,11 +54,6 @@ window.addEventListener('load', function(event){
     if(localStorage.getItem('loggedInUser')){
       change.innerText = "LOGGA UT";
     }
-    // //Gömmer hela navigation sidan och skickar dig vidare till login-modal.
-    // purple.addEventListener('click', function(event){
-    //   navigation.className = 'hidden';
-    // });
-
 
     menuDiv.addEventListener('click', function(event){
       menuToggle.className = '';
