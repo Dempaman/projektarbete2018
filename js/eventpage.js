@@ -938,6 +938,11 @@ function retrieveEventInfo(){
           let date = event.localeventdate;
           let offsale = event.offsale.value;
 
+          console.log('Date is: ', date);
+          if(!date){
+            date = event.date;
+          }
+
           // createMarker(latitude, longitude);
           //console.log('ImageUrl', imageURL);
 
@@ -1025,7 +1030,12 @@ function displayDate(dateStr, weekDay, offsale){
   if(dateStr.includes('T')){
     dateStr = dateStr.split('T');
 
-    console.log('datestr: ',dateStr)
+    console.log('datestr: ',dateStr);
+    time = dateStr[1];
+
+    year = dateStr[0];
+    month = dateStr[1];
+    day = dateStr[2];
 
   } else {
     console.log('DateSTRING: ',dateStr);
@@ -1054,12 +1064,15 @@ function displayDate(dateStr, weekDay, offsale){
   }
 
   // Ifall dagen / månaden börjar med 0 så plocka bort nollan!
-  if(day.startsWith('0')){
-    day = day.replace(0, '');
+  if(day){
+    if(day.startsWith('0')){
+      day = day.replace(0, '');
+    }
+    if(month.startsWith('0')){
+      month = month.replace(0, '');
+    }
   }
-  if(month.startsWith('0')){
-    month = month.replace(0, '');
-  }
+
 
   console.log(date + ' - ' + time);
   if(weekDay){
