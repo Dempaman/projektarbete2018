@@ -12,6 +12,12 @@ body {
 	padding: 0;
     position: relative;
 }
+.eventLink {
+	position: absolute;
+	width: 321px;
+	height: 225px;
+	display: inline-block;
+}
 
 .events-search > h1 {
     font-family: 'Impact', Arial, sans-serif;
