@@ -1,7 +1,9 @@
+  ul {
+    list-style-type: none
+  }
 
   /* deskNav style and flex box */
   .deskNav {
-
     list-style-type: none;
     padding: 5px 25px;
     margin: 0;
@@ -19,7 +21,6 @@
   .deskNav li {
     cursor: pointer;
     position: relative;
-    display: block;
     padding: 1em;
     margin-right: 15px;
     margin-left: 15px;
