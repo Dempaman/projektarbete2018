@@ -69,9 +69,9 @@
       //     //Add classes and info
 
       eventDiv.className = "big-card";
-      eName.className = "event-info";
-      ePlace.className = "event-info";
-      eTime.className = "date";
+      // eName.className = "event-info";
+      // ePlace.className = "event-info";
+      // eTime.className = "date";
 
 
 
