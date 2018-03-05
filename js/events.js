@@ -132,9 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				} else {
 					eventTime = eventTime.slice(0, 10);
 				}
-                
+
                 console.log(event.images);
-                
+
 				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
 				searchValue[0].value = '';
 			})
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /*
 ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=popularity&apikey=wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq
 */
-    
+
     /********************Default search USER SELECTION********************/
 
 	//Search my search default field, user selection
@@ -242,8 +242,8 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		})
 	}
     /********************Default search USER SELECTION END********************/
-    
-    
+
+
 
     /********************Get most popular event in Sweden on eventpage load********************/
 	function getMostPopularEvents() {
@@ -264,6 +264,9 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 				let eventTime = event.localeventdate;
 				let eventImg = event.images;
 				let eImg;
+				let numberOfMeetups;
+
+
 
 				if (eventImg !== undefined) {
 					eImg = eventImg[0].url;
@@ -280,6 +283,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 				}
 
 				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
+
 			})
 		}).catch((error) => {
 
@@ -291,13 +295,15 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		})
 	}
   /********************Get most popular event in Sweden on eventpage load********************/
-    
-    
-    
+
+
+
 
 
 	/********************Random code before merging with eventcards file********************/
 	function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg) {
+
+
 
 		while (testOutPut.firstchild) {
 			testOutPut.removeChild(testOutPut.firstChild);
@@ -320,10 +326,11 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		eID.innerText = `ID: ${eventId}`;
 		eName.innerText = `${eventName}`;
 		ePlace.innerText = `${eventPlace}, ${eventCity}`;0
-        
+		
 		eTime.innerText = `${eventTime}`;
 
         //Append
+		setMeetupCount(eventId,ePlace);
     eventDiv.appendChild(eventLink);
 		eventDiv.appendChild(eUrlImg);
 		eventDiv.appendChild(eName);
@@ -332,10 +339,10 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		testOutPut.appendChild(eventDiv);
 	}
     /********************Random code before merging with eventcards file END********************/
-    
-    
-    
-    
+
+
+
+
 
 
     /********************Handling error function********************/
@@ -351,9 +358,9 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
     }
     /********************Handling error function END********************/
 
-    
-    
-    
+
+
+
 
 
     /********************Save down information about Cities*******************/
@@ -385,7 +392,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
     					}
 
     					cities.push(sweCity);
-                        
+
                         console.log(sweCity);
     				}
     			});
@@ -402,6 +409,16 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 
 
+/* Functions */
+function setMeetupCount(eventID, htmlObject){
+	db.ref('meetups/' + eventID + '/info').on('child_added', function(snapshot){
+		let data = snapshot.val();
+		console.log('Does this run? Data is:', data);
+		if(data){
+			htmlObject.innerText = data;
+		}
+	});
+}
 
 
 
