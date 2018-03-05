@@ -128,6 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				} else {
 					eventTime = eventTime.slice(0, 10);
 				}
+                
+                console.log(event.images);
+                
 				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
 				searchValue[0].value = '';
 			})
@@ -146,6 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
 /*
 ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=popularity&apikey=wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq
 */
+    
+    /********************Default search USER SELECTION********************/
 
 	//Search my search default field, user selection
 	function defaultSearchEventInfo() {
@@ -232,6 +237,9 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 		})
 	}
+    /********************Default search USER SELECTION END********************/
+    
+    
 
     /********************Get most popular event in Sweden on eventpage load********************/
 	function getMostPopularEvents() {
@@ -278,7 +286,10 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
             handleError('Felmeddelande: ', errorMessage);
 		})
 	}
-
+  /********************Get most popular event in Sweden on eventpage load********************/
+    
+    
+    
 
 
 	/********************Random code before merging with eventcards file********************/
@@ -315,6 +326,11 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		eventDiv.appendChild(eTime);
 		testOutPut.appendChild(eventDiv);
 	}
+    /********************Random code before merging with eventcards file END********************/
+    
+    
+    
+    
 
 
     /********************Handling error function********************/
@@ -328,8 +344,11 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         testOutPut.appendChild(errorMessageDiv);
 
     }
+    /********************Handling error function END********************/
 
-
+    
+    
+    
 
 
     /********************Save down information about Cities*******************/
@@ -361,6 +380,8 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
     					}
 
     					cities.push(sweCity);
+                        
+                        console.log(sweCity);
     				}
     			})
     		}
@@ -369,7 +390,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
     	xmlhttp.send();
     }
 
-
+    /********************Save down information about Cities END*******************/
 
 
 
