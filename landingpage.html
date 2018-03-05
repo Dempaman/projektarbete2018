@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" name="viewport" content="Width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="img/logo-design2.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/logo-design-white-frame.png">
   <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
   <script type="text/javascript" src="js/landingpage.js">
 
@@ -12,9 +12,9 @@
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/landingpage-style.css">
   <link rel="stylesheet" href="css/evenemangskort.css">
+  <link rel="stylesheet" href="css/headstyle.css" type="text/css">
   <link rel="stylesheet" href="css/menu.css">
   <link rel="stylesheet" href="css/footer.css">
-  <link rel="stylesheet" href="css/headstyle.css" type="text/css">
 
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
@@ -24,20 +24,21 @@
 </head>
 <body>
 
-  <!--Menu-->
-  <nav id="navigation">
-    <!-- <a href="#"><img src="./img/logo-design3.png"></a> -->
-    <!-- <img src="img/logo-design3.png" alt="Event"> -->
-    <!-- HTML för desktopläge i nav -->
-    <ul class="deskNav">
-      <a href="#"><li>MIN PROFIL</li></a>
-      <a href="#"><li>ALLA EVENT</li></a>
-      <a href="#contactUs"><li>KONTAKTA OSS</li></a>
-      <a href="#"><li class= "loginInMenu">LOGGA IN</li></a>
-    </ul>
+  <nav id="navigation" class="hidden">
+    <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
+    <div class="header">
+      <img src="img/logo-design3.png" alt="Event">
+      <!-- HTML för desktopläge i nav -->
 
+      <ul class="deskNav">
+        <a href="#"><li>MIN PROFIL</li></a>
+        <a href="#"><li>ALLA EVENT</li></a>
+        <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+        <a href="#"><li class= "loginInMenu">LOGGA IN</li></a>
+      </ul>
+
+    </div>
     <div id="menuToggle">
-
       <!--
       A fake / hidden checkbox is used as click reciever,
       so you can use the :checked selector on it.
@@ -56,15 +57,15 @@
       but hey, it's pure CSS magic.
       -->
       <ul id="menu">
-        <a href="#" class="active"><li>HEM</li></a>
-        <a href="#"><li>MIN PROFIL</li></a>
-        <a href="#"><li>ALLA EVENTS</li></a>
+        <a href="/landingpage.html" class="active"><li>HEM</li></a>
+        <a href="/profil.html"><li>MIN PROFIL</li></a>
+        <a href="/events.html"><li>ALLA EVENTS</li></a>
         <a href="#contactUs"><li>KONTAKTA OSS</li></a>
-        <a href="#"><li>LOGGA IN</li></a>
+        <a href=""><li class="loginInMenu">LOGGA IN</li></a>
       </ul>
     </div>
   </nav>
-  <!--Menu End-->
+  <!-- Menu End -->
 
   <main>
     <div class="background-img">
