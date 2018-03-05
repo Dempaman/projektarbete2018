@@ -326,7 +326,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		eID.innerText = `ID: ${eventId}`;
 		eName.innerText = `${eventName}`;
 		ePlace.innerText = `${eventPlace}, ${eventCity}`;0
-		
+
 		eTime.innerText = `${eventTime}`;
 
         //Append
@@ -411,7 +411,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 /* Functions */
 function setMeetupCount(eventID, htmlObject){
-	db.ref('meetups/' + eventID + '/info').on('child_added', function(snapshot){
+	db.ref('meetups/' + eventID + '/info/meetupCounter').on('value', function(snapshot){
 		let data = snapshot.val();
 		console.log('Does this run? Data is:', data);
 		if(data){

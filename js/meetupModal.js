@@ -147,6 +147,7 @@ function initCreateMeetupListeners(ageSlider){
       // Skapa meetupet.
       let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
       meetup.push();
+      meetup.updateCount();
       console.log('Meetup: ',meetup);
 
       //visa navigation och menu.... igen!!.
@@ -169,7 +170,7 @@ function initCreateMeetupListeners(ageSlider){
           // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
           let bodyScroll = document.getElementsByClassName('body')[0];
           let htmlScroll = document.getElementsByTagName('html')[0];
-          
+
           if(bodyScroll == 0){
             console.log('Html scroll!!');
             htmlScroll.className += ' smooth-scroll';
