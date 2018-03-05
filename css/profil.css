@@ -46,7 +46,7 @@ main>h2 {
   margin: 1rem;
   padding: 1rem;
   width: 95%;
-  min-width: 240px;
+  /* min-width: 240px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -155,7 +155,7 @@ main>h2 {
   flex-direction: column;
 }
 .user-meetups-container {
-  min-width: 240px;
+  /* min-width: 240px; */
   display: flex;
   flex-direction: column;
   width: 95%;
