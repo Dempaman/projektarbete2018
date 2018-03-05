@@ -1,5 +1,5 @@
 /*
-API DOKUMENTION: 
+API DOKUMENTION:
 https://developer.ticketmaster.com/products-and-docs/apis/international-discovery/#event-search
 
 Land:
@@ -13,20 +13,20 @@ https://app.ticketmaster.eu/discovery/v2/events/Z698xZq2Z17fvZ9/images.json?apik
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
 	const apiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
-    
+
 	let testOutPut = document.getElementById('testOutPut');
 	let searchBtn = document.getElementById('search-button');
 	let searchValue = document.querySelectorAll('input[name="searchevent"]');
-    
+
 	let allEventsSearchDefault = document.getElementsByClassName('all-events-search');
 	let selectedEvents = allEventsSearchDefault[0];
 	let selectedCity = allEventsSearchDefault[1];
 	let selectedWhen = allEventsSearchDefault[2];
-    
+
 	getMostPopularEvents();
-    
+
 	searchBtn.addEventListener('click', (event) => {
 		testOutPut.innerHTML = '';
 		retrieveSearchEventInfo();
@@ -49,11 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		event.preventDefault();
 		let userSearch;
 		let userSearchValue = searchValue[0].value;
-		
+
         //Switch for Sweden 10 biggest cities
 		switch (userSearchValue) {
         case "":
-            userSearchValue = ''; 
+            userSearchValue = '';
 		case "Stockholm":
 		case "stockholm":
 			userSearchValue = '50001';
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			userSearchValue = 'Your city sucks!'
 			handleError(userSearchValue);
 		}
-        
+
 		//Fetch from TicketMaster Api in search field
 		fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?&city_ids=${userSearchValue}&rows=10&sort_by=popularity&apikey=${apiKey}`).then((response) => {
 			return response.json();
@@ -132,72 +132,72 @@ document.addEventListener('DOMContentLoaded', () => {
 				searchValue[0].value = '';
 			})
 		}).catch((error) => {
-			
+
             let errorMessage = error.message;
-            
+
 			console.log('Felmeddelande: ', errorMessage);
-            
+
             handleError(errorMessage);
-            
+
 		})
 	};
-    
-    
+
+
 /*
 ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=popularity&apikey=wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq
 */
-    
+
 	//Search my search default field, user selection
 	function defaultSearchEventInfo() {
 		let ISO = 'T10:00:00Z';
 		let selCategory = selectedEvents.value;
 		let selCity = selectedCity.value;
 		let selWhen = selectedWhen.value;
-        
+
 		//Todays date
 		let currentDate = new Date();
 		let today = currentDate.toISOString();
 		today = today.slice(0, 10) + ISO;
-        
+
 		//This month
 		let nextDateMonth = new Date(Date.now() + (30 * 24 * 60 * 60 * 1000));
 		let month = nextDateMonth.toISOString();
 		month = month.slice(0, 10) + ISO;
-        
+
 		//This week
 		let nextDateWeek = new Date(Date.now() + (7 * 24 * 60 * 60 * 1000));
 		let week = nextDateWeek.toISOString();
 		week = week.slice(0, 10) + ISO;
-        
+
 		//Today & Tomorrow
 		let tomorrowDate = new Date(Date.now() + (2 * 24 * 60 * 60 * 1000));
 		let tomorrow = tomorrowDate.toISOString();
 		tomorrow = tomorrow.slice(0, 10) + ISO;
-        
-        
+
+
 		if (selWhen == 'today') {
 			selWhen = today;
-            
+
 		} else if (selWhen == 'tomorrow') {
 			selWhen = tomorrow;
-            
+
 		} else if (selWhen == 'week') {
 			selWhen = week;
-            
+
 		} else if (selWhen == 'month') {
 			selWhen = month;
 		}
-        
+
 		fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&category_ids=${selCategory}&city_ids=${selCity}&eventdate_from=${today}&eventdate_to=${selWhen}&rows=15&sort_by=popularity&apikey=${apiKey}`).then((response) => {
-            
+
 			return response.json();
-            
+
 		}).then((json) => {
-            
+
 			let event = json.events;
-            
+
 			event.forEach((event) => {
-                
+
 				let eventId = event.id;
 				let eventName = event.name;
 				let eventPlace = event.venue.name;
@@ -205,46 +205,46 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 				let eventTime = event.localeventdate;
 				let eventImg = event.images;
 				let eImg;
-                
+
 				if (eventImg !== undefined) {
 					eImg = eventImg[0].url;
-                    
+
 				} else {
 					eImg = `http://cdn-01.hymn.se/wp-content/uploads/2017/09/IMG-142.jpg`;
-                    
+
 				}
 				if (eventTime == undefined) {
 					eventTime = '';
-                    
+
 				} else {
 					eventTime = eventTime.slice(0, 10);
 				}
-                
+
 				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
 			})
 		}).catch((error) => {
-			
+
             let errorMessage = error.message;
-            
+
 			console.log('Felmeddelande: ', errorMessage);
-            
+
             handleError(errorMessage);
-            
+
 		})
 	}
 
     /********************Get most popular event in Sweden on eventpage load********************/
 	function getMostPopularEvents() {
 		fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&rows=15&sort_by=popularity&apikey=${apiKey}`).then((response) => {
-            
+
 			return response.json();
-            
+
 		}).then((json) => {
-            
+
 			let event = json.events;
-            
+
 			event.forEach((event) => {
-                
+
 				let eventId = event.id;
 				let eventName = event.name;
 				let eventPlace = event.venue.name;
@@ -252,43 +252,46 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 				let eventTime = event.localeventdate;
 				let eventImg = event.images;
 				let eImg;
-                
+
 				if (eventImg !== undefined) {
 					eImg = eventImg[0].url;
-                    
+
 				} else {
 					eImg = `http://cdn-01.hymn.se/wp-content/uploads/2017/09/IMG-142.jpg`;
-                    
+
 				}
 				if (eventTime == undefined) {
 					eventTime = '';
-                    
+
 				} else {
 					eventTime = eventTime.slice(0, 10);
 				}
-                
+
 				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
 			})
 		}).catch((error) => {
-			
+
             let errorMessage = error.message;
-            
+
 			console.log('Felmeddelande: ', errorMessage);
-            
+
             handleError('Felmeddelande: ', errorMessage);
 		})
 	}
-    
-    
-    
+
+
+
 	/********************Random code before merging with eventcards file********************/
 	function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg) {
-        
+
 		while (testOutPut.firstchild) {
 			testOutPut.removeChild(testOutPut.firstChild);
 		}
-        
+
         //Create event-cards (Test)
+    let eventLink = document.createElement('a');
+    eventLink.className = 'eventLink';
+    eventLink.setAttribute('href', '/eventpage.html?event='+eventId);
 		let eventDiv = document.createElement('div');
 		let eUrlImg = document.createElement('img');
 		eUrlImg.src = eImg;
@@ -296,40 +299,41 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		let eName = document.createElement('h4');
 		let ePlace = document.createElement('p');
 		let eTime = document.createElement('p');
-        
+
         //Add classes and info
 		eventDiv.classList.add('event-card');
 		eID.innerText = `ID: ${eventId}`;
 		eName.innerText = `${eventName}`;
 		ePlace.innerText = `${eventPlace}, ${eventCity}`;
 		eTime.innerText = `${eventTime}`;
-        
+
         //Append
+    eventDiv.appendChild(eventLink);
 		eventDiv.appendChild(eUrlImg);
 		eventDiv.appendChild(eName);
 		eventDiv.appendChild(ePlace);
 		eventDiv.appendChild(eTime);
 		testOutPut.appendChild(eventDiv);
 	}
-    
-    
+
+
     /********************Handling error function********************/
-    
+
     function handleError(errorMessage, userSearchValue){
-        
+
         let errorMessageDiv = document.createElement('div');
-        
+
         errorMessageDiv.innerText = errorMessage;
-        
+
         testOutPut.appendChild(errorMessageDiv);
-        
+
     }
 
 
 
 
     /********************Save down information about Cities*******************/
-    
+
     let getMeWent = document.getElementsByTagName('h1');
     let meWent = getMeWent[0];
     let oXML = 'https://app.ticketmaster.eu/mfxapi/v1/cities?domain_id=sweden&apikey=wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq'
@@ -339,23 +343,23 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
     	var xmlhttp = new XMLHttpRequest();
     	xmlhttp.onreadystatechange = function () {
     		if (this.readyState == 4 && this.status == 200) {
-                
+
     			let allCities = JSON.parse(this.responseText);
     			allCities = allCities.cities;
-                
+
     			//create new empty list
     			let cities = [];
-                
+
     			//loop trough allCities
     			allCities.forEach((city) => {
-                    
+
     				//check country code
     				if (city.country_id == 752) {
     					let sweCity = {
     						id: city.id,
     						name: city.name
     					}
-                        
+
     					cities.push(sweCity);
     				}
     			})
