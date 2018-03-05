@@ -10,7 +10,9 @@ body {
   box-sizing: border-box;
 }
 
-
+footer.footer-box.hidden {
+  display: none;
+}
 
 footer.footer-box {
   background-color: #232323;
@@ -32,7 +34,7 @@ footer.footer-box {
   width: 100%;
 }
 
-.adress-menu{
+.adress-menu {
   align-self: center;
   display: flex;
   justify-content: flex-start;
