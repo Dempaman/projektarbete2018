@@ -20,36 +20,35 @@
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/menu.css">
     <link rel="stylesheet" type="text/css" href="css/headstyle.css">
-    
-    <!-- FireBase 
-    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-    -->
 
-    <!-- JavaScript 
+    <!-- FireBase -->
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+
+
+    <!-- JavaScript -->
     <script src="js/classes.js"></script>
     <script src="js/loginModal.js"></script>
-    -->
     <script src="js/events.js"></script>
 
   </head>
   <body>
-    <!--------------------Menu-------------------->
+    <!-- Menu -->
     <nav id="navigation">
-      <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
-      
+
       <div class="header">
-      
+
       <!-- HTML för desktopläge i nav -->
+      <a href="/landingpage.html"><img src="./img/logo-design3.png"></a>
         <ul class="deskNav">
           <li>MIN PROFIL</li>
           <li>ALLA EVENT</li>
           <li>KONTAKTA OSS</li>
           <li class= "loginInMenu">LOGGA IN</li>
         </ul>
-      
+
       </div>
-      
-      
+
+
       <div id="menuToggle">
         <!--A fake / hidden checkbox is used as click reciever, so you can use the :checked selector on it. -->
         <input type="checkbox"/>
@@ -70,8 +69,8 @@
         </ul>
       </div>
     </nav>
-    <!--------------------Menu End-------------------->
-    
+    <!-- Menu End -->
+
 
     <!--Korten innehåller: Datum, evenemangsnamn, bild samt antal meetups för detta event. -->
     <div id="all-events-main">
@@ -83,10 +82,10 @@
                   <input type="text" name="searchevent" placeholder="Sök stad..">
                   <button id="search-button"><i class="fa fa-search"></i></button>
                 </form>
-                
+
                 <!--SELECT DEFAULT OPTIONS-->
                 <div class="select-default">
-                <select class="all-events-search"> 
+                <select class="all-events-search">
                   <option value="">Alla events </option>
                   <option value="10001">Musik</option>
                   <option value="10101">Festival</option>

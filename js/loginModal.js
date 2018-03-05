@@ -30,7 +30,10 @@ firebase.auth().onAuthStateChanged(user => {
         localStorage.setItem('loggedInUser', JSON.stringify(newUser));
       }
       // retrieveEventInfo after we've logged in!
-      retrieveEventInfo();
+      if(window.location.pathname.includes('eventpage.html')){
+        retrieveEventInfo();
+      }
+
       //console.log('THE USER IS NOOOOOOW LOGGED IN');
     });
 
@@ -46,7 +49,7 @@ firebase.auth().onAuthStateChanged(user => {
 
   } else {
     console.log('wubalubadub dub');
-    removeEditBtn();
+
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
       localStorage.removeItem('loggedInUser');
@@ -55,40 +58,45 @@ firebase.auth().onAuthStateChanged(user => {
       console.log('Nothing to remove');
     }
 
-    let creatorDivArray = document.getElementsByClassName('creatorDiv');
+    if(window.location.pathname.includes('eventpage.html')){
+      removeEditBtn();
 
-    if(creatorDivArray.length == 0){
-      console.log('Length is 0! Posting!!!');
-      retrieveEventInfo();
-    } else {
-      console.log('Nah I ain\'t posting that again!');
-    }
+      let creatorDivArray = document.getElementsByClassName('creatorDiv');
 
-    // Om det existerar några meetups. Det vill säga personen loggade ut med sidan uppe.
-
-    let meetupArray = document.getElementById('meetupWrapper').children;
-    if(meetupArray){
-      for(let meetup of meetupArray){
-        if(meetup.lastChild.className.includes('moreMeetupInfoDiv')){
-
-          let btnDiv = document.createElement('div');
-          btnDiv.className = 'btnHolder';
-          let joinMeetupBtn = document.createElement('button');
-
-          joinMeetupBtn.className = 'purple';
-          joinMeetupBtn.innerText = 'Gå med i meetup';
-
-          btnDiv.appendChild(joinMeetupBtn);
+      if(creatorDivArray.length == 0){
+        console.log('Length is 0! Posting!!!');
+        retrieveEventInfo();
+      } else {
+        console.log('Nah I ain\'t posting that again!');
+      }
 
 
-          meetup.removeChild(meetup.lastChild);
-          meetup.appendChild(btnDiv);
-          // Console.log('APPEND BTN');
-          let meetupKey = meetup.getAttribute('id').replace('-', '&');
-          meetupKey = meetupKey.split('&')[1];
-          joinBtnListener(joinMeetupBtn, meetupKey);
-        } else {
-          console.log('We should not remove this joinMeetupBtn!');
+      // Om det existerar några meetups. Det vill säga personen loggade ut med sidan uppe.
+
+      let meetupArray = document.getElementById('meetupWrapper').children;
+      if(meetupArray){
+        for(let meetup of meetupArray){
+          if(meetup.lastChild.className.includes('moreMeetupInfoDiv')){
+
+            let btnDiv = document.createElement('div');
+            btnDiv.className = 'btnHolder';
+            let joinMeetupBtn = document.createElement('button');
+
+            joinMeetupBtn.className = 'purple';
+            joinMeetupBtn.innerText = 'Gå med i meetup';
+
+            btnDiv.appendChild(joinMeetupBtn);
+
+
+            meetup.removeChild(meetup.lastChild);
+            meetup.appendChild(btnDiv);
+            // Console.log('APPEND BTN');
+            let meetupKey = meetup.getAttribute('id').replace('-', '&');
+            meetupKey = meetupKey.split('&')[1];
+            joinBtnListener(joinMeetupBtn, meetupKey);
+          } else {
+            console.log('We should not remove this joinMeetupBtn!');
+          }
         }
       }
     }

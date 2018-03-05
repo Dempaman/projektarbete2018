@@ -1,6 +1,8 @@
 
 /* Class Header CSS */
 
+
+
 .header {
   display: flex;
   flex-direction: row;
@@ -20,7 +22,15 @@
   font-weight: 100;
 }
 
-
+/* Navigation Image CSS */
+#navigation img {
+	margin-top: 8px;
+	margin-left: 12px;
+	width: 40px;
+	height: 40px;
+	border: 1px solid #232323; /*Behöver vara där för att logga inte ska bli avskuren i botten*/
+	border-radius: 100px;
+}
 
   /* deskNav style and flex box */
   .deskNav {
