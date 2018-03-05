@@ -39,6 +39,7 @@ firebase.auth().onAuthStateChanged(user => {
 
     //Eftersom google sign-in redirect'ar oss så kollar vi om vi är inloggade eller inte.
     //Är vi detta så skriver vi ut att vi kan logga ut och visar samt "Min profil" i Nav.
+
     let myProfile =  document.getElementById('myProfile');
     let myProfileMob = document.getElementById('myProfileMob');
     myProfile.classList.remove('hidden')

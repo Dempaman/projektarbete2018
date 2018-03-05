@@ -31,8 +31,8 @@ window.addEventListener('load', function(event){
 
       firebase.auth().signOut().then(function() {
         // Sign-out successful.
-        //moreMeetupInfoDiv.remove();
         console.log('sign-out successful')
+        //När vi trycker på "logga ut" så tar den bort "min profil" i Nav.
         myProfile.classList.add('hidden');
         myProfileMob.classList.add('hidden');
       }).catch(function(error) {

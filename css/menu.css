@@ -127,7 +127,7 @@ a {
 	font-size: 1.1em;
 }
 
-@media all and (min-width: 801px) {
+@media all and (min-width: 876px) {
 	#menuToggle {
 		display: none
 	}
