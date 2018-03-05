@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <link rel="icon" href="img/logo-design2.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="img/logo-design-white-frame.png" type="image/png" sizes="16x16">
   <!--Meta tags-->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,20 +14,62 @@
   <title>Profil</title>
 
   <!--CSS links-->
+  <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/headstyle.css">
   <link rel="stylesheet" href="css/profil.css">
 
   <!--Script tags-->
   <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-  <!-- <script src="js/classes.js"></script> -->
+  <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+  <script src="js/classes.js"></script>
   <script src="js/profil.js"></script>
 
 
 </head>
 
 <body>
-  <header>
-    <!--Sätt in kod för navigation-->
-  </header>
+  <!-- Menu -->
+  <nav id="navigation" class="hidden">
+    <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
+    <div class="header">
+      <img src="img/logo-design3.png" alt="Event">
+      <!-- HTML för desktopläge i nav -->
+      <ul class="deskNav">
+        <li>MIN PROFIL</li>
+        <li>ALLA EVENT</li>
+        <li>KONTAKTA OSS</li>
+        <li class= "loginInMenu">LOGGA IN</li>
+      </ul>
+
+    </div>
+    <div id="menuToggle">
+      <!--
+      A fake / hidden checkbox is used as click reciever,
+      so you can use the :checked selector on it.
+      -->
+      <input type="checkbox"/>
+
+      <!--
+      Some spans to act as a hamburger.
+      -->
+      <span></span>
+      <span></span>
+      <span></span>
+
+      <!--
+      Too bad the menu has to be inside of the button
+      but hey, it's pure CSS magic.
+      -->
+      <ul id="menu">
+        <a href="/landingpage.html" class="active"><li>HEM</li></a>
+        <a href="/profil.html"><li>MIN PROFIL</li></a>
+        <a href="/events.html"><li>ALLA EVENTS</li></a>
+        <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+        <a href=""><li class="loginInMenu">LOGGA IN</li></a>
+      </ul>
+    </div>
+  </nav>
+  <!-- Menu End -->
 
   <main>
     <div class="user">
@@ -57,6 +99,7 @@
           </a>
       </div>
     </div>
+
 
         <!-- <div class="meetup-count">
           <div class="created">
