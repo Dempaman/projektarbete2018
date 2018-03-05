@@ -50,6 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		let userSearch;
 		let userSearchValue = searchValue[0].value;
 
+        // { 'stockholm': 50001 }
+        //kolla in localstorage
+        let found = cachedCities[userSearchValue];
+        if( !found )
         //Switch for Sweden 10 biggest cities
 		switch (userSearchValue) {
         case "":
@@ -315,7 +319,8 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		eventDiv.classList.add('event-card');
 		eID.innerText = `ID: ${eventId}`;
 		eName.innerText = `${eventName}`;
-		ePlace.innerText = `${eventPlace}, ${eventCity}`;
+		ePlace.innerText = `${eventPlace}, ${eventCity}`;0
+        
 		eTime.innerText = `${eventTime}`;
 
         //Append
@@ -383,7 +388,8 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
                         
                         console.log(sweCity);
     				}
-    			})
+    			});
+                localStorage.setItem('cities', JSON.stringify(cities));
     		}
     	};
     	xmlhttp.open("GET", oXML, true);
