@@ -36,7 +36,29 @@ class MeetupClass {
   push(){
 
     this.key = db.ref('meetups/' + this.eventID).push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
-    new SystemMessage(this.key, this.creator.fullname + ' skapade detta meetup!').push(); // Skapar ett meddelande i chatten direkt.
+    new SystemMessage(this.key, this.creator.fullname + ' skapade detta meetup!').push(); // Skapar ett meddelande i chatten direkt
+
+    console.log('EventID är lika med:',this.eventID);
+    let eventFittID = this.eventID;
+
+    db.ref('meetups/'+eventFittID+'/info/meetupCounter').once('value', function(snapshot){
+      console.log()
+      let count = snapshot.val();
+      console.log('Count is:', count);
+      console.log('This is:', this);
+      if(count){
+        console.log('count is', count);
+        db.ref('meetups/'+eventFittID+'/info/meetupCounter').set((count - 0) + 1);
+      } else {
+        console.log('Count is null but eventID is', eventFittID);
+        db.ref('meetups/'+eventFittID+'/info/meetupCounter').set(1);
+      }
+    });
+
+  }
+
+  updateCount(){
+    console.log('Hej jag behövs inte');
   }
 
   removeSelf(){
