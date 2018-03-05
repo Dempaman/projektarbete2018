@@ -31,7 +31,7 @@ window.addEventListener('load', function(event){
       firebase.auth().signOut().then(function() {
         // Sign-out successful.
         //moreMeetupInfoDiv.remove();
-        console.log('Google sign-out successful')
+        console.log('sign-out successful')
 
       }).catch(function(error) {
         // An error happened.

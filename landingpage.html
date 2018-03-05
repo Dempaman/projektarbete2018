@@ -5,20 +5,38 @@
   <meta charset="utf-8" name="viewport" content="Width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" sizes="32x32" href="img/logo-design2.png">
   <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+  <script type="text/javascript" src="js/landingpage.js">
 
+  </script>
+
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="css/landingpage-style.css">
-  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/evenemangskort.css">
   <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/headstyle.css" type="text/css">
+
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
+
   <title>meWent | Välkommen</title>
+
 </head>
 <body>
 
   <!--Menu-->
   <nav id="navigation">
-    <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
+    <!-- <a href="#"><img src="./img/logo-design3.png"></a> -->
+    <!-- HTML för desktopläge i nav -->
+    <ul class="deskNav">
+      <li>MIN PROFIL</li>
+      <li>ALLA EVENT</li>
+      <li>KONTAKTA OSS</li>
+      <li class= "loginInMenu">LOGGA IN</li>
+    </ul>
+
     <div id="menuToggle">
+
       <!--
       A fake / hidden checkbox is used as click reciever,
       so you can use the :checked selector on it.
@@ -54,7 +72,13 @@
       <a href="events.html" id="landingpageBtn">Hitta eventet för dig</a>
       <h2>Träffa nya människor med samma intressen</h2>
     </div>
-  
+
+      <h2 class="heading2">Populära events</h2>
+      <div class="card-holder">
+        <div id="testOutPut">
+
+        </div>
+      </div>
   </main>
 
   <footer class="footer-box">
