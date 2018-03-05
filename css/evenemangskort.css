@@ -29,7 +29,7 @@ p {
   justify-content: space-around;
 }
 
-.biggest-card, .big-card, .small-card {
+.big-card {
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -48,7 +48,8 @@ p {
   background-color:  #232323;
 
 }
-.biggest-card:hover, .big-card:hover, .small-card:hover{
+
+.big-card:hover{
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
 }
 .date {
@@ -109,10 +110,7 @@ p {
     justify-content: space-between;
     margin: 1rem;
   }
-  .biggest-card{
-    width: 55%;
-    margin: 1rem;
-  }
+
   .big-card{
     width: 25%;
     margin: 1rem;

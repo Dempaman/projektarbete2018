@@ -3,6 +3,9 @@ html * {
   padding: 0;
   box-sizing: border-box;
 }
+html{
+  scroll-behavior: smooth;
+}
 .background-img{
   height: 100vh;
   background-image: url("../img/crowd.jpg");

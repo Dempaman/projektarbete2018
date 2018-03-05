@@ -27,12 +27,13 @@
   <!--Menu-->
   <nav id="navigation">
     <!-- <a href="#"><img src="./img/logo-design3.png"></a> -->
+    <!-- <img src="img/logo-design3.png" alt="Event"> -->
     <!-- HTML för desktopläge i nav -->
     <ul class="deskNav">
-      <li>MIN PROFIL</li>
-      <li>ALLA EVENT</li>
-      <li>KONTAKTA OSS</li>
-      <li class= "loginInMenu">LOGGA IN</li>
+      <a href="#"><li>MIN PROFIL</li></a>
+      <a href="#"><li>ALLA EVENT</li></a>
+      <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+      <a href="#"><li class= "loginInMenu">LOGGA IN</li></a>
     </ul>
 
     <div id="menuToggle">
@@ -58,7 +59,7 @@
         <a href="#" class="active"><li>HEM</li></a>
         <a href="#"><li>MIN PROFIL</li></a>
         <a href="#"><li>ALLA EVENTS</li></a>
-        <a href="#"><li>KONTAKTA OSS</li></a>
+        <a href="#contactUs"><li>KONTAKTA OSS</li></a>
         <a href="#"><li>LOGGA IN</li></a>
       </ul>
     </div>
@@ -113,7 +114,7 @@
             </div>
           </div>
         </div>
-        <div class="contact-form">
+        <div id="contactUs" class="contact-form">
           <h4>Kontakta oss</h4>
           <input type="text" name="" value="" placeholder="Namn" >
           <input type="text" name="" value="" placeholder="E-post">
