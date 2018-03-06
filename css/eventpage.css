@@ -262,9 +262,9 @@ div.googleMapDiv > img {
   position: absolute;
   color: #eee;
   margin: -66px 0px;
-  padding: 4px 9px;
-  border-radius: 7px;
   font-size: 0.8em;
+  padding: 3px 8px;
+  border-radius: 4px;
 }
 
 #meetupWrapper > div .moreMeetupInfoDiv > div > div > div.memberDiv > img:hover + .hoverMessage {
@@ -308,6 +308,43 @@ div.googleMapDiv > img {
 }
 #meetupWrapper > div div.chattMessageDiv > p.timeStamp {
   color: red;
+}
+
+/* Chat Icons */
+.chattWrapperDiv .mdi-wrench {
+  font-size: 0.8em;
+  margin-left: 2px;
+  vertical-align: 0.4pt;
+}
+.chattWrapperDiv .mdi-verified {
+  font-size: 0.9em;
+  margin-left: 1px;
+}
+.chattWrapperDiv .mdi-approval {
+  font-size: 0.9em;
+  margin-left: 1px;
+}
+
+/* Hover Message on icon */
+#meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i + span.hoverMessage {
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin: -50px 4px;
+  vertical-align: 0px;
+  background-color: #505050;
+  color: #eee;
+  display: none;
+  z-index: 1;
+  position: relative;
+}
+
+#meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i:hover + span.hoverMessage, #meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i:focus + span.hoverMessage {
+  display: inline;
+  opacity: 1;
+}
+
+#meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i:hover ~ .mdi-approval,  #meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i:focus ~ .mdi-approval{
+  display: none;
 }
 
 .messageWrapper {

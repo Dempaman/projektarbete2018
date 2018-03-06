@@ -64,9 +64,9 @@ button.logInBtn {
   font-size: 1.7em;
   font-weight: 100;
 }
-#modalContent > .header i {
-  align-self: center;
-  padding: 15px;
+#modalContent > .header > #menuDiv{
+  padding: 8px 2px;
+  cursor: pointer;
 }
 #modalContent > .content {
   position: relative;

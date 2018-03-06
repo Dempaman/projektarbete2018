@@ -36,6 +36,10 @@ a {
 	-webkit-user-select: none;
 	user-select: none;
 }
+/* Lägger till så man kan dölja den med hidden! Display: block är onödigt btw*/
+#menuToggle.hidden {
+	display: none;
+}
 #menuToggle input {
 	display: block;
 	width: 40px;

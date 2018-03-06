@@ -345,10 +345,10 @@ function retrieveMeetupInfo(eventDate){
 }
 
 // Funktion för att gå med i ett meetup!
-function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
+function joinMeetup(userID, avatarURL, fullname, meetupKey, eventID){
 
   // joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
-  db.ref('meetups/' + eventID + '/' + meetupID + '/members').once('value', function(snap){
+  db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
 
     let data = snap.val();
     let userIsNotComing = false;
@@ -367,9 +367,12 @@ function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
     }
 
     if(!userIsNotComing){
-      db.ref('meetups/' + eventID + '/' + meetupID + '/members').push(userObject);
+      db.ref('meetups/' + eventID + '/' + meetupKey + '/members').push(userObject);
       console.log('Vi la till dig i meetupet!');
-      new SystemMessage(meetupID, userObject.fullname + ' gick med i meetupet.').push();
+      new SystemMessage(meetupKey, userObject.fullname + ' gick med i meetupet.').push();
+
+      // Lägg till meetup i användarens profil.
+      addUserMeetup(userObject.uniqueID, meetupKey);
     } else {
       console.log('Du är redan med i detta meetup! Något måste gått fel!');
     }
@@ -666,10 +669,22 @@ function createMessage(event){
         let ms = md.getAttribute('id'); // meetup String
 
         let meetupKey = ms.replace('-', '&').split('&')[1]
+        let eventID = getLocationInfo()[0];
+        db.ref('meetups/' + eventID + '/' + meetupKey + '/creator').once('value', function(snapshot){
+          let creator = snapshot.val();
+          console.log('Creator is:', creator);
 
-        let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
+          if(creator.uniqueID == currentUser.uniqueID){
+            creator = true;
+          } else {
+            creator = false;
+          }
+          let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage, creator);
+          newMessage.push();
+        });
 
-        newMessage.push();
+
+
 
         let chattWrapperDiv = event.target.previousSibling;
         // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
@@ -687,16 +702,17 @@ function createMessage(event){
 
 // Start to listen to chat messages on this meetupKey
 function listenToChat(meetupKey, joinedTime){
-  let first = true;
+  let first = true, admin;
   let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
   for(let wrapperDiv in document.getElementsByClassName('chattWrapperDiv')){
     wrapperDiv.scrollTop = wrapperDiv.scrollHeight;
   }
-
+  admin = currentUser.admin;
   db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
     let chattWrapperDiv = document.getElementById('chat' + meetupKey);
     let message = snapshot.val();
     let messageKey = snapshot.key;
+
     // Should we display the message? If the message was made before the player joined we don't show it.
     if(joinedTime <= message.time){
 
@@ -725,6 +741,31 @@ function listenToChat(meetupKey, joinedTime){
       // Create the fullname
       let fullname = document.createElement('p');
       fullname.innerText = message.fullname;
+
+      //Create Icon hoverMessage
+      let iconHoverMessage = document.createElement('span');
+
+
+      // Here we got the fullname, hehe! append appropriate icons?
+      if(message.system){
+          fullname.innerHTML += '<i class="mdi mdi-wrench"></i>';
+          iconHoverMessage.innerText = 'System bot';
+          iconHoverMessage.className = 'hoverMessage';
+          fullname.appendChild(iconHoverMessage);
+      } else if(admin){
+          fullname.innerHTML += '<i class="mdi mdi-verified"></i>';
+          iconHoverMessage.innerText = 'Administratör';
+          iconHoverMessage.className = 'hoverMessage';
+          fullname.appendChild(iconHoverMessage);
+      } else if(message.creator){
+          fullname.innerHTML += '<i class="mdi mdi-approval"></i>';
+          iconHoverMessage.innerText = 'Skapare';
+          iconHoverMessage.className = 'hoverMessage';
+          fullname.appendChild(iconHoverMessage);
+        }
+
+      // Then if the user is owner of the meetup append approval
+
 
       // Create the actual message
       let textmessage = document.createElement('p');
@@ -806,7 +847,7 @@ function restoreJoinBtn(meetupKey){
     let data = snapshot.val();
     let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
     console.log('This was removed: ',data);
-
+    removeUserMeetup(data.uniqueID, meetupKey);
         if(currentUser.uniqueID == data.uniqueID){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
@@ -1391,4 +1432,15 @@ function destroyMeetup(meetupKey, eventID){
 
   console.log('Meetup with ID: '+meetupKey+' under eventID: '+eventID+'is being removed from the database...');
   db.ref('meetups/' +eventID+ '/' +meetupKey).remove();
+}
+
+// Tanken med denna funktion är att lägga till meetupets meetupKey på användarens profil under "meetups".
+function addUserMeetup(userID, meetupKey){
+  //console.log('Lägga till meetup på användarens profil kördes.');
+  db.ref('users/' + userID + '/meetups/'+meetupKey).set(true);
+}
+
+function removeUserMeetup(userID, meetupKey){
+  //console.log('Ta bort meetup från användarens profil kördes.');
+  db.ref('users/' + userID + '/meetups/'+meetupKey).remove();
 }

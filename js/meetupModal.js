@@ -22,7 +22,8 @@ function initSliderAndMoreShit() {
       let modalWrapper = document.getElementById('modalWrapper');
       let meetupWrapper = document.getElementById('meetupWrapper');
       if(closeBtn){
-        closeBtn.addEventListener('click', function(){
+        closeBtn.addEventListener('click', function(event){
+          console.log('Target:', event.target);
           console.log('Closed skapa meetup');
           ageSlider.destroy();
           modalWrapper.className = 'hidden';
@@ -247,16 +248,20 @@ function toggleCreateMeetupModal(){
   let modalWrapper = document.getElementById('modalWrapper');
   let meetupWrapper = document.getElementById('meetupWrapper');
   let menuToggleBtn = document.getElementById('menuToggle');
+  let footer = document.getElementsByTagName('footer')[0];
 
+  // ModalWrapper är gömd från början. Om den är hidden visar vi den.
   if(modalWrapper.className == 'hidden'){
-    modalWrapper.className = '';
-    meetupWrapper.className = 'hidden';
-    menuToggleBtn.className = 'hidden';
+    modalWrapper.className = ''; // Visa modalen för att skapa meetup
+    meetupWrapper.className = 'hidden'; // Dölj
+    menuToggleBtn.className = 'hidden'; // Dölj
+    footer.className = 'hidden'; // Dölj
 
   } else {
     modalWrapper.className = 'hidden';
     meetupWrapper.className = '';
     menuToggleBtn.className = '';
+    footer.className = '';
   }
 
   //Check if user is logged in and set btn correctly

@@ -156,13 +156,15 @@ class MessageClass {
   }
 }
 
+
 class UserMessage extends MessageClass {
 
-  constructor(senderID, avatarURL, meetupID, fullname, message){
+  constructor(senderID, avatarURL, meetupID, fullname, message, creator){
     super(meetupID, message);
     this.sender = senderID;
     this.fullname = fullname;
     this.avatarURL = avatarURL;
+    this.creator = creator;
   }
 }
 
@@ -171,6 +173,7 @@ class SystemMessage extends MessageClass {
     super(meetupID, message);
     this.avatarURL = 'img\\logo-design3.png';
     this.fullname = 'Chattbot';
+    this.system = 'true';
   }
 }
 
