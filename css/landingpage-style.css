@@ -59,9 +59,30 @@ h2{
   margin-right: 1rem;
 
 }
-.heading2{
-  color: black;
-  justify-content: flex-start;
+
+.title {
+    padding: 20px;
+    text-align: center;
+    color: #111;
+}
+.title > h1 {
+    margin: 10px;
+    border-bottom: 7px solid #6C0CCC;
+    display: inline-block;
+    margin-bottom: 20px;
+
+}
+.showMore{
+  padding: 20px;
+  text-align: center;
+}
+.showMore> *{
+  color: #111;
+  margin: 10px;
+}
+.showMore>a:hover{
+  /* border-bottom: 7px solid #6C0CCC; */
+  color: #6C0CCC;
 }
 #landingpageBtn{
   text-decoration: none;
