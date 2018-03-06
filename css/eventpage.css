@@ -542,10 +542,6 @@ div.googleMapDiv > img {
 /* MEDIA QUERIES ENSKILT EVENT */
 @media screen and (min-width: 1000px){
 
-    /* Edit Button */
-  .iconBtn.editBtn {
-    display: none;
-  }
 
   /* Entire Meetup */
   #meetupWrapper > div {
@@ -649,7 +645,7 @@ div.googleMapDiv > img {
   .moreMeetupInfoDiv {
     display: flex;
     flex-direction: row;
-    margin-top: 90px;
+    margin-top: 70px;
     justify-content: center;
   }
   .moreMeetupInfoDiv > div {
@@ -659,6 +655,15 @@ div.googleMapDiv > img {
 
   .moreMeetupInfoDiv > div.chatWrapperWithLabel {
     flex: 2;
+  }
+
+  /* Edit Button */
+  .iconBtn.editBtn {
+    display: none;
+  }
+  /* Join Button */
+  .btnHolder {
+    margin: 48px 0px -30px 90px;
   }
 
   /* Leave Meetup Btn */
