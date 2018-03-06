@@ -55,6 +55,8 @@ function retrieveMeetupInfo(eventDate){
   // This one listens to new Meetups and posts them in the DOM!
     db.ref('meetups/'+eventID).on('child_added', function(snapshot){
 
+
+
       let eventID = getLocationInfo()[0];
       let obj = snapshot.val();
       let meetupKey = snapshot.key;
@@ -65,281 +67,282 @@ function retrieveMeetupInfo(eventDate){
 
       //console.log(obj);
 
-      // Skapa funktion här som lägger till ett meetupkort!
-      let md = document.createElement('div');
-      md.setAttribute('id', 'meetup-' + meetupKey);
+      if(!meetupKey.includes('info')){
+        // Skapa funktion här som lägger till ett meetupkort!
+        let md = document.createElement('div');
+        md.setAttribute('id', 'meetup-' + meetupKey);
 
-      let meetupDivTitle = document.createElement('h2');
-      meetupDivTitle.innerText = obj.name;
+        let meetupDivTitle = document.createElement('h2');
+        meetupDivTitle.innerText = obj.name;
 
-      let meetupDivDate = document.createElement('p');
-      meetupDivDate.innerText = eventDate + ' - ' + obj.time;
-
-
-      // Namn på skaparen av meetup och label med bild.
-
-      let creatorDiv = document.createElement('div');
-      creatorDiv.className = 'creatorDiv';
-      let insideCreatorDiv = document.createElement('div');
-
-      let creatorNameLabel = document.createElement('p');
-      creatorNameLabel.innerText = 'Skapare';
-      let creatorName = document.createElement('p');
-      creatorName.innerText = obj.creator.fullname;
+        let meetupDivDate = document.createElement('p');
+        meetupDivDate.innerText = eventDate + ' - ' + obj.time;
 
 
-      insideCreatorDiv.appendChild(creatorNameLabel);
-      insideCreatorDiv.appendChild(creatorName);
+        // Namn på skaparen av meetup och label med bild.
 
-      // ProfilbildsURL
-      let creatorAvatarURL = document.createElement('img');
-      creatorAvatarURL.setAttribute('alt', obj.creator.name + '\'s avatar.');
-      creatorAvatarURL.setAttribute('src', obj.creator.avatarURL);
-      creatorAvatarURL.className = 'avatar';
+        let creatorDiv = document.createElement('div');
+        creatorDiv.className = 'creatorDiv';
+        let insideCreatorDiv = document.createElement('div');
 
-      creatorDiv.appendChild(creatorAvatarURL);
-      creatorDiv.appendChild(insideCreatorDiv);
-
-      // Skaparns mail
-      let creatorMailDiv = document.createElement('div');
-      creatorMailDiv.className = 'infoDiv';
-      let creatorMailLabel = document.createElement('p');
-      creatorMailLabel.innerText = 'Kontaktinformation';
-      let creatorMail = document.createElement('p');
-      creatorMail.innerText = obj.creator.mail;
-
-      creatorMailDiv.appendChild(creatorMailLabel);
-      creatorMailDiv.appendChild(creatorMail);
+        let creatorNameLabel = document.createElement('p');
+        creatorNameLabel.innerText = 'Skapare';
+        let creatorName = document.createElement('p');
+        creatorName.innerText = obj.creator.fullname;
 
 
-      //Deltagare + Åldersgräns wrapper
-      let ageAntalWrapper = document.createElement('div');
-      ageAntalWrapper.className = 'infoDivWrapper';
+        insideCreatorDiv.appendChild(creatorNameLabel);
+        insideCreatorDiv.appendChild(creatorName);
 
-      // Deltagare
+        // ProfilbildsURL
+        let creatorAvatarURL = document.createElement('img');
+        creatorAvatarURL.setAttribute('alt', obj.creator.name + '\'s avatar.');
+        creatorAvatarURL.setAttribute('src', obj.creator.avatarURL);
+        creatorAvatarURL.className = 'avatar';
 
-      let currentMembers = 0;
+        creatorDiv.appendChild(creatorAvatarURL);
+        creatorDiv.appendChild(insideCreatorDiv);
 
-      for(let thisisnotused in obj.members){
-        currentMembers++;
-      }
+        // Skaparns mail
+        let creatorMailDiv = document.createElement('div');
+        creatorMailDiv.className = 'infoDiv';
+        let creatorMailLabel = document.createElement('p');
+        creatorMailLabel.innerText = 'Kontaktinformation';
+        let creatorMail = document.createElement('p');
+        creatorMail.innerText = obj.creator.mail;
 
-
-      let antalDiv = document.createElement('div');
-      antalDiv.className = 'infoDiv';
-
-      let antalLabel = document.createElement('p');
-      antalLabel.innerText = 'Deltagare';
-      let antal = document.createElement('p');
-      antal.innerText = currentMembers + '/' + obj.spots;
-
-
-
-      antalDiv.appendChild(antalLabel);
-      antalDiv.appendChild(antal);
-
-      // Åldersgräns
-      let ageDiv = document.createElement('div');
-      ageDiv.className = 'infoDiv';
-
-      let ageIntervalLabel = document.createElement('p');
-      ageIntervalLabel.innerText = 'Åldersgräns';
-      let ageInterval = document.createElement('p');
-      ageInterval.innerText = obj.ageInterval[0] + ' - ' + obj.ageInterval[1];
-
-      ageDiv.appendChild(ageIntervalLabel);
-      ageDiv.appendChild(ageInterval);
-
-      ageAntalWrapper.appendChild(ageDiv);
-      ageAntalWrapper.appendChild(antalDiv);
-
-      // Adress
-      let addressDiv = document.createElement('div');
-      addressDiv.className = 'infoDiv';
-
-      let addressLabel = document.createElement('p');
-      addressLabel.innerText = 'Adress';
-      let address = document.createElement('p');
-      address.innerText = obj.address;
-
-      addressDiv.appendChild(addressLabel);
-      addressDiv.appendChild(address);
+        creatorMailDiv.appendChild(creatorMailLabel);
+        creatorMailDiv.appendChild(creatorMail);
 
 
-      /* MAKE THE CARD HERE, PLACED RIGHT IN THE MEETUP */
+        //Deltagare + Åldersgräns wrapper
+        let ageAntalWrapper = document.createElement('div');
+        ageAntalWrapper.className = 'infoDivWrapper';
 
-      // Kort wrapper!
-      let addressCard = document.createElement('div');
-      addressCard.className = 'addressCard';
+        // Deltagare
 
-      // Plats
-      let placeNameLabel = document.createElement('p');
-      let placeName = document.createElement('p');
-      placeNameLabel.innerText = 'Plats';
-      placeName.innerText = obj.placeName;
+        let currentMembers = 0;
 
-      //Address!
-      let cardAddressLabel = document.createElement('p');
-      let cardAddress = document.createElement('p');
-      cardAddress.innerText = obj.address;
-      cardAddressLabel.innerText = 'Adress';
-
-      let cardDateLabel = document.createElement('p');
-      let cardDate = document.createElement('p');
-      cardDateLabel.innerText = 'Datum & Tid';
-      cardDate.innerText = eventDate + ' kl ' + obj.time;
-
-      // Splice latitude and longitude
-      let latitude = obj.latitude.substring(0,9);
-      let longitude = obj.longitude.substring(0,9);
-      //console.log('LATITUDE!!', latitude);
-      //console.log('LONGITUDE!!', longitude);
+        for(let thisisnotused in obj.members){
+          currentMembers++;
+        }
 
 
-      let googleMapDiv = document.createElement('div');
-      let googleMap = document.createElement('img');
-      googleMapDiv.className = 'googleMapDiv';
-      // Just src
-      googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
-      googleMap.setAttribute('zoom', '16');
+        let antalDiv = document.createElement('div');
+        antalDiv.className = 'infoDiv';
 
-      googleMap.addEventListener('click', function(){
-        let currentZoom = googleMap.getAttribute('zoom');
-        let newZoom = (currentZoom-0) + 1;
-        googleMap.setAttribute('zoom', newZoom);
-        googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
-      });
-      googleMap.addEventListener('contextmenu', function(event){
-        event.preventDefault();
-        let currentZoom = googleMap.getAttribute('zoom');
-        let newZoom = (currentZoom-0) - 1;
-        googleMap.setAttribute('zoom', newZoom);
-        googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
-      });
-
-      // Data-src - Debug shit
-      // googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
-
-      googleMapDiv.appendChild(googleMap);
-
-      //Append into the card:
-
-      addressCard.appendChild(placeNameLabel);
-      addressCard.appendChild(placeName);
-
-      addressCard.appendChild(cardAddressLabel);
-      addressCard.appendChild(cardAddress);
-
-      addressCard.appendChild(cardDateLabel);
-      addressCard.appendChild(cardDate);
-
-      addressCard.appendChild(googleMapDiv);
-
-      let infoDiv = document.createElement('div');
-      infoDiv.className = 'meetupInfo';
-
-      let infoTextLabel = document.createElement('p')
-      infoTextLabel.innerText = 'Information';
-      let infoText = document.createElement('p');
-      infoText.innerText = obj.info;
-
-      infoDiv.appendChild(infoTextLabel);
-      infoDiv.appendChild(infoText);
-
-      let meetupWrapper = document.getElementById('meetupWrapper');
-
-      // Gå med knapp
-      let btnDiv = document.createElement('div');
-      btnDiv.className = 'btnHolder';
-      let joinMeetupBtn = document.createElement('button');
-
-      joinMeetupBtn.className = 'purple';
-      joinMeetupBtn.innerText = 'Gå med i meetup';
-
-      let editBtn = document.createElement('button');
-      editBtn.className = 'editBtn purple';
-      editBtn.innerHTML = 'Redigera Meetup';
-
-      let editSmallBtn = document.createElement('button');
-      editSmallBtn.className = 'editBtn iconBtn';
-      editSmallBtn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
+        let antalLabel = document.createElement('p');
+        antalLabel.innerText = 'Deltagare';
+        let antal = document.createElement('p');
+        antal.innerText = currentMembers + '/' + obj.spots;
 
 
-      editBtn.addEventListener('click', function(){
-        editMeetup(meetupKey);
-      });
-      editSmallBtn.addEventListener('click', function(){
-        editMeetup(meetupKey);
-      });
 
-      btnDiv.appendChild(joinMeetupBtn);
+        antalDiv.appendChild(antalLabel);
+        antalDiv.appendChild(antal);
 
-      md.appendChild(meetupDivTitle);
-      md.appendChild(meetupDivDate);
-      md.appendChild(creatorDiv);
-      md.appendChild(creatorMailDiv);
-      md.appendChild(ageAntalWrapper);
-      md.appendChild(addressDiv);
-      md.appendChild(addressCard);
-      md.appendChild(infoDiv);
+        // Åldersgräns
+        let ageDiv = document.createElement('div');
+        ageDiv.className = 'infoDiv';
 
-      // Display button based on if the user is in the meetup or not.
-      let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        let ageIntervalLabel = document.createElement('p');
+        ageIntervalLabel.innerText = 'Åldersgräns';
+        let ageInterval = document.createElement('p');
+        ageInterval.innerText = obj.ageInterval[0] + ' - ' + obj.ageInterval[1];
 
-      if(currentUser){
-        // Skriva om denna så att vi kan kolla ifall personen är admin / ägare.
-          let comingMembers = obj.members;
-          let admins = obj.admins;
-          console.log('The Admins of this meetup are: ' + admins);
-            // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
-            if(comingMembers != null){
-              console.log('Members coming to this Meetup: ',comingMembers);
+        ageDiv.appendChild(ageIntervalLabel);
+        ageDiv.appendChild(ageInterval);
 
-              //Get dem admins first.
-              let adminBool = false;
-              for(let admin in admins){
-                if(admins[admin] == currentUser.uniqueID){
-                  console.log('You are the effing admin man!');
-                  adminBool = true;
+        ageAntalWrapper.appendChild(ageDiv);
+        ageAntalWrapper.appendChild(antalDiv);
+
+        // Adress
+        let addressDiv = document.createElement('div');
+        addressDiv.className = 'infoDiv';
+
+        let addressLabel = document.createElement('p');
+        addressLabel.innerText = 'Adress';
+        let address = document.createElement('p');
+        address.innerText = obj.address;
+
+        addressDiv.appendChild(addressLabel);
+        addressDiv.appendChild(address);
+
+
+        /* MAKE THE CARD HERE, PLACED RIGHT IN THE MEETUP */
+
+        // Kort wrapper!
+        let addressCard = document.createElement('div');
+        addressCard.className = 'addressCard';
+
+        // Plats
+        let placeNameLabel = document.createElement('p');
+        let placeName = document.createElement('p');
+        placeNameLabel.innerText = 'Plats';
+        placeName.innerText = obj.placeName;
+
+        //Address!
+        let cardAddressLabel = document.createElement('p');
+        let cardAddress = document.createElement('p');
+        cardAddress.innerText = obj.address;
+        cardAddressLabel.innerText = 'Adress';
+
+        let cardDateLabel = document.createElement('p');
+        let cardDate = document.createElement('p');
+        cardDateLabel.innerText = 'Datum & Tid';
+        cardDate.innerText = eventDate + ' kl ' + obj.time;
+
+        // Splice latitude and longitude
+        let latitude = obj.latitude.substring(0,9);
+        let longitude = obj.longitude.substring(0,9);
+        //console.log('LATITUDE!!', latitude);
+        //console.log('LONGITUDE!!', longitude);
+
+
+        let googleMapDiv = document.createElement('div');
+        let googleMap = document.createElement('img');
+        googleMapDiv.className = 'googleMapDiv';
+        // Just src
+        googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+        googleMap.setAttribute('zoom', '16');
+
+        googleMap.addEventListener('click', function(){
+          let currentZoom = googleMap.getAttribute('zoom');
+          let newZoom = (currentZoom-0) + 1;
+          googleMap.setAttribute('zoom', newZoom);
+          googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+        });
+        googleMap.addEventListener('contextmenu', function(event){
+          event.preventDefault();
+          let currentZoom = googleMap.getAttribute('zoom');
+          let newZoom = (currentZoom-0) - 1;
+          googleMap.setAttribute('zoom', newZoom);
+          googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+        });
+
+        // Data-src - Debug shit
+        // googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+
+        googleMapDiv.appendChild(googleMap);
+
+        //Append into the card:
+
+        addressCard.appendChild(placeNameLabel);
+        addressCard.appendChild(placeName);
+
+        addressCard.appendChild(cardAddressLabel);
+        addressCard.appendChild(cardAddress);
+
+        addressCard.appendChild(cardDateLabel);
+        addressCard.appendChild(cardDate);
+
+        addressCard.appendChild(googleMapDiv);
+
+        let infoDiv = document.createElement('div');
+        infoDiv.className = 'meetupInfo';
+
+        let infoTextLabel = document.createElement('p')
+        infoTextLabel.innerText = 'Information';
+        let infoText = document.createElement('p');
+        infoText.innerText = obj.info;
+
+        infoDiv.appendChild(infoTextLabel);
+        infoDiv.appendChild(infoText);
+
+        let meetupWrapper = document.getElementById('meetupWrapper');
+
+        // Gå med knapp
+        let btnDiv = document.createElement('div');
+        btnDiv.className = 'btnHolder';
+        let joinMeetupBtn = document.createElement('button');
+
+        joinMeetupBtn.className = 'purple';
+        joinMeetupBtn.innerText = 'Gå med i meetup';
+
+        let editBtn = document.createElement('button');
+        editBtn.className = 'editBtn purple';
+        editBtn.innerHTML = 'Redigera Meetup';
+
+        let editSmallBtn = document.createElement('button');
+        editSmallBtn.className = 'editBtn iconBtn';
+        editSmallBtn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
+
+
+        editBtn.addEventListener('click', function(){
+          editMeetup(meetupKey);
+        });
+        editSmallBtn.addEventListener('click', function(){
+          editMeetup(meetupKey);
+        });
+
+        btnDiv.appendChild(joinMeetupBtn);
+
+        md.appendChild(meetupDivTitle);
+        md.appendChild(meetupDivDate);
+        md.appendChild(creatorDiv);
+        md.appendChild(creatorMailDiv);
+        md.appendChild(ageAntalWrapper);
+        md.appendChild(addressDiv);
+        md.appendChild(addressCard);
+        md.appendChild(infoDiv);
+
+        // Display button based on if the user is in the meetup or not.
+        let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        if(currentUser){
+          // Skriva om denna så att vi kan kolla ifall personen är admin / ägare.
+            let comingMembers = obj.members;
+            let admins = obj.admins;
+            console.log('The Admins of this meetup are: ' + admins);
+              // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
+              if(comingMembers != null){
+                console.log('Members coming to this Meetup: ',comingMembers);
+
+                //Get dem admins first.
+                let adminBool = false;
+                for(let admin in admins){
+                  if(admins[admin] == currentUser.uniqueID){
+                    console.log('You are the effing admin man!');
+                    adminBool = true;
+                  } else {
+                    console.log('No admin here.');
+                  }
+                }
+
+                // Gå igenom användaregenskaperna under denna medlem
+                let show = null;
+                for(let user in comingMembers){
+                  // Om användaren som är inloggad finns i detta meetup så sätter vi userIsInMeetup till true
+                  if(comingMembers[user].uniqueID == currentUser.uniqueID){
+                    show = true;
+                  }
+                }
+                if(show){
+                  if(adminBool){
+                    console.log('You are admin!');
+                    md.appendChild(editBtn);
+                    md.appendChild(editSmallBtn);
+                  }
+                  displayMembersAndChat(md, meetupKey);
                 } else {
-                  console.log('No admin here.');
+                  md.appendChild(btnDiv);
                 }
-              }
-
-              // Gå igenom användaregenskaperna under denna medlem
-              let show = null;
-              for(let user in comingMembers){
-                // Om användaren som är inloggad finns i detta meetup så sätter vi userIsInMeetup till true
-                if(comingMembers[user].uniqueID == currentUser.uniqueID){
-                  show = true;
-                }
-              }
-              if(show){
-                if(adminBool){
-                  console.log('You are admin!');
-                  md.appendChild(editBtn);
-                  md.appendChild(editSmallBtn);
-                }
-                displayMembersAndChat(md, meetupKey);
               } else {
-                md.appendChild(btnDiv);
+                console.warn('Data is null for the members of this meeup!');
               }
-            } else {
-              console.warn('Data is null for the members of this meeup!');
-            }
 
-      } else {
-        md.appendChild(btnDiv);
-        console.log('NO EFFING USER');
+        } else {
+          md.appendChild(btnDiv);
+          console.log('NO EFFING USER');
+        }
+
+
+        // Append MAINDIV (md)
+        meetupWrapper.appendChild(md);
+
+        // Create Eventlistener for the joinMeetupBtn
+        joinBtnListener(joinMeetupBtn, meetupKey);
       }
-
-
-      // Append MAINDIV (md)
-      meetupWrapper.appendChild(md);
-
-      // Create Eventlistener for the joinMeetupBtn
-      joinBtnListener(joinMeetupBtn, meetupKey);
-
     });
   }
 }
@@ -594,7 +597,7 @@ function displayMembersAndChat(md, meetupKey){
     let first = true;
 
     // start listening to chat messages on this meetupKey
-    listenToChat(meetupKey, joinedTime);
+    listenToChat(chattWrapperDiv, meetupKey, joinedTime);
     // End of chat
 
 
@@ -701,131 +704,199 @@ function createMessage(event){
 }
 
 // Start to listen to chat messages on this meetupKey
-function listenToChat(meetupKey, joinedTime){
-  let first = true, admin = false;
-  let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
-  for(let wrapperDiv in document.getElementsByClassName('chattWrapperDiv')){
-    wrapperDiv.scrollTop = wrapperDiv.scrollHeight;
-  }
+function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
 
-  db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
-    let chattWrapperDiv = document.getElementById('chat' + meetupKey);
-    let message = snapshot.val();
-    let messageKey = snapshot.key;
-    admin = currentUser.admin;
-    // Should we display the message? If the message was made before the player joined we don't show it.
-    if(joinedTime <= message.time){
+    // Fire scroll event.
+    let likeArray = [];
+    let doScroll = true;
+    let messageCounter = 0;
+    let count = 25;
 
-      if(first){
-        while(chattWrapperDiv.firstChild){
-          chattWrapperDiv.removeChild(chattWrapperDiv.firstChild);
+    chatMessagesChildAdded(count);
+
+    function loadMoreMessages(event){
+      // Check if we're at the top.
+      if(event.target.scrollTop == 0 && event.target.scrollHeight > 1200){
+        // If we are and the fire scroll is active:
+        if(doScroll){
+          // Disable scroll event. We activate it later.
+          doScroll = false;
+
+          // Remove old listener. (Stop listening to new messages)
+          stopListenToChat(meetupKey);
+
+          // console.log('Count: ', count);
+          // console.log('MessageCount: ', messageCounter);
+
+          // If the counter + 15 is greater than messageCounter we've reached the top!
+          if(count <= messageCounter + 15){
+
+
+            // Start to listen to the chat again. This time add 25 to the counter.
+            chatMessagesChildAdded(count += 25, true);
+            //console.log('Count increased by 25! Currently displaying ' + messageCounter + ' messages');
+
+            setTimeout(function(){
+              //Set a timeout to scroll down.
+              chattWrapperDiv.scrollTop = 1390;
+
+              //Reset the scroll
+              doScroll = true;
+            },180);
+          } else {
+            console.log('No more messages to display.');
+            let noMoreMessages = document.createElement('p');
+            noMoreMessages.innerText = 'Inga fler meddelanden.';
+            noMoreMessages.className = 'noMessage';
+            chattWrapperDiv.insertBefore(noMoreMessages,chattWrapperDiv.firstChild);
+            chattWrapperDiv.removeEventListener('scroll', loadMoreMessages);
+          }
         }
-        first = false;
       }
-
-      // Create the message DIV to be printed on the DOM
-      let messageDiv = document.createElement('div');
-      messageDiv.className = 'chattMessageDiv';
-
-      // Create the avatar picture
-      let avatarImg = document.createElement('img');
-      avatarImg.setAttribute('src', message.avatarURL);
-      messageDiv.appendChild(avatarImg);
-
-      // Create the timeStamp
-      let timeStamp = document.createElement('p');
-      timeStamp.innerText = chatMessageTimeStamp(message.time);
-      timeStamp.setAttribute('timeStamp', message.time);
-      timeStamp.className = 'timeStamp';
-
-      // Create the fullname
-      let fullname = document.createElement('p');
-      fullname.innerText = message.fullname;
-
-      //Create Icon hoverMessage
-      let iconHoverMessage = document.createElement('span');
-
-
-      // Here we got the fullname, hehe! append appropriate icons?
-      if(message.system){
-          fullname.innerHTML += '<i class="mdi mdi-wrench"></i>';
-          iconHoverMessage.innerText = 'System bot';
-          iconHoverMessage.className = 'hoverMessage';
-          fullname.appendChild(iconHoverMessage);
-      } else if(getAdmin(message.sender)){
-          fullname.innerHTML += '<i class="mdi mdi-verified"></i>';
-          iconHoverMessage.innerText = 'Administratör';
-          iconHoverMessage.className = 'hoverMessage';
-          fullname.appendChild(iconHoverMessage);
-      } else if(message.creator){
-          fullname.innerHTML += '<i class="mdi mdi-approval"></i>';
-          iconHoverMessage.innerText = 'Skapare';
-          iconHoverMessage.className = 'hoverMessage';
-          fullname.appendChild(iconHoverMessage);
-        }
-
-      // Then if the user is owner of the meetup append approval
-
-
-      // Create the actual message
-      let textmessage = document.createElement('p');
-      textmessage.innerText = message.textmessage;
-
-      // Create a div to hold name + timeStamp
-      let messageWrapper = document.createElement('div');
-      messageWrapper.className = 'messageWrapper';
-
-      messageWrapper.appendChild(fullname);
-      messageWrapper.appendChild(timeStamp);
-
-      //Create textmessage wrapperDiv
-      let textmessageWrapper = document.createElement('div');
-      textmessageWrapper.className = 'textmessageWrapper';
-
-      // Create Like Button and counter
-      let likeCount = document.createElement('span');
-      likeCount.className = 'likeCount ' + messageKey;
-      let likeBtn = document.createElement('span');
-
-      // If the current user has liked this message, put this as a filled heart already!
-      db.ref('likes/' + messageKey  + '/' + currentUser.uniqueID).once('value', function(newShot){
-        if(newShot.val()){
-          likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
-        } else {
-          likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
-        }
-      });
-
-
-      // Add eventListener for the likeButton
-      likeBtn.addEventListener('click', function(event){
-        if(likeBtn.innerHTML == '<i class="mdi mdi-heart-outline"></i>'){
-          toggleLike(messageKey);
-          likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
-        } else {
-          toggleLike(messageKey);
-          likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
-        }
-      });
-
-      likeListenerOn(messageKey);
-      // Append it into the textmessageWrapper
-      textmessageWrapper.appendChild(textmessage);
-      textmessageWrapper.appendChild(likeCount);
-      textmessageWrapper.appendChild(likeBtn);
-      messageWrapper.appendChild(textmessageWrapper);
-
-      // Append everything into the messageDiv
-      messageDiv.appendChild(avatarImg);
-      messageDiv.appendChild(messageWrapper);
-
-
-      chattWrapperDiv.appendChild(messageDiv);
-
-      chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
     }
-    admin = false;
-  });
+
+    chattWrapperDiv.addEventListener('scroll', loadMoreMessages);
+
+
+  let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  // chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+
+  function chatMessagesChildAdded(count, scroll = false){
+    let first = true;
+
+    messageCounter = 0;
+    db.ref('chats/' + meetupKey).limitToLast(count).on('child_added', function(snapshot){
+
+      let chattWrapperDiv = document.getElementById('chat' + meetupKey);
+      let message = snapshot.val();
+      let messageKey = snapshot.key;
+
+
+      // Should we display the message? If the message was made before the player joined we don't show it.
+      if(joinedTime <= message.time || getAdmin(currentUser.uniqueID)){
+        if(first){
+          while(chattWrapperDiv.firstChild){
+            chattWrapperDiv.removeChild(chattWrapperDiv.firstChild);
+          }
+          first = false;
+        }
+
+        // Create the message DIV to be printed on the DOM
+        let messageDiv = document.createElement('div');
+        messageDiv.className = 'chattMessageDiv';
+
+        // Create the avatar picture
+        let avatarImg = document.createElement('img');
+        avatarImg.setAttribute('src', message.avatarURL);
+        messageDiv.appendChild(avatarImg);
+
+        // Create the timeStamp
+        let timeStamp = document.createElement('p');
+        timeStamp.innerText = chatMessageTimeStamp(message.time);
+        timeStamp.setAttribute('timeStamp', message.time);
+        timeStamp.className = 'timeStamp';
+
+        // Create the fullname
+        let fullname = document.createElement('p');
+        fullname.innerText = message.fullname;
+
+        //Create Icon hoverMessage
+        let iconHoverMessage = document.createElement('span');
+
+
+        // Here we got the fullname, hehe! append appropriate icons?
+        if(message.system){
+            fullname.innerHTML += '<i class="mdi mdi-wrench"></i>';
+            iconHoverMessage.innerText = 'Systembot';
+            iconHoverMessage.className = 'hoverMessage';
+            fullname.appendChild(iconHoverMessage);
+        } else if(getAdmin(message.sender)){
+            fullname.innerHTML += '<i class="mdi mdi-verified"></i>';
+            iconHoverMessage.innerText = 'Administratör';
+            iconHoverMessage.className = 'hoverMessage';
+            fullname.appendChild(iconHoverMessage);
+        } else if(message.creator){
+            fullname.innerHTML += '<i class="mdi mdi-approval"></i>';
+            iconHoverMessage.innerText = 'Skapare';
+            iconHoverMessage.className = 'hoverMessage';
+            fullname.appendChild(iconHoverMessage);
+          }
+
+        // Then if the user is owner of the meetup append approval
+
+
+        // Create the actual message
+        let textmessage = document.createElement('p');
+        textmessage.innerText = message.textmessage;
+
+        // Create a div to hold name + timeStamp
+        let messageWrapper = document.createElement('div');
+        messageWrapper.className = 'messageWrapper';
+
+        messageWrapper.appendChild(fullname);
+        messageWrapper.appendChild(timeStamp);
+
+        //Create textmessage wrapperDiv
+        let textmessageWrapper = document.createElement('div');
+        textmessageWrapper.className = 'textmessageWrapper';
+
+        // Create Like Button and counter
+        let likeCount = document.createElement('span');
+        likeCount.className = 'likeCount ' + messageKey;
+        let likeBtn = document.createElement('span');
+
+        // If the current user has liked this message, put this as a filled heart already!
+        db.ref('likes/' + messageKey  + '/' + currentUser.uniqueID).once('value', function(newShot){
+          if(newShot.val()){
+            likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
+          } else {
+            likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+          }
+        });
+
+
+        // Add eventListener for the likeButton
+          if(!likeArray.includes(messageKey)){
+            likeListenerOn(messageKey);
+            likeArray.push(messageKey);
+          } else {
+            //console.log('This btn has already a likeListenerOn');
+          }
+
+          likeBtn.addEventListener('click', function(event){
+            if(likeBtn.innerHTML == '<i class="mdi mdi-heart-outline"></i>'){
+              toggleLike(messageKey);
+              likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
+            } else {
+              toggleLike(messageKey);
+              likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+            }
+          });
+
+        // Append it into the textmessageWrapper
+        textmessageWrapper.appendChild(textmessage);
+        textmessageWrapper.appendChild(likeCount);
+        textmessageWrapper.appendChild(likeBtn);
+        messageWrapper.appendChild(textmessageWrapper);
+
+        // Append everything into the messageDiv
+        messageDiv.appendChild(avatarImg);
+        messageDiv.appendChild(messageWrapper);
+
+
+
+          chattWrapperDiv.appendChild(messageDiv);
+
+
+
+        // To scroll down or not to scroll down. Only if there's a user message outputted and not the scroll.
+        if(!scroll){
+          chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+        }
+        messageCounter += 1;
+      }
+    });
+  }
 }
 
 // Denna funktion uppdaterar tiden på meddelanden!
@@ -1251,7 +1322,6 @@ function likeListenerOn(key){
       }
     }
   });
-
 }
 
 function joinBtnListener(joinMeetupBtn, meetupKey){
