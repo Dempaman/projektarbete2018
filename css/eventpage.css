@@ -549,9 +549,6 @@ div.googleMapDiv > img {
   #meetupWrapper > div div.meetupInfo p:nth-child(2){
     max-width: 300px;
   }
-  #meetupWrapper > div > div p {
-    max-width: 200px;
-  }
 
   div.meetupInfo {
     position: absolute;

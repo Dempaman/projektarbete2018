@@ -702,17 +702,17 @@ function createMessage(event){
 
 // Start to listen to chat messages on this meetupKey
 function listenToChat(meetupKey, joinedTime){
-  let first = true, admin;
+  let first = true, admin = false;
   let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
   for(let wrapperDiv in document.getElementsByClassName('chattWrapperDiv')){
     wrapperDiv.scrollTop = wrapperDiv.scrollHeight;
   }
-  admin = currentUser.admin;
+
   db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
     let chattWrapperDiv = document.getElementById('chat' + meetupKey);
     let message = snapshot.val();
     let messageKey = snapshot.key;
-
+    admin = currentUser.admin;
     // Should we display the message? If the message was made before the player joined we don't show it.
     if(joinedTime <= message.time){
 
@@ -752,7 +752,7 @@ function listenToChat(meetupKey, joinedTime){
           iconHoverMessage.innerText = 'System bot';
           iconHoverMessage.className = 'hoverMessage';
           fullname.appendChild(iconHoverMessage);
-      } else if(admin){
+      } else if(admin && currentUser.uniqueID == message.sender){
           fullname.innerHTML += '<i class="mdi mdi-verified"></i>';
           iconHoverMessage.innerText = 'Administratör';
           iconHoverMessage.className = 'hoverMessage';
@@ -824,7 +824,7 @@ function listenToChat(meetupKey, joinedTime){
 
       chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
     }
-
+    admin = false;
   });
 }
 
