@@ -274,6 +274,7 @@ div.googleMapDiv > img {
 
 /* Chatt css */
 .chattWrapperDiv {
+
   height: 230px;
   overflow: auto;
   width: calc(100% - 40px);
@@ -392,7 +393,7 @@ div.googleMapDiv > img {
 }
 
 /* No Message */
-#meetupWrapper > div > div.moreMeetupInfoDiv p.noMessage {
+#meetupWrapper > div > div.moreMeetupInfoDiv > div p.noMessage:first-child {
   font-size: 1.3em;
   color: #ececec;
   width: auto;
