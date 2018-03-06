@@ -3,11 +3,12 @@ console.log('this should be printed');
 const ticketMasterApiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
 const googleApiKey2 = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
 
+
 // Initalize the page based on window location.
 window.onload = function(){
 console.log(chatMessageTimeStamp(1519755958554));
 console.log(chatMessageTimeStamp(1516758062943));
-
+retrieveAdminsFromDatabase();
 
 
   // Turned off for debug purposes
@@ -752,7 +753,7 @@ function listenToChat(meetupKey, joinedTime){
           iconHoverMessage.innerText = 'System bot';
           iconHoverMessage.className = 'hoverMessage';
           fullname.appendChild(iconHoverMessage);
-      } else if(admin && currentUser.uniqueID == message.sender){
+      } else if(getAdmin(message.sender)){
           fullname.innerHTML += '<i class="mdi mdi-verified"></i>';
           iconHoverMessage.innerText = 'Administratör';
           iconHoverMessage.className = 'hoverMessage';
@@ -1443,4 +1444,18 @@ function addUserMeetup(userID, meetupKey){
 function removeUserMeetup(userID, meetupKey){
   //console.log('Ta bort meetup från användarens profil kördes.');
   db.ref('users/' + userID + '/meetups/'+meetupKey).remove();
+}
+
+function getAdmin(userID){
+  return adminArray.includes(userID);
+}
+
+function retrieveAdminsFromDatabase(){
+    db.ref('users/').on('child_added', function(snapshot){
+      let data = snapshot.val();
+      if(data.admin){
+        adminArray.push(data.uniqueID);
+      }
+
+    });
 }

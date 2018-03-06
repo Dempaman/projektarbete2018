@@ -1,5 +1,6 @@
 // Global Variables
 let googleApiKey = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
+const adminArray = [];
 
 var config = {
     apiKey: "AIzaSyBISgoM6Nlg9SMg8mwki7SmYCj2wsrbMzY",
