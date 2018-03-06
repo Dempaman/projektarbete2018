@@ -1,6 +1,23 @@
 // Global Variables
 let googleApiKey = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
+
+// En array med admins.
 const adminArray = [];
+
+// En funktion för att se om användarID:et är admin.
+function getAdmin(userID){
+  return adminArray.includes(userID);
+}
+
+// En funktion för att hämta alla admins.
+function retrieveAdminsFromDatabase(){
+    db.ref('users/').on('child_added', function(snapshot){
+      let data = snapshot.val();
+      if(data.admin){
+        adminArray.push(data.uniqueID);
+      }
+    });
+}
 
 var config = {
     apiKey: "AIzaSyBISgoM6Nlg9SMg8mwki7SmYCj2wsrbMzY",
@@ -14,6 +31,7 @@ var config = {
   firebase.initializeApp(config);
 
   const db = firebase.database();
+  retrieveAdminsFromDatabase();
 
 class MeetupClass {
 

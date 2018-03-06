@@ -8,7 +8,6 @@ const googleApiKey2 = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
 window.onload = function(){
 console.log(chatMessageTimeStamp(1519755958554));
 console.log(chatMessageTimeStamp(1516758062943));
-retrieveAdminsFromDatabase();
 
 
   // Turned off for debug purposes
@@ -1444,18 +1443,4 @@ function addUserMeetup(userID, meetupKey){
 function removeUserMeetup(userID, meetupKey){
   //console.log('Ta bort meetup från användarens profil kördes.');
   db.ref('users/' + userID + '/meetups/'+meetupKey).remove();
-}
-
-function getAdmin(userID){
-  return adminArray.includes(userID);
-}
-
-function retrieveAdminsFromDatabase(){
-    db.ref('users/').on('child_added', function(snapshot){
-      let data = snapshot.val();
-      if(data.admin){
-        adminArray.push(data.uniqueID);
-      }
-
-    });
 }
