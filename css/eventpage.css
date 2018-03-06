@@ -542,9 +542,17 @@ div.googleMapDiv > img {
 /* MEDIA QUERIES ENSKILT EVENT */
 @media screen and (min-width: 1000px){
 
+    /* Edit Button */
   .iconBtn.editBtn {
     display: none;
   }
+
+  /* Entire Meetup */
+  #meetupWrapper > div {
+    position: relative;
+    padding: 15px 0px 30px 30px;
+  }
+
 
   #meetupWrapper > div div.meetupInfo p:nth-child(2){
     max-width: 300px;
@@ -577,6 +585,7 @@ div.googleMapDiv > img {
     background-color: #fff;
     color: #2d2d2d;
   }
+  /* addressCard */
   .addressCard {
     display: inline-block;
     opacity: 1;
@@ -606,11 +615,13 @@ div.googleMapDiv > img {
     color: #555;
   }
 
+  /* The Creator Div */
   #meetupWrapper > div > div.creatorDiv {
     margin: 5px 0px -22px;
     max-width: 30%;
   }
 
+  /* Google Map */
   .googleMapDiv {
     margin: -7px -20px -28px;
   }
@@ -618,25 +629,43 @@ div.googleMapDiv > img {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
   }
-  #meetupWrapper > div {
-    position: relative;
-    padding: 15px 0px 15px 30px;
-    min-height: 485px;
-  }
 
   #meetupWrapper, #eventHolder {
     max-width: 1200px;
     margin: 0px auto 0px;
   }
 
+  /* background-color on body (??) */
   body {
     background-color: #fafafa;
   }
 
   /* Css for the chatt and members */
-  /* start by fixing the heart */
 
   #meetupWrapper > div > div div.textmessageWrapper p {
     max-width: 100%;
+  }
+
+  .moreMeetupInfoDiv {
+    display: flex;
+    flex-direction: row;
+    margin-top: 90px;
+    justify-content: center;
+  }
+  .moreMeetupInfoDiv > div {
+    flex: 1;
+    margin: 0px 70px;
+  }
+
+  .moreMeetupInfoDiv > div.chatWrapperWithLabel {
+    flex: 2;
+  }
+
+  /* Leave Meetup Btn */
+  button.leaveMeetupBtn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 3px 0px 30px 119px;
   }
 }
