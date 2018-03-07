@@ -31,6 +31,7 @@ html{
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 700px;
 
 }
 
@@ -94,7 +95,7 @@ h2{
   padding: 1rem;
   align-self: center;
   max-width: 70%;
-  margin-top: 8rem;
+
   color: #FFFFFF;
   background-color: #6C0CCC;
   border: 3px solid  #6C0CCC;

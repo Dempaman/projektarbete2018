@@ -24,18 +24,18 @@
 
 </head>
 <body>
-
-  <nav id="navigation" class="hidden">
+  <!-- Menu -->
+  <nav id="navigation" class="">
     <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
     <div class="header">
       <img src="img/logo-design3.png" alt="Event">
       <!-- HTML för desktopläge i nav -->
-
       <ul class="deskNav">
-        <a href="#"><li>MIN PROFIL</li></a>
-        <a href="#"><li>ALLA EVENT</li></a>
+        <a href="/index.html" class="active"><li>HEM</li></a>
+        <a href="/profil.html"><li id="myProfile" class="hidden">MIN PROFIL</li></a>
+        <a href="/events.html"><li>ALLA EVENTS</li></a>
         <a href="#contactUs"><li>KONTAKTA OSS</li></a>
-        <a href="#"><li class= "loginInMenu">LOGGA IN</li></a>
+        <li class="loginInMenu">LOGGA IN</li>
       </ul>
 
     </div>
@@ -58,15 +58,17 @@
       but hey, it's pure CSS magic.
       -->
       <ul id="menu">
-        <a href="/landingpage.html" class="active"><li>HEM</li></a>
-        <a href="/profil.html"><li>MIN PROFIL</li></a>
+        <a href="/index.html" class="active"><li>HEM</li></a>
+        <a href="/profil.html"><li id="myProfileMob" class="hidden">MIN PROFIL</li></a>
         <a href="/events.html"><li>ALLA EVENTS</li></a>
         <a href="#contactUs"><li>KONTAKTA OSS</li></a>
-        <a href=""><li class="loginInMenu">LOGGA IN</li></a>
+        <a ><li class="loginInMenu">LOGGA IN</li></a>
       </ul>
     </div>
   </nav>
   <!-- Menu End -->
+
+  <div id="menuDiv"></div>
 
   <main>
     <div class="background-img">

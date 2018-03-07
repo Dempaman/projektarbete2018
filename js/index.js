@@ -44,6 +44,47 @@
               eventTime = eventTime.slice(0, 10);
               day = eventTime.slice(8,10);
               month = eventTime.slice(5, 7);
+
+              switch (month) {
+                case "01":
+                  month = "Jan";
+                  break;
+                case "02":
+                  month = "Feb";
+                  break;
+                case "03":
+                  month = "Mar";
+                  break;
+                case "04":
+                  month = "Apr";
+                  break;
+                case "05":
+                  month = "Maj";
+                  break;
+                case "06":
+                  month = "Jun";
+                  break;
+                case "07":
+                  month = "Jul";
+                  break;
+                case "08":
+                  month = "Aug";
+                  break;
+                case "09":
+                  month = "Sep";
+                  break;
+                case "10":
+                  month = "Okt";
+                  break;
+                case "11":
+                  month = "Nov";
+                case "12":
+                  month = "Dec";
+                  break;
+                default:
+
+              }
+
             }
 
             console.log(eventId, eventName, eventPlace, eventCity, eventTime, eventImg, day, month);
@@ -58,7 +99,7 @@
     }
 
     function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month) {
-
+          //  monthName(month)
           //Create event-cards (Test)
       let eventDiv = document.createElement('div');
       let eUrlImg = document.createElement('img');
@@ -70,7 +111,7 @@
 
       let eDay = document.createElement("span");
       let eMonth = document.createElement("span");
-      let eMeetUps = document.createElement("span");
+      let eMeetUps = document.createElement("button");
 
       eID.innerText = `ID: ${eventId}`;
       eName.innerText = `${eventName}`;
@@ -78,9 +119,9 @@
       eTime.innerText = `${eventTime}`;
       eDay.innerText =  `${day}`;
       eMonth.innerText = `${month}`;
-      eMeetUps.innerHTML = `<a href="#">Gå till meetups <i class="fas fa-users"></i></a>`;
+      eMeetUps.innerHTML = `Gå till meetups <i class="fas fa-users"></i>`;
 
-      //     //Add classes and info
+      //Add classes and info
 
       eventDiv.className = "big-card";
       eName.className = "event-info";
@@ -100,7 +141,7 @@
 
       eventDiv.appendChild(eDay);
       eventDiv.appendChild(eMonth);
-      eventDiv.appendChild(eMeetUps);
+    //  eventDiv.appendChild(eMeetUps);
 
       // eventDiv.appendChild(eID);
       testOutPut.appendChild(eventDiv);
