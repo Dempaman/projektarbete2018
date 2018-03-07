@@ -731,15 +731,18 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
           // If the counter + 15 is greater than messageCounter we've reached the top!
           if(count <= messageCounter + 15){
 
-
+            console.log(chattWrapperDiv.scrollHeight);
+            let scrollToThis = chattWrapperDiv.scrollHeight
+            console.log(chattWrapperDiv.scrollTop);
             // Start to listen to the chat again. This time add 25 to the counter.
             chatMessagesChildAdded(count += 25, true);
             //console.log('Count increased by 25! Currently displaying ' + messageCounter + ' messages');
-
+            //chattWrapperDiv.className += ' smooth-scroll'
             setTimeout(function(){
               //Set a timeout to scroll down.
-              chattWrapperDiv.scrollTop = 1390;
-
+              chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight - scrollToThis;
+              console.log(chattWrapperDiv.scrollHeight);
+              console.log(chattWrapperDiv.scrollTop);
               //Reset the scroll
               doScroll = true;
             },180);
@@ -760,25 +763,31 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
 
   let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
   // chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
-
+  let displayedMessages = [];
+  let first = true;
   function chatMessagesChildAdded(count, scroll = false){
-    let first = true;
 
     messageCounter = 0;
+    let firstInsert = true, insertBefore = null;
     db.ref('chats/' + meetupKey).limitToLast(count).on('child_added', function(snapshot){
 
       let chattWrapperDiv = document.getElementById('chat' + meetupKey);
       let message = snapshot.val();
       let messageKey = snapshot.key;
-
+      let doNotAppend = false;
 
       // Should we display the message? If the message was made before the player joined we don't show it.
       if(joinedTime <= message.time || getAdmin(currentUser.uniqueID)){
+
         if(first){
           while(chattWrapperDiv.firstChild){
             chattWrapperDiv.removeChild(chattWrapperDiv.firstChild);
           }
           first = false;
+        }
+        if(displayedMessages.includes(messageKey)){
+          console.log('Stop code plox');
+          doNotAppend = true;
         }
 
         // Create the message DIV to be printed on the DOM
@@ -885,8 +894,22 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
 
 
 
+        if(doNotAppend){
+          console.log('Not appending!');
+        } else if(scroll && !insertBefore){
+          // First insert!
+          console.log('Scroll is true!');
+          insertBefore = chattWrapperDiv.firstChild;
+          chattWrapperDiv.insertBefore(messageDiv, chattWrapperDiv.firstChild);
+        } else if(insertBefore && !doNotAppend && scroll){
+          console.log('This one!');
+          chattWrapperDiv.insertBefore(messageDiv, insertBefore);
+        } else if(!scroll){
+          console.log('Appending normally, apparently scroll is false.');
           chattWrapperDiv.appendChild(messageDiv);
+        }
 
+          displayedMessages.push(messageKey);
 
 
         // To scroll down or not to scroll down. Only if there's a user message outputted and not the scroll.
@@ -894,8 +917,14 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
           chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
         }
         messageCounter += 1;
+      } else {
+        console.log('Did not print message again.');
       }
     });
+    setTimeout(function(){
+      scroll = false;
+      insertBefore = null;
+    }, 500);
   }
 }
 
