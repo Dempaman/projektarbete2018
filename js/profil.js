@@ -1,6 +1,62 @@
 window.addEventListener('load', profilFunction);
 
+
+// function getUserMeetups() {
+//
+// }
+//
+// function getUserCreatedMeetups() {
+//
+// }
+
+function ifUserIsTrue() {
+  let data;
+  const userLog = JSON.parse(localStorage.getItem('loggedInUser'));
+
+  if (userLog) {
+    let userName = document.getElementById('user-name');
+    let userImg = document.getElementById('user-img');
+    let meetupCount = document.getElementById('user-joind-meetups');
+
+    userName.innerText = userLog.fullname;
+    userImg.src = userLog.avatarURL;
+
+    db.ref('/users').once('value', function(snapshot){
+      data = snapshot.val();
+
+      for(let x in data){
+
+        if (data[x].uniqueID === userLog.uniqueID) {
+          let amontOfMeetups = Object.keys(data[x].meetups);
+          meetupCount.innerText = amontOfMeetups.length;
+
+          console.log(data[x]);
+
+        }else {
+          console.log('not me');
+        }
+      }
+
+    });
+
+    // dra ner databasen
+
+    console.log(userLog);
+
+  } else {
+    console.log('Sorry! No Web Storage support');
+    let indexPage = '/index.html';
+    let testLocalHost = window.location.protocol + '//' + window.location.hostname + ':8000' + indexPage;
+    let relocate = window.location.protocol + '//' + window.location.hostname + indexPage;
+    console.log(testLocalHost);
+    window.location.assign(testLocalHost);
+  }
+
+}
+
 function profilFunction(event) {
+
+  ifUserIsTrue();
 
 
   // User info text - show more/ show less

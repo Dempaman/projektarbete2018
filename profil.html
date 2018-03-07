@@ -9,7 +9,7 @@
 
   <!--Google fonts-->
   <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto" rel="stylesheet">
-
+  <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
   <!--Title of page-->
   <title>Profil</title>
 
@@ -17,20 +17,24 @@
   <link rel="stylesheet" href="css/menu.css">
   <link rel="stylesheet" href="css/headstyle.css">
   <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/loginModal.css">
   <link rel="stylesheet" href="css/profil.css">
 
   <!--Script tags-->
   <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
   <script src="js/classes.js"></script>
+  <!-- <script src="js/menu.js"></script> -->
+  <!-- <script src="js/loginModal.js"></script>  -->
   <script src="js/profil.js"></script>
 
 
 </head>
 
 <body>
+
   <!-- Menu -->
-  <nav id="navigation" class="hidden">
+  <nav id="navigation" class="">
     <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
     <div class="header">
       <img src="img/logo-design3.png" alt="Event">
@@ -78,22 +82,19 @@
         <div class="change">
           <a href="" id="edit-user"><i class="fas fa-edit"></i></a>
         </div>
-        <img src="img/user-img-test.jpg" alt="Foto av användare">
+        <img id="user-img" src="img/user-img-test.jpg" alt="Profilbild">
         <h3 id="user-name">jon doe</h3>
-        <div class="created-meetups">
 
-        </div>
-        <div class="attending">
-
-        </div>
         <div class="user-info">
+          <!-- <button type="button" name="button">Berätta om dig själv, klicka här</button> -->
           <p id="user-description">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-            in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+            in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. -->
           </p>
           <div class="white-cover">
           </div>
         </div>
+        <button id="tellMeMore" type="button" name="button">Berätta om dig själv</button>
         <a id="user-info-more" href="">
             <span class="show-more">visa mer</span>
             <i class="fas fa-angle-down fa-2x"></i>
@@ -101,18 +102,17 @@
       </div>
     </div>
 
-
-        <!-- <div class="meetup-count">
+        <div class="meetup-count">
           <div class="created">
-            <p>Skapade meetups</p>
-            <p>12</p>
+            <h4>Skapade meetups</h4>
+            <p id="user-created-meetups">0</p>
 
           </div>
           <div class="attending">
-            <p>joinade meetups</p>
-              <p>3</p>
+            <h4>joinade meetups</h4>
+              <p id="user-joind-meetups">0</p>
           </div>
-        </div> -->
+        </div>
 
     <h2>Mina Meetups</h2>
     <div class="user-meetups-container">
@@ -169,7 +169,7 @@
           <nav>
             <a class="go-too" href="">Gå till meetup</a>
             <a class="remove-meetup" href="">ta bort meetup</a>
-            <a class="close-small-menu" href="">&times</i></a>
+            <a class="close-small-menu" href="">&times;</i></a>
           </nav>
         </div>
       </div>
