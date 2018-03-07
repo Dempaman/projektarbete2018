@@ -201,7 +201,7 @@ class SystemMessage extends MessageClass {
 
 /* Function to print a message on any page */
 let count = 0;
-function printMessage(type, message, timer = 8000){
+function printMessage(type, message, timer = 8000, delay = 0){
 
   let messageHolder = document.getElementById('printMessageHolder');
   let body = document.getElementsByTagName('body')[0];
@@ -256,33 +256,35 @@ function printMessage(type, message, timer = 8000){
     }, 450)
   });
 
-  /* Append Everything */
-  messageWrapper.appendChild(icon);
-  messageWrapper.appendChild(textMessage);
-  messageWrapper.appendChild(closeBtn);
-
-  if(count >= 2){
-    messageHolder.removeChild(messageHolder.firstChild);
-    --count;
-  }
-  messageHolder.appendChild(messageWrapper);
-  count++;
-  /* Kod för att ta bort meddelandet efter x sekunder! */
+  /* If we have a delay */
   setTimeout(function(){
-    // Add animation fadeout.
-    messageWrapper.className += ' fadeout';
+    /* Append Everything */
+    messageWrapper.appendChild(icon);
+    messageWrapper.appendChild(textMessage);
+    messageWrapper.appendChild(closeBtn);
+
+    if(count >= 2){
+      messageHolder.removeChild(messageHolder.firstChild);
+      --count;
+    }
+    messageHolder.appendChild(messageWrapper);
+    count++;
+    /* Kod för att ta bort meddelandet efter x sekunder! */
     setTimeout(function(){
+      // Add animation fadeout.
+      messageWrapper.className += ' fadeout';
+      setTimeout(function(){
 
-      // If the messagewrapper is already displaying. Don't remove it.
-      if(messageWrapper.offsetParent != null){
-        messageHolder.removeChild(messageWrapper);
-        count--;
-      } else {
-        console.log('Already removed!');
-      }
-    }, 450)
-  }, timer-500);
-
+        // If the messagewrapper is already displaying. Don't remove it.
+        if(messageWrapper.offsetParent != null){
+          messageHolder.removeChild(messageWrapper);
+          count--;
+        } else {
+          console.log('Already removed!');
+        }
+      }, 450)
+    }, timer-500);
+  },delay);
 }
 
 /*

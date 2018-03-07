@@ -270,11 +270,11 @@ function retrieveMeetupInfo(eventDate){
         editSmallBtn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
 
 
-        editBtn.addEventListener('click', function(){
-          editMeetup(meetupKey);
+        editBtn.addEventListener('click', function(event){
+          toggleMeetupDropDown(event, meetupKey, eventID);
         });
-        editSmallBtn.addEventListener('click', function(){
-          editMeetup(meetupKey);
+        editSmallBtn.addEventListener('click', function(event){
+          toggleMeetupDropDown(event, meetupKey, eventID);
         });
 
         btnDiv.appendChild(joinMeetupBtn);
@@ -878,9 +878,11 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
             if(likeBtn.innerHTML == '<i class="mdi mdi-heart-outline"></i>'){
               toggleLike(messageKey);
               likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
+              likeBtn.className += ' heartbeat';
             } else {
               toggleLike(messageKey);
               likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+              likeBtn.className = likeBtn.className.replace(' heartbeat', '');
             }
           });
 
@@ -1446,10 +1448,7 @@ function editMeetup(meetupKey){
     console.log('This does not exist :o');
   } else {
 
-
-
   }
-
 }
 
 function removeEditBtn(meetupKey){
