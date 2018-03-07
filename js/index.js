@@ -111,7 +111,9 @@
 
       let eDay = document.createElement("span");
       let eMonth = document.createElement("span");
-      let eMeetUps = document.createElement("button");
+      let eMeetUps = document.createElement("span");
+
+      let meetups = 4;
 
       eID.innerText = `ID: ${eventId}`;
       eName.innerText = `${eventName}`;
@@ -119,16 +121,14 @@
       eTime.innerText = `${eventTime}`;
       eDay.innerText =  `${day}`;
       eMonth.innerText = `${month}`;
-      eMeetUps.innerHTML = `Gå till meetups <i class="fas fa-users"></i>`;
+      eMeetUps.innerHTML = `${meetups} <i class="fas fa-users fa-1x"></i>`;
 
       //Add classes and info
 
       eventDiv.className = "big-card";
-      eName.className = "event-info";
-      ePlace.className = "event-info";
-      // eTime.className = "date";
+      eName.className = "event-name";
+      ePlace.className = "event-place";
       eDay.className = "day";
-      // eDay.className = "date";
       eMonth.className = "month";
       eMeetUps.className = "meetups-box";
 
@@ -141,9 +141,24 @@
 
       eventDiv.appendChild(eDay);
       eventDiv.appendChild(eMonth);
-    //  eventDiv.appendChild(eMeetUps);
+      eventDiv.appendChild(eMeetUps);
 
       // eventDiv.appendChild(eID);
       testOutPut.appendChild(eventDiv);
     }
     })
+
+
+
+
+    /* Funktion för meetups  */
+    function setMeetupCount(eventID, htmlObject){
+    	db.ref('meetups/' + eventID + '/info/meetupCounter').on('value', function(snapshot){
+    		let data = snapshot.val();
+    		console.log('Does this run? Data is:', data);
+        console.log(evetnID);
+    		if(data){
+    			htmlObject.innerText = data;
+    		}
+    	});
+    }
