@@ -4,6 +4,9 @@
 firebase.auth().onAuthStateChanged(user => {
   console.log('AUTH STATE CHANGE FOUND!');
   if(user) {
+    if(document.getElementById('lmw')){
+      closeModal();
+    }
     //window.location = 'eventpage.html'; //After successful login, user will be redirected to home.html
 
     // The user is logged in.
@@ -148,6 +151,7 @@ function retrieveLoginModalContent(){
   let lmw = document.createElement('div'); // LoginModalWrapper
   let lmc = document.createElement('div'); // LoginModalContent
   let btnHolder = document.createElement('div'); // ButtonHolder div
+  //let btnHolderUser = document.createElement('div'); // ButtonHolder div for created Users
   let btnHolderInside = document.createElement('div'); // ButtonHolderInside div.
   btnHolder.className = 'centered';
 
@@ -167,6 +171,81 @@ function retrieveLoginModalContent(){
 
   headerDiv.appendChild(headerTitle);
   headerDiv.appendChild(closeButton);
+
+
+
+  //create user part
+  let containerUser = document.createElement('div'); //container for create users / login users
+  let containerUserInput = document.createElement('div'); // container for login input and txtPassword
+  let txtEmail = document.createElement('input');
+  let txtPassword = document.createElement('input');
+  let btnCuHolder = document.createElement('div');
+  let btnCuLogin = document.createElement('button');
+  let btnCuSignUp = document.createElement('button');
+  let btnCuLogout = document.createElement('button');
+
+  containerUser.className = 'containerUser doNotCloseThis';
+  btnHolder.appendChild(containerUser);
+
+  containerUserInput.className = 'containerUserInput';
+  containerUser.appendChild(containerUserInput);
+
+  txtEmail.className = 'txtEmail';
+  txtEmail.setAttribute('type', 'email');
+  containerUserInput.appendChild(txtEmail);
+
+  txtPassword.className = 'txtPassword';
+  txtPassword.setAttribute('type', 'password');
+  containerUserInput.appendChild(txtPassword);
+
+  //lägger in knappar i button-created-User-Login Div
+
+  //Login button
+  containerUser.appendChild(btnCuHolder);
+  btnCuLogin.className = 'btnCuLogin btnCu btnCu-action';
+  btnCuLogin.innerText = 'Logga in'
+  btnCuHolder.appendChild(btnCuLogin);
+
+  //Signup button
+  btnCuSignUp.className = 'btnCuSignUp btnCu btnCu-secondary';
+  btnCuSignUp.innerText = 'Skapa konto';
+  btnCuHolder.appendChild(btnCuSignUp);
+
+  /*
+  //Sign out
+  btnCuLogout.className = 'btnCLogout btnCu btnC-action2 hide';
+  btnCuLogout.innerText = 'Logga ut';
+  btnCuHolder.appendChild(btnCuLogout); */
+
+  //Add login event
+  btnCuLogin.addEventListener('click', function(event){
+    //get email and password
+    const email = txtEmail.value;
+    const password = txtPassword.value;
+    //Sign in
+    const promise = firebase.auth().signInWithEmailAndPassword(email, password);
+    promise
+    .catch(function(error){
+      console.log(error.message);
+      printMessage('error', 'ah ah ah you didnt say the magic word..') // If some error occurs it will print the message
+    });
+  });
+
+    btnCuSignUp.addEventListener('click', function(event){
+      //get email and password
+      const email = txtEmail.value;
+      const password = txtPassword.value;
+      //Sign in
+      const promise = firebase.auth().createUserWithEmailAndPassword(email, password);
+      promise
+        .catch(function(error){
+          console.log(error.message);
+        });
+    });
+
+
+
+
 
   // Create button Wrappers
   let googleButtonWrapper = document.createElement('div');
@@ -213,6 +292,8 @@ function retrieveLoginModalContent(){
 
   // add eventlisteners to the buttons!
   addBtnListeners(googleButton, facebookButton, closeButton, closeCenteredBtn);
+
+
 }
 
 
@@ -240,7 +321,7 @@ function addWindowClosed(){
 
     if(event.target.className != 'centered'){
       if(event.target.className != 'loginModalButtonHolder'){
-        if(event.target.className != 'doNotCloseThis'){
+        if(!event.target.className.includes('doNotCloseThis')){
           closeModal();
           window.removeEventListener('click', closeIfNotCenter);
           console.log('Closeeed with closeIfNotCenter');

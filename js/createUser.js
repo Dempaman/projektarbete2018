@@ -16,12 +16,12 @@ window.addEventListener('load', function(event){
 //Get elements
 const txtEmail = document.getElementById('txtEmail');
 const txtPassword = document.getElementById('txtPassword');
-const btnLogin = document.getElementById('btnLogin');
-const btnSignUp = document.getElementById('btnSignUp');
-const btnLogout = document.getElementById('btnLogout');
+const btnCLogin = document.getElementById('btnCLogin');
+const btnCSignUp = document.getElementById('btnCSignUp');
+const btnCLogout = document.getElementById('btnCLogout');
 
 //Add login event
-btnLogin.addEventListener('click', function(event){
+btnCLogin.addEventListener('click', function(event){
   //get email and password
   const email = txtEmail.value;
   const password = txtPassword.value;
@@ -32,7 +32,7 @@ btnLogin.addEventListener('click', function(event){
 });
 
 //Add signup event
-  btnSignUp.addEventListener('click', function(event){
+  btnCSignUp.addEventListener('click', function(event){
     //get email and password
     //Todo: Check for real email!!!!!!!
     const email = txtEmail.value;
@@ -47,14 +47,14 @@ btnLogin.addEventListener('click', function(event){
     if(user){
       console.log(user);
       console.log("Now logged in")
-      btnLogout.classList.remove('hide');
+      btnCLogout.classList.remove('hide');
     }else{
       console.log('not logged in');
-      btnLogout.classList.add('hide')
+      btnCLogout.classList.add('hide')
     }
   });
 
-  btnLogout.addEventListener('click', function(event){
+  btnCLogout.addEventListener('click', function(event){
     firebase.auth().signOut();
     console.log('Tack för du loggade ut!!')
   });
