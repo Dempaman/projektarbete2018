@@ -786,7 +786,7 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
           first = false;
         }
         if(displayedMessages.includes(messageKey)){
-          console.log('Stop code plox');
+          //console.log('Stop code plox');
           doNotAppend = true;
         }
 
@@ -895,17 +895,17 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
 
 
         if(doNotAppend){
-          console.log('Not appending!');
+          //console.log('Not appending!');
         } else if(scroll && !insertBefore){
           // First insert!
-          console.log('Scroll is true!');
+          //console.log('Scroll is true!');
           insertBefore = chattWrapperDiv.firstChild;
           chattWrapperDiv.insertBefore(messageDiv, chattWrapperDiv.firstChild);
         } else if(insertBefore && !doNotAppend && scroll){
-          console.log('This one!');
+          //console.log('This one!');
           chattWrapperDiv.insertBefore(messageDiv, insertBefore);
         } else if(!scroll){
-          console.log('Appending normally, apparently scroll is false.');
+          //console.log('Appending normally, apparently scroll is false.');
           chattWrapperDiv.appendChild(messageDiv);
         }
 
