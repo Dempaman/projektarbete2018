@@ -147,8 +147,10 @@ function initCreateMeetupListeners(ageSlider){
 
       // Skapa meetupet.
       let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
+      printMessage('success', 'Grymt! Du skapade meetupet "' + name + '"');
       meetup.push();
       meetup.updateCount();
+      ageSlider.destroy();
       console.log('Meetup: ',meetup);
 
       //visa navigation och menu.... igen!!.
@@ -166,25 +168,20 @@ function initCreateMeetupListeners(ageSlider){
       // Visa alla meetups igen!
         document.getElementById('modalWrapper').className = 'hidden';
         document.getElementById('meetupWrapper').className = 'show';
-        setTimeout(function(){
 
+        setTimeout(function(){
           // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-          let bodyScroll = document.getElementsByClassName('body')[0];
           let htmlScroll = document.getElementsByTagName('html')[0];
 
-          if(bodyScroll == 0){
-            console.log('Html scroll!!');
-            htmlScroll.className += ' smooth-scroll';
-            htmlScroll.scrollTop = htmlScroll.scrollHeight - newMeetup.scrollHeight;
-          } else {
-            console.log('Body scroll!!');
-            bodyScroll.className += ' smooth-scroll';
-            bodyScroll.scrollTop = bodyScroll.scrollHeight - newMeetup.scrollHeight;
-          }
-
-
-
+          console.log('Html scroll!!');
           let newMeetup = document.getElementById('meetupWrapper').lastChild;
+          htmlScroll.className += ' smooth-scroll';
+          htmlScroll.scrollTop = htmlScroll.scrollHeight - newMeetup.scrollHeight;
+
+          console.log(htmlScroll.scrollHeight);
+
+
+
 
           console.log('Height is:', htmlScroll.scrollHeight - newMeetup.scrollHeight);
         },300);

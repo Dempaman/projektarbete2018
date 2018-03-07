@@ -8,7 +8,6 @@
 .printMessageWrapper {
   display: flex;
   top: 0;
-  width: 100%;
   padding: 17px 15px 17px;
   box-shadow: 1px 1px 3px #363636;
   animation-name: fadein;
@@ -61,6 +60,7 @@
     display: flex;
     flex-direction: column;
     align-items: right;
+    max-width: 30%;
   }
   .printMessageWrapper:first-child {
     margin-top: 25px;
@@ -68,8 +68,8 @@
   .printMessageWrapper {
     right: 0;
     width: auto;
-    min-width: 25%;
-    max-width: 50%;
+    min-width: 60%;
+    max-width: 90%;
     margin: 5px 25px;
   }
 }
