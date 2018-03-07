@@ -140,7 +140,6 @@
           <input id="nameInput" placeholder="Namn" type="text">
           <input id="addressInput" placeholder="Adress" type="text">
           <input id="placeNameInput" placeholder="Platsnamn" type="text">
-          <input id="timeInput" placeholder="Tid" type="text">
 
           <div class="sliderHolder"> <!-- Själva wrappern för slidern -->
             <input type="text" id="ageSlider" class="slider"/>
@@ -154,10 +153,12 @@
           </div>
 
           <input id="spotsInput" placeholder="Antal platser" type="text"> <!-- Input för antal platser -->
+          <input id="timeInput" placeholder="Tid" type="text">
 
           <div id="textareaDiv" maxlength="25">
             <p>Information</p>
             <textarea placeholder="Skriv lite information om ditt meetup här!"></textarea>
+            <span class="characterCounter">Antal tecken: <span>0/900</span></span>
           </div>
 
           <button id="createMeetupButton"></button>
