@@ -17,7 +17,7 @@ p, a {
   font-family: 'Roboto', sans-serif;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -143,17 +143,37 @@ main>h2 {
 }
 
 .meetup-count{
+  width: 95%;
   margin-top: 2rem;
   display: flex;
   justify-content: space-between;
+
   background-color: #fff;
   padding: 1rem;
+  flex-wrap: wrap;
   border-radius: 5px;
 }
 .meetup-count>*{
+
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
+.meetup-count>div:first-child{
+  /* margin-right: 2rem; */
+  margin-bottom: 2rem;
+}
+
+
+.attending>h4,.created>h4{
+  margin-top: 1rem;
+  text-transform: capitalize;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: green;
+}
+
+
 .user-meetups-container {
   /* min-width: 240px; */
   display: flex;
@@ -289,6 +309,20 @@ main>h2 {
   /* align-self: flex-end; */
 }
 
+
+
+@media screen and (max-width: 415px) {
+  .meetup-count{
+    padding: auto;
+    flex-direction: column;
+    align-items: center;
+  }
+  .meetup-count>*{
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 @media screen and (min-width: 450px) {
   #user-info-more {
     margin-top: -5rem;
@@ -306,6 +340,10 @@ main>h2 {
     width: 60%;
   }
   .user-meetups-container {
+    width: 60%;
+  }
+  .meetup-count{
+    /* padding: 1rem 7rem; */
     width: 60%;
   }
 }

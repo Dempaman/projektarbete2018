@@ -196,6 +196,95 @@ class SystemMessage extends MessageClass {
   }
 }
 
+
+/* Global functions to be used on all pages */
+
+/* Function to print a message on any page */
+let count = 0;
+function printMessage(type, message, timer = 8000){
+
+  let messageHolder = document.getElementById('printMessageHolder');
+  let body = document.getElementsByTagName('body')[0];
+  if(!messageHolder){
+    messageHolder = document.createElement('div');
+    messageHolder.setAttribute('id', 'printMessageHolder');
+    body.appendChild(messageHolder);
+  }
+
+  if(type){
+    if(type.includes('success') || type.includes('error') || type.includes('warn')){
+      type += 'printMessage';
+    } else {
+      type = 'defaultprintMessage';
+    }
+  } else {
+    type = 'defaultprintMessage';
+  }
+
+
+  let messageWrapper = document.createElement('div');
+  messageWrapper.className = 'printMessageWrapper ' + type;
+
+  let icon = document.createElement('span');
+
+
+  /* Icon based on Type */
+  if(type == 'successprintMessage'){
+    icon.innerHTML = '<i class="mdi mdi-check-circle-outline mdi-24px"></i>';
+  } else if(type == 'errorprintMessage'){
+    icon.innerHTML = '<i class="mdi mdi-alert-circle-outline mdi-24px"></i>';
+  } else if(type == 'warnprintMessage'){
+    icon.innerHTML = '<i class="mdi mdi-alert mdi-24px"></i>';
+  } else {
+    icon.innerHTML = '<i class="mdi mdi-information-outline mdi-24px"></i>';
+  }
+
+  let textMessage = document.createElement('p');
+  textMessage.innerText = message;
+
+  let closeBtn = document.createElement('span');
+  closeBtn.innerHTML = '<i class="mdi mdi-close mdi-24px"></i>';
+
+  /* Add listener for the close button */
+  closeBtn.addEventListener('click', function(){
+    messageWrapper.className += ' fadeout';
+
+    // Remove it after the timer.
+    setTimeout(function(){
+      messageHolder.removeChild(messageWrapper);
+      count--;
+    }, 450)
+  });
+
+  /* Append Everything */
+  messageWrapper.appendChild(icon);
+  messageWrapper.appendChild(textMessage);
+  messageWrapper.appendChild(closeBtn);
+
+  if(count >= 2){
+    messageHolder.removeChild(messageHolder.firstChild);
+    --count;
+  }
+  messageHolder.appendChild(messageWrapper);
+  count++;
+  /* Kod för att ta bort meddelandet efter x sekunder! */
+  setTimeout(function(){
+    // Add animation fadeout.
+    messageWrapper.className += ' fadeout';
+    setTimeout(function(){
+
+      // If the messagewrapper is already displaying. Don't remove it.
+      if(messageWrapper.offsetParent != null){
+        messageHolder.removeChild(messageWrapper);
+        count--;
+      } else {
+        console.log('Already removed!');
+      }
+    }, 450)
+  }, timer-500);
+
+}
+
 /*
 
 avatarURL: "https://lh3.googleusercontent.com/-AxgGHdqx1CM/AAAAAAAAAAI/AAAAAAAAABo/hrcuCx0tzAU/photo.jpg"

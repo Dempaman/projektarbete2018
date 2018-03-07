@@ -1,0 +1,86 @@
+#printMessageHolder {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  z-index: 2;
+}
+.printMessageWrapper {
+  display: flex;
+  top: 0;
+  width: 100%;
+  padding: 17px 15px 17px;
+  box-shadow: 1px 1px 3px #363636;
+  animation-name: fadein;
+  animation-duration: .6s;
+}
+.printMessageWrapper > p {
+  margin: 2px 4px 0px;
+  padding: 5px;
+  display: inline;
+  font-size: 0.7em;
+  font-style: 'Roboto', sans-serif;
+  flex: 1;
+}
+
+.printMessageWrapper > span:last-child:hover {
+  cursor: pointer;
+  color: #ddd;
+}
+
+
+/* PrintMessage types */
+.successprintMessage {
+  background-color: #62b45a;
+  color: #f9f9f9;
+}
+.errorprintMessage {
+  background-color: #d73a3a;
+  color: #f3f3f3;
+}
+.defaultprintMessage {
+  background-color: #fafafa;
+  color: #212121;
+}
+.warnprintMessage {
+  background-color: #ffe99a;
+  color: #212121;
+}
+
+
+/* Animation Classes */
+.fadeout {
+  animation-name: fadeout;
+  animation-duration: .5s;
+}
+
+/* Media Queries */
+@media screen and (min-width: 800px){
+  #printMessageHolder {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+  }
+  .printMessageWrapper:first-child {
+    margin-top: 25px;
+  }
+  .printMessageWrapper {
+    right: 0;
+    width: auto;
+    min-width: 25%;
+    max-width: 50%;
+    margin: 5px 25px;
+  }
+}
+
+
+/* Animations */
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+@keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
