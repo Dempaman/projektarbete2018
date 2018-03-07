@@ -8,7 +8,7 @@ const googleApiKey2 = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
 window.onload = function(){
 console.log(chatMessageTimeStamp(1519755958554));
 console.log(chatMessageTimeStamp(1516758062943));
-
+//printMessage('error', 'Testprint', 200000); // Type, message, timer (antal millisekunder)
 
 
 
@@ -1376,11 +1376,6 @@ function joinBtnListener(joinMeetupBtn, meetupKey){
 }
 
 function pageLoaded(){
-
-  if(localStorage.getItem('loggedInUser')){
-    let user = JSON.parse(localStorage.getItem('loggedInUser'));
-    printMessage('success', 'Välkommen ' + user.fullname);
-  }
 
   let header = document.getElementById('navigation');
   header.className = header.className.replace('hidden', '');

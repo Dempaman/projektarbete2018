@@ -147,6 +147,7 @@ function initCreateMeetupListeners(ageSlider){
 
       // Skapa meetupet.
       let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
+      printMessage('success', 'Grymt! Du skapade meetupet "' + name + '"');
       meetup.push();
       meetup.updateCount();
       ageSlider.destroy();

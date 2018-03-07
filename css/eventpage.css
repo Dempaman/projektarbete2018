@@ -263,7 +263,7 @@ div.googleMapDiv > img {
   color: #eee;
   margin: -66px 0px;
   font-size: 0.8em;
-  padding: 3px 8px;
+  padding: 5px 9px;
   border-radius: 4px;
 }
 
@@ -328,7 +328,7 @@ div.googleMapDiv > img {
 
 /* Hover Message on icon */
 #meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i + span.hoverMessage {
-  padding: 2px 7px;
+  padding: 3px 9px;
   border-radius: 4px;
   margin: -50px 4px;
   vertical-align: 0px;
