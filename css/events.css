@@ -63,8 +63,8 @@ form.search-events input[type=text] {
 }
 
 form.search-events button {
-    float: left;
-    width: 16%;
+    float: right;
+    width: 13%;
     padding: 10px;
     background: #6C0CCC;
     color: white;

@@ -121,6 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				let eventTime = event.localeventdate;
 				let eventImg = event.images;
 				let eImg;
+                let day;
+                let month;
+                let meetUps;
+                
 				if (eventImg !== undefined) {
 					eImg = eventImg[0].url;
 				} else {
@@ -128,13 +132,56 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 				if (eventTime == undefined) {
 					eventTime = '';
+                    day = '';
+                    month = '';
 				} else {
 					eventTime = eventTime.slice(0, 10);
+                    day = eventTime.slice(8,10);
+                    month = eventTime.slice(5, 7);
+                    
+                    switch (month) {
+                        case "01":
+                          month = "Jan";
+                          break;
+                        case "02":
+                          month = "Feb";
+                          break;
+                        case "03":
+                          month = "Mar";
+                          break;
+                        case "04":
+                          month = "Apr";
+                          break;
+                        case "05":
+                          month = "Maj";
+                          break;
+                        case "06":
+                          month = "Jun";
+                          break;
+                        case "07":
+                          month = "Jul";
+                          break;
+                        case "08":
+                          month = "Aug";
+                          break;
+                        case "09":
+                          month = "Sep";
+                          break;
+                        case "10":
+                          month = "Okt";
+                          break;
+                        case "11":
+                          month = "Nov";
+                        case "12":
+                          month = "Dec";
+                          break;
+                        default:
+
+                      }
 				}
 
-                console.log(event.images);
 
-				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
+				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month);
 				searchValue[0].value = '';
 			})
 		}).catch((error) => {
@@ -213,6 +260,9 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 				let eventTime = event.localeventdate;
 				let eventImg = event.images;
 				let eImg;
+                let day;
+                let month;
+                let meetUps;
 
 				if (eventImg !== undefined) {
 					eImg = eventImg[0].url;
@@ -223,12 +273,56 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 				}
 				if (eventTime == undefined) {
 					eventTime = '';
+                    day = "";
+                    month = "";
 
 				} else {
 					eventTime = eventTime.slice(0, 10);
+                    day = eventTime.slice(8,10);
+                    month = eventTime.slice(5, 7);
+                    
+                    switch (month) {
+                        case "01":
+                          month = "Jan";
+                          break;
+                        case "02":
+                          month = "Feb";
+                          break;
+                        case "03":
+                          month = "Mar";
+                          break;
+                        case "04":
+                          month = "Apr";
+                          break;
+                        case "05":
+                          month = "Maj";
+                          break;
+                        case "06":
+                          month = "Jun";
+                          break;
+                        case "07":
+                          month = "Jul";
+                          break;
+                        case "08":
+                          month = "Aug";
+                          break;
+                        case "09":
+                          month = "Sep";
+                          break;
+                        case "10":
+                          month = "Okt";
+                          break;
+                        case "11":
+                          month = "Nov";
+                        case "12":
+                          month = "Dec";
+                          break;
+                        default:
+
+                      }
 				}
 
-				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
+				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month);
 			})
 		}).catch((error) => {
 
@@ -286,6 +380,46 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 					eventTime = eventTime.slice(0, 10);
                     day = eventTime.slice(8,10);
                     month = eventTime.slice(5, 7);
+                    
+                    switch (month) {
+                        case "01":
+                          month = "Jan";
+                          break;
+                        case "02":
+                          month = "Feb";
+                          break;
+                        case "03":
+                          month = "Mar";
+                          break;
+                        case "04":
+                          month = "Apr";
+                          break;
+                        case "05":
+                          month = "Maj";
+                          break;
+                        case "06":
+                          month = "Jun";
+                          break;
+                        case "07":
+                          month = "Jul";
+                          break;
+                        case "08":
+                          month = "Aug";
+                          break;
+                        case "09":
+                          month = "Sep";
+                          break;
+                        case "10":
+                          month = "Okt";
+                          break;
+                        case "11":
+                          month = "Nov";
+                        case "12":
+                          month = "Dec";
+                          break;
+                        default:
+
+                      }
 				}
 
 				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month);
@@ -310,7 +444,6 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 	function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month) {
 
 
-
 		while (testOutPut.firstchild) {
 			testOutPut.removeChild(testOutPut.firstChild);
 		}
@@ -331,6 +464,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         let eDay = document.createElement("span");
         let eMonth = document.createElement("span");
         let eMeetUps = document.createElement("span");
+        let meetups = document.createElement("span");
 
         //Add classes and info
 		eventDiv.classList.add('event-card');
@@ -342,29 +476,28 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         //Annas kod
         eDay.innerText =  `${day}`;
         eMonth.innerText = `${month}`;
-        eMeetUps.innerHTML = `<a href="#">Gå till meetups <i class="fas fa-users"></i></a>`;
+        eMeetUps.innerHTML = ` <i class="fas fa-users fa-1x"></i>`;
+        meetups.innerHTML = ``;
+        
         
         //     //Add classes and info
-
         eventDiv.className = "big-card";
-        eName.className = "event-info";
-        ePlace.className = "event-info";
-        // eTime.className = "date";
+        eName.className = "event-name";
+        ePlace.className = "event-place";
         eDay.className = "day";
-        // eDay.className = "date";
         eMonth.className = "month";
         eMeetUps.className = "meetups-box";
 
         
         //Append
-		setMeetupCount(eventId,ePlace);
+		setMeetupCount(eventId,meetups);
         eventDiv.appendChild(eventLink);
 		eventDiv.appendChild(eUrlImg);
 		eventDiv.appendChild(eName);
 		eventDiv.appendChild(ePlace);
-		eventDiv.appendChild(eTime);
         eventDiv.appendChild(eDay);
         eventDiv.appendChild(eMonth);
+        eMeetUps.insertBefore(meetups, eMeetUps.childNodes[0]);
         eventDiv.appendChild(eMeetUps);
         
 		testOutPut.appendChild(eventDiv);
@@ -440,7 +573,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 
 
-/* Functions */
+/* Functions to calculate how many meetups is made */
 function setMeetupCount(eventID, htmlObject){
 	db.ref('meetups/' + eventID + '/info/meetupCounter').on('value', function(snapshot){
 		let data = snapshot.val();
@@ -450,12 +583,6 @@ function setMeetupCount(eventID, htmlObject){
 		}
 	});
 }
-
-
-
-
-
-
 
 
 
