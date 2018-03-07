@@ -263,6 +263,9 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 				let eventTime = event.localeventdate;
 				let eventImg = event.images;
 				let eImg;
+                let day;
+                let month;
+                let meetUps;
 				let numberOfMeetups;
 
 
@@ -275,13 +278,17 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 				}
 				if (eventTime == undefined) {
+                    day = '';
+                    month = '';
 					eventTime = '';
 
 				} else {
 					eventTime = eventTime.slice(0, 10);
+                    day = eventTime.slice(8,10);
+                    month = eventTime.slice(5, 7);
 				}
 
-				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg);
+				getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month);
 
 			})
 		}).catch((error) => {
@@ -300,7 +307,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 
 	/********************Random code before merging with eventcards file********************/
-	function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg) {
+	function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month) {
 
 
 
@@ -309,32 +316,57 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		}
 
         //Create event-cards (Test)
-    let eventLink = document.createElement('a');
-    eventLink.className = 'eventLink';
-    eventLink.setAttribute('href', '/eventpage.html?event='+eventId);
+        let eventLink = document.createElement('a');
+        eventLink.className = 'eventLink';
+        eventLink.setAttribute('href', '/eventpage.html?event='+eventId);
+        
 		let eventDiv = document.createElement('div');
 		let eUrlImg = document.createElement('img');
 		eUrlImg.src = eImg;
 		let eID = document.createElement('h5');
 		let eName = document.createElement('h4');
 		let ePlace = document.createElement('p');
-		let eTime = document.createElement('p');
+		let eTime = document.createElement('span');
+        
+        let eDay = document.createElement("span");
+        let eMonth = document.createElement("span");
+        let eMeetUps = document.createElement("span");
 
         //Add classes and info
 		eventDiv.classList.add('event-card');
 		eID.innerText = `ID: ${eventId}`;
 		eName.innerText = `${eventName}`;
-		ePlace.innerText = `${eventPlace}, ${eventCity}`;0
+		ePlace.innerText = `${eventPlace}, ${eventCity}`;
+        eTime.innerText = `${eventTime}`;
 
-		eTime.innerText = `${eventTime}`;
+        //Annas kod
+        eDay.innerText =  `${day}`;
+        eMonth.innerText = `${month}`;
+        eMeetUps.innerHTML = `<a href="#">Gå till meetups <i class="fas fa-users"></i></a>`;
+        
+        //     //Add classes and info
 
+        eventDiv.className = "big-card";
+        eName.className = "event-info";
+        ePlace.className = "event-info";
+        // eTime.className = "date";
+        eDay.className = "day";
+        // eDay.className = "date";
+        eMonth.className = "month";
+        eMeetUps.className = "meetups-box";
+
+        
         //Append
 		setMeetupCount(eventId,ePlace);
-    eventDiv.appendChild(eventLink);
+        eventDiv.appendChild(eventLink);
 		eventDiv.appendChild(eUrlImg);
 		eventDiv.appendChild(eName);
 		eventDiv.appendChild(ePlace);
 		eventDiv.appendChild(eTime);
+        eventDiv.appendChild(eDay);
+        eventDiv.appendChild(eMonth);
+        eventDiv.appendChild(eMeetUps);
+        
 		testOutPut.appendChild(eventDiv);
 	}
     /********************Random code before merging with eventcards file END********************/

@@ -16,11 +16,11 @@
 
     <!-- Stylesheet -->
     <link rel="stylesheet" type="text/css" href="css/loginModal.css">
+    <link rel="stylesheet" type="text/css" href="css/evenemangskort.css">
   	<link rel="stylesheet" type="text/css" href="css/events.css">
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/menu.css">
     <link rel="stylesheet" type="text/css" href="css/headstyle.css">
-    <link rel="stylesheet" type="text/css" href="css/eventpage.css">
 
     <!-- FireBase -->
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
@@ -41,9 +41,9 @@
         <img src="img/logo-design3.png" alt="Event">
         <!-- HTML för desktopläge i nav -->
         <ul class="deskNav">
-          <a href="/landingpage.html" class="active"><li>HEM</li></a>
+          <a href="/index.html"><li>HEM</li></a>
           <a href="/profil.html"><li id="myProfile" class="hidden">MIN PROFIL</li></a>
-          <a href="/events.html"><li>ALLA EVENTS</li></a>
+          <a href="/events.html" ><li>ALLA EVENTS</li></a>
           <a href="#contactUs"><li>KONTAKTA OSS</li></a>
           <li class="loginInMenu">LOGGA IN</li>
         </ul>
@@ -84,7 +84,7 @@
     <div id="all-events-main">
       <div class="big-photo-wrapper">
           <div class="events-search">
-              <h1>me<span style="color: #6C0CCC">W</span>ent</h1>
+              <img src="img/logo-design-white-frame.png">
                <!--SEARCH WITH INPUT VALUE-->
                 <form class="search-events" style="margin:auto;max-width:400px">
                   <input type="text" name="searchevent" placeholder="Sök stad..">
@@ -94,7 +94,7 @@
                 <!--SELECT DEFAULT OPTIONS-->
                 <div class="select-default">
                 <select class="all-events-search">
-                  <option value="">Alla events </option>
+                  <option value="">Alla events</option>
                   <option value="10001">Musik</option>
                   <option value="10101">Festival</option>
                   <option value="10004">Sports</option>
@@ -156,7 +156,7 @@
             </div>
           </div>
         </div>
-        <div class="contact-form">
+        <div id="contactUs" class="contact-form">
           <h4>Kontakta oss</h4>
           <input type="text" name="" value="" placeholder="Namn" >
           <input type="text" name="" value="" placeholder="E-post">

@@ -43,6 +43,10 @@ body {
     position: absolute;
     top: 130px;
 }
+.events-search > img {
+    width: 160px;
+    margin-bottom: 20px;
+}
 
 form.search-events {
     margin: 200px auto;
@@ -83,23 +87,23 @@ form.search-events:focus {
     margin-left: 5px;
 }
 select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        background: url(../img/dropdown-arrow.png) right / 20px no-repeat #fff;
-        padding-right: 20px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url() right / 20px no-repeat #fff;
+    padding-right: 20px;
 }
 
 .all-events-search {
-    margin-top: 5px;
+    margin-top: 0px;
     background-color: transparent;
     font-family: Roboto;
-    font-size: 1em;
+    font-size: 1.05em;
     color: white;
     border: none;
     letter-spacing: .5px;
     text-decoration: underline;
-    text-decoration-style: solid;
+    padding: 10px;
 }
 .all-events-search:nth-child(1) {
     margin-left: -5px;
@@ -109,51 +113,6 @@ select {
     background-color: #6C0CCC;
 }
 
-
-
-
-/*RANDOM CSS FÖR TESTING*/
-
-#testOutPut {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.event-card {
-    background-color: #F1F1F1;
-    width: 360px;
-    color: #111;
-    margin: 10px;
-    padding: 20px;
-}
-.event-card:hover {
-    transition: 0.3s;
-    background:#232323;
-    color: white;
-}
-.event-card h4 {
-    font-size: 1.1em;
-    margin: 5px auto;
-    font-family: Roboto;
-}
-.event-card h5 {
-    margin-top: 10px;
-    font-size: 0.8em;
-    letter-spacing: 1px;
-    font-family: Roboto;
-    font-weight: 100;
-}
-.event-card p {
-    font-size: 0.8em;
-    margin-top 10px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-.event-card img {
-    width: 100%;
-    height: 225px;
-}
 
 
 @media only screen and (max-width: 405px) {
