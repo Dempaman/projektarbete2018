@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // { 'stockholm': 50001 }
         //kolla in localstorage
-        let found = cachedCities[userSearchValue];
-        if( !found )
+        //let found = cachedCities[userSearchValue];
+        //if( !found )
         //Switch for Sweden 10 biggest cities
 		switch (userSearchValue) {
         case "":
@@ -577,13 +577,12 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 function setMeetupCount(eventID, htmlObject){
 	db.ref('meetups/' + eventID + '/info/meetupCounter').on('value', function(snapshot){
 		let data = snapshot.val();
-		console.log('Does this run? Data is:', data);
+		console.log(eventID, data);
 		if(data){
 			htmlObject.innerText = data;
 		}
 	});
 }
-
 
 
 
