@@ -240,7 +240,7 @@ function addWindowClosed(){
 
     if(event.target.className != 'centered'){
       if(event.target.className != 'loginModalButtonHolder'){
-        if(event.target.className != 'doNotCloseThis'){
+        if(!event.target.className.includes('doNotCloseThis')){
           closeModal();
           window.removeEventListener('click', closeIfNotCenter);
           console.log('Closeeed with closeIfNotCenter');
