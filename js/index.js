@@ -1,14 +1,12 @@
+  window.addEventListener("load", function() {
 
-      window.addEventListener("load", function(){
+    const apiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
 
+    let testOutPut = document.getElementById('testOutPut');
+    getMostPopularEvents();
 
-      const apiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
-
-      let testOutPut = document.getElementById('testOutPut');
-      getMostPopularEvents();
-
-      function getMostPopularEvents() {
-        fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&rows=8&sort_by=popularity&apikey=${apiKey}`)
+    function getMostPopularEvents() {
+      fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&rows=8&sort_by=popularity&apikey=${apiKey}`)
         .then((response) => {
           console.log(response);
           return response.json();
@@ -42,7 +40,7 @@
 
             } else {
               eventTime = eventTime.slice(0, 10);
-              day = eventTime.slice(8,10);
+              day = eventTime.slice(8, 10);
               month = eventTime.slice(5, 7);
 
               switch (month) {
@@ -88,19 +86,20 @@
             }
 
             console.log(eventId, eventName, eventPlace, eventCity, eventTime, eventImg, day, month);
-            getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month);
+            console.log(eventId);
+            getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month, meetUps);
           })
-      }).catch((error) => {
+        }).catch((error) => {
 
-        let errorMessage = error.message;
-        console.log('Felmeddelande: ', errorMessage);
+          let errorMessage = error.message;
+          console.log('Felmeddelande: ', errorMessage);
 
-      })
+        })
     }
 
-    function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month) {
-          //  monthName(month)
-          //Create event-cards (Test)
+    function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month, meetUps) {
+
+      //Create event-cards (Test)
       let eventDiv = document.createElement('div');
       let eUrlImg = document.createElement('img');
       eUrlImg.src = eImg;
@@ -113,15 +112,14 @@
       let eMonth = document.createElement("span");
       let eMeetUps = document.createElement("span");
 
-      let meetups = 4;
 
       eID.innerText = `ID: ${eventId}`;
       eName.innerText = `${eventName}`;
       ePlace.innerText = `${eventPlace}, ${eventCity}`;
       eTime.innerText = `${eventTime}`;
-      eDay.innerText =  `${day}`;
+      eDay.innerText = `${day}`;
       eMonth.innerText = `${month}`;
-      eMeetUps.innerHTML = `${meetups} <i class="fas fa-users fa-1x"></i>`;
+      eMeetUps.innerHTML = `${meetUps} <i class="fas fa-users fa-1x"></i>`;
 
       //Add classes and info
 
@@ -133,7 +131,9 @@
       eMeetUps.className = "meetups-box";
 
 
-          //Append
+      //Append
+
+      setMeetupCount(eventId, eMeetUps);
       eventDiv.appendChild(eUrlImg);
       eventDiv.appendChild(eName);
       eventDiv.appendChild(ePlace);
@@ -146,19 +146,17 @@
       // eventDiv.appendChild(eID);
       testOutPut.appendChild(eventDiv);
     }
-    })
+  })
 
-
-
-
-    /* Funktion för meetups  */
-    function setMeetupCount(eventID, htmlObject){
-    	db.ref('meetups/' + eventID + '/info/meetupCounter').on('value', function(snapshot){
-    		let data = snapshot.val();
-    		console.log('Does this run? Data is:', data);
-        console.log(evetnID);
-    		if(data){
-    			htmlObject.innerText = data;
-    		}
-    	});
-    }
+  /* Funktion för meetups  */
+  function setMeetupCount(eventID, meetUps) {
+    db.ref('meetups/' + eventID + '/info/meetupCounter').on('value', function(snapshot) {
+      let data = snapshot.val();
+      console.log(data);
+      if (true) {
+        meetUps.innerHTML = `${data} <i class="fas fa-users fa-1x"></i>`;
+      }if(data == null){
+        meetUps.innerHTML = `0 <i class="fas fa-users fa-1x"></i>`;
+      }
+    });
+  }
