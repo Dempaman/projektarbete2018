@@ -12,7 +12,6 @@
 window.addEventListener('load', function(event){
 
 
-
 //Get elements
 const txtEmail = document.getElementById('txtEmail');
 const txtPassword = document.getElementById('txtPassword');

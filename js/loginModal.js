@@ -5,7 +5,7 @@ firebase.auth().onAuthStateChanged(user => {
   console.log('AUTH STATE CHANGE FOUND!');
   if(user) {
     if(document.getElementById('lmw')){
-      closeModal();
+      location.reload();
     }
     //window.location = 'eventpage.html'; //After successful login, user will be redirected to home.html
 
@@ -175,47 +175,98 @@ function retrieveLoginModalContent(){
 
 
   //create user part
-  let containerUser = document.createElement('div'); //container for create users / login users
-  let containerUserInput = document.createElement('div'); // container for login input and txtPassword
+  let containerUser = document.createElement('div');
+  let containerUserInput = document.createElement('div');
   let txtEmail = document.createElement('input');
   let txtPassword = document.createElement('input');
   let btnCuHolder = document.createElement('div');
+  let switchHolder = document.createElement('div');
   let btnCuLogin = document.createElement('button');
   let btnCuSignUp = document.createElement('button');
   let btnCuLogout = document.createElement('button');
+  let paragE = document.createElement('p');
+  let paragP = document.createElement('p');
+  let paragSignIn = document.createElement('p');
+  let paragSignUp = document.createElement('p');
+  let switchInput = document.createElement('input');
+  let label = document.createElement('label');
+  let divBorder = document.createElement('div');
+  const email = txtEmail.value;
+  const password = txtPassword.value;
 
-  containerUser.className = 'containerUser doNotCloseThis';
+  containerUser.className = 'containerUser doNotCloseThis';//container for create user and login user
   btnHolder.appendChild(containerUser);
 
-  containerUserInput.className = 'containerUserInput';
+  containerUserInput.className = 'containerUserInput doNotCloseThis';
   containerUser.appendChild(containerUserInput);
 
-  txtEmail.className = 'txtEmail';
+  containerUser.appendChild(switchHolder);
+  switchHolder.className = 'switchHolder';//Container for switch and paragrafs
+
+  switchHolder.appendChild(paragSignIn);//sign in text
+  paragSignIn.className = 'paragSignIn highlight';
+  paragSignIn.innerText = 'Sign in';
+
+  //switch here
+  switchInput.className = 'switchInput doNotCloseThis';
+  label.className = 'doNotCloseThis';
+  switchInput.setAttribute('type', 'checkbox');
+  switchInput.setAttribute('id', 'switch');
+  label.setAttribute('for', 'switch')
+  switchHolder.appendChild(switchInput);
+  switchHolder.appendChild(label);
+
+  switchHolder.appendChild(paragSignUp);//sign up text
+  paragSignUp.className = 'paragSignUp';
+  paragSignUp.innerText = 'Sign up';
+
+  txtEmail.className = 'txtEmail doNotCloseThis'; //creates an input field for email
   txtEmail.setAttribute('type', 'email');
+  paragE.innerText = 'EMAIL ADDRESS'
+  paragE.className = 'paragE'
+  containerUserInput.appendChild(paragE);
   containerUserInput.appendChild(txtEmail);
 
-  txtPassword.className = 'txtPassword';
+  txtPassword.className = 'txtPassword doNotCloseThis'; // creates an input field for password
   txtPassword.setAttribute('type', 'password');
+  paragP.innerText = 'PASSWORD'
+  paragP.className = 'paragP'
+  containerUserInput.appendChild(paragP);
   containerUserInput.appendChild(txtPassword);
-
-  //lägger in knappar i button-created-User-Login Div
 
   //Login button
   containerUser.appendChild(btnCuHolder);
-  btnCuLogin.className = 'btnCuLogin btnCu btnCu-action';
+  btnCuLogin.className = 'btnCuLogin btnCu btnCu-action doNotCloseThis';
   btnCuLogin.innerText = 'Logga in'
   btnCuHolder.appendChild(btnCuLogin);
 
   //Signup button
-  btnCuSignUp.className = 'btnCuSignUp btnCu btnCu-secondary';
+  btnCuSignUp.className = 'btnCuSignUp btnCu btnCu-secondary doNotCloseThis hide';
   btnCuSignUp.innerText = 'Skapa konto';
   btnCuHolder.appendChild(btnCuSignUp);
 
-  /*
-  //Sign out
-  btnCuLogout.className = 'btnCLogout btnCu btnC-action2 hide';
-  btnCuLogout.innerText = 'Logga ut';
-  btnCuHolder.appendChild(btnCuLogout); */
+  divBorder.className = 'divBorder';
+  containerUser.appendChild(divBorder);
+
+  //Switch changed login- and signup button
+  switchInput.addEventListener('change', function(event){
+    if(this.checked){
+      console.log("It is true!!");
+      paragSignIn.classList.remove('highlight');
+      paragSignUp.classList.add('highlight');
+      btnCuLogin.classList.add('hide');
+      btnCuSignUp.classList.remove('hide');
+
+    }else{
+      console.log('it is false');
+      paragSignUp.classList.remove('highlight');
+      paragSignIn.classList.add('highlight');
+      btnCuLogin.classList.remove('hide');
+      btnCuSignUp.classList.add('hide');
+    }
+  });
+
+
 
   //Add login event
   btnCuLogin.addEventListener('click', function(event){
@@ -227,7 +278,7 @@ function retrieveLoginModalContent(){
     promise
     .catch(function(error){
       console.log(error.message);
-      printMessage('error', 'ah ah ah you didnt say the magic word..') // If some error occurs it will print the message
+      //printMessage('error', 'ah ah ah you didnt say the magic word..') // If some error occurs it will print the message
     });
   });
 
@@ -235,11 +286,12 @@ function retrieveLoginModalContent(){
       //get email and password
       const email = txtEmail.value;
       const password = txtPassword.value;
-      //Sign in
+      //Sign-up user
       const promise = firebase.auth().createUserWithEmailAndPassword(email, password);
       promise
         .catch(function(error){
           console.log(error.message);
+          //printMessage('error', 'ah ah ah you didnt say the magic word..') // If some error occurs it will print the message
         });
     });
 
@@ -321,7 +373,7 @@ function addWindowClosed(){
 
     if(event.target.className != 'centered'){
       if(event.target.className != 'loginModalButtonHolder'){
-        if(!event.target.className.includes('doNotCloseThis')){
+        if(!event.target.classList.contains('doNotCloseThis')){
           closeModal();
           window.removeEventListener('click', closeIfNotCenter);
           console.log('Closeeed with closeIfNotCenter');
