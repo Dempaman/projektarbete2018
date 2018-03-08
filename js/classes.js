@@ -56,23 +56,13 @@ class MeetupClass {
 
     this.key = db.ref('meetups/' + this.eventID).push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
     new SystemMessage(this.key, this.creator.fullname + ' skapade detta meetup!').push(); // Skapar ett meddelande i chatten direkt
-    printMessage('success', 'Ditt meetup skapades!');
-    console.log('EventID är lika med:',this.eventID);
-    let eventFittID = this.eventID;
 
-    db.ref('meetups/'+eventFittID+'/info/meetupCounter').once('value', function(snapshot){
-      console.log()
-      let count = snapshot.val();
-      console.log('Count is:', count);
-      console.log('This is:', this);
-      if(count){
-        console.log('count is', count);
-        db.ref('meetups/'+eventFittID+'/info/meetupCounter').set((count - 0) + 1);
-      } else {
-        console.log('Count is null but eventID is', eventFittID);
-        db.ref('meetups/'+eventFittID+'/info/meetupCounter').set(1);
-      }
-    });
+    /* Lägg till meetupKey under createdMeetups på användarens profil. */
+    db.ref('users/' + this.creator.uniqueID + '/createdMeetups/' + this.eventID + '/' + this.key).set(true);
+    printMessage('success', 'Ditt meetup skapades!'); // Visa ett meddelande på sidan att meetupet har skapats!
+    console.log('EventID är lika med:',this.eventID);
+
+    increaseMeetupCount(this.eventID);
 
   }
 
@@ -287,6 +277,28 @@ function printMessage(type, message, timer = 8000, delay = 0){
   },delay);
 }
 
+function increaseMeetupCount(eventID){
+  db.ref('meetups/'+eventID+'/info/meetupCounter').once('value', function(snapshot){
+    let count = snapshot.val();
+
+    if(count){
+      db.ref('meetups/'+eventID+'/info/meetupCounter').set((count - 0) + 1);
+    } else {
+      db.ref('meetups/'+eventID+'/info/meetupCounter').set(1);
+    }
+  });
+}
+function decreaseMeetupCount(eventID){
+  db.ref('meetups/'+eventID+'/info/meetupCounter').once('value', function(snapshot){
+    let count = snapshot.val();
+
+    if(count >= 1){
+      db.ref('meetups/'+eventID+'/info/meetupCounter').set(count - 1);
+    } else {
+      db.ref('meetups/'+eventID+'/info/meetupCounter').set(0);
+    }
+  });
+}
 /*
 
 avatarURL: "https://lh3.googleusercontent.com/-AxgGHdqx1CM/AAAAAAAAAAI/AAAAAAAAABo/hrcuCx0tzAU/photo.jpg"
