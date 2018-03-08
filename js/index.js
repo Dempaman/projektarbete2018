@@ -119,7 +119,7 @@
       eTime.innerText = `${eventTime}`;
       eDay.innerText = `${day}`;
       eMonth.innerText = `${month}`;
-      eMeetUps.innerHTML = `${meetUps} <i class="fas fa-users fa-1x"></i>`;
+    //  eMeetUps.innerHTML = `${meetUps} <i class="fas fa-users fa-1x"></i>`;
 
       //Add classes and info
 
@@ -156,7 +156,7 @@
       if (true) {
         meetUps.innerHTML = `${data} <i class="fas fa-users fa-1x"></i>`;
       }if(data == null){
-        meetUps.innerHTML = `0 <i class="fas fa-users fa-1x"></i>`;
+        meetUps.innerHTML = `<i class="fas fa-users fa-1x"></i>`;
       }
     });
   }
