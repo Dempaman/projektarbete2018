@@ -111,10 +111,10 @@ span.loginModalCloseButton {
   }
 
   #lmw > div > div.header + div {
-    width: 40%;
-    height: 45%;
-    background-color: #e4e4e4;
-    box-shadow: 3px 3px 3px #636363;
+    width: 60%;
+    height: 80%;
+    background-color: #21252C;
+    box-shadow: 3px 3px 3px #292929;
   }
   #lmw > div > div.header{
     display: none;
@@ -123,9 +123,23 @@ span.loginModalCloseButton {
   #lmw > div > div.header + div > div {
     position: fixed;
     width: 100%;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
+  .loginModalButtonHolder{
+    display: flex;
+    flex-direction: column;
+    margin: 360px 0 0 0;
+  }
 
+}
+
+@media screen and (min-width: 1033px) and (min-height: 450px){
+  #lmw > div > div.header + div {
+    width: 750px;
+    height: 80%;
+    background-color: #21252C;
+    box-shadow: 3px 3px 3px #292929;
+  }
 }
