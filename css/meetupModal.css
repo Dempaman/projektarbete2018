@@ -111,6 +111,7 @@ button.logInBtn {
   cursor: pointer;
   max-width: 23%;
 }
+
 /* Slider input */
 #ageIntervalDisplayer > div > input[type="text"] {
   color: #222;
@@ -187,4 +188,17 @@ button.logInBtn {
   display: flex;
   justify-content: center;
   margin-bottom: 40px;
+}
+
+/* Antal Tecken CSS för telefon. */
+.characterCounter {
+  width: 93%;
+  display: flex;
+  align-content: right;
+  align-self: right;
+  justify-content: right;
+  margin: -24px auto;
+  font-size: 0.8em;
+  color: #5a5a5a;
+  font-family: 'Roboto',sans-serif;
 }
