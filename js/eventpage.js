@@ -474,6 +474,24 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
             memberDiv.appendChild(hoverMessage);
             membersWrapper.appendChild(memberDiv);
           }
+          let memberDiv = document.createElement('div');
+          memberDiv.className = 'memberDiv';
+          // let imageWrapper = document.createElement('div');
+          // let plus = document.createElement('span');
+          // plus.innerHTML = '<i class="mdi mdi-account-plus"></i>';
+          let addMemberDiv = document.createElement('div');
+          addMemberDiv.className = 'addMemberDiv';
+          addMemberDiv.innerHTML = '<i class="mdi mdi-plus mdi-36px"></i>';
+
+          let hoverMessage = document.createElement('p');
+          hoverMessage.innerText = 'Bjud in en vän!';
+          hoverMessage.className = 'hoverMessage';
+
+          // imageWrapper.appendChild(plus);
+          // imageWrapper.appendChild(memberImage);
+          memberDiv.appendChild(addMemberDiv);
+          memberDiv.appendChild(hoverMessage);
+          membersWrapper.appendChild(memberDiv);
 
       } else if(memberOrButton.className == 'btnHolder'){
           console.log('This is a button.'); // This most likely the btn to join the meetup.
@@ -565,6 +583,25 @@ function displayMembersAndChat(md, meetupKey){
         membersWrappingDiv.appendChild(memberDiv);
         memberWrapperWithLabel.appendChild(membersWrappingDiv);
       }
+
+      let memberDiv = document.createElement('div');
+      memberDiv.className = 'memberDiv';
+      // let imageWrapper = document.createElement('div');
+      // let plus = document.createElement('span');
+      // plus.innerHTML = '<i class="mdi mdi-account-plus"></i>';
+      let addMemberDiv = document.createElement('div');
+      addMemberDiv.className = 'addMemberDiv';
+      addMemberDiv.innerHTML = '<i class="mdi mdi-plus mdi-36px"></i>';
+
+      let hoverMessage = document.createElement('p');
+      hoverMessage.innerText = 'Bjud in en vän!';
+      hoverMessage.className = 'hoverMessage';
+
+      // imageWrapper.appendChild(plus);
+      // imageWrapper.appendChild(memberImage);
+      memberDiv.appendChild(addMemberDiv);
+      memberDiv.appendChild(hoverMessage);
+      membersWrappingDiv.appendChild(memberDiv);
 
     });
 

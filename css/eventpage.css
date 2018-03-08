@@ -255,7 +255,30 @@ div.googleMapDiv > img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  background-color: #bcbcbc;
+  box-shadow: 1px 1px 2px #bdbdbd;
 }
+.addMemberDiv {
+  cursor: pointer;
+  margin: 0px 4px 4px;
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #8f8f8f;
+  box-shadow: 1px 1px 2px #bdbdbd;
+  border: 1px solid #5f5f5f;
+}
+.addMemberDiv:hover {
+  color: #686868;
+  border: 1px solid #444;
+  box-shadow: 1px 1px 3px #838383;
+}
+
+
 #meetupWrapper > div > div > div p.hoverMessage {
   display: none;
   background-color: #454545;
@@ -267,7 +290,7 @@ div.googleMapDiv > img {
   border-radius: 4px;
 }
 
-#meetupWrapper > div .moreMeetupInfoDiv > div > div > div.memberDiv > img:hover + .hoverMessage {
+#meetupWrapper > div .moreMeetupInfoDiv > div > div > div.memberDiv > img:hover + .hoverMessage, #meetupWrapper > div .moreMeetupInfoDiv > div > div > div.memberDiv > div:hover + .hoverMessage {
   display: block;
   opacity: 1;
 }
