@@ -78,18 +78,6 @@ h2{
     margin-bottom: 20px;
 
 }
-.showMore{
-  padding: 20px;
-  text-align: center;
-}
-.showMore> *{
-  color: #111;
-  margin: 10px;
-}
-.showMore>a:hover{
-  /* border-bottom: 7px solid #6C0CCC; */
-  color: #6C0CCC;
-}
 
 #landingpageBtn{
   text-decoration: none;
@@ -108,6 +96,17 @@ h2{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
+.showMore>*{
+  padding: 20px;
+  text-align: center;
+  color: #111;
+  margin: 10px;
+}
+
+.showMore>h2:hover {
+  color: #6C0CCC;
+  transition: 0.5s;
+}
 
  /* mobile landscape */
 @media screen and (max-width: 650px) and (orientation:landscape ){
@@ -121,6 +120,8 @@ h2{
     font-size: 1rem;
   }
 }
+
+
 
 
 /* desktop */

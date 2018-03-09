@@ -12,7 +12,7 @@
           return response.json();
         }).then((json) => {
           let event = json.events;
-          console.log(event);
+          //console.log(event);
 
           event.forEach((event) => {
 
@@ -85,8 +85,8 @@
 
             }
 
-            console.log(eventId, eventName, eventPlace, eventCity, eventTime, eventImg, day, month);
-            console.log(eventId);
+            //console.log(eventId, eventName, eventPlace, eventCity, eventTime, eventImg, day, month);
+            //console.log(eventId);
             getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month, meetUps);
           })
         }).catch((error) => {
@@ -102,7 +102,7 @@
 
       let eventLink = document.createElement('a');
       eventLink.setAttribute('href', '/eventpage.html?event='+ eventId);
-      console.log(eventLink);
+      //console.log(eventLink);
       let eventDiv = document.createElement('div');
       let eUrlImg = document.createElement('img');
       eUrlImg.src = eImg;
@@ -141,11 +141,9 @@
       eventDiv.appendChild(eUrlImg);
       eventDiv.appendChild(eName);
       eventDiv.appendChild(ePlace);
-
       eventDiv.appendChild(eDay);
       eventDiv.appendChild(eMonth);
       eventDiv.appendChild(eMeetUps);
-
       testOutPut.appendChild(eventDiv);
     }
   })
@@ -154,7 +152,7 @@
   function setMeetupCount(eventID, meetUps) {
     db.ref('meetups/' + eventID + '/info/meetupCounter').on('value', function(snapshot) {
       let data = snapshot.val();
-      console.log(data);
+      //console.log(data);
       if (true) {
         meetUps.innerHTML = `${data} <i class="mdi mdi-account-multiple mdi-24px"></i>`;
       }if(data == null){
