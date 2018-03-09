@@ -3,7 +3,6 @@ let createSlider = true;
 let ageSlider;
 function initSliderAndMoreShit(redigera = false, meetupKey) {
 
-
   if(createSlider){
     createSlider = false;
     ageSlider = new rSlider({
@@ -213,91 +212,17 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
 
 }
 
-let once = true;
 function initCreateMeetupListeners(ageSlider, redigera = false, meetupKey = false){
   let createBtn = document.getElementById('createMeetupButton');
-  if(once){
-    once = false;
-    createBtn.addEventListener('click', function(event){
-      /* Börja med att hämta alla variabler */
-      let eventid = getLocationInfo()[0];
-      let name = document.getElementById('nameInput').value;
-      let address = document.getElementById('addressInput').value;
-      let placeName = document.getElementById('placeNameInput').value;
-      let time = document.getElementById('timeInput').value;
 
-      // Koordinater
-      let latitude = document.getElementById('map').getAttribute('lat').substring(0,9);
-      let longitude = document.getElementById('map').getAttribute('lng').substring(0,9);
+    createBtn.addEventListener('click', createMeetupListener);
+    createBtn.meetupKey = meetupKey;
+    createBtn.redigera = redigera;
 
-      // ageInterval
-      let ageInterval = ageSlider.getValue().split(',');
-
-      // Antal platser
-      let spots = document.getElementById('spotsInput').value;
-
-      // Information
-      let information = document.getElementsByTagName('textarea')[0].value;
-
-      // Skaparens användarID som vi får genom autentiseringen!
-      if(localStorage.getItem('loggedInUser')){
-
-
-        let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
-
-        let creator = {
-            uniqueID: localUser.uniqueID,
-            fullname: localUser.fullname,
-            mail: localUser.mail,
-            avatarURL: localUser.avatarURL
-        };
-
-        console.log(creator);
-
-        console.log('CREATOR LOGGED IN ATM: ', creator);
-        // Medlemmar - Lägger skaparen av meetupet som medlem direkt i en LISTA.
-        let members = {creator};
-
-        // Admins - Lägger skaparen av meetupet som admin direkt i en LISTA.
-        let admins = [creator.uniqueID];
-
-        if(name.length > 6 && name.length < 36){
-            if(placeName.length > 4 && placeName.length < 18){
-                if(placeName.length > 4 && placeName.length < 18){
-                    if(!isNaN(spots)){
-
-                      createBtn.addEventListener('click', createMeetupListener);
-                      createBtn.meetupKey = meetupKey;
-                      createBtn.redigera = redigera;
-
-                    } else {
-                     printMessage('error', 'Du måste ange antal platser')
-                    }
-                } else {
-                 printMessage('error', 'Platsnamn är för kort eller för långt')
-                }
-            } else {
-              printMessage('error', 'Platsnamn är för kort eller för långt')
-            }
-        } else {
-          printMessage('error', 'Namnet är för kort eller för långt', 6000, 400)
-        }
-      } else {
-        modalWrapper.className = 'hidden'
-        toggleLoginModal();
-        console.log('No user logged in!!!');
-      }
-    });
-  }
-
+}
 function createMeetupListener(event){
   let redigera = event.target.redigera;
   let meetupKey = event.target.meetupKey;
-
-  event.target.myFunc();
-  event.target.myFunc();
-  event.target.myFunc();
-  event.target.myFunc();
 
   /* Börja med att hämta alla variabler */
   let eventid = getLocationInfo()[0];
@@ -341,67 +266,83 @@ function createMeetupListener(event){
     // Admins - Lägger skaparen av meetupet som admin direkt i en LISTA.
     let admins = [creator.uniqueID];
 
-    // Skapa meetupet.
-    if(meetupKey && redigera){
-      let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information);
-      meetup.key = meetupKey;
-      meetup.save();
-      redigera = false;
+    if(name.length > 6 && name.length < 36){
+        if(placeName.length > 4 && placeName.length < 18){
+            if(placeName.length > 4 && placeName.length < 18){
+                if(!isNaN(spots)){
+
+                  // Skapa meetupet.
+                  if(meetupKey && redigera){
+                    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information);
+                    meetup.key = meetupKey;
+                    meetup.save();
+                    redigera = false;
+                  } else {
+                    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information);
+
+                    meetup.creator = creator;
+                    meetup.admins = admins;
+                    meetup.members = members;
+
+                    /* Skapa meetup */
+                    meetupKey = meetup.push();
+                    meetup.updateCount();
+                    console.log('Meetup: ',meetup);
+                  }
+
+                  setTimeout(function(){
+                    // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+                    let htmlScroll = document.getElementsByTagName('html')[0];
+
+                    let newMeetup = document.getElementById('meetup-' + meetupKey);
+
+                    newMeetup.scrollIntoView({behavior: 'smooth'});
+                    console.log(htmlScroll.scrollHeight);
+
+                  },200);
+
+                  //visa navigation och menu.... igen!!.
+                    document.getElementById('navigation').className = 'show';
+                    document.getElementById('menuToggle').className = 'show';
+
+
+                  // Empty the fields
+                    document.getElementById('nameInput').value = '';
+                    document.getElementById('addressInput').value = '';
+                    document.getElementById('timeInput').value = '';
+                    document.getElementById('spotsInput').value = '';
+                    document.getElementById('placeNameInput').value = '';
+
+                  // Visa alla meetups igen!
+                    document.getElementById('modalWrapper').className = 'hidden';
+                    document.getElementById('meetupWrapper').className = 'show';
+
+                    let footer = document.getElementsByTagName('footer')[0];
+                    footer.className = 'footer-box';
+                    
+                    event.target.removeEventListener('click', createMeetupListener);
+
+                } else {
+                 printMessage('error', 'Du måste ange antal platser')
+                }
+            } else {
+             printMessage('error', 'Platsnamn är för kort eller för långt')
+            }
+        } else {
+          printMessage('error', 'Platsnamn är för kort eller för långt')
+        }
     } else {
-      let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information);
-
-      meetup.creator = creator;
-      meetup.admins = admins;
-      meetup.members = members;
-
-      /* Skapa meetup */
-      meetupKey = meetup.push();
-      meetup.updateCount();
-      console.log('Meetup: ',meetup);
+      printMessage('error', 'Namnet är för kort eller för långt', 6000, 400)
     }
-
-    setTimeout(function(){
-      // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-      let htmlScroll = document.getElementsByTagName('html')[0];
-
-      let newMeetup = document.getElementById('meetup-' + meetupKey);
-
-      newMeetup.scrollIntoView({behavior: 'smooth'});
-      console.log(htmlScroll.scrollHeight);
-
-    },500);
-
-
-    //visa navigation och menu.... igen!!.
-      document.getElementById('navigation').className = 'show';
-      document.getElementById('menuToggle').className = 'show';
-
-
-    // Empty the fields
-      document.getElementById('nameInput').value = '';
-      document.getElementById('addressInput').value = '';
-      document.getElementById('timeInput').value = '';
-      document.getElementById('spotsInput').value = '';
-      document.getElementById('placeNameInput').value = '';
-
-    // Visa alla meetups igen!
-      document.getElementById('modalWrapper').className = 'hidden';
-      document.getElementById('meetupWrapper').className = 'show';
-
-
-
-
-      let footer = document.getElementsByTagName('footer')[0];
-      footer.className = 'footer-box';
 
   } else {
     modalWrapper.className = 'hidden'
     let footer = document.getElementsByTagName('footer')[0];
     footer.className = 'footer-box';
     toggleLoginModal();
+    event.target.removeEventListener('click', createMeetupListener);
     console.log('No user logged in!!!');
   }
-  event.target.removeEventListener('click', createMeetupListener);
 }
 
 function getLocationInfo(){
@@ -485,5 +426,4 @@ function toggleCreateMeetupModal(redigera = false){
     btn.innerText = 'Logga in';
     btn.className = 'createMeetupBtn logInBtn leaveMeetupBtn';
   }
-}
 }
