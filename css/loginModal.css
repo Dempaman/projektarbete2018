@@ -3,7 +3,7 @@ body.hiddenBody {
 }
 
 #lmw {
-  background-color: #dadada;
+  background-color: #21252C;
   position: fixed;
   width: 100%;
   height: 100%;
@@ -19,9 +19,10 @@ span.loginModalCloseButton {
 
 .centered {
   position: fixed;
-  top: 50%;
+  top: 51%;
   left: 50%;
   transform: translate(-50%, -50%);
+  /*bottom: 0px;*/
 }
 
 #lmw > div > div.header + div {
@@ -42,13 +43,13 @@ span.loginModalCloseButton {
   font-family: 'Questrial',sans-serif;
   color: #515151;
   font-size: 0.8em;
-  background-color: #b9b9b966;
+  background-color: #c5c5c533;
   font-weight: 100;
   cursor: pointer;
 }
 #lmw button > span {
   margin: 6px 10px 0px 13px;
-  color: #393939;
+  color: #fff;
 }
 #lmw button > i {
   transition: 0.8s ease;
@@ -69,22 +70,27 @@ span.loginModalCloseButton {
 }
 
 /* Hover Effects for the WEB */
+/*Alltid färg på när mobil visas */
 #lmw button:hover {
   background-color: #ececec;
 }
-#lmw button:hover > i.mdi-facebook-box {
-  color: #7fb2d8;
+#lmw button > i.mdi-facebook-box {
+  color: #45a1e6;
 }
-#lmw button:hover > i.mdi-google {
+#lmw button > i.mdi-google {
   color: #269e5a;
 }
+
+
+
+
 .loginModalCloseCenteredBtn {
   display: none;
 }
 /* MEDIA QUERIES FOR LOGINMODAL*/
 
 @media screen and (min-width: 667px) and (min-height: 450px){
-  
+
   body.hiddenBody {
     width: 100%;
     position: fixed;
@@ -105,10 +111,10 @@ span.loginModalCloseButton {
   }
 
   #lmw > div > div.header + div {
-    width: 40%;
-    height: 45%;
-    background-color: #e4e4e4;
-    box-shadow: 3px 3px 3px #636363;
+    width: 60%;
+    height: 80%;
+    background-color: #21252C;
+    box-shadow: 3px 3px 3px #292929;
   }
   #lmw > div > div.header{
     display: none;
@@ -117,9 +123,23 @@ span.loginModalCloseButton {
   #lmw > div > div.header + div > div {
     position: fixed;
     width: 100%;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
+  .loginModalButtonHolder{
+    display: flex;
+    flex-direction: column;
+    margin: 360px 0 0 0;
+  }
 
+}
+
+@media screen and (min-width: 1033px) and (min-height: 450px){
+  #lmw > div > div.header + div {
+    width: 750px;
+    height: 80%;
+    background-color: #21252C;
+    box-shadow: 3px 3px 3px #292929;
+  }
 }
