@@ -156,9 +156,9 @@
       let data = snapshot.val();
       console.log(data);
       if (true) {
-        meetUps.innerHTML = `${data} <i class="fas fa-users fa-1x"></i>`;
+        meetUps.innerHTML = `${data} <i class="mdi mdi-account-multiple mdi-24px"></i>`;
       }if(data == null){
-        meetUps.innerHTML = `<i class="fas fa-users fa-1x"></i>`;
+        meetUps.innerHTML = `<i class="mdi mdi-account-multiple mdi-24px"></i>`;
       }
     });
   }
