@@ -35,7 +35,7 @@ var config = {
 
 class MeetupClass {
 
-  constructor(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins){
+  constructor(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information){
     this.eventID = eventid;
     this.name = name;
     this.address = address;
@@ -46,15 +46,12 @@ class MeetupClass {
     this.spots = spots;
     this.ageInterval = ageInterval;
     this.info = information;
-    this.creator = creator;
-    this.members = members;
-    this.admins = admins;
     this.created = firebase.database.ServerValue.TIMESTAMP;
   }
 
   push(){
 
-    this.key = db.ref('meetups/' + this.eventID).push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
+    this.key = db.ref('meetups/' + this.eventID + '/').push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
     new SystemMessage(this.key, this.creator.fullname + ' skapade detta meetup!').push(); // Skapar ett meddelande i chatten direkt
 
     /* Lägg till meetupKey under createdMeetups på användarens profil. */
@@ -79,7 +76,9 @@ class MeetupClass {
   }
 
   save(){
-    db.ref('meetups/'+this.key).set(this);
+    db.ref('meetups/' + this.eventID + '/' + this.key).update(this);
+    console.log('Update the meetup with information: ', this)
+    printMessage('success', 'Meetupet har uppdaterats!');
   }
 
 }

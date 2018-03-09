@@ -163,7 +163,7 @@ function toggleNotifications(event){
 function dropDownEditMeetup(eventID, meetupKey){
   console.log('So you want me to edit this meetup? ', eventID, meetupKey);
   toggleCreateMeetupModal(true);
-  initSliderAndMoreShit(true);
+  initSliderAndMoreShit(true, meetupKey);
 }
 
 function fadeOutObject(htmlObj){
