@@ -265,9 +265,11 @@ function createMeetupListener(event){
 
     // Admins - Lägger skaparen av meetupet som admin direkt i en LISTA.
     let admins = [creator.uniqueID];
+    let allChecks = false;
 
-    if(name.length > 6 && name.length < 36){
-        if(placeName.length > 4 && placeName.length < 18){
+
+    if(checkLength('Namnet', name.length, 6, 36) && checkLength('Platsnamnet', placeName.length, 4, 18)){
+        if(checkLength('Platsnamnet', placeName.length, 4, 18)){
             if(placeName.length > 4 && placeName.length < 18){
                 if(!isNaN(spots)){
 
@@ -319,7 +321,7 @@ function createMeetupListener(event){
 
                     let footer = document.getElementsByTagName('footer')[0];
                     footer.className = 'footer-box';
-                    
+
                     event.target.removeEventListener('click', createMeetupListener);
 
                 } else {
@@ -426,4 +428,26 @@ function toggleCreateMeetupModal(redigera = false){
     btn.innerText = 'Logga in';
     btn.className = 'createMeetupBtn logInBtn leaveMeetupBtn';
   }
+}
+
+function checkLength(type, str, min, max){
+
+    if(type == 'Antal platser'){
+      try {
+        Number.parseInt(str);
+      } catch(e){
+        printMessage('error', type + ' måste vara ett tal');
+        return false;
+      }
+    }
+
+    if(str.length < min){
+      printMessage('error', type + ' är litee för kort.');
+      return false;
+    } else if (str.length > max){
+      printMessage('error', type + ' är lite långt.');
+      return false;
+    } else {
+      return true;
+    }
 }
