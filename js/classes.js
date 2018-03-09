@@ -64,6 +64,7 @@ class MeetupClass {
 
     increaseMeetupCount(this.eventID);
 
+    return this.key;
   }
 
   updateCount(){

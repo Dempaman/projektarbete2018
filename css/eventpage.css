@@ -456,7 +456,8 @@ div.googleMapDiv > img {
   font-family: 'Questrial', sans-serif;
   font-size: 0.9em;
   position: absolute;
-  margin: 53px 95px;
+  margin: 57px 88px 0px;
+  box-shadow: 1px 1px 3px #c5c5c5;
 }
 
 .dropDownWrapper > ul {
@@ -465,22 +466,25 @@ div.googleMapDiv > img {
 }
 .dropDownWrapper > ul > li {
   cursor: pointer;
-  margin: 0 -7px;
-  padding: 10px 40px;
+  margin: 0px;
+  padding: 13px 18px;
   color: #4a4a4a;
-  background-color: #c7c7c7;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #efefef;
 }
 .dropDownWrapper > ul > li:hover {
-  color: #333333;
-  background-color: #e3e3e3;
+  color: #ededed;
+  background-color: #8f8f8f;
+  border-bottom: 1px solid #7e7e7e;
 }
 .dropDownWrapper > ul > li:last-child {
   background-color: #ff8181;
-  color: #fbfbfb
+  color: #fbfbfb;
 }
 .dropDownWrapper > ul > li:last-child:hover {
   background-color: #e86060;
-  color: #d4d4d4;
+  color: #fbfbfb;
+  border-bottom: 1px solid #fbfbfb;
 }
 
 /* Css for the confirmModal */
@@ -659,6 +663,7 @@ div.googleMapDiv > img {
     margin: 0px;
     color: #6e6e6e;
     background-color: #fff;
+    border-bottom: 1px solid #efefef;
   }
   .dropDownWrapper > ul > li:first-child {
     border-top: 2px solid #878787;
@@ -666,6 +671,7 @@ div.googleMapDiv > img {
   .dropDownWrapper > ul > li:hover {
     color: #222;
     background-color: #fff;
+    border-bottom: 1px solid #efefef;
   }
   /* Css for the confirmModal */
   .confirmModal {
