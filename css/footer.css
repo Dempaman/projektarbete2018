@@ -1,6 +1,6 @@
 /* footer style */
 
-html {
+html *{
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -93,6 +93,7 @@ a {
   margin-right: 2rem;
   font-weight: bold;
   color: #AFAFAF;
+  cursor: pointer;
   margin:5px;
 }
 
