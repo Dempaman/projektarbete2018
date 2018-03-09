@@ -99,7 +99,10 @@
 
     function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month, meetUps) {
 
-      //Create event-cards (Test)
+
+      let eventLink = document.createElement('a');
+      eventLink.setAttribute('href', '/eventpage.html?event='+ eventId);
+      console.log(eventLink);
       let eventDiv = document.createElement('div');
       let eUrlImg = document.createElement('img');
       eUrlImg.src = eImg;
@@ -119,7 +122,7 @@
       eTime.innerText = `${eventTime}`;
       eDay.innerText = `${day}`;
       eMonth.innerText = `${month}`;
-      eMeetUps.innerHTML = `${meetUps} <i class="fas fa-users fa-1x"></i>`;
+    //  eMeetUps.innerHTML = `${meetUps} <i class="fas fa-users fa-1x"></i>`;
 
       //Add classes and info
 
@@ -129,21 +132,20 @@
       eDay.className = "day";
       eMonth.className = "month";
       eMeetUps.className = "meetups-box";
-
+      eventLink.className = "eventLink";
 
       //Append
 
       setMeetupCount(eventId, eMeetUps);
+      eventDiv.appendChild(eventLink)
       eventDiv.appendChild(eUrlImg);
       eventDiv.appendChild(eName);
       eventDiv.appendChild(ePlace);
-      //eventDiv.appendChild(eTime);
 
       eventDiv.appendChild(eDay);
       eventDiv.appendChild(eMonth);
       eventDiv.appendChild(eMeetUps);
 
-      // eventDiv.appendChild(eID);
       testOutPut.appendChild(eventDiv);
     }
   })
@@ -156,7 +158,7 @@
       if (true) {
         meetUps.innerHTML = `${data} <i class="fas fa-users fa-1x"></i>`;
       }if(data == null){
-        meetUps.innerHTML = `0 <i class="fas fa-users fa-1x"></i>`;
+        meetUps.innerHTML = `<i class="fas fa-users fa-1x"></i>`;
       }
     });
   }
