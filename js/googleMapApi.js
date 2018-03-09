@@ -1,8 +1,10 @@
-  function initMap() {
+  function initMap(setMarker) {
+
     var map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: -33.8688, lng: 151.2195},
+      center: {lat: 57.70887, lng: 11.974559999999997},
       zoom: 13
     });
+
     var card = document.getElementById('pac-card');
     var input = document.getElementById('addressInput');
     var types = document.getElementById('type-selector');
@@ -25,6 +27,13 @@
       anchorPoint: new google.maps.Point(0, -29)
     });
 
+    if(setMarker){
+      marker.setVisible(true);
+      marker.setPosition(setMarker);
+      map.setCenter(setMarker);
+      map.setZoom(16);
+      console.log('SETMARKER');
+    }
     autocomplete.addListener('place_changed', function() {
       infowindow.close();
       marker.setVisible(false);
@@ -43,6 +52,7 @@
         map.setCenter(place.geometry.location);
         map.setZoom(17);  // Why 17? Because it looks good.
       }
+      console.log('MARKER PLACE GEMOETRY LOCATION: ',place.geometry.location);
       marker.setPosition(place.geometry.location);
       marker.setVisible(true);
 
