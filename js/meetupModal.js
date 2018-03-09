@@ -124,7 +124,6 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
 let once = true;
 function initCreateMeetupListeners(ageSlider){
   let createBtn = document.getElementById('createMeetupButton');
-
   if(once){
     once = false;
     createBtn.addEventListener('click', function(event){
@@ -170,43 +169,59 @@ function initCreateMeetupListeners(ageSlider){
         // Admins - Lägger skaparen av meetupet som admin direkt i en LISTA.
         let admins = [creator.uniqueID];
 
-        // Skapa meetupet.
-        let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
-        meetup.push();
-        meetup.updateCount();
-        //ageSlider.destroy();
-        console.log('Meetup: ',meetup);
+        if(name.length > 6 && name.length < 36){
+            if(placeName.length > 4 && placeName.length < 18){
+                if(placeName.length > 4 && placeName.length < 18){
+                    if(!isNaN(spots)){
+                      // Skapa meetupet.
+                      let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
 
-        //visa navigation och menu.... igen!!.
-          document.getElementById('navigation').className = 'show';
-          document.getElementById('menuToggle').className = 'show';
+                      meetup.push();
+                      meetup.updateCount();
+                      //ageSlider.destroy();
+                      console.log('Meetup: ',meetup);
+
+                      //visa navigation och menu.... igen!!.
+                        document.getElementById('navigation').className = 'show';
+                        document.getElementById('menuToggle').className = 'show';
 
 
-        // Empty the fields
-          document.getElementById('nameInput').value = '';
-          document.getElementById('addressInput').value = '';
-          document.getElementById('timeInput').value = '';
-          document.getElementById('spotsInput').value = '';
-          document.getElementById('placeNameInput').value = '';
+                      // Empty the fields
+                        document.getElementById('nameInput').value = '';
+                        document.getElementById('addressInput').value = '';
+                        document.getElementById('timeInput').value = '';
+                        document.getElementById('spotsInput').value = '';
+                        document.getElementById('placeNameInput').value = '';
 
-        // Visa alla meetups igen!
-          document.getElementById('modalWrapper').className = 'hidden';
-          document.getElementById('meetupWrapper').className = 'show';
+                      // Visa alla meetups igen!
+                        document.getElementById('modalWrapper').className = 'hidden';
+                        document.getElementById('meetupWrapper').className = 'show';
 
-          setTimeout(function(){
-            // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-            let htmlScroll = document.getElementsByTagName('html')[0];
+                        setTimeout(function(){
+                          // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+                          let htmlScroll = document.getElementsByTagName('html')[0];
 
-            console.log('Html scroll!!');
-            let newMeetup = document.getElementById('meetupWrapper').lastChild;
-            htmlScroll.className += ' smooth-scroll';
-            htmlScroll.scrollTop = htmlScroll.scrollHeight - newMeetup.scrollHeight;
+                          console.log('Html scroll!!');
+                          let newMeetup = document.getElementById('meetupWrapper').lastChild;
+                          htmlScroll.className += ' smooth-scroll';
+                          htmlScroll.scrollTop = htmlScroll.scrollHeight - newMeetup.scrollHeight;
 
-            console.log(htmlScroll.scrollHeight);
+                          console.log(htmlScroll.scrollHeight);
 
-            console.log('Height is:', htmlScroll.scrollHeight - newMeetup.scrollHeight);
-          },300);
-
+                          console.log('Height is:', htmlScroll.scrollHeight - newMeetup.scrollHeight);
+                        },300);
+                    } else {
+                     printMessage('error', 'Du måste ange antal platser')
+                    }
+                } else {
+                 printMessage('error', 'Platsnamn är för kort eller för långt')
+                }
+            } else {
+              printMessage('error', 'Platsnamn är för kort eller för långt')
+            }
+        } else {
+          printMessage('error', 'Namnet är för kort eller för långt', 6000, 400)
+        }
       } else {
         modalWrapper.className = 'hidden'
         toggleLoginModal();
