@@ -40,7 +40,6 @@ function createEventListenersForBtns(eventid, url, onsale){
     // Init the skapa meetup modal HERE
     toggleCreateMeetupModal();
     initSliderAndMoreShit();
-    console.log('DOES THIS EVEN FIRE?!');
     // Create meetup btn Function
 
   });
@@ -136,7 +135,7 @@ function retrieveMeetupInfo(eventDate){
         let antalLabel = document.createElement('p');
         antalLabel.innerText = 'Deltagare';
         let antal = document.createElement('p');
-        antal.innerText = currentMembers + '/' + obj.spots;
+        antal.innerText = currentMembers + ' / ' + obj.spots;
 
 
 
@@ -204,6 +203,8 @@ function retrieveMeetupInfo(eventDate){
         let googleMapDiv = document.createElement('div');
         let googleMap = document.createElement('img');
         googleMapDiv.className = 'googleMapDiv';
+        googleMapDiv.setAttribute('lat', latitude);
+        googleMapDiv.setAttribute('lng', longitude);
         // Just src
         googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
         googleMap.setAttribute('zoom', '16');
@@ -377,7 +378,7 @@ function joinMeetup(userID, avatarURL, fullname, meetupKey, eventID){
       new SystemMessage(meetupKey, userObject.fullname + ' gick med i meetupet.').push();
 
       // Lägg till meetup i användarens profil.
-      addUserMeetup(userObject.uniqueID, meetupKey);
+      addUserMeetup(userObject.uniqueID,eventID, meetupKey);
     } else {
       console.log('Du är redan med i detta meetup! Något måste gått fel!');
     }
@@ -426,7 +427,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
         i++;
       }
 
-      ageAndMembersDiv.children[1].children[1].innerText = i + '/' + meetup.spots;
+      ageAndMembersDiv.children[1].children[1].innerText = i + ' / ' + meetup.spots;
 
       //Adressen
       let adressDiv = meetupWrapper.children[5];
@@ -991,7 +992,7 @@ function restoreJoinBtn(meetupKey){
     let data = snapshot.val();
     let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
     console.log('This was removed: ',data);
-    removeUserMeetup(data.uniqueID, meetupKey);
+    removeUserMeetup(data.uniqueID, eventid,  meetupKey);
         if(currentUser.uniqueID == data.uniqueID){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
@@ -1582,15 +1583,15 @@ function destroyMeetup(meetupKey, eventID){
 }
 
 // Tanken med denna funktion är att lägga till meetupets meetupKey på användarens profil under "meetups".
-function addUserMeetup(userID, meetupKey){
+function addUserMeetup(userID, eventID, meetupKey){
   //console.log('Lägga till meetup på användarens profil kördes.');
-  db.ref('users/' + userID + '/meetups/'+meetupKey).set(true);
+  db.ref('users/' + userID + '/meetups/' + eventID + '/' + meetupKey).set(true);
 }
 
 // Ta bort meetups personen ska gå på ifrån profilen
-function removeUserMeetup(userID, meetupKey){
+function removeUserMeetup(userID, eventID, meetupKey){
   //console.log('Ta bort meetup från användarens profil kördes.');
-  db.ref('users/' + userID + '/meetups/'+meetupKey).remove();
+  db.ref('users/' + userID + '/meetups/' + eventID + '/' +meetupKey).remove();
 }
 
 // Ta bort allting kring ett meetup i databasen.
