@@ -216,18 +216,79 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
 let once = true;
 function initCreateMeetupListeners(ageSlider, redigera = false, meetupKey = false){
   let createBtn = document.getElementById('createMeetupButton');
+  if(once){
+    once = false;
+    createBtn.addEventListener('click', function(event){
+      /* Börja med att hämta alla variabler */
+      let eventid = getLocationInfo()[0];
+      let name = document.getElementById('nameInput').value;
+      let address = document.getElementById('addressInput').value;
+      let placeName = document.getElementById('placeNameInput').value;
+      let time = document.getElementById('timeInput').value;
 
-    createBtn.addEventListener('click', createMeetupListener);
-    createBtn.meetupKey = meetupKey;
-    createBtn.redigera = redigera;
-    createBtn.myFunc = function (){
-      console.log('WWWWWWWWWWWWWW FUND THSIHISHIS');
-    }
+      // Koordinater
+      let latitude = document.getElementById('map').getAttribute('lat').substring(0,9);
+      let longitude = document.getElementById('map').getAttribute('lng').substring(0,9);
 
-  // Vad gör vi när man trycker på skapa meetup.
-  // (eventid, name, address, latitude, longitude, time, spots, ageInterval, information, creator, members, admins)
+      // ageInterval
+      let ageInterval = ageSlider.getValue().split(',');
 
-}
+      // Antal platser
+      let spots = document.getElementById('spotsInput').value;
+
+      // Information
+      let information = document.getElementsByTagName('textarea')[0].value;
+
+      // Skaparens användarID som vi får genom autentiseringen!
+      if(localStorage.getItem('loggedInUser')){
+
+
+        let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        let creator = {
+            uniqueID: localUser.uniqueID,
+            fullname: localUser.fullname,
+            mail: localUser.mail,
+            avatarURL: localUser.avatarURL
+        };
+
+        console.log(creator);
+
+        console.log('CREATOR LOGGED IN ATM: ', creator);
+        // Medlemmar - Lägger skaparen av meetupet som medlem direkt i en LISTA.
+        let members = {creator};
+
+        // Admins - Lägger skaparen av meetupet som admin direkt i en LISTA.
+        let admins = [creator.uniqueID];
+
+        if(name.length > 6 && name.length < 36){
+            if(placeName.length > 4 && placeName.length < 18){
+                if(placeName.length > 4 && placeName.length < 18){
+                    if(!isNaN(spots)){
+
+                      createBtn.addEventListener('click', createMeetupListener);
+                      createBtn.meetupKey = meetupKey;
+                      createBtn.redigera = redigera;
+                        
+                    } else {
+                     printMessage('error', 'Du måste ange antal platser')
+                    }
+                } else {
+                 printMessage('error', 'Platsnamn är för kort eller för långt')
+                }
+            } else {
+              printMessage('error', 'Platsnamn är för kort eller för långt')
+            }
+        } else {
+          printMessage('error', 'Namnet är för kort eller för långt', 6000, 400)
+        }
+      } else {
+        modalWrapper.className = 'hidden'
+        toggleLoginModal();
+        console.log('No user logged in!!!');
+      }
+    });
+  }
 
 function createMeetupListener(event){
   let redigera = event.target.redigera;
