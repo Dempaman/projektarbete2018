@@ -122,8 +122,9 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
   let inputBox = document.getElementsByTagName('textarea')[0];
   let charCount = document.getElementsByClassName('characterCounter')[0];
   let charCountOutput = charCount.children[0];
-  inputBox.addEventListener('keydown', function(e){
 
+
+  inputBox.addEventListener('keydown', function(e){
       if(inputBox.value.length >= 900){
         if(e.keyCode != 8 && e.keyCode != 46){
           e.preventDefault();
@@ -131,8 +132,8 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
         }
       }
       charCountOutput.innerText = inputBox.value.length + ' /900';
-
   });
+
   inputBox.addEventListener('keypress', function(e){
     if(inputBox.value.length >= 900){
       if(e.keyCode != 8 && e.keyCode != 46){
@@ -141,7 +142,8 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
       }
     }
       charCountOutput.innerText = inputBox.value.length + ' /900';
-    });
+  });
+
 }
 let once = true;
 function initCreateMeetupListeners(ageSlider){
