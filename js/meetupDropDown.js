@@ -1,20 +1,18 @@
 function toggleMeetupDropDown(event, meetupKey, eventID){
+
   let dropDownWrapper = document.getElementById('drop'+meetupKey);
   let target = event.target;
 
-  function printCloseIfNotCenter(event){
-    let t = event.target;
-    if(t.className != 'dropDownWrapper'){
-        if(!t.className.includes('doNotCloseThis')){
-          toggleWrapper();
-          window.removeEventListener('click', printCloseIfNotCenter);
-          console.log('Closeeed with closeIfNotCenter');
-        }
-    }
+  function printCloseIfNotCenter(closeEvent){
+      if(!closeEvent.target.className.includes('doNotCloseThis')){
+        toggleWrapper(true);
+        window.removeEventListener('click', printCloseIfNotCenter);
+        console.log('Closeeed with closeIfNotCenter');
+      }
   }
 
   if(dropDownWrapper){
-    toggleWrapper(dropDownWrapper, event.target);
+    toggleWrapper();
   } else {
     /* Byt texten på knappen */
 
@@ -34,10 +32,14 @@ function toggleMeetupDropDown(event, meetupKey, eventID){
 
     /* Skapa "Redigera" */
     let dropDownEdit = document.createElement('li');
+    dropDownEdit.className += ' doNotCloseThis';
     dropDownEdit.innerHTML = '<i class="mdi mdi-pencil"></i> Redigera';
     dropDownList.appendChild(dropDownEdit);
 
     /* EventListener för "Redigera" */
+    dropDownEdit.addEventListener('click', function(event){
+      dropDownEditMeetup(eventID, meetupKey);
+    });
 
     /* Skapa "Notiser" */
     let dropDownNotice = document.createElement('li');
@@ -59,34 +61,43 @@ function toggleMeetupDropDown(event, meetupKey, eventID){
     /* Lägg in listan i wrappern (Själva menyn) */
     dropDownWrapper.appendChild(dropDownList);
 
-    setTimeout(function(){
-      window.addEventListener('click', printCloseIfNotCenter);
-    },200);
     /* Lägg till om man klickar utanför menyn så stängs den. */
+    window.addEventListener('click', printCloseIfNotCenter);
 
     /* Lägg ut den i dom:en */
-    event.target.parentNode.insertBefore(dropDownWrapper, event.target);
+
+    /* OM det är mobilknappen vi trycker på så appenda den en framför den framför */
+    if(event.target.className.includes('iconBtn')){
+      event.target.parentNode.insertBefore(dropDownWrapper, event.target.previousSibling);
+    } else {
+      event.target.parentNode.insertBefore(dropDownWrapper, event.target);
+    }
   }
 
-  function toggleWrapper(){
-    if(dropDownWrapper.className.includes('hidden')){
-      if(target.className.includes('purple')){
-        target.innerText = 'Stäng';
+  function toggleWrapper(close = false){
+    console.log('Toggled the dropDownMenu');
+
+      if(dropDownWrapper.className.includes('hidden') && !close){
+        if(target.className.includes('purple')){
+          target.innerText = 'Stäng';
+          console.log('We are now showing the dropDownMenu');
+        } else if(target.previousSibling.className.includes('purple')){
+          target.previousSibling.innerText = 'Stäng';
+        }
+        console.log('Adding printCloseIfNotCenter');
+        window.addEventListener('click', printCloseIfNotCenter);
+        dropDownWrapper.className = dropDownWrapper.className.replace(' hidden', '');
+      } else if(!dropDownWrapper.className.includes('hidden')){
+          if(target.className.includes('purple')){
+            target.innerText = 'Redigera Meetup';
+          } else if(target.previousSibling.className.includes('purple')){
+            target.previousSibling.innerText = 'Redigera Meetup';
+          }
+          dropDownWrapper.className += ' hidden';
+          console.log('Removing listener');
+          window.removeEventListener('click', printCloseIfNotCenter);
       }
 
-
-        setTimeout(function(){
-          window.addEventListener('click', printCloseIfNotCenter);
-        },200);
-
-
-      dropDownWrapper.className = dropDownWrapper.className.replace(' hidden', '');
-    } else {
-        if(target.className.includes('purple')){
-          target.innerText = 'Redigera Meetup';
-        }
-        dropDownWrapper.className += ' hidden';
-    }
   }
 
   /* Remove Meetup function */
@@ -109,7 +120,7 @@ function confirmRemoveMeetup(eventID, meetupKey){
   question.innerHTML = '<i class="mdi mdi-alert-circle-outline mdi-36px"></i> Du håller på att radera detta meetup, är du säker?';
   /* Skapa knappar */
   let yesBtn = document.createElement('button');
-  yesBtn.innerHTML = 'Radera';
+  yesBtn.innerHTML = 'Ja';
   let noBtn = document.createElement('button');
   noBtn.innerHTML = 'Stäng';
 
@@ -149,10 +160,17 @@ function toggleNotifications(event){
 
 }
 
+function dropDownEditMeetup(eventID, meetupKey){
+  console.log('So you want me to edit this meetup? ', eventID, meetupKey);
+  toggleCreateMeetupModal(true);
+  initSliderAndMoreShit(true);
+}
 
 function fadeOutObject(htmlObj){
   htmlObj.className += ' fadeout';
   setTimeout(function(){
-    htmlObj.parentNode.removeChild(htmlObj);
+    if(htmlObj.parentNode){
+      htmlObj.parentNode.removeChild(htmlObj);
+    }
   },450);
 }

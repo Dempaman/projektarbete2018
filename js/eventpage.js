@@ -262,11 +262,11 @@ function retrieveMeetupInfo(eventDate){
         joinMeetupBtn.innerText = 'Gå med i meetup';
 
         let editBtn = document.createElement('button');
-        editBtn.className = 'editBtn purple';
+        editBtn.className = 'editBtn purple doNotCloseThis';
         editBtn.innerHTML = 'Redigera Meetup';
 
         let editSmallBtn = document.createElement('button');
-        editSmallBtn.className = 'editBtn iconBtn';
+        editSmallBtn.className = 'editBtn iconBtn doNotCloseThis' ;
         editSmallBtn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
 
 

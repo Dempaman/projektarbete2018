@@ -1,10 +1,9 @@
 // Initialize a new plugin instance for one element or NodeList of elements.
 
-function initSliderAndMoreShit() {
+function initSliderAndMoreShit(redigera = false) {
 
-  displayAgeInterval('0,100');
 
-  getLocationInfo();
+
   var ageSlider;
   if(!document.getElementById('ageSlider')){
     printMessage('warn', 'Slider already exists.');
@@ -20,6 +19,29 @@ function initSliderAndMoreShit() {
             onChange: displayAgeInterval
         });
   }
+
+  /* Variables */
+  let mc = document.getElementById('modalContent');
+  let headerTitle = mc.children[0].children[0];
+
+  /* Inställningar för redigera */
+  if(redigera){
+    /* scrolla till toppen */
+    if(!window.location.href.includes('#')){
+      window.location.href += '#';
+    } else {
+      window.location.href = window.location.href;
+    }
+    headerTitle.innerText = 'Redigera meetup';
+    ageSlider.values = {min: 40, max: 90};
+
+    console.log('I guess you where being serious :o');
+  } else {
+    headerTitle.innerText = 'Skapa meetup';
+
+    console.log('Inte här för att redigera!');
+  }
+
 
       let closeBtn = document.getElementById('menuDiv');
       let modalWrapper = document.getElementById('modalWrapper');
@@ -270,7 +292,7 @@ function getValues(values){
   return values.split(',');
 }
 
-function toggleCreateMeetupModal(){
+function toggleCreateMeetupModal(redigera = false){
 
   let modalWrapper = document.getElementById('modalWrapper');
   let meetupWrapper = document.getElementById('meetupWrapper');
@@ -295,10 +317,14 @@ function toggleCreateMeetupModal(){
   let btn = document.getElementById('createMeetupButton')
 
   if(localStorage.getItem('loggedInUser')){
-    btn.innerText = 'Skapa Meetup';
+    if(redigera){
+      btn.innerText = 'Redigera meetup';
+    } else {
+      btn.innerText = 'Skapa meetup';
+    }
     btn.className = 'createMeetupBtn purple';
   } else {
-    btn.innerText = 'Logga In';
+    btn.innerText = 'Logga in';
     btn.className = 'createMeetupBtn logInBtn leaveMeetupBtn';
   }
 }
