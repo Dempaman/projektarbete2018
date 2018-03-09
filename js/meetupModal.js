@@ -269,7 +269,7 @@ function initCreateMeetupListeners(ageSlider, redigera = false, meetupKey = fals
                       createBtn.addEventListener('click', createMeetupListener);
                       createBtn.meetupKey = meetupKey;
                       createBtn.redigera = redigera;
-                        
+
                     } else {
                      printMessage('error', 'Du måste ange antal platser')
                     }
@@ -485,4 +485,5 @@ function toggleCreateMeetupModal(redigera = false){
     btn.innerText = 'Logga in';
     btn.className = 'createMeetupBtn logInBtn leaveMeetupBtn';
   }
+}
 }
