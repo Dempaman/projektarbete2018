@@ -52,7 +52,7 @@ form.search-events input[type=text] {
     font-size: 1em;
     border: none;
     float: left;
-    width: 80%;
+    width: 79%;
     background: #f1f1f1;
     opacity: 0.9;
     margin-left: 7px;
@@ -67,6 +67,7 @@ form.search-events button {
     font-size: 1em;
     border: none;
     cursor: pointer;
+    margin-bottom: 0px;
 }
 
 form.search-events button:hover {

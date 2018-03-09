@@ -328,8 +328,6 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
             let errorMessage = error.message;
 
-			console.log('Felmeddelande: ', errorMessage);
-
             handleError(errorMessage);
 
 		})
@@ -428,9 +426,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		}).catch((error) => {
 
             let errorMessage = error.message;
-
-			console.log('Felmeddelande: ', errorMessage);
-
+            
             handleError('Felmeddelande: ', errorMessage);
 		})
 	}
@@ -442,7 +438,6 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 	/********************Random code before merging with eventcards file********************/
 	function getUserEventInfo(eventName, eventPlace, eventTime, eventId, eventCity, eImg, day, month) {
-
 
 		while (testOutPut.firstchild) {
 			testOutPut.removeChild(testOutPut.firstChild);
@@ -514,8 +509,10 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
     function handleError(errorMessage, userSearchValue){
 
         let errorMessageDiv = document.createElement('div');
+        
+        console.log('Felmeddelande: ', errorMessage);
 
-        errorMessageDiv.innerText = errorMessage;
+        errorMessageDiv.innerText = `No searchresult was found :(`;
 
         testOutPut.appendChild(errorMessageDiv);
 
@@ -557,7 +554,6 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
     					cities.push(sweCity);
 
-                        console.log(sweCity);
     				}
     			});
                 localStorage.setItem('cities', JSON.stringify(cities));
@@ -577,7 +573,6 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 function setMeetupCount(eventID, htmlObject){
 	db.ref('meetups/' + eventID + '/info/meetupCounter').on('value', function(snapshot){
 		let data = snapshot.val();
-		console.log(eventID, data);
 		if(data){
 			htmlObject.innerText = data;
 		}
