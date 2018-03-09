@@ -46,6 +46,8 @@ function initSliderAndMoreShit(redigera = false) {
       let closeBtn = document.getElementById('menuDiv');
       let modalWrapper = document.getElementById('modalWrapper');
       let meetupWrapper = document.getElementById('meetupWrapper');
+      let footer = document.getElementsByTagName('footer')[0];
+
       if(closeBtn){
         closeBtn.addEventListener('click', function(event){
           console.log('Target:', event.target);
@@ -53,6 +55,7 @@ function initSliderAndMoreShit(redigera = false) {
           //ageSlider.destroy();
           modalWrapper.className = 'hidden';
           meetupWrapper.className = 'show';
+          footer.className = 'footer-box';
         });
       } else {
         console.log('no btn');
@@ -196,7 +199,7 @@ function initCreateMeetupListeners(ageSlider){
 
         // Skapa meetupet.
         let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins);
-        meetup.push();
+        let meetupKey = meetup.push();
         meetup.updateCount();
         //ageSlider.destroy();
         console.log('Meetup: ',meetup);
@@ -221,18 +224,21 @@ function initCreateMeetupListeners(ageSlider){
             // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
             let htmlScroll = document.getElementsByTagName('html')[0];
 
-            console.log('Html scroll!!');
-            let newMeetup = document.getElementById('meetupWrapper').lastChild;
-            htmlScroll.className += ' smooth-scroll';
-            htmlScroll.scrollTop = htmlScroll.scrollHeight - newMeetup.scrollHeight;
+            let newMeetup = document.getElementById('meetup-' + meetupKey);
 
+            newMeetup.scrollIntoView({behavior: 'smooth'});
             console.log(htmlScroll.scrollHeight);
 
-            console.log('Height is:', htmlScroll.scrollHeight - newMeetup.scrollHeight);
-          },300);
+          },500);
+
+
+          let footer = document.getElementsByTagName('footer')[0];
+          footer.className = 'footer-box';
 
       } else {
         modalWrapper.className = 'hidden'
+        let footer = document.getElementsByTagName('footer')[0];
+        footer.className = 'footer-box';
         toggleLoginModal();
         console.log('No user logged in!!!');
       }
