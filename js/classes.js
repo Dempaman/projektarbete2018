@@ -35,7 +35,7 @@ var config = {
 
 class MeetupClass {
 
-  constructor(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, creator, members, admins){
+  constructor(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information){
     this.eventID = eventid;
     this.name = name;
     this.address = address;
@@ -46,15 +46,12 @@ class MeetupClass {
     this.spots = spots;
     this.ageInterval = ageInterval;
     this.info = information;
-    this.creator = creator;
-    this.members = members;
-    this.admins = admins;
     this.created = firebase.database.ServerValue.TIMESTAMP;
   }
 
   push(){
 
-    this.key = db.ref('meetups/' + this.eventID).push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
+    this.key = db.ref('meetups/' + this.eventID + '/').push(this).key; // Returnerar nyckeln som den skapas vid ifall vi vill, kanske. Otestat
     new SystemMessage(this.key, this.creator.fullname + ' skapade detta meetup!').push(); // Skapar ett meddelande i chatten direkt
 
     /* Lägg till meetupKey under createdMeetups på användarens profil. */
@@ -79,13 +76,12 @@ class MeetupClass {
   }
 
   save(){
-    db.ref('meetups/'+this.key).set(this);
+    db.ref('meetups/' + this.eventID + '/' + this.key).update(this);
+    console.log('Update the meetup with information: ', this)
+    printMessage('success', 'Meetupet har uppdaterats!');
   }
 
 }
-
-
-
 
 class EventClass {
   constructor(eventid, eventName, date, place, address, city, onsale, minage, priceRange, currency, eventInformation, imageURL, weekDay, offsale){
@@ -124,6 +120,17 @@ class UserClass {
 
   push(){
     db.ref('users/'+this.uniqueID).set(this);
+
+    // Get a sid
+    createUniqueSid(this).then(function(value){
+        // Körs om/när Promise-koden har lyckats (anropat succeed)
+        console.log('Sid found, woohoo');
+        db.ref('users/' + value[0].uniqueID + '/sid').set(value[1]);
+    })
+    .catch(function(error){
+      console.log('fel', error);
+    });
+
   }
 
   removeSelf(){
@@ -300,6 +307,111 @@ function decreaseMeetupCount(eventID){
     }
   });
 }
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
+function createUniqueSid(userObject, requestedSid){
+  return new Promise((resolve, reject) => {
+
+    recursiveSidFind(userObject);
+
+    function recursiveSidFind(userObject, count = 0){
+      if(count <= 10){
+        /* Create a site id here (sid) */
+        let name = userObject.fullname, sid;
+
+        if(name == null){
+          sid = 'anonymous#'+getRandomInt(1000, 9999);
+        } else {
+          if(name.includes(' ')){
+            name = name.split(' ');
+            sid = name[0] + '#' + getRandomInt(1000,9999);
+          } else {
+            sid = name + '#' + getRandomInt(1000,9999);
+          }
+        }
+
+        if(requestedSid){
+          if(!requestedSid.includes('#')){
+            sid = requestedSid + '#' + getRandomInt(1000,9999);
+          } else {
+            printMessage('error', 'You can\'t have another hashtag in your usertag.');
+            reject('Too many hashtags.');
+          }
+        }
+        sid = sid.toString().toLowerCase();
+
+        // /* Check if the requestsid is lower than 100 */
+        // if(requestsid){
+        //   try{
+        //     let num = Number.parseInt(sid);
+        //
+        //     if(num <= 99){
+        //       printMessage('error', 'SID-nummer under 1000 är reserverade.');
+        //       reject('För lågt nummer specificerat.');
+        //       return;
+        //     }
+        //   } catch(e){
+        //     console.log('No ints found');
+        //   }
+        // }
+        console.log('Final sid is: ', sid);
+        db.ref('users/').once('value', snapshot => {
+          let data = snapshot.val();
+          if(data){
+            for(let user in data){
+              user = data[user];
+              if(user.sid){
+                if(user.sid.toString().toLowerCase() == sid){
+                  console.log('Sid already taken, lets create another one!');
+                  if(requestedSid){
+                    printMessage('error', 'Det unika id:et är tyvärr redan taget.');
+                    reject('Sid already taken.');
+                  } else {
+                    return recursiveSidFind(userObject, count += 1);
+                  }
+                }
+              }
+            }
+            console.log('Sid not taken :o');
+            resolve([userObject, sid]);
+          } else {
+            printMessage('error', 'Ingen databasanslutning hittades');
+          }
+        });
+      } else {
+        reject('Could not find a sid in 10 tries.')
+      }
+    }
+  });
+}
+
+/* ett userObject måste innehålla userObject.uniqueID */
+function requestsid(userObject, sid){
+  createUniqueSid(userObject, sid).then(function(value){
+      db.ref('users/' + value[0].uniqueID + '/sid').set(value[1]);
+
+      /* Check if the requested sid is for the localUser then set it to loggedInUser */
+      let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+      /* check if there's a local user */
+      if(localUser){
+        /* Check if they match */
+        if(localUser.uniqueID == userObject.uniqueID){
+          /* If so set the SID then push it into the localStorage */
+          localUser.sid = sid;
+          localStorage.setItem('loggedInUser', JSON.stringify(localUser));
+        }
+      }
+  })
+  .catch(function(error){
+    console.log('Något gick snett: ', error);
+  });
+}
+
 /*
 
 avatarURL: "https://lh3.googleusercontent.com/-AxgGHdqx1CM/AAAAAAAAAAI/AAAAAAAAABo/hrcuCx0tzAU/photo.jpg"

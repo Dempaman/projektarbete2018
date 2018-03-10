@@ -53,8 +53,11 @@ footer.footer-box {
 .place, .phone, .mail {
   display: flex;
   margin-bottom: 10px;
-}
 
+}
+.phone>p, .mail>p{
+    padding-top: 5px;
+}
 .phone {
   display: flex;
 }

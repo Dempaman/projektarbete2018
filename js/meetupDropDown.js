@@ -107,7 +107,7 @@ function toggleMeetupDropDown(event, meetupKey, eventID){
   }
 }
 
-function confirmRemoveMeetup(eventID, meetupKey){
+function confirmRemoveMeetup(eventID, meetupKey, questionParam, answer, callback){
   let confirmWrapper = document.createElement('div');
   confirmWrapper.className = 'confirmModal centered';
 
@@ -117,19 +117,37 @@ function confirmRemoveMeetup(eventID, meetupKey){
 
   /* Skapa fråga */
   let question = document.createElement('p');
-  question.innerHTML = '<i class="mdi mdi-alert-circle-outline mdi-36px"></i> Du håller på att radera detta meetup, är du säker?';
+  if(questionParam){
+    question.innerHTML = '<i class="mdi mdi-alert-circle-outline mdi-36px"></i>' + questionParam;
+  } else {
+    question.innerHTML = '<i class="mdi mdi-alert-circle-outline mdi-36px"></i> Du håller på att radera detta meetup, är du säker?';
+  }
+
   /* Skapa knappar */
   let yesBtn = document.createElement('button');
-  yesBtn.innerHTML = 'Ja';
+  if(answer){
+    yesBtn.innerHTML = answer;
+  } else {
+    yesBtn.innerHTML = 'Ja';
+  }
+
   let noBtn = document.createElement('button');
   noBtn.innerHTML = 'Stäng';
 
   /* Add Listeners */
-  yesBtn.addEventListener('click', function(){
-    db.ref('meetups/' + eventID + '/' + meetupKey).remove();
-    printMessage('success', 'Meetupet har raderats.', 7000, 1500);
-    fadeOutObject(confirmWrapper);
-  });
+
+  if(callback){
+    yesBtn.addEventListener('click', function(){
+      callback();
+      fadeOutObject(confirmWrapper);
+    });
+  } else {
+    yesBtn.addEventListener('click', function(){
+      db.ref('meetups/' + eventID + '/' + meetupKey).remove();
+      printMessage('success', 'Meetupet har raderats.', 7000, 1500);
+      fadeOutObject(confirmWrapper);
+    });
+  }
 
   noBtn.addEventListener('click', function(){
     fadeOutObject(confirmWrapper);
@@ -163,7 +181,7 @@ function toggleNotifications(event){
 function dropDownEditMeetup(eventID, meetupKey){
   console.log('So you want me to edit this meetup? ', eventID, meetupKey);
   toggleCreateMeetupModal(true);
-  initSliderAndMoreShit(true);
+  initSliderAndMoreShit(true, meetupKey);
 }
 
 function fadeOutObject(htmlObj){
