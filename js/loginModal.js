@@ -18,18 +18,30 @@ firebase.auth().onAuthStateChanged(user => {
 
       if(result){
         // Print this if the user exists in the database.
+
         //console.log(result);
         console.log('Setting the loggedInUser here #1!');
         // Put the user information into the  localStorage db
         localStorage.setItem('loggedInUser', JSON.stringify(result));
 
+        /* Skapar SID ifall du inte har en! */
+        if(!result.sid){
+          printMessage('default', 'You do not seem to have a SID. Creating one for you now!');
+          requestsid(result);
+        }
+
       } else {
 
         let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
-        //console.log('No user here. Creating user in database.');
 
+        //console.log('No user here. Creating user in database.');
         newUser.push();
-        console.log('Setting the loggedInUser here!');
+        //console.log('Creating the user for the first time in the database! Welcome message printed.');
+
+        /* Welcome Message */
+        printMessage('success', 'Välkommen ' + user.displayName + '!', 8000, 300);
+
+        /* Setting localStorage */
         localStorage.setItem('loggedInUser', JSON.stringify(newUser));
       }
       // retrieveEventInfo after we've logged in!

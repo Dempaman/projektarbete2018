@@ -9,7 +9,7 @@ window.onload = function(){
 console.log(chatMessageTimeStamp(1519755958554));
 console.log(chatMessageTimeStamp(1516758062943));
 //printMessage('error', 'Testprint', 200000); // Type, message, timer (antal millisekunder)
-
+let user = localStorage.getItem('loggedInUser');
 
 
   // Turned off for debug purposes
@@ -351,7 +351,7 @@ function retrieveMeetupInfo(eventDate){
 }
 
 // Funktion för att gå med i ett meetup!
-function joinMeetup(userID, avatarURL, fullname, meetupKey, eventID){
+function joinMeetup(user, meetupKey, eventID){
 
   // joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
   db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
@@ -360,15 +360,16 @@ function joinMeetup(userID, avatarURL, fullname, meetupKey, eventID){
     let userIsNotComing = false;
 
     for(let comingUser in data){
-      if(data[comingUser].uniqueID == userID) {
+      if(data[comingUser].uniqueID == user.uniqueID) {
         userIsNotComing = true;
       }
     }
 
     let userObject = {
-      uniqueID: userID,
-      fullname: fullname,
-      avatarURL: avatarURL,
+      uniqueID: user.uniqueID,
+      sid: user.sid,
+      fullname: user.fullname,
+      avatarURL: user.avatarURL,
       joined: firebase.database.ServerValue.TIMESTAMP
     }
 
@@ -460,15 +461,18 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
             // Update the member list!
             for(let member in meetup.members){
-              if(currentUser.uniqueID == meetup.members[member].uniqueID) { found = true; }
+              let user = meetup.members[member];
+              if(currentUser.uniqueID == user.uniqueID) { found = true; }
               let memberDiv = document.createElement('div');
               memberDiv.className = 'memberDiv';
 
               let memberImage = document.createElement('img');
-              memberImage.setAttribute('src', meetup.members[member].avatarURL);
+              memberImage.setAttribute('src', user.avatarURL);
+              memberImage.setAttribute('sid', user.sid);
+              memberImage.addEventListener('click', gotoProfile);
 
               let hoverMessage = document.createElement('p');
-              hoverMessage.innerText = meetup.members[member].fullname;
+              hoverMessage.innerText = user.fullname;
               hoverMessage.className = 'hoverMessage';
 
               memberDiv.appendChild(memberImage);
@@ -483,7 +487,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
             let addMemberDiv = document.createElement('div');
             addMemberDiv.className = 'addMemberDiv';
             addMemberDiv.innerHTML = '<i class="mdi mdi-plus mdi-36px"></i>';
-
+            addMemberDiv.addEventListener('click', inviteFriend);
             let hoverMessage = document.createElement('p');
             hoverMessage.innerText = 'Bjud in en vän!';
             hoverMessage.className = 'hoverMessage';
@@ -558,15 +562,18 @@ function displayMembersAndChat(md, meetupKey){
 
       let data = snap.val();
       for(let comingUser in data){
+        let user = data[comingUser];
         let memberDiv = document.createElement('div');
         memberDiv.className = 'memberDiv';
 
         let memberDivAvatar = document.createElement('img');
         memberDivAvatar.setAttribute('alt', 'User picture');
-        memberDivAvatar.setAttribute('src', data[comingUser].avatarURL);
+        memberDivAvatar.setAttribute('src', user.avatarURL);
+        memberDivAvatar.setAttribute('sid', user.sid);
+        memberDivAvatar.addEventListener('click', gotoProfile);
 
         let hoverMessage = document.createElement('p');
-        hoverMessage.innerText = data[comingUser].fullname;
+        hoverMessage.innerText = user.fullname;
         hoverMessage.className = 'hoverMessage';
 
         if(comingUser != 'creator'){
@@ -596,7 +603,7 @@ function displayMembersAndChat(md, meetupKey){
       let addMemberDiv = document.createElement('div');
       addMemberDiv.className = 'addMemberDiv';
       addMemberDiv.innerHTML = '<i class="mdi mdi-plus mdi-36px"></i>';
-
+      addMemberDiv.addEventListener('click', inviteFriend);
       let hoverMessage = document.createElement('p');
       hoverMessage.innerText = 'Bjud in en vän!';
       hoverMessage.className = 'hoverMessage';
@@ -1405,7 +1412,7 @@ function joinBtnListener(joinMeetupBtn, meetupKey){
     let eventID = getLocationInfo()[0];
 
     if(currentUser){
-      joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
+      joinMeetup(currentUser, meetupKey, eventID);
 
     } else {
       console.log('Setup login modal here?');
@@ -1623,4 +1630,135 @@ function removeMeetupEntirelyFromTheDatabase(eventID, data, meetupKey){
   /* Decrease the meetupCounter */
   decreaseMeetupCount(eventID);
 
+}
+
+// Bjud in vänner till ett meetup!
+
+function inviteFriend(event){
+  printMessage('error', 'You cannot invite friends yet, sorry :(');
+}
+
+function gotoProfile(event){
+  popupProfile(event);
+}
+
+function popupProfile(event){
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  let user = {
+    sid: event.target.getAttribute('sid'),
+    avatarURL: event.target.getAttribute('src'),
+    fullname: event.target.nextSibling.innerText
+  }
+  if(user.sid == 'undefined'){
+    user.sid = false;
+  }
+
+  let profileHolder = document.createElement('div');
+  profileHolder.className = 'profileHolder fadein';
+
+  let avatarImage = document.createElement('img');
+  avatarImage.setAttribute('src', user.avatarURL);
+
+  let nameAndSidHolder = document.createElement('div');
+  let fullname = document.createElement('span');
+  fullname.innerText = user.fullname;
+
+  let sid = document.createElement('span');
+  sid.innerText = '[' + user.sid + ']' ;
+
+  let btnHolder = document.createElement('div');
+  let gotoBtn = document.createElement('button');
+  gotoBtn.innerText = 'Gå till profil';
+  gotoBtn.className = 'doNotCloseThis';
+  if(user.sid){
+    gotoBtn.addEventListener('click', function(){
+      //window.location.assign('profile.html?user=' + event.target.getAttribute('sid'));
+      printMessage('default', 'Denna ska leda till användarens profil. SiteID: ' + user.sid);
+    });
+  } else {
+    gotoBtn.className = 'disabledBtn doNotCloseThis';
+  }
+
+
+  let kickBtn = document.createElement('button');
+  kickBtn.innerHTML = '<i class="mdi mdi-account-remove mdi-24px"></i>';
+  kickBtn.addEventListener('click', function(){
+    confirmRemoveMeetup(null, null, 'Vill du verkligen ta bort ' + user.fullname + ' ifrån meetupet?', 'Hell yeah', function(){
+      printMessage('success', 'Du sparkade på riktigt ut ' + user.fullname + '. Skäms!');
+    });
+  });
+
+  let addFriendBtn = document.createElement('button');
+  addFriendBtn.innerText = 'Lägg till vän';
+  addFriendBtn.className = 'doNotCloseThis';
+  /* Some small checks */
+  if(user.sid){
+    if(localUser){
+      if(localUser.sid == user.sid){
+        addFriendBtn.className = 'disabledBtn doNotCloseThis';
+      } else {
+        addFriendBtn.addEventListener('click', function(){
+          addFriend(sid);
+        });
+      }
+    } else {
+      printMessage('error', 'Du är inte inloggad :o');
+    }
+  } else {
+    addFriendBtn.className = 'disabledBtn doNotCloseThis';
+  }
+
+  let closeBtn = document.createElement('span');
+  closeBtn.innerHTML = '<i class="mdi mdi-close mdi-24px"></i>'
+  closeBtn.className = 'closeBtn';
+
+  closeBtn.addEventListener('click', function(event){
+    profileHolder.parentNode.removeChild(profileHolder);
+  })
+
+  let nameAndBtnWrapper = document.createElement('div');
+
+  /* Append Everything */
+  btnHolder.appendChild(gotoBtn);
+  btnHolder.appendChild(addFriendBtn);
+  btnHolder.appendChild(kickBtn);
+
+  nameAndSidHolder.appendChild(fullname);
+
+  if(user.sid){ nameAndSidHolder.appendChild(sid); }
+    else {nameAndSidHolder.className = 'noSid'; }
+  nameAndSidHolder.appendChild(closeBtn);
+
+  nameAndBtnWrapper.appendChild(nameAndSidHolder);
+  nameAndBtnWrapper.appendChild(btnHolder);
+
+  profileHolder.appendChild(avatarImage);
+  profileHolder.appendChild(nameAndBtnWrapper);
+
+  event.target.parentNode.appendChild(profileHolder);
+
+  window.addEventListener('click', function(e){
+
+    if(e.target.className != profileHolder && !e.target.className.includes('doNotCloseThis') && e.target.className != 'noSid'){
+      if(e.target == event.target){
+        if(document.getElementsByClassName('profileHolder').length >= 2){
+          if(profileHolder.parentNode){
+            profileHolder.parentNode.removeChild(profileHolder);
+          }
+        }
+      } else if(profileHolder.parentNode){
+        profileHolder.parentNode.removeChild(profileHolder);
+      }
+    }
+  });
+}
+
+function addFriend(sid){
+  let user = JSON.parse(localStorage.getItem('loggedInUser'));
+  if(user){
+    console.log('Adding a new friend :3');
+    db.ref('users/' + user.uniqueID + '/friends').push(sid);
+  } else {
+    printMessage('error', 'Du är inte inloggad :o');
+  }
 }
