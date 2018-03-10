@@ -1,0 +1,105 @@
+.profileHolder {
+  position: absolute;
+  background-color: #535353;
+  border-radius: 4px;
+  padding: 15px 34px 15px 19px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+.profileHolder > img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 35px #5d5d5d;
+}
+
+/* Div margin */
+.profileHolder > div {
+  margin-left: 15px;
+}
+
+.profileHolder > div > div:first-child {
+  display: flex;
+  justify-content: space-around;
+}
+
+.profileHolder > div > div:last-child {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 4px;
+}
+
+.profileHolder > div > div.noSid {
+  display: flex;
+  justify-content: left;
+  margin-left: 4px;
+}
+
+/* Information (Name + sid) */
+.profileHolder > div > div > span:first-child {
+  color: #ececec;
+}
+.profileHolder > div > div > span:nth-child(2) {
+  color: #8f8f8f;
+  margin-left: 4px;
+}
+
+/* Buttons */
+.profileHolder > div > div > button {
+  cursor: pointer;
+  font-family: 'Questrial', sans-serif;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 3px;
+  margin: 4px;
+}
+
+.profileHolder > div > div > button {
+  color: #3e4e4e;
+  background-color: #f8f8f8;
+}
+.profileHolder > div > div > button:last-child {
+  color: #fcfcfc;
+  background-color: #cc5353;
+  padding: 0px 7px 0px 6px;
+  margin: 3px 2px;
+}
+
+/* Hover for buttons */
+.profileHolder > div > div > button:hover {
+  color: #454545;
+  background-color: #ececec;
+}
+.profileHolder > div > div > button:last-child:hover {
+  color: #fcfcfc;
+  background-color: #d77979;
+}
+
+/* closeButton */
+.profileHolder > div > div > .closeBtn {
+  color: #d2d2d2;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1px 4px;
+}
+
+/* disabled btn */
+.profileHolder > div > div > button.disabledBtn {
+  cursor: not-allowed;
+  color: #8d8d8d;
+  background-color: #484848;
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 3px;
+  margin: 4px;
+}
+.profileHolder > div > div > button.disabledBtn:hover {
+  cursor: not-allowed;
+  color: #8d8d8d;
+  background-color: #484848;
+}
