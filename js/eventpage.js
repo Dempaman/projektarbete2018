@@ -487,7 +487,11 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
             let addMemberDiv = document.createElement('div');
             addMemberDiv.className = 'addMemberDiv';
             addMemberDiv.innerHTML = '<i class="mdi mdi-plus mdi-36px"></i>';
+            addMemberDiv.meetupKey = meetupKey;
             addMemberDiv.addEventListener('click', inviteFriend);
+            addMemberDiv.meetupKey = meetupKey;
+
+
             let hoverMessage = document.createElement('p');
             hoverMessage.innerText = 'Bjud in en vän!';
             hoverMessage.className = 'hoverMessage';
@@ -604,6 +608,10 @@ function displayMembersAndChat(md, meetupKey){
       addMemberDiv.className = 'addMemberDiv';
       addMemberDiv.innerHTML = '<i class="mdi mdi-plus mdi-36px"></i>';
       addMemberDiv.addEventListener('click', inviteFriend);
+      addMemberDiv.meetupKey = meetupKey;
+
+      console.log('attribute here is: ', addMemberDiv.attribute);
+
       let hoverMessage = document.createElement('p');
       hoverMessage.innerText = 'Bjud in en vän!';
       hoverMessage.className = 'hoverMessage';
@@ -1635,13 +1643,22 @@ function removeMeetupEntirelyFromTheDatabase(eventID, data, meetupKey){
 // Bjud in vänner till ett meetup!
 
 function inviteFriend(event){
-  printMessage('error', 'You cannot invite friends yet, sorry :(');
+  let target = event.target;
+  if(event.target.nodeName == 'I'){
+    target = target.parentNode;
+  }
+  localStorage.setItem('currentMeetupKey', target.meetupKey);
+  // console.log('Key is: ', target.meetupKey);
+  // console.log('Event target is: ', event.target);
+  //printMessage('error', 'You cannot invite friends yet, sorry :(');
+  displayInviteFriends(event);
 }
 
 function gotoProfile(event){
   popupProfile(event);
 }
 
+// function to popup the userProfile when pressed on their avatar.
 function popupProfile(event){
   let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
   let user = {
@@ -1753,6 +1770,7 @@ function popupProfile(event){
   });
 }
 
+// Add a friend with SID, (currentUser)
 function addFriend(sid){
   let user = JSON.parse(localStorage.getItem('loggedInUser'));
   if(user){
@@ -1761,4 +1779,281 @@ function addFriend(sid){
   } else {
     printMessage('error', 'Du är inte inloggad :o');
   }
+}
+
+function displayInviteFriends(event){
+  let array = [];
+  downloadUsersToArray(array);
+  let friendWrapper = document.createElement('div');
+  friendWrapper.className = 'friendWrapper';
+  let friendTitle = document.createElement('h2');
+  friendTitle.innerText = 'Bjud in vänner';
+
+  let searchDiv = document.createElement('div');
+  let searchIcon = document.createElement('span');
+  searchIcon.className = 'icon';
+  let searchBar = document.createElement('input');
+  searchBar.setAttribute('placeholder', 'Sök efter namn eller #tag');
+  searchIcon.innerHTML = '<i class="mdi mdi-magnify mdi-24px"></i>';
+
+  let searchBtn = document.createElement('span');
+  searchBtn.className = 'searchBtn';
+  searchBtn.innerText = 'Sök';
+
+  searchDiv.appendChild(searchIcon);
+  searchDiv.appendChild(searchBar);
+  searchDiv.appendChild(searchBtn);
+
+  /* Resultat från sökningen */
+  let resultDiv = document.createElement('div');
+  resultDiv.className += 'resultHolder';
+
+  let friendsResultTitle = document.createElement('h3');
+  friendsResultTitle.innerText = 'Vänner';
+  friendsResultTitle.className = 'hidden';
+  let otherResultTitle = document.createElement('h3');
+  otherResultTitle.innerText = 'Andra';
+  otherResultTitle.className = 'hidden';
+  let resultDivFriends = document.createElement('div');
+  let resultDivAndra = document.createElement('div');
+  resultDivFriends.className = 'friendList';
+  resultDivAndra.className = 'otherList';
+
+  resultDiv.appendChild(friendsResultTitle);
+  resultDiv.appendChild(resultDivFriends);
+  resultDiv.appendChild(otherResultTitle);
+  resultDiv.appendChild(resultDivAndra);
+
+  let closeWrapperBtn = document.createElement('div');
+  closeWrapperBtn.className = 'closeWrapperBtn';
+  closeWrapperBtn.innerText = 'Stäng';
+
+
+
+  /* Skapa vänlistan */
+  let friendList = [];
+
+  /* Check if there is a localUser. Should always be one.. */
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  if(localUser){
+    console.log(localUser);
+    for(let friend in localUser.friends){
+      console.log(friend);
+      friendList.push(localUser.friends[friend]);
+    }
+    console.log(friendList);
+  }
+
+  searchBtn.addEventListener('click', function(e){
+    displayInviteFriendsResults(e, array, resultDiv, friendList, true);
+  })
+
+  searchBar.addEventListener('change', function(e){
+    displayInviteFriendsResults(e, array, resultDiv, friendList);
+  });
+
+  /* Append Everything */
+  friendWrapper.appendChild(friendTitle);
+  friendWrapper.appendChild(searchDiv);
+  friendWrapper.appendChild(resultDiv);
+  friendWrapper.appendChild(closeWrapperBtn);
+
+  let body = document.getElementsByTagName('body')[0];
+  body.appendChild(friendWrapper);
+
+  closeWrapperBtn.addEventListener('click', function(){
+    body.removeChild(friendWrapper);
+  });
+
+}
+
+function displayInviteFriendsResults(event, searchArray, printList, friendList, btn){
+  /* check if it's empty first */
+  if(searchArray.length){
+    let searchStr;
+    if(btn){
+      searchStr = event.target.previousSibling.value.toLowerCase();
+    } else {
+      searchStr = event.target.value.toLowerCase();
+    }
+
+    if(searchStr == ""){
+      printMessage('success', 'Visar alla användare  :\') ');
+    }
+    /* Filter the users based on value */
+    let found = false;
+
+    /* Remove all currently displayed persons & hide the titels*/
+    while(printList.children[1].firstChild){
+      printList.children[1].removeChild(printList.children[1].firstChild);
+    }
+    while(printList.children[3].firstChild){
+      printList.children[3].removeChild(printList.children[3].firstChild);
+    }
+    /* hide titles */
+    for(let title of printList.children){
+      if(title.nodeName == 'H3'){
+        title.className = 'hidden';
+      }
+    }
+
+    /* Search through users in the usersArray */
+
+    for(let user of searchArray){
+      let fullname = user.fullname;
+      let sid = user.sid;
+      let friend = false;
+
+
+      if(fullname || sid){
+
+        /* Search by sid */
+        if(searchStr.includes('#')){
+          if(sid){
+            /* Set SID to toLowerCase */
+            sid = sid.toLowerCase();
+
+            if(sid.includes(searchStr)){
+              /* We found a match! */
+              if(friendList){
+                /* The person has a friend ! */
+                  if(user.sid){
+                    /* the found person has a SID defined! They might be friends :o */
+                    console.log('sid again:' + user.sid);
+                    if(friendList.includes(user.sid)){
+                      console.log('They are friends!!');
+                      friend = true;
+                    }
+                  }
+              }
+              displayMatch(user, printList, friend, true);
+              found = true;
+            }
+          }
+        } else if(fullname){
+          /* Set fullname to toLowerCase */
+          fullname = fullname.toLowerCase();
+          /* Search by name */
+          if(fullname.includes(searchStr)){
+            /* We found a match! */
+            /* Display based on friendShip! */
+            if(friendList){
+              /* The person has a friend ! */
+                if(user.sid){
+                  /* the found person has a SID defined! They might be friends :o */
+                  console.log('sid again:' + user.sid);
+                  if(friendList.includes(user.sid)){
+                    console.log('They are friends!!');
+                    friend = true;
+                  }
+                }
+            }
+            displayMatch(user, printList, friend, false);
+            found = true;
+          }
+        }
+
+      }
+    }
+    if(!found){
+      printMessage('error', 'Vi kunde tyvärr inte hitta en användare :(', undefined, undefined, 1);
+    }
+  } else {
+    printMessage('error', 'Sorry, we couldn\t find any users :(');
+  }
+}
+
+function displayMatch(user, printList, friend, foundBySid = false){
+  /* If the user we want to display is a friend of the current user put them in the friendsDiv */
+  if(friend){
+    printList.children[0].className = '';
+    printList = printList.children[1];
+  } else {
+    printList.children[2].className = '';
+    printList = printList.children[3];
+  }
+
+  let userDiv = document.createElement('div');
+  userDiv.className = 'userProfile fadein';
+
+  if(friend){
+    userDiv.className += ' friend';
+  }
+  let avatarImage = document.createElement('img');
+  avatarImage.setAttribute('src', user.avatarURL);
+
+  let nameAndSidHolder = document.createElement('div');
+  nameAndSidHolder.className = 'nameAndSidHolder';
+
+  let fullname = document.createElement('span');
+  fullname.innerText = user.fullname;
+
+  let sid = document.createElement('span');
+  sid.innerText = '[' + user.sid + ']' ;
+
+  if(foundBySid){
+    sid.className = 'foundBySid';
+    fullname.className = 'foundBySid';
+  }
+
+  let inviteBtn = document.createElement('button');
+  inviteBtn.innerHTML = '<i class="mdi mdi-plus mdi-24px"> </i>';
+  inviteBtn.addEventListener('click', function(e){
+    inviteBtn.disabled = true;
+    printMessage('default', 'Vill du veeeerkligen bjuda med ' + user.fullname + '?', undefined, undefined, 1);
+    e.target.children[0].className += ' fadeout';
+
+    sendInvite(user, friend);
+
+    setTimeout(function(){
+      e.target.innerHTML = '<i class="mdi mdi-check mdi-24px fadein"> </i>';
+    }, 500);
+
+  });
+
+  nameAndSidHolder.appendChild(fullname);
+  if(user.sid){
+    nameAndSidHolder.appendChild(sid);
+  }
+
+
+
+  userDiv.appendChild(avatarImage);
+  userDiv.appendChild(nameAndSidHolder);
+  userDiv.appendChild(inviteBtn);
+
+  printList.appendChild(userDiv);
+
+}
+
+function downloadUsersToArray(array){
+  db.ref('users/').on('child_added', function(snapshot){
+    let user = snapshot.val();
+
+    array.push(user);
+  });
+}
+
+function sendInvite(user, friend){
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  let meetupKey = localStorage.getItem('currentMeetupKey');
+  if(!localUser){
+    printMessage('error', 'Du är inte inloggad! :o');
+    throw('There is not a user logged in.');
+  }
+  eventID = getLocationInfo()[0];
+
+  let invite = {
+    fromID: localUser.uniqueID,
+    fullname: localUser.fullname,
+    avatarURL: localUser.avatarURL,
+    friend: friend,
+    eventid: eventID,
+    meetupKey: meetupKey,
+    time: firebase.database.ServerValue.TIMESTAMP
+  }
+
+  db.ref('users/' + user.uniqueID + '/invites').push(invite);
+
+
 }
