@@ -1431,6 +1431,7 @@ function pageLoaded(){
   header.className = header.className.replace('hidden', '');
   document.getElementById('imageHolder').className = '';
   document.getElementById('eventHolder').className = '';
+  document.getElementById('divBorderEventPage').className = '';
   document.getElementsByClassName('footer-box hidden')[0].className = 'footer-box';
   if(document.getElementsByClassName('spinner')[0]){
     document.getElementsByClassName('spinner')[0].className = 'hidden';
