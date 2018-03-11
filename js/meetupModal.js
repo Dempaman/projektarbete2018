@@ -268,10 +268,10 @@ function createMeetupListener(event){
     let allChecks = false;
 
 
-    if(checkLength('Namnet', name.length, 6, 36) && checkLength('Platsnamnet', placeName.length, 4, 18)){
-        if(checkLength('Platsnamnet', placeName.length, 4, 18)){
-            if(placeName.length > 4 && placeName.length < 18){
-                if(!isNaN(spots)){
+    if(checkLength('Namnet', name.length, 6, 36)){
+        if(checkLength('Platsnamnet', placeName.length, 4, 48)){
+            if(checkForNumber('Antal plantser', spots)){
+                if(checkLength('Tid', time, 4, 48)){
 
                   // Skapa meetupet.
                   if(meetupKey && redigera){
@@ -324,17 +324,9 @@ function createMeetupListener(event){
 
                     event.target.removeEventListener('click', createMeetupListener);
 
-                } else {
-                 printMessage('error', 'Du måste ange antal platser')
                 }
-            } else {
-             printMessage('error', 'Platsnamn är för kort eller för långt')
             }
-        } else {
-          printMessage('error', 'Platsnamn är för kort eller för långt')
         }
-    } else {
-      printMessage('error', 'Namnet är för kort eller för långt', 6000, 400)
     }
 
   } else {
@@ -431,23 +423,24 @@ function toggleCreateMeetupModal(redigera = false){
 }
 
 function checkLength(type, str, min, max){
-
-    if(type == 'Antal platser'){
-      try {
-        Number.parseInt(str);
-      } catch(e){
-        printMessage('error', type + ' måste vara ett tal');
-        return false;
-      }
-    }
-
-    if(str.length < min){
-      printMessage('error', type + ' är litee för kort.');
+    if(str < min){
+      printMessage('error', type + ' är lite för kort.');
       return false;
-    } else if (str.length > max){
+    } else if (str > max){
       printMessage('error', type + ' är lite långt.');
       return false;
     } else {
       return true;
     }
+}
+
+function checkForNumber(type, number){
+    if(isNaN(number)){
+      return printMessage('error', type + ' måste vara ett tal');
+    } else if( number < 2){
+      printMessage('error', type + ' är för få platser')
+    } else if ( number > 100){
+      printMessage('error', type + ' är för många platser');
+    }
+      return true;
 }
