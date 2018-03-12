@@ -2,13 +2,13 @@
 <html>
 
 <head>
-  <meta charset="utf-8" name="viewport" content="Width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
   <link rel="icon" type="image/png" sizes="16x16" href="img/logo-design-white-frame.png">
   <!-- <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script> -->
 
   <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
   <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-  <script type="text/javascript" src="js/index.js"></script>
+  <script src="js/index.js"></script>
 
   <script src="js/classes.js"></script>
   <script src="js/loginModal.js"></script>
@@ -19,13 +19,13 @@
   <link rel="stylesheet" type="text/css" href="css/events.css">
   <link rel="stylesheet" type="text/css" href="css/eventpage.css">
   <link rel="stylesheet" type="text/css" href="css/createUser.css">
+  <link rel="stylesheet" type="text/css" href="css/loginModal.css">
 
-  <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/evenemangskort.css">
   <link rel="stylesheet" href="css/headstyle.css" type="text/css">
   <link rel="stylesheet" href="css/menu.css" type="text/css">
   <link rel="stylesheet" href="css/footer.css" type="text/css">
-  <link rel="stylesheet" type="text/css" href="css/loginModal.css">
+  <link rel="stylesheet" href="css/index.css">
 
 
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
@@ -40,12 +40,15 @@
     <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
     <div class="header">
       <img src="img/logo-design3.png" alt="Event">
+      <div id="helloUser" class="hidden">
+        <span id="userName"></span>
+      </div>
       <!-- HTML för desktopläge i nav -->
       <ul class="deskNav">
-        <a href="/index.html" class="active"><li>HEM</li></a>
-        <a href="/profil.html"><li id="myProfile" class="hidden">MIN PROFIL</li></a>
-        <a href="/events.html"><li>ALLA EVENTS</li></a>
-        <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+        <li><a href="/index.html" class="active">HEM</a></li>
+        <li id="myProfile" class="hidden"> <a href="/profil.html">MIN PROFIL</a>
+        <li><a href="/events.html">ALLA EVENTS</a></li>
+        <li><a href="#contactUs">KONTAKTA OSS</a></li>
         <li class="loginInMenu">LOGGA IN</li>
       </ul>
 
@@ -57,23 +60,18 @@
       -->
       <input type="checkbox"/>
 
-      <!--
-      Some spans to act as a hamburger.
-      -->
+      <!--Some spans to act as a hamburger.-->
       <span></span>
       <span></span>
       <span></span>
 
-      <!--
-      Too bad the menu has to be inside of the button
-      but hey, it's pure CSS magic.
-      -->
+      <!--Too bad the menu has to be inside of the button but hey, it's pure CSS magic.  -->
       <ul id="menu">
-        <a href="/index.html" class="active"><li>HEM</li></a>
-        <a href="/profil.html"><li id="myProfileMob" class="hidden">MIN PROFIL</li></a>
-        <a href="/events.html"><li>ALLA EVENTS</li></a>
-        <a href="#contactUs"><li>KONTAKTA OSS</li></a>
-        <a ><li class="loginInMenu">LOGGA IN</li></a>
+        <li><a href="/index.html" class="active">HEM</a></li>
+        <li id="myProfileMob" class="hidden"><a href="/profil.html">MIN PROFIL</a></li>
+        <li><a href="/events.html">ALLA EVENTS</a></li>
+        <li><a href="#contactUs">KONTAKTA OSS</a></li>
+        <li class="loginInMenu"><a>LOGGA IN</a></li>
       </ul>
     </div>
   </nav>
@@ -94,8 +92,11 @@
 
       <div id="testOutPut">
     </div>
+    <div class="title">
+      <h1><a href="events.html">Alla events <span>&#187;</span></a></h1>
+    </div>
 
-    <a class="showMore" href="events.html"><h2>Visa alla events <span>&#187;</span></h2><a>
+    <!-- <a class="showMore" href="events.html"><h2>Visa alla events <span>&#187;</span></h2><a> -->
 
   </main>
   <footer class="footer-box">
@@ -123,9 +124,10 @@
           <div class="menu-box">
             <div class="footer-menu">
               <ul>
-                <a href="/index.html"><li>HEM</li></a>
-                <a href="/events.html"><li>ALLA EVENTS</li></a>
-                <a><li class="loginInMenu">LOGGA IN</li></a>
+                <li><a href="/index.html">HEM</a></li>
+                <li><a href="/events.html">ALLA EVENTS</a></li>
+                <li><a href="#contactUs">FAQ</a></li>
+                <!-- <li class="loginInMenu"><a>LOGGA IN</a></li> -->
 
               </ul>
             </div>
@@ -133,8 +135,8 @@
         </div>
         <div id="contactUs" class="contact-form">
           <h4>Kontakta oss</h4>
-          <input type="text" name="" value="" placeholder="Namn" >
-          <input type="email" name="" value="" placeholder="E-post">
+          <input type="text" name="namn" value="" placeholder="Namn" >
+          <input type="email" name="e-post" value="" placeholder="E-post">
           <textarea name="name" rows="8" cols="50" placeholder="Meddelande"></textarea>
           <button id="contact-send" type="button" name="button">Skicka</button>
         </div>
