@@ -20,7 +20,7 @@ firebase.auth().onAuthStateChanged(user => {
 
     /* start to listen for invites for this person */
     let initTime = new Date().getTime();
-    db.ref('users/' + user.uid + '/invites').on('child_added', function(snapshot){
+    db.ref('users/' + user.uid + '/notifications').on('child_added', function(snapshot){
       let data = snapshot.val();
 
       if(initTime > data.time){
@@ -35,11 +35,16 @@ firebase.auth().onAuthStateChanged(user => {
     console.log('User data:',user);
     //Annas magic
     let helloUser = document.getElementById("helloUser");
-    helloUser.classList.remove("hidden");
-    let usersName = document.getElementById("userName");
-    // let firstName = user.displayName.split(" ",1);
-    usersName.innerText = user.displayName;
 
+    helloUser.classList.remove("hidden");
+    let userName = document.getElementById("userName");
+    // let firstName = user.displayName.split(" ",1);
+    userName.innerText = user.displayName;
+
+    let bell = document.getElementById('notificationBell');
+    bell.classList.remove('hidden');
+
+    bell.addEventListener('click', showNotifications);
 
     db.ref("users/" + user.uid).once("value", function(snapshot){
 
@@ -100,6 +105,7 @@ firebase.auth().onAuthStateChanged(user => {
   } else {
     console.log('wubalubadub dub');
       helloUser.classList.add("hidden");
+      bell.classList.add('hidden');
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
       localStorage.removeItem('loggedInUser');
@@ -473,4 +479,300 @@ function removeLoginModalListeners(){
 
   googleButton.removeEventListener('click', loginGoogle);
   facebookButton.removeEventListener('click', loginFacebook);
+}
+
+function showNotifications(event){
+  console.log('Hi!!');
+  let notificationWrapper = document.getElementById('notificationWrapper');
+  if(notificationWrapper){
+    toggleNotifications();
+  } else {
+
+    notificationWrapper = document.createElement('div');
+    notificationWrapper.setAttribute('id', 'notificationWrapper');
+
+    /* Notification header */
+    let notificationHeader = document.createElement('div');
+    let notificationLabel = document.createElement('h2');
+    notificationLabel.innerText = 'Notifikationer';
+    let notificationCloseIcon = document.createElement('span');
+    notificationCloseIcon.innerHTML = '<i class="mdi mdi-close mdi-36px"></i>'
+
+    notificationCloseIcon.addEventListener('click', toggleNotifications);
+
+    let notificationContent = document.createElement('div');
+    let notificationList = document.createElement('div');
+    notificationList.setAttribute('id', 'notificationList');
+
+
+    /* append everything */
+    let header = document.getElementsByClassName('header')[0];
+
+
+    notificationHeader.appendChild(notificationLabel);
+    notificationHeader.appendChild(notificationCloseIcon);
+
+    notificationContent.appendChild(notificationList);
+
+    notificationWrapper.appendChild(notificationHeader);
+    notificationWrapper.appendChild(notificationContent);
+
+    header.appendChild(notificationWrapper);
+
+
+    displayNotifications(notificationList);
+  }
+}
+
+function toggleNotifications(){
+  let wrapper = document.getElementById('notificationWrapper');
+  if(wrapper.className.includes('hidden')){
+    wrapper.classList.remove('hidden');
+  } else {
+    wrapper.classList.add('hidden');
+  }
+}
+
+
+function displayNotifications(displayList){
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+  /* Check if user is logged in */
+  if(localUser){
+    db.ref('users/' + localUser.uniqueID + '/notifications').on('child_added', function(snapshot){
+      let data = snapshot.val();
+      let notificationKey = snapshot.key;
+      let eventID = data.eventid;
+      let meetupKey = data.meetupKey;
+
+      console.log('WHAT IS DATA?!', data);
+      let listItem = document.createElement('div');
+      let contentWrapper = document.createElement('div');
+
+      let img = document.createElement('img');
+      img.setAttribute('src', data.avatarURL);
+      img.style.border = 'none';
+
+      let fromName = document.createElement('span');
+      fromName.innerText = data.fullname + ' ' + getAction(data.action);
+
+      let time = document.createElement('span');
+      time.innerText = chatMessageTimeStamp(data.time);
+      time.className = 'notificationTime';
+      let btn = document.createElement('button');
+      btn.innerHTML = '<i class="mdi mdi-chevron-down mdi-30px"></i>'
+
+      /* Show more */
+      let showMoreDiv = document.createElement('div');
+      showMoreDiv.className = 'hidden';
+      btn.addEventListener('click', function(e){
+        console.log('Go to event: ', data.eventid + data.meetupKey);
+        if(showMoreDiv.className == 'hidden'){
+          showMoreDiv.className = '';
+          e.target.innerHTML = '<i class="mdi mdi-chevron-up mdi-30px"></i>';
+        } else {
+          showMoreDiv.className = 'hidden';
+          e.target.innerHTML = '<i class="mdi mdi-chevron-down mdi-30px"></i>'
+        }
+      });
+
+      let notImgDiv = document.createElement('div');
+      contentWrapper.appendChild(img);
+
+      notImgDiv.appendChild(fromName);
+      contentWrapper.appendChild(time);
+
+
+      contentWrapper.appendChild(notImgDiv);
+      contentWrapper.appendChild(btn);
+
+
+      /* Append stuff into showMoreDiv */
+
+      db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snapshot){
+        data = snapshot.val();
+        console.log('WHAT IS MEETUPDATA?!?', data);
+        let showMoreInfoDiv = document.createElement('div');
+        showMoreInfoDiv.className = 'showMoreInfoDiv';
+
+        let skapareDiv = document.createElement('div');
+        let skapareLabel = document.createElement('span');
+        skapareLabel.innerText = 'Skapare';
+        let skapare = document.createElement('span')
+        skapare.innerText = data.creator.fullname;
+        skapareDiv.appendChild(skapareLabel);
+        skapareDiv.appendChild(skapare);
+
+        let platsDiv = document.createElement('div');
+        let platsLabel = document.createElement('span');
+        platsLabel.innerText = 'Plats';
+        let plats = document.createElement('span')
+        plats.innerText = data.placeName;
+        platsDiv.appendChild(platsLabel);
+        platsDiv.appendChild(plats);
+
+        let nameDiv = document.createElement('div');
+        let nameLabel = document.createElement('span');
+        nameLabel.innerText = 'Name'
+        let name = document.createElement('span')
+        name.innerText = data.name;
+        nameDiv.appendChild(nameLabel);
+        nameDiv.appendChild(name);
+
+
+        let adressDiv = document.createElement('div');
+        let adressLabel = document.createElement('span');
+        adressLabel.innerText = 'Adress';
+        let adress = document.createElement('span')
+        adress.innerText = data.adress;
+        adressDiv.appendChild(adressLabel);
+        adressDiv.appendChild(adress);
+        let infoWrapper = document.createElement('div');
+        infoWrapper.className = 'infoWrapper';
+
+
+        infoWrapper.appendChild(skapareDiv);
+        infoWrapper.appendChild(platsDiv);
+        infoWrapper.appendChild(nameDiv);
+        infoWrapper.appendChild(adressDiv);
+
+        showMoreInfoDiv.appendChild(infoWrapper);
+
+        let btnHolder = document.createElement('div');
+
+        let gotoEventBtn = document.createElement('button');
+        let acceptInviteBtn = document.createElement('button');
+        gotoEventBtn.innerText = 'Tacka nej';
+        acceptInviteBtn.innerText = 'Acceptera inbjudan';
+        gotoEventBtn.className = 'gotoBtn';
+        acceptInviteBtn.className = 'gotoBtn';
+
+
+        /* eventListener */
+        gotoEventBtn.addEventListener('click', function(e){
+            /* Tacka nej */
+            db.ref('users/' + localUser.uniqueID + '/notifications/'+notificationKey).remove();
+            displayList.removeChild(listItem);
+            printMessage('success', 'Du tackade nej.');
+        });
+
+        acceptInviteBtn.addEventListener('click', function(e){
+          joinMeetup(localUser, meetupKey, eventID);
+        });
+
+        btnHolder.appendChild(gotoEventBtn);
+        btnHolder.appendChild(acceptInviteBtn);
+
+        /* append everything */
+
+
+
+        showMoreDiv.appendChild(showMoreInfoDiv);
+        showMoreDiv.appendChild(btnHolder);
+
+
+      });
+
+      listItem.appendChild(contentWrapper);
+      listItem.appendChild(showMoreDiv);
+
+      if(displayList.firstChild){
+        displayList.insertBefore(listItem, displayList.firstChild);
+      } else {
+        displayList.appendChild(listItem);
+      }
+    });
+  }
+}
+
+function getAction(action){
+
+  if(action == 'invite'){
+    return ' bjöd in dig till ett meetup!';
+  }
+
+}
+
+// Denna funktion beräknar vad som ska visas som tid på varje chattmeddelande!
+function chatMessageTimeStamp(timeStamp){
+  let currTime = new Date().getTime();
+  //console.log('Current time is: ', currTime);
+  let difference = currTime - timeStamp;
+  //console.log('Difference:', difference);
+  let seconds = Math.floor((difference / 1000));
+  let minutes = Math.floor((difference / 1000 / 60));
+  let hours = Math.floor((difference / 1000 / 60 / 60));
+  let days = Math.floor((difference / 1000 / 60 / 60 / 24));
+  // console.log('Divided by 1000 then 60:', difference / 1000 / 60);
+  // console.log('Current date: ', new Date(currTime));
+  // console.log('Timestamp date:', new Date(timeStamp));
+  //console.log(timeStamp);
+
+  // console.log('Sekunder: ' + seconds);
+  // console.log('Minuter: ' + minutes);
+  // console.log('Timmar: ' + hours);
+
+  if(days > 0){
+    if(days == 1){
+      return ' en dag sedan';
+    } else {
+      return days + ' dagar sedan';
+    }
+  } else if(hours > 0){
+    if(hours == 1){
+      return hours + ' timme sedan';
+    } else {
+      return hours + ' timmar sedan';
+    }
+  } else if(minutes > 0){
+      if(minutes == 1){
+        return minutes + ' minut sedan';
+      } else {
+        return minutes + ' minuter sedan';
+      }
+  } else if (seconds > 0){
+      if(seconds == 1){
+        return seconds + ' sekund sedan';
+      } else {
+        return seconds + ' sekunder sedan';
+      }
+  } else {
+    return 'nu';
+  }
+}
+
+// Funktion för att gå med i ett meetup!
+function joinMeetup(user, meetupKey, eventID){
+
+  // joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
+  db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
+
+    let data = snap.val();
+    let userIsNotComing = false;
+
+    for(let comingUser in data){
+      if(data[comingUser].uniqueID == user.uniqueID) {
+        userIsNotComing = true;
+      }
+    }
+
+    let userObject = {
+      uniqueID: user.uniqueID,
+      sid: user.sid,
+      fullname: user.fullname,
+      avatarURL: user.avatarURL,
+      joined: firebase.database.ServerValue.TIMESTAMP
+    }
+    console.log('DATA IS: ', data);
+    if(!userIsNotComing){
+      db.ref('meetups/' + eventID + '/' + meetupKey + '/members').push(userObject);
+      console.log('Vi la till dig i meetupet!');
+      new SystemMessage(meetupKey, userObject.fullname + ' gick med i meetupet.').push();
+
+      // Lägg till meetup i användarens profil.
+      addUserMeetup(userObject.uniqueID,eventID, meetupKey);
+    } else {
+      console.log('Du är redan med i detta meetup! Något måste gått fel!');
+    }
+  });
 }

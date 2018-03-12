@@ -350,41 +350,6 @@ function retrieveMeetupInfo(eventDate){
   }
 }
 
-// Funktion för att gå med i ett meetup!
-function joinMeetup(user, meetupKey, eventID){
-
-  // joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
-  db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
-
-    let data = snap.val();
-    let userIsNotComing = false;
-
-    for(let comingUser in data){
-      if(data[comingUser].uniqueID == user.uniqueID) {
-        userIsNotComing = true;
-      }
-    }
-
-    let userObject = {
-      uniqueID: user.uniqueID,
-      sid: user.sid,
-      fullname: user.fullname,
-      avatarURL: user.avatarURL,
-      joined: firebase.database.ServerValue.TIMESTAMP
-    }
-
-    if(!userIsNotComing){
-      db.ref('meetups/' + eventID + '/' + meetupKey + '/members').push(userObject);
-      console.log('Vi la till dig i meetupet!');
-      new SystemMessage(meetupKey, userObject.fullname + ' gick med i meetupet.').push();
-
-      // Lägg till meetup i användarens profil.
-      addUserMeetup(userObject.uniqueID,eventID, meetupKey);
-    } else {
-      console.log('Du är redan med i detta meetup! Något måste gått fel!');
-    }
-  });
-}
 
 // Denna funktion uppdaterar dom:en när det sker en ändring i databasen!
 function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
@@ -1170,53 +1135,6 @@ function retrieveEventInfo(){
   }
 }
 
-// Denna funktion beräknar vad som ska visas som tid på varje chattmeddelande!
-function chatMessageTimeStamp(timeStamp){
-  let currTime = new Date().getTime();
-  //console.log('Current time is: ', currTime);
-  let difference = currTime - timeStamp;
-  //console.log('Difference:', difference);
-  let seconds = Math.floor((difference / 1000));
-  let minutes = Math.floor((difference / 1000 / 60));
-  let hours = Math.floor((difference / 1000 / 60 / 60));
-  let days = Math.floor((difference / 1000 / 60 / 60 / 24));
-  // console.log('Divided by 1000 then 60:', difference / 1000 / 60);
-  // console.log('Current date: ', new Date(currTime));
-  // console.log('Timestamp date:', new Date(timeStamp));
-  //console.log(timeStamp);
-
-  // console.log('Sekunder: ' + seconds);
-  // console.log('Minuter: ' + minutes);
-  // console.log('Timmar: ' + hours);
-
-  if(days > 0){
-    if(days == 1){
-      return ' en dag sedan';
-    } else {
-      return days + ' dagar sedan';
-    }
-  } else if(hours > 0){
-    if(hours == 1){
-      return hours + ' timme sedan';
-    } else {
-      return hours + ' timmar sedan';
-    }
-  } else if(minutes > 0){
-      if(minutes == 1){
-        return minutes + ' minut sedan';
-      } else {
-        return minutes + ' minuter sedan';
-      }
-  } else if (seconds > 0){
-      if(seconds == 1){
-        return seconds + ' sekund sedan';
-      } else {
-        return seconds + ' sekunder sedan';
-      }
-  } else {
-    return 'nu';
-  }
-}
 
 //Funktion för att visa datumet lite finare :)
 function displayDate(dateStr, weekDay, offsale){
@@ -2015,7 +1933,7 @@ function displayMatch(user, printList, friend, foundBySid = false){
     printMessage('default', 'Vill du veeeerkligen bjuda med ' + user.fullname + '?', undefined, undefined, 1);
     e.target.children[0].className += ' fadeout';
 
-    sendInvite(user, friend);
+    sendInvite(user, friend, 'invite');
 
     setTimeout(function(){
       e.target.innerHTML = '<i class="mdi mdi-check mdi-24px fadein"> </i>';
@@ -2046,7 +1964,7 @@ function downloadUsersToArray(array){
   });
 }
 
-function sendInvite(user, friend){
+function sendInvite(user, friend, action){
   let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
   let meetupKey = localStorage.getItem('currentMeetupKey');
   if(!localUser){
@@ -2059,13 +1977,14 @@ function sendInvite(user, friend){
     fromID: localUser.uniqueID,
     fullname: localUser.fullname,
     avatarURL: localUser.avatarURL,
+    action: action,
     friend: friend,
     eventid: eventID,
     meetupKey: meetupKey,
     time: firebase.database.ServerValue.TIMESTAMP
   }
 
-  db.ref('users/' + user.uniqueID + '/invites').push(invite);
+  db.ref('users/' + user.uniqueID + '/notifications').push(invite);
 
 
 }
