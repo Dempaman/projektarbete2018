@@ -1321,7 +1321,15 @@ function getLocationInfo(){
         }
 
         // Radera eventuella #
-        eventID = eventID.replace('#', '');
+        // eventID = eventID.replace('#', '');
+
+        // Om eventID innerhåller # så splitta och ta bort det efteråt.
+        if(eventID.includes('#')){
+          eventID = eventID.split('#')[0];
+        }
+
+
+
         return [eventID, meetupID];
     }
   } else {
@@ -1439,6 +1447,7 @@ function pageLoaded(){
   header.className = header.className.replace('hidden', '');
   document.getElementById('imageHolder').className = '';
   document.getElementById('eventHolder').className = '';
+  document.getElementById('divBorderEventPage').className = '';
   document.getElementsByClassName('footer-box hidden')[0].className = 'footer-box';
   if(document.getElementsByClassName('spinner')[0]){
     document.getElementsByClassName('spinner')[0].className = 'hidden';
@@ -1715,7 +1724,9 @@ function popupProfile(event){
         addFriendBtn.className = 'disabledBtn doNotCloseThis';
       } else {
         addFriendBtn.addEventListener('click', function(){
-          addFriend(sid);
+          addFriend(user.sid);
+          addFriendBtn.disabled = true;
+          addFriendBtn.className += ' disabledBtn doNotCloseThis';
         });
       }
     } else {
@@ -1774,7 +1785,8 @@ function popupProfile(event){
 function addFriend(sid){
   let user = JSON.parse(localStorage.getItem('loggedInUser'));
   if(user){
-    console.log('Adding a new friend :3');
+    console.log('Adding friend, sid is: ' +sid);
+    console.log('Adding a new friend!');
     db.ref('users/' + user.uniqueID + '/friends').push(sid);
   } else {
     printMessage('error', 'Du är inte inloggad :o');

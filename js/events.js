@@ -48,62 +48,47 @@ document.addEventListener('DOMContentLoaded', () => {
 		event.preventDefault();
 		let userSearch;
 		let userSearchValue = searchValue[0].value;
+		userSearchValue = userSearchValue.toLowerCase();
 
-        // { 'stockholm': 50001 }
-        //kolla in localstorage
-        //let found = cachedCities[userSearchValue];
-        //if( !found )
         //Switch for Sweden 10 biggest cities
 		switch (userSearchValue) {
         case "":
             userSearchValue = '';
-		case "Stockholm":
 		case "stockholm":
 			userSearchValue = '50001';
 			break;
-		case "Göteborg":
 		case "göteborg":
 			userSearchValue = '50482';
 			break;
-		case "Malmö":
 		case "malmö":
 			userSearchValue = '50111';
 			break;
-		case "Uppsala":
 		case "uppsala":
 			userSearchValue = '51166';
 			break;
-		case "Sollentuna":
 		case "sollentuna":
 			userSearchValue = '50103';
 			break;
-		case "Västerås":
 		case "västerås":
 			userSearchValue = '51109';
 			break;
-		case "Örebro":
 		case "örebro":
 			userSearchValue = '51082';
 			break;
-		case "Linköping":
 		case "linköping":
 			userSearchValue = '50869';
 			break;
-		case "Helsingborg":
 		case "helsingborg":
 			userSearchValue = '50167';
 			break;
-		case "Norrköping":
 		case "norrköping":
 			userSearchValue = '50906';
 			break;
-		case "Jönköping":
 		case "jönköping":
 			userSearchValue = '50792';
 			break;
 		default:
 			userSearchValue = 'Your city sucks!'
-			handleError(userSearchValue);
 		}
 
 		//Fetch from TicketMaster Api in search field
@@ -124,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let day;
                 let month;
                 let meetUps;
-                
+
 				if (eventImg !== undefined) {
 					eImg = eventImg[0].url;
 				} else {
@@ -138,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					eventTime = eventTime.slice(0, 10);
                     day = eventTime.slice(8,10);
                     month = eventTime.slice(5, 7);
-                    
+
                     switch (month) {
                         case "01":
                           month = "Jan";
@@ -187,8 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		}).catch((error) => {
 
             let errorMessage = error.message;
-
-			console.log('Felmeddelande: ', errorMessage);
 
             handleError(errorMessage);
 
@@ -268,7 +251,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 					eImg = eventImg[0].url;
 
 				} else {
-					eImg = `http://cdn-01.hymn.se/wp-content/uploads/2017/09/IMG-142.jpg`;
+					eImg = `https://images.pexels.com/photos/342520/pexels-photo-342520.jpeg?w=305&h=225&auto=compress&cs=tinysrgb`;
 
 				}
 				if (eventTime == undefined) {
@@ -280,7 +263,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 					eventTime = eventTime.slice(0, 10);
                     day = eventTime.slice(8,10);
                     month = eventTime.slice(5, 7);
-                    
+
                     switch (month) {
                         case "01":
                           month = "Jan";
@@ -378,7 +361,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 					eventTime = eventTime.slice(0, 10);
                     day = eventTime.slice(8,10);
                     month = eventTime.slice(5, 7);
-                    
+
                     switch (month) {
                         case "01":
                           month = "Jan";
@@ -426,7 +409,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		}).catch((error) => {
 
             let errorMessage = error.message;
-            
+
             handleError('Felmeddelande: ', errorMessage);
 		})
 	}
@@ -447,7 +430,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         let eventLink = document.createElement('a');
         eventLink.className = 'eventLink';
         eventLink.setAttribute('href', '/eventpage.html?event='+eventId);
-        
+
 		let eventDiv = document.createElement('div');
 		let eUrlImg = document.createElement('img');
 		eUrlImg.src = eImg;
@@ -455,7 +438,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		let eName = document.createElement('h4');
 		let ePlace = document.createElement('p');
 		let eTime = document.createElement('span');
-        
+
         let eDay = document.createElement("span");
         let eMonth = document.createElement("span");
         let eMeetUps = document.createElement("span");
@@ -473,8 +456,8 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         eMonth.innerText = `${month}`;
         eMeetUps.innerHTML = ` <i class="fas fa-users fa-1x"></i>`;
         meetups.innerHTML = ``;
-        
-        
+
+
         //     //Add classes and info
         eventDiv.className = "big-card";
         eName.className = "event-name";
@@ -483,7 +466,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         eMonth.className = "month";
         eMeetUps.className = "meetups-box";
 
-        
+
         //Append
 		setMeetupCount(eventId,meetups);
         eventDiv.appendChild(eventLink);
@@ -494,7 +477,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         eventDiv.appendChild(eMonth);
         eMeetUps.insertBefore(meetups, eMeetUps.childNodes[0]);
         eventDiv.appendChild(eMeetUps);
-        
+
 		testOutPut.appendChild(eventDiv);
 	}
     /********************Random code before merging with eventcards file END********************/
@@ -506,13 +489,13 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
     /********************Handling error function********************/
 
-    function handleError(errorMessage, userSearchValue){
+    function handleError(errorMessage){
 
         let errorMessageDiv = document.createElement('div');
-        
-        console.log('Felmeddelande: ', errorMessage);
 
         errorMessageDiv.innerText = `No searchresult was found :(`;
+
+				errorMessageDiv.style.paddingTop = "10px";
 
         testOutPut.appendChild(errorMessageDiv);
 

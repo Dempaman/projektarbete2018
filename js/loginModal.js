@@ -11,10 +11,16 @@ firebase.auth().onAuthStateChanged(user => {
 
 
     /* start to listen for invites for this person */
-    db.ref('users/' + user.uid + '/invites').on('child_changed', function(snapshot){
+    let initTime = new Date().getTime();
+    db.ref('users/' + user.uid + '/invites').on('child_added', function(snapshot){
       let data = snapshot.val();
 
-      printMessage('success','Du fick precis en inbjudan till ett meetup av ' + data.fullname);
+      if(initTime > data.time){
+        console.log('This is an old invite.');
+      } else {
+        printMessage('success','Du fick precis en inbjudan till ett meetup av ' + data.fullname);
+      }
+
 
     });
     // The user is logged in.

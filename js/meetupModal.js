@@ -189,27 +189,19 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
   let charCount = document.getElementsByClassName('characterCounter')[0];
   let charCountOutput = charCount.children[0];
 
-
-  inputBox.addEventListener('keydown', function(e){
+  let lastKeyUp = new Date().getTime();
+  inputBox.addEventListener('keyup', function(e){
+      let curTime = new Date().getTime();
       if(inputBox.value.length >= 900){
-        if(e.keyCode != 8 && e.keyCode != 46){
-          e.preventDefault();
-          printMessage('warn', 'Du har nu nått maximalt antal tecken som får plats i beskrivningen.');
+        if(lastKeyUp > curTime - 5000){
+            console.log('Wait!');
+        } else {
+          printMessage('warn', 'Du har nu nått maximalt antal tecken som får plats i beskrivningen.', 4000);
+          lastKeyUp = curTime;
         }
       }
       charCountOutput.innerText = inputBox.value.length + ' /900';
   });
-
-  inputBox.addEventListener('keypress', function(e){
-    if(inputBox.value.length >= 900){
-      if(e.keyCode != 8 && e.keyCode != 46){
-        e.preventDefault();
-        printMessage('warn', 'Du har nu nått maximalt antal tecken som får plats i beskrivningen.');
-      }
-    }
-      charCountOutput.innerText = inputBox.value.length + ' /900';
-  });
-
 }
 
 function initCreateMeetupListeners(ageSlider, redigera = false, meetupKey = false){
@@ -268,10 +260,10 @@ function createMeetupListener(event){
     let allChecks = false;
 
 
-    if(checkLength('Namnet', name.length, 6, 36) && checkLength('Platsnamnet', placeName.length, 4, 18)){
-        if(checkLength('Platsnamnet', placeName.length, 4, 18)){
-            if(placeName.length > 4 && placeName.length < 18){
-                if(!isNaN(spots)){
+    if(checkLength('Namnet', name.length, 6, 36)){
+        if(checkLength('Platsnamnet', placeName.length, 4, 48)){
+            if(checkForNumber('Antal plantser', spots)){
+                if(checkLength('Tid', time, 4, 48)){
 
                   // Skapa meetupet.
                   if(meetupKey && redigera){
@@ -324,17 +316,9 @@ function createMeetupListener(event){
 
                     event.target.removeEventListener('click', createMeetupListener);
 
-                } else {
-                 printMessage('error', 'Du måste ange antal platser')
                 }
-            } else {
-             printMessage('error', 'Platsnamn är för kort eller för långt')
             }
-        } else {
-          printMessage('error', 'Platsnamn är för kort eller för långt')
         }
-    } else {
-      printMessage('error', 'Namnet är för kort eller för långt', 6000, 400)
     }
 
   } else {
@@ -431,23 +415,24 @@ function toggleCreateMeetupModal(redigera = false){
 }
 
 function checkLength(type, str, min, max){
-
-    if(type == 'Antal platser'){
-      try {
-        Number.parseInt(str);
-      } catch(e){
-        printMessage('error', type + ' måste vara ett tal');
-        return false;
-      }
-    }
-
-    if(str.length < min){
-      printMessage('error', type + ' är litee för kort.');
+    if(str < min){
+      printMessage('error', type + ' är lite för kort.');
       return false;
-    } else if (str.length > max){
+    } else if (str > max){
       printMessage('error', type + ' är lite långt.');
       return false;
     } else {
       return true;
     }
+}
+
+function checkForNumber(type, number){
+    if(isNaN(number)){
+      return printMessage('error', type + ' måste vara ett tal');
+    } else if( number < 2){
+      printMessage('error', type + ' är för få platser')
+    } else if ( number > 100){
+      printMessage('error', type + ' är för många platser');
+    }
+      return true;
 }
