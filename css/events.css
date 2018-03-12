@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 .big-photo-wrapper {
 	background-image: url(../img/alleventsmain.png);
 	background-size: cover;
@@ -89,6 +93,7 @@ select {
     appearance: none;
     background: url() right / 20px no-repeat #fff;
     padding-right: 20px;
+    outline: none;
 }
 
 .all-events-search {
@@ -108,6 +113,7 @@ select {
 
 .all-events-search option {
     background-color: #6C0CCC;
+    outline: none;
 }
 
 
