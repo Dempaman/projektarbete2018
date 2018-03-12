@@ -1715,7 +1715,9 @@ function popupProfile(event){
         addFriendBtn.className = 'disabledBtn doNotCloseThis';
       } else {
         addFriendBtn.addEventListener('click', function(){
-          addFriend(sid);
+          addFriend(user.sid);
+          addFriendBtn.disabled = true;
+          addFriendBtn.className += ' disabledBtn doNotCloseThis';
         });
       }
     } else {
@@ -1774,7 +1776,8 @@ function popupProfile(event){
 function addFriend(sid){
   let user = JSON.parse(localStorage.getItem('loggedInUser'));
   if(user){
-    console.log('Adding a new friend :3');
+    console.log('Adding friend, sid is: ' +sid);
+    console.log('Adding a new friend!');
     db.ref('users/' + user.uniqueID + '/friends').push(sid);
   } else {
     printMessage('error', 'Du är inte inloggad :o');
