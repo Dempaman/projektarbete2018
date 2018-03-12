@@ -140,10 +140,20 @@
         </div>
 
         <div class="content"> <!-- Innehåller allt som ska finnas i modalen -->
-          <input id="nameInput" placeholder="Namn" type="text">
-          <input id="addressInput" placeholder="Adress" type="text">
-          <input id="placeNameInput" placeholder="Platsnamn" type="text">
-
+          <div class="nameAdressPlacelabels">
+            <div>
+              <span>Namn</span>
+              <input id="nameInput" placeholder="Namn" type="text">
+            </div>
+            <div>
+              <span>Adress</span>
+              <input id="addressInput" placeholder="Adress" type="text">
+            </div>
+            <div>
+              <span class="inputLabel">Platsnamn</span>
+              <input id="placeNameInput" placeholder="Platsnamn" type="text">
+            </div>
+          </div>
           <div class="sliderHolder"> <!-- Själva wrappern för slidern -->
             <input type="text" id="ageSlider" class="slider"/>
           </div>
@@ -155,12 +165,19 @@
             <div id="map"></div>
           </div>
 
-          <input id="spotsInput" placeholder="Antal platser" type="text"> <!-- Input för antal platser -->
-          <input id="timeInput" placeholder="Tid" type="text">
-
-          <div id="textareaDiv" maxlength="25">
+          <div class="timeOrSpots">
+            <div>
+              <span>Antal platser</span>
+              <input id="spotsInput" class="timeOrSpots" placeholder="Antal platser" type="text"> <!-- Input för antal platser -->
+            </div>
+            <div>
+              <span>Tid</span>
+              <input id="timeInput" class="timeOrSpots" placeholder="Tid" type="text">
+            </div>
+          </div>
+          <div id="textareaDiv" >
             <p>Information</p>
-            <textarea placeholder="Skriv lite information om ditt meetup här!"></textarea>
+            <textarea maxlength="900" placeholder="Skriv lite information om ditt meetup här!"></textarea>
             <span class="characterCounter">Antal tecken: <span>0/900</span></span>
           </div>
 

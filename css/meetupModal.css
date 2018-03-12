@@ -76,11 +76,46 @@ button.logInBtn {
   border: none;
   outline: none;
   padding: 15px 0px 15px 15px;
-  width: calc(80% - 15px);
+  width: 100%;
   display: flex;
-  margin: 8px auto;
+  margin: 0px auto 12px;
   box-shadow: 1px 1px 3px #a2a2a2;
   border: 1px solid #f0f0f0;
+}
+
+#modalContent .content > input[type="text"]:first-child {
+  margin-top: 20px;
+}
+
+#modalContent div.timeOrSpots{
+  display: flex;
+  justify-content: center;
+}
+.nameAdressPlacelabels {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: calc(80% - 15px);
+  margin: 20px auto;
+}
+#modalContent div.timeOrSpots > div {
+  display: flex;
+  flex-direction: column;
+}
+
+#modalContent span {
+  margin: 2px 7px;
+  font-family: 'Roboto',sans-serif;
+  color: #656565;
+  font-size: 0.8em;
+}
+#modalContent .nameAdressPlacelabels span {
+  margin: 2px 0px;
+}
+
+#modalContent input[type="text"].timeOrSpots {
+  width: auto;
+  margin: 0px 5px 15px;
 }
 
 #modalContent .sliderHolder {
@@ -123,6 +158,7 @@ button.logInBtn {
 }
 #textareaDiv {
   width: 90%;
+  position: relative;
   margin: 0px auto 50px auto;
   height: 230px;
 }
@@ -191,14 +227,12 @@ button.logInBtn {
 }
 
 /* Antal Tecken CSS för telefon. */
-.characterCounter {
-  width: 93%;
-  display: flex;
-  align-content: right;
-  align-self: right;
-  justify-content: right;
-  margin: -24px auto;
-  font-size: 0.8em;
-  color: #5a5a5a;
+#modalContent .characterCounter {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: -17px 6px -11px -1px;
   font-family: 'Roboto',sans-serif;
+  color: #393939;
+  font-size: 0.9em;
 }
