@@ -34,10 +34,16 @@ firebase.auth().onAuthStateChanged(user => {
     // The user is logged in.
     console.log('User data:',user);
     //Annas magic
+<<<<<<< HEAD
     let helloUser = document.getElementById("helloUser");
 
     helloUser.classList.remove("hidden");
     let userName = document.getElementById("userName");
+=======
+    let helloUser = document.getElementById('helloUser');
+    helloUser.classList.remove('hidden');
+    let usersName = document.getElementById('userName');
+>>>>>>> 26e8e6dfdcb5079e267cfff98e70f5d82c9f5e70
     // let firstName = user.displayName.split(" ",1);
     userName.innerText = user.displayName;
 
@@ -104,8 +110,13 @@ firebase.auth().onAuthStateChanged(user => {
 
   } else {
     console.log('wubalubadub dub');
+<<<<<<< HEAD
       helloUser.classList.add("hidden");
       bell.classList.add('hidden');
+=======
+    let helloUser = document.getElementById('helloUser');
+    helloUser.classList.add('hidden');
+>>>>>>> 26e8e6dfdcb5079e267cfff98e70f5d82c9f5e70
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
       localStorage.removeItem('loggedInUser');
@@ -252,11 +263,11 @@ function retrieveLoginModalContent(){
 
   switchHolder.appendChild(paragSignIn);//sign in text
   paragSignIn.className = 'paragSignIn highlight';
-  paragSignIn.innerText = 'Sign in';
+  paragSignIn.innerText = 'Logga in';
 
   //switch here
   switchInput.className = 'switchInput doNotCloseThis';
-  label.className = 'doNotCloseThis';
+  label.className = 'doNotCloseThis labelSwitch';
   switchInput.setAttribute('type', 'checkbox');
   switchInput.setAttribute('id', 'switch');
   label.setAttribute('for', 'switch')
@@ -265,7 +276,7 @@ function retrieveLoginModalContent(){
 
   switchHolder.appendChild(paragSignUp);//sign up text
   paragSignUp.className = 'paragSignUp';
-  paragSignUp.innerText = 'Sign up';
+  paragSignUp.innerText = 'Skapa konto';
 
   txtEmail.className = 'txtEmail doNotCloseThis'; //creates an input field for email
   txtEmail.setAttribute('type', 'email');
