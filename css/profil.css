@@ -80,6 +80,23 @@ main>h2 {
   background-color: #6C0CCC;
 }
 
+.user-story{
+  display: none;
+}
+.user-story>*{
+  display: block;
+  max-width: 100%;
+}
+.user-story>label{
+  margin: 1.5rem 0 0.3rem 0;
+}
+.user-story>*:nth-child(even){
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  border: none;
+  min-height: 2rem;
+}
+
 .photo-menu {
   width: 100%;
   display: flex;
@@ -213,6 +230,7 @@ main>h2 {
 
 .user-meetups-container {
   /* min-width: 240px; */
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   width: 95%;
