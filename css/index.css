@@ -6,16 +6,20 @@ html * {
 html{
   scroll-behavior: smooth;
 }
-.header {
- display: flex;
- flex-direction: row;
- justify-content: space-between;
- align-content: center;
- width: 100%;
- height: 60px;
- background-color: #222;
- color: #fff;
+
+#helloUser{
+  position: absolute;
+  left: 80px;
+	padding: 17px 0;
+	font-size: 1.2em;
+  /* text-transform: uppercase; */
 }
+#userName{
+  color:#fff;
+  font-weight: 600;
+  /* text-transform: uppercase; */
+}
+
 .eventLink {
 	position: absolute;
 	width: 100%;
@@ -96,17 +100,13 @@ h2{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
-.showMore>*{
-  padding: 20px;
-  text-align: center;
+.title>h1>a{
   color: #111;
-  margin: 10px;
+}
+.title>h1>a>span{
+ display: none;
 }
 
-.showMore>h2:hover {
-  color: #6C0CCC;
-  transition: 0.5s;
-}
 
  /* mobile landscape */
 @media screen and (max-width: 650px) and (orientation:landscape ){
@@ -153,7 +153,6 @@ h2{
     background-color: rgba(96,96,96, 0.8);
     color: #FFFFFF;
     border: 3px solid  #FFFFFF;
-
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   }
 
@@ -173,5 +172,16 @@ h2{
   h2{
     margin: 2rem;
   }
-
+  .title>h1>a{
+    color: #111;
+  }
+ .title>h1>a>span{
+   display: none;
+ }
+  .title>h1:hover{
+    cursor: pointer;
+  }
+ .title>h1:hover>a>span{
+   display: inline;
+ }
 }
