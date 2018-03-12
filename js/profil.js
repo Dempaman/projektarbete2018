@@ -189,11 +189,18 @@ function profilFunction(event) {
     });
   } // End of -To checkout meetups or remove them - hidden nav
 
-  let userEdit = document.getElementById('edit-user');
-
-  // userEdit.addEventListener('click', function(event) {
-  //   event.preventDefault();
-  // });
+//   let userEdit = document.getElementById('tellMeMore');
+// console.log(userEdit);
+//   userEdit.addEventListener('click', function(event) {
+//     console.log(event.type);
+//
+//     if (document.getElementsByClassName('user-story').style.display === 'none') {
+//       document.getElementsByClassName('user-story').style.display = 'block';
+//     }  else {
+//       document.getElementsByClassName('user-story').style.display = 'none';
+//     }
+//
+//   });
 
 
 }
