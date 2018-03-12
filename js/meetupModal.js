@@ -263,7 +263,7 @@ function createMeetupListener(event){
     if(checkLength('Namnet', name.length, 6, 36)){
         if(checkLength('Platsnamnet', placeName.length, 4, 48)){
             if(checkForNumber('Antal plantser', spots)){
-                if(checkLength('Tid', time, 4, 48)){
+                if(checkForTime('Tid', time)){
 
                   // Skapa meetupet.
                   if(meetupKey && redigera){
@@ -435,4 +435,47 @@ function checkForNumber(type, number){
       printMessage('error', type + ' är för många platser');
     }
       return true;
+}
+/*
+function checkForTime(type, timeVal){
+
+
+    if(isNaN(timeVal)){
+      printMessage('error', type + ' måste vara en tid');
+      //let newtimeVal = timeVal.split(":", 2);
+    }
+    else {
+      let timeToString = timeVal.toString().split('');
+      console.log('fungerar detta', + timeToString)
+      printMessage('success', type + ' är en test!!')
+    }
+} */
+
+function checkForTime(type, timeInp){
+    var timeValue = timeInp;
+    if(timeValue == "" || timeValue.indexOf(":")<0){
+        printMessage('error',  type  + ': Fel format. Exempel 17:10');
+        return false;
+    } else {
+        var hours = timeValue.split(':')[0];
+        var min = timeValue.split(':')[1];
+
+        if(hours == "" || isNaN(hours) || parseInt(hours)>23){
+            printMessage('error', type + ': Fel format. Exempel "17:10"');
+            return false;
+        } else if(parseInt(hours) == 0)
+            hours = "00";
+        else if (hours <10)
+            hours = "0"+hours;
+        if(min == "" || isNaN(min) || parseInt(min)>59){
+            printMessage('error', type + ': Fel format. Exempel "17:10"');
+            return false;
+        }
+        else if(parseInt(min) == 0)
+            min = "00";
+        else if (min <10)
+            min = "0"+min;
+        timeInp = hours + ":" + min;
+    }
+    return true;
 }
