@@ -37,13 +37,15 @@
 }
 
 /* Information (Name + sid) */
-.profileHolder > div > div > span:first-child {
-  color: #ececec;
-}
-.profileHolder > div > div > span:nth-child(2) {
+.profileHolder > div > div > span:nth-child(2), .friendWrapper .nameAndSidHolder > span:last-child  {
   color: #8f8f8f;
   margin-left: 4px;
 }
+
+.profileHolder > div > div > span:first-child, .friendWrapper .nameAndSidHolder > span:first-child {
+  color: #ececec;
+}
+
 
 /* Buttons */
 .profileHolder > div > div > button {
@@ -55,15 +57,13 @@
   padding: 6px 10px;
   border-radius: 3px;
   margin: 4px;
+  color: #fff;
+  background-color: #484848;
 }
 
-.profileHolder > div > div > button {
-  color: #3e4e4e;
-  background-color: #f8f8f8;
-}
 .profileHolder > div > div > button:last-child {
   color: #fcfcfc;
-  background-color: #cc5353;
+  background-color: #ff8181;
   padding: 0px 7px 0px 6px;
   margin: 3px 2px;
 }
@@ -75,7 +75,7 @@
 }
 .profileHolder > div > div > button:last-child:hover {
   color: #fcfcfc;
-  background-color: #d77979;
+  background-color: #cf5757;
 }
 
 /* closeButton */
@@ -102,4 +102,225 @@
   cursor: not-allowed;
   color: #8d8d8d;
   background-color: #484848;
+}
+
+
+/* This file also holds the invite friends CSS!!!!! */
+
+/* friendWrapper */
+.friendWrapper {
+  display: inline-block;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: #ececec;
+  top: 0;
+  left: 0;
+  color: #222;
+  z-index: 1;
+}
+.friendWrapper h3.hidden {
+  display: none;
+  opacity: 0;
+}
+.friendWrapper h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100;
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+  color: #636363;
+  border-bottom: 2px solid #ddd;
+  padding: 0px 2px 6px;
+}
+.friendWrapper h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100;
+  margin: 15px 5px 10px;
+  color: #7a7a7a;
+  border-bottom: 2px solid #ddd;
+  padding: 0px 2px 0px;
+}
+
+/* Icon and search bar */
+.friendWrapper .icon {
+  padding-left: 8px;
+}
+.friendWrapper > div:nth-child(2){
+  display: flex;
+  justify-content: center;
+  margin: 15px 20px 10px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  align-items: center;
+  color: #a2a2a2;
+}
+.friendWrapper input {
+  padding: 9px 5px;
+  flex: 1;
+  border: none;
+  outline: none;
+  background-color: inherit;
+}
+.friendWrapper .searchBtn {
+  display: inline-block;
+  background-color: #787878;
+  padding: 9px 16px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  margin: 0px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+.friendWrapper .searchBtn:hover {
+  background-color: #c684c0;
+}
+
+/* resultDiv */
+.friendWrapper > div:nth-child(3) {
+  display: flex;
+  justify-content: center;
+  margin: 10px 20px 5px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  height: calc(100% - 185px);
+}
+.friendWrapper div.resultHolder {
+  overflow: auto;
+  background-color: #d7d7d7;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  padding: 8px;
+}
+
+.friendWrapper div.resultHolder > div > div {
+  display: flex;
+  background-color: #5d5d5d;
+  border-radius: 5px;
+  margin: 4px 5px;
+  padding: 7px 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+.friendWrapper div.resultHolder > div > div.friend {
+  background-color: #747474;
+}
+
+.friendWrapper div.resultHolder > div img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0px 0px 22px #595959;
+}
+
+/* Close everything btn */
+.closeWrapperBtn {
+  height: 46px;
+  cursor: pointer;
+  color: #fcfcfc;
+  display: flex;
+  justify-content: center;
+  background-color: #ff8181;
+  align-items: center;
+  margin: 5px 20px 5px;
+  border-radius: 5px;
+  border-top: 2px solid #d17d7d;
+}
+.closeWrapperBtn:hover {
+  background-color: #da9393;
+}
+
+/* spans, names etc */
+.nameAndSidHolder {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  font-size: 0.9em;
+}
+/* If found through sid, make it stand out */
+.friendWrapper .nameAndSidHolder > span.foundBySid:last-child {
+  color: #f2f2f2;
+}
+.friendWrapper .nameAndSidHolder > span.foundBySid:first-child {
+  color: #aaabaa;
+}
+
+/* invite btn */
+
+.friendWrapper button {
+  cursor: pointer;
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin: 0;
+  border: none;
+  color: #6c6b6b;
+  background-color: #d7d7d7;
+}
+
+.friendWrapper button:hover {
+  color: #5e5d5d;
+  background-color: #d5d4d4;
+
+}
+
+
+/* Media Queries */
+
+@media screen and (max-width: 600px){
+  .profileHolder {
+    padding: 10px 30px 10px 9px;
+    z-index: 2;
+    left: 20px;
+    align-items: start;
+  }
+
+  /* Div holders etc */
+  .profileHolder > div {
+    margin-left: 10px;
+    min-width: 135px;
+  }
+
+  .profileHolder > div > div:first-child {
+    display: flex;
+    flex-direction: column;
+  }
+
+    /* Name and sid */
+  .profileHolder > div > div > span:nth-child(2):not(.closeBtn) {
+    margin: 0;
+  }
+
+  .profileHolder > img {
+    width: 65px;
+    height: 65px;
+  }
+
+  .profileHolder > div > div.noSid {
+    margin: 0;
+  }
+
+  /* buttons etc */
+  .profileHolder > div > div:last-child {
+    display: flex;
+  justify-content: space-around;
+  margin-top: 7px;
+  flex-direction: column;
+  }
+
+  .profileHolder > div > div > button {
+    margin: 3px 0px;
+  }
+  .profileHolder > div > div > button.disabledBtn {
+    margin: 3px 0px;
+  }
+
+  .profileHolder > div > div > button:last-child {
+    margin: 3px 0 0;
+  }
+
 }

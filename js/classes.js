@@ -199,7 +199,7 @@ class SystemMessage extends MessageClass {
 
 /* Function to print a message on any page */
 let count = 0;
-function printMessage(type, message, timer = 8000, delay = 0){
+function printMessage(type, message, timer = 8000, delay = 0, limit = 2){
 
   let messageHolder = document.getElementById('printMessageHolder');
   let body = document.getElementsByTagName('body')[0];
@@ -261,7 +261,7 @@ function printMessage(type, message, timer = 8000, delay = 0){
     messageWrapper.appendChild(textMessage);
     messageWrapper.appendChild(closeBtn);
 
-    if(count >= 2){
+    if(count >= limit){
       messageHolder.removeChild(messageHolder.firstChild);
       --count;
     }
