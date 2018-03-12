@@ -21,6 +21,10 @@
   font-style: 'Roboto', sans-serif;
   flex: 1;
 }
+.printMessageWrapper > span {
+  display: flex;
+  align-items: center;
+}
 
 .printMessageWrapper > span:last-child:hover {
   cursor: pointer;

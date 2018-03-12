@@ -389,13 +389,13 @@ function toggleCreateMeetupModal(redigera = false){
     modalWrapper.className = ''; // Visa modalen för att skapa meetup
     meetupWrapper.className = 'hidden'; // Dölj
     menuToggleBtn.className = 'hidden'; // Dölj
-    footer.className = 'hidden'; // Dölj
+    footer.setAttribute('id', 'fokenHide'); // Dölj
 
   } else {
     modalWrapper.className = 'hidden';
     meetupWrapper.className = '';
     menuToggleBtn.className = '';
-    footer.className = '';
+    footer.setAttribute('id', '');
   }
 
   //Check if user is logged in and set btn correctly
