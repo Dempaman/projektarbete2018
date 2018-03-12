@@ -1,4 +1,12 @@
 // This document holds the loginModal to be displayed on any page that uses this function!
+firebase.auth().getRedirectResult().then(function(result) {
+  console.log('Login Results: ', result);
+}).catch(function(err){
+  if(err.code == 'auth/account-exists-with-different-credential'){
+    printMessage('error', 'Oops! Ett konto med din angivna mail existerar redan på denna webbplats! Logga in med ett annat konto.', 10000);
+  }
+})
+
 
 //Eventlistener to authStateChange
 firebase.auth().onAuthStateChanged(user => {
@@ -11,10 +19,16 @@ firebase.auth().onAuthStateChanged(user => {
 
 
     /* start to listen for invites for this person */
-    db.ref('users/' + user.uid + '/invites').on('child_changed', function(snapshot){
+    let initTime = new Date().getTime();
+    db.ref('users/' + user.uid + '/invites').on('child_added', function(snapshot){
       let data = snapshot.val();
 
-      printMessage('success','Du fick precis en inbjudan till ett meetup av ' + data.fullname);
+      if(initTime > data.time){
+        console.log('This is an old invite.');
+      } else {
+        printMessage('success','Du fick precis en inbjudan till ett meetup av ' + data.fullname);
+      }
+
 
     });
     // The user is logged in.
@@ -427,13 +441,21 @@ function closeModal(){
 
 function loginGoogle(){
   var providerGoogle = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithRedirect(providerGoogle)
+  firebase.auth().signInWithRedirect(providerGoogle).catch(function(error){
+    console.log('ERRORRRR: ', error);
+  });
   console.log('Google button pressed!');
 }
 
 function loginFacebook(){
   var providerFacebook = new firebase.auth.FacebookAuthProvider();
-  firebase.auth().signInWithRedirect(providerFacebook)
+  firebase.auth().signInWithRedirect(providerFacebook).then(function(msg){
+    console.log('FACEBOOK LOGMESSAGE', msg);
+  })
+
+  .catch(function(error){
+    console.log('FB ERROR: ', error);
+  });
   console.log('Facebook button pressed!');
 }
 

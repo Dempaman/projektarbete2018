@@ -189,27 +189,19 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
   let charCount = document.getElementsByClassName('characterCounter')[0];
   let charCountOutput = charCount.children[0];
 
-
-  inputBox.addEventListener('keydown', function(e){
+  let lastKeyUp = new Date().getTime();
+  inputBox.addEventListener('keyup', function(e){
+      let curTime = new Date().getTime();
       if(inputBox.value.length >= 900){
-        if(e.keyCode != 8 && e.keyCode != 46){
-          e.preventDefault();
-          printMessage('warn', 'Du har nu nått maximalt antal tecken som får plats i beskrivningen.');
+        if(lastKeyUp > curTime - 5000){
+            console.log('Wait!');
+        } else {
+          printMessage('warn', 'Du har nu nått maximalt antal tecken som får plats i beskrivningen.', 4000);
+          lastKeyUp = curTime;
         }
       }
       charCountOutput.innerText = inputBox.value.length + ' /900';
   });
-
-  inputBox.addEventListener('keypress', function(e){
-    if(inputBox.value.length >= 900){
-      if(e.keyCode != 8 && e.keyCode != 46){
-        e.preventDefault();
-        printMessage('warn', 'Du har nu nått maximalt antal tecken som får plats i beskrivningen.');
-      }
-    }
-      charCountOutput.innerText = inputBox.value.length + ' /900';
-  });
-
 }
 
 function initCreateMeetupListeners(ageSlider, redigera = false, meetupKey = false){
@@ -397,13 +389,13 @@ function toggleCreateMeetupModal(redigera = false){
     modalWrapper.className = ''; // Visa modalen för att skapa meetup
     meetupWrapper.className = 'hidden'; // Dölj
     menuToggleBtn.className = 'hidden'; // Dölj
-    footer.className = 'hidden'; // Dölj
+    footer.setAttribute('id', 'fokenHide'); // Dölj
 
   } else {
     modalWrapper.className = 'hidden';
     meetupWrapper.className = '';
     menuToggleBtn.className = '';
-    footer.className = '';
+    footer.setAttribute('id', '');
   }
 
   //Check if user is logged in and set btn correctly
