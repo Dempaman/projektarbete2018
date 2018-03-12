@@ -3,7 +3,7 @@
   top: 0;
   right: 0;
   width: 100%;
-  z-index: 2;
+  z-index: 21;
 }
 .printMessageWrapper {
   display: flex;
@@ -56,7 +56,7 @@
 /* Media Queries */
 @media screen and (min-width: 800px){
   #printMessageHolder {
-    z-index: 2;
+    z-index: 21;
     display: flex;
     flex-direction: column;
     align-items: right;
