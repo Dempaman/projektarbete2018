@@ -19,24 +19,40 @@ html, body {
 #imageHolder {
   background-color: #eee;
   display: flex;
-  height: 200px;
+  justify-content: center;
+  height: 225px;
+  padding: 10px 0 10px;
 }
 
 .eventImage {
   height: 100%;
-  width: 100%;
+  width: 305px;
+
 }
 
-@media screen and (min-width: 500px){
+@media screen and (min-width: 620px){
   .eventImage, .googleMapImg {
     height: 100%;
-    width: 50%;
+    width: 305px;
+
   }
+
   #imageHolder {
     background-color: #eee;
     display: flex;
-    height: 230px;
+    height: 265px;
+    padding: 20px 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
+}
+
+#divBorderEventPage{
+    height: 5px;
+    width: 100%;
+    background-image: linear-gradient(93deg,rgba(108, 12, 204, 0.59) ,rgba(18, 163, 86, 0.65));
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 
@@ -251,6 +267,7 @@ div.googleMapDiv > img {
   color: #777;
 }
 .moreMeetupInfoDiv > div > div > div.memberDiv > img {
+  cursor: pointer;
   margin: 0px 4px 4px;
   width: 40px;
   height: 40px;
