@@ -34,16 +34,10 @@ firebase.auth().onAuthStateChanged(user => {
     // The user is logged in.
     console.log('User data:',user);
     //Annas magic
-<<<<<<< HEAD
     let helloUser = document.getElementById("helloUser");
 
     helloUser.classList.remove("hidden");
     let userName = document.getElementById("userName");
-=======
-    let helloUser = document.getElementById('helloUser');
-    helloUser.classList.remove('hidden');
-    let usersName = document.getElementById('userName');
->>>>>>> 26e8e6dfdcb5079e267cfff98e70f5d82c9f5e70
     // let firstName = user.displayName.split(" ",1);
     userName.innerText = user.displayName;
 
@@ -110,13 +104,8 @@ firebase.auth().onAuthStateChanged(user => {
 
   } else {
     console.log('wubalubadub dub');
-<<<<<<< HEAD
       helloUser.classList.add("hidden");
       bell.classList.add('hidden');
-=======
-    let helloUser = document.getElementById('helloUser');
-    helloUser.classList.add('hidden');
->>>>>>> 26e8e6dfdcb5079e267cfff98e70f5d82c9f5e70
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
       localStorage.removeItem('loggedInUser');
