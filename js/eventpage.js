@@ -1321,7 +1321,15 @@ function getLocationInfo(){
         }
 
         // Radera eventuella #
-        eventID = eventID.replace('#', '');
+        // eventID = eventID.replace('#', '');
+
+        // Om eventID innerhåller # så splitta och ta bort det efteråt.
+        if(eventID.includes('#')){
+          eventID = eventID.split('#')[0];
+        }
+
+
+
         return [eventID, meetupID];
     }
   } else {
