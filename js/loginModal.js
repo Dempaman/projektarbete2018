@@ -342,9 +342,6 @@ function retrieveLoginModalContent(){
       paragSignUp.classList.add('highlight');
       btnCuLogin.classList.add('hide');
       btnCuSignUp.classList.remove('hide');
-<<<<<<< HEAD
-      loginModalButtonHolder.classList.add('hide');
-=======
       paragCp.classList.remove('hide');
       txtPassword2.classList.remove('hide');
 
@@ -353,7 +350,6 @@ function retrieveLoginModalContent(){
 
       btnHolderInside.classList.add('closed');
       btnHolderInside.classList.remove('slideUp');
->>>>>>> develop
 
     }else{
       console.log('it is false');
@@ -361,9 +357,6 @@ function retrieveLoginModalContent(){
       paragSignIn.classList.add('highlight');
       btnCuLogin.classList.remove('hide');
       btnCuSignUp.classList.add('hide');
-<<<<<<< HEAD
-      loginModalButtonHolder.classList.remove('hide');
-=======
       paragCp.classList.add('hide');
       txtPassword2.classList.add('hide');
 
@@ -372,7 +365,6 @@ function retrieveLoginModalContent(){
 
       btnHolderInside.classList.remove('closed');
       btnHolderInside.classList.add('slideUp');
->>>>>>> develop
     }
   });
 
@@ -424,10 +416,6 @@ function retrieveLoginModalContent(){
       }
     });
 
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
   // Create button Wrappers
   let googleButtonWrapper = document.createElement('div');
   let facebookButtonWrapper = document.createElement('div');
