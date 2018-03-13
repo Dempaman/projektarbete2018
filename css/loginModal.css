@@ -125,6 +125,7 @@ span.loginModalCloseButton {
     display: flex;
     flex-direction: column;
     margin: 18px 0 0;
+    transition: all 1s linear;
   }
 
 }

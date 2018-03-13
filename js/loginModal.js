@@ -292,12 +292,14 @@ function retrieveLoginModalContent(){
 
   //Switch changed login- and signup button
   switchInput.addEventListener('change', function(event){
+    let loginModalButtonHolder = document.getElementsByClassName('loginModalButtonHolder')[0];
     if(this.checked){
       console.log("It is true!!");
       paragSignIn.classList.remove('highlight');
       paragSignUp.classList.add('highlight');
       btnCuLogin.classList.add('hide');
       btnCuSignUp.classList.remove('hide');
+      loginModalButtonHolder.classList.add('hide');
 
     }else{
       console.log('it is false');
@@ -305,6 +307,7 @@ function retrieveLoginModalContent(){
       paragSignIn.classList.add('highlight');
       btnCuLogin.classList.remove('hide');
       btnCuSignUp.classList.add('hide');
+      loginModalButtonHolder.classList.remove('hide');
     }
   });
 
@@ -336,9 +339,6 @@ function retrieveLoginModalContent(){
           //printMessage('error', 'ah ah ah you didnt say the magic word..') // If some error occurs it will print the message
         });
     });
-
-
-
 
 
   // Create button Wrappers
