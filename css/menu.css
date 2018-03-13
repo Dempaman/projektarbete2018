@@ -140,6 +140,8 @@ a {
 	outline: none;
 	color: #6b6b6b;
 	cursor: pointer;
+	flex: 1;
+	text-align: right;
 }
 .mdi-30px.mdi {
 	font-size: 30px;

@@ -126,6 +126,12 @@ class UserClass {
         // Körs om/när Promise-koden har lyckats (anropat succeed)
         console.log('Sid found, woohoo');
         db.ref('users/' + value[0].uniqueID + '/sid').set(value[1]);
+
+        /* Vi sätter sid i localStorage här också!! */
+        let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        localUser.sid = value[1];
+        localStorage.setItem('loggedInUser', JSON.stringify(localUser));
+        console.log('FIND ME IF THIS BREAKS XP');
     })
     .catch(function(error){
       console.log('fel', error);
@@ -210,7 +216,7 @@ function printMessage(type, message, timer = 8000, delay = 0, limit = 2){
   }
 
   if(type){
-    if(type.includes('success') || type.includes('error') || type.includes('warn')){
+    if(type.includes('success') || type.includes('error') || type.includes('warn') || type.includes('notification')){
       type += 'printMessage';
     } else {
       type = 'defaultprintMessage';
@@ -233,6 +239,8 @@ function printMessage(type, message, timer = 8000, delay = 0, limit = 2){
     icon.innerHTML = '<i class="mdi mdi-alert-circle-outline mdi-24px"></i>';
   } else if(type == 'warnprintMessage'){
     icon.innerHTML = '<i class="mdi mdi-alert mdi-24px"></i>';
+  } else if(type == 'notificationprintMessage'){
+    icon.innerHTML = '<i class="mdi mdi-bell mdi-24px"></i>';
   } else {
     icon.innerHTML = '<i class="mdi mdi-information-outline mdi-24px"></i>';
   }

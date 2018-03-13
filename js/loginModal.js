@@ -21,22 +21,31 @@ firebase.auth().onAuthStateChanged(user => {
     /* start to listen for invites for this person */
     let initTime = new Date().getTime();
     db.ref('users/' + user.uid + '/notifications').on('child_added', function(snapshot){
+      let bell = document.getElementById('notificationBell');
+      if(bell){
+        bell.innerHTML = '<i class="mdi mdi-bell-ring mdi-24px"> </i>'
+      }
       let data = snapshot.val();
 
       if(initTime > data.time){
         console.log('This is an old invite.');
       } else {
-        printMessage('success','Du fick precis en inbjudan till ett meetup av ' + data.fullname);
+        if(data.action == 'invite'){
+          printMessage('notification', data.fullname + ' bjöd precis in dig till ett meetup!');
+        } else if(data.action == 'friendRequest'){
+          printMessage('notification', data.fullname + ' la precis till dig som vän!');
+        }
       }
-
-
     });
     // The user is logged in.
     console.log('User data:',user);
     //Annas magic
     let helloUser = document.getElementById("helloUser");
 
-    helloUser.classList.remove("hidden");
+    if(helloUser){
+      helloUser.classList.remove("hidden");
+    }
+
     let userName = document.getElementById("userName");
     // let firstName = user.displayName.split(" ",1);
     userName.innerText = user.displayName;
@@ -486,6 +495,7 @@ function showNotifications(event){
   let notificationWrapper = document.getElementById('notificationWrapper');
   if(notificationWrapper){
     toggleNotifications();
+    updateTimeStamps();
   } else {
 
     notificationWrapper = document.createElement('div');
@@ -526,24 +536,30 @@ function showNotifications(event){
 
 function toggleNotifications(){
   let wrapper = document.getElementById('notificationWrapper');
+  let bell = document.getElementById('notificationBell');
   if(wrapper.className.includes('hidden')){
     wrapper.classList.remove('hidden');
   } else {
     wrapper.classList.add('hidden');
+    bell.innerHTML = '<i class="mdi mdi-bell mdi-24px"></i>';
   }
 }
 
 
 function displayNotifications(displayList){
   let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
-
   /* Check if user is logged in */
   if(localUser){
     db.ref('users/' + localUser.uniqueID + '/notifications').on('child_added', function(snapshot){
       let data = snapshot.val();
       let notificationKey = snapshot.key;
-      let eventID = data.eventid;
-      let meetupKey = data.meetupKey;
+      let action = data.action;
+      let eventID, meetupKey;
+
+      if(action == 'invite'){
+        eventID = data.eventid;
+        meetupKey = data.meetupKey;
+      }
 
       console.log('WHAT IS DATA?!', data);
       let listItem = document.createElement('div');
@@ -558,7 +574,8 @@ function displayNotifications(displayList){
 
       let time = document.createElement('span');
       time.innerText = chatMessageTimeStamp(data.time);
-      time.className = 'notificationTime';
+      time.className = 'notificationTime timeStamp';
+      time.setAttribute('timeStamp', data.time);
       let btn = document.createElement('button');
       btn.innerHTML = '<i class="mdi mdi-chevron-down mdi-30px"></i>'
 
@@ -566,7 +583,6 @@ function displayNotifications(displayList){
       let showMoreDiv = document.createElement('div');
       showMoreDiv.className = 'hidden';
       btn.addEventListener('click', function(e){
-        console.log('Go to event: ', data.eventid + data.meetupKey);
         if(showMoreDiv.className == 'hidden'){
           showMoreDiv.className = '';
           e.target.innerHTML = '<i class="mdi mdi-chevron-up mdi-30px"></i>';
@@ -589,89 +605,119 @@ function displayNotifications(displayList){
 
       /* Append stuff into showMoreDiv */
 
-      db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snapshot){
-        data = snapshot.val();
-        console.log('WHAT IS MEETUPDATA?!?', data);
-        let showMoreInfoDiv = document.createElement('div');
-        showMoreInfoDiv.className = 'showMoreInfoDiv';
+      /* If it's an invitation to a meetup */
+      if(action == 'invite'){
+        db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snapshot){
+          data = snapshot.val();
+          console.log('WHAT IS MEETUPDATA?!?', data);
+          let showMoreInfoDiv = document.createElement('div');
+          showMoreInfoDiv.className = 'showMoreInfoDiv';
 
-        let skapareDiv = document.createElement('div');
-        let skapareLabel = document.createElement('span');
-        skapareLabel.innerText = 'Skapare';
-        let skapare = document.createElement('span')
-        skapare.innerText = data.creator.fullname;
-        skapareDiv.appendChild(skapareLabel);
-        skapareDiv.appendChild(skapare);
+          let skapareDiv = document.createElement('div');
+          let skapareLabel = document.createElement('span');
+          skapareLabel.innerText = 'Skapare';
+          let skapare = document.createElement('span')
+          skapare.innerText = data.creator.fullname;
+          skapareDiv.appendChild(skapareLabel);
+          skapareDiv.appendChild(skapare);
 
-        let platsDiv = document.createElement('div');
-        let platsLabel = document.createElement('span');
-        platsLabel.innerText = 'Plats';
-        let plats = document.createElement('span')
-        plats.innerText = data.placeName;
-        platsDiv.appendChild(platsLabel);
-        platsDiv.appendChild(plats);
+          let platsDiv = document.createElement('div');
+          let platsLabel = document.createElement('span');
+          platsLabel.innerText = 'Plats';
+          let plats = document.createElement('span')
+          plats.innerText = data.placeName;
+          platsDiv.appendChild(platsLabel);
+          platsDiv.appendChild(plats);
 
-        let nameDiv = document.createElement('div');
-        let nameLabel = document.createElement('span');
-        nameLabel.innerText = 'Name'
-        let name = document.createElement('span')
-        name.innerText = data.name;
-        nameDiv.appendChild(nameLabel);
-        nameDiv.appendChild(name);
-
-
-        let adressDiv = document.createElement('div');
-        let adressLabel = document.createElement('span');
-        adressLabel.innerText = 'Adress';
-        let adress = document.createElement('span')
-        adress.innerText = data.adress;
-        adressDiv.appendChild(adressLabel);
-        adressDiv.appendChild(adress);
-        let infoWrapper = document.createElement('div');
-        infoWrapper.className = 'infoWrapper';
+          let nameDiv = document.createElement('div');
+          let nameLabel = document.createElement('span');
+          nameLabel.innerText = 'Name'
+          let name = document.createElement('span')
+          name.innerText = data.name;
+          nameDiv.appendChild(nameLabel);
+          nameDiv.appendChild(name);
 
 
-        infoWrapper.appendChild(skapareDiv);
-        infoWrapper.appendChild(platsDiv);
-        infoWrapper.appendChild(nameDiv);
-        infoWrapper.appendChild(adressDiv);
+          let adressDiv = document.createElement('div');
+          let adressLabel = document.createElement('span');
+          adressLabel.innerText = 'Adress';
+          let adress = document.createElement('span')
+          adress.innerText = data.adress;
+          adressDiv.appendChild(adressLabel);
+          adressDiv.appendChild(adress);
+          let infoWrapper = document.createElement('div');
+          infoWrapper.className = 'infoWrapper';
 
-        showMoreInfoDiv.appendChild(infoWrapper);
 
-        let btnHolder = document.createElement('div');
+          infoWrapper.appendChild(skapareDiv);
+          infoWrapper.appendChild(platsDiv);
+          infoWrapper.appendChild(nameDiv);
+          infoWrapper.appendChild(adressDiv);
 
-        let gotoEventBtn = document.createElement('button');
-        let acceptInviteBtn = document.createElement('button');
+          showMoreInfoDiv.appendChild(infoWrapper);
+
+          showMoreDiv.appendChild(showMoreInfoDiv);
+
+
+        });
+      } else {
+        console.log('LUUUL THIS IS A friendRequest!!!!');
+      }
+
+      /* append Btns */
+      let btnHolder = document.createElement('div');
+
+      let gotoEventBtn = document.createElement('button');
+      let acceptInviteBtn = document.createElement('button');
+
+
+      /* Om det är en inbjudan till ett meetup */
+      if(action == 'invite'){
+
         gotoEventBtn.innerText = 'Tacka nej';
-        acceptInviteBtn.innerText = 'Acceptera inbjudan';
+        acceptInviteBtn.innerText = 'Acceptera';
         gotoEventBtn.className = 'gotoBtn';
         acceptInviteBtn.className = 'gotoBtn';
 
-
-        /* eventListener */
         gotoEventBtn.addEventListener('click', function(e){
             /* Tacka nej */
             db.ref('users/' + localUser.uniqueID + '/notifications/'+notificationKey).remove();
             displayList.removeChild(listItem);
-            printMessage('success', 'Du tackade nej.');
+            printMessage('success', 'Du tackade nej');
         });
 
         acceptInviteBtn.addEventListener('click', function(e){
           joinMeetup(localUser, meetupKey, eventID);
         });
 
-        btnHolder.appendChild(gotoEventBtn);
-        btnHolder.appendChild(acceptInviteBtn);
+      } else if(action == 'friendRequest'){
+        gotoEventBtn.innerText = 'Tacka nej';
+        acceptInviteBtn.innerText = 'Acceptera';
+        gotoEventBtn.className = 'gotoBtn';
+        acceptInviteBtn.className = 'gotoBtn';
 
-        /* append everything */
+        gotoEventBtn.addEventListener('click', function(e){
+            /* Tacka nej */
+            db.ref('users/' + localUser.uniqueID + '/notifications/'+notificationKey).remove();
+            displayList.removeChild(listItem);
+            printMessage('success', 'Du tackade nej');
+        });
+
+        acceptInviteBtn.addEventListener('click', function(e){
+          addFriend(data.fromSID);
+          db.ref('users/' + localUser.uniqueID + '/notifications/'+notificationKey).remove()
+          displayList.removeChild(listItem);
+        });
+      }
 
 
+      btnHolder.appendChild(gotoEventBtn);
+      btnHolder.appendChild(acceptInviteBtn);
 
-        showMoreDiv.appendChild(showMoreInfoDiv);
-        showMoreDiv.appendChild(btnHolder);
+      showMoreDiv.appendChild(btnHolder);
 
 
-      });
+      /* Append final stuff */
 
       listItem.appendChild(contentWrapper);
       listItem.appendChild(showMoreDiv);
@@ -688,7 +734,9 @@ function displayNotifications(displayList){
 function getAction(action){
 
   if(action == 'invite'){
-    return ' bjöd in dig till ett meetup!';
+    return ' bjöd in dig till ett meetup';
+  } else if(action == 'friendRequest'){
+    return ' la till dig som vän';
   }
 
 }
