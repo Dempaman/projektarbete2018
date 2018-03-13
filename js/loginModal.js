@@ -13,7 +13,6 @@ firebase.auth().onAuthStateChanged(user => {
   console.log('AUTH STATE CHANGE FOUND!');
   if(user) {
     if(document.getElementById('lmw')){
-      location.reload();
     }
     //window.location = 'eventpage.html'; //After successful login, user will be redirected to home.html
 
@@ -116,10 +115,10 @@ firebase.auth().onAuthStateChanged(user => {
 
   } else {
     console.log('wubalubadub dub');
-      helloUser.classList.add("hidden");
       let bell = document.getElementById('notificationBell');
       if(bell != undefined){
         bell.classList.add('hidden');
+        helloUser.classList.add("hidden");
       }
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
@@ -241,6 +240,7 @@ function retrieveLoginModalContent(){
   let containerUserInput = document.createElement('div');
   let txtEmail = document.createElement('input');
   let txtPassword = document.createElement('input');
+  let txtPassword2 = document.createElement('input');
   let btnCuHolder = document.createElement('div');
   let switchHolder = document.createElement('div');
   let btnCuLogin = document.createElement('button');
@@ -248,11 +248,16 @@ function retrieveLoginModalContent(){
   let btnCuLogout = document.createElement('button');
   let paragE = document.createElement('p');
   let paragP = document.createElement('p');
+  let paragCp = document.createElement('p');
+  let paragN = document.createElement('p');
   let paragSignIn = document.createElement('p');
   let paragSignUp = document.createElement('p');
   let switchInput = document.createElement('input');
+  let nameInput = document.createElement('input');
   let label = document.createElement('label');
   let divBorder = document.createElement('div');
+  let confDiv = document.createElement('div');
+
   const email = txtEmail.value;
   const password = txtPassword.value;
 
@@ -284,17 +289,35 @@ function retrieveLoginModalContent(){
 
   txtEmail.className = 'txtEmail doNotCloseThis'; //creates an input field for email
   txtEmail.setAttribute('type', 'email');
-  paragE.innerText = 'EMAIL ADDRESS'
+  paragE.innerText = 'EMAIL ADRESS'
   paragE.className = 'paragE'
   containerUserInput.appendChild(paragE);
   containerUserInput.appendChild(txtEmail);
 
   txtPassword.className = 'txtPassword doNotCloseThis'; // creates an input field for password
   txtPassword.setAttribute('type', 'password');
-  paragP.innerText = 'PASSWORD'
+  paragP.innerText = 'LÖSENORD'
   paragP.className = 'paragP'
   containerUserInput.appendChild(paragP);
   containerUserInput.appendChild(txtPassword);
+
+  txtPassword2.className = 'txtPassword2 doNotCloseThis'; // creates an input field for password2
+  txtPassword2.setAttribute('type', 'password');
+  paragCp.innerText = 'BEKRÄFTA LÖSENORD';
+  paragCp.className = 'paragCp';
+  confDiv.className ='slider closed';
+  containerUserInput.appendChild(confDiv);
+  confDiv.appendChild(paragCp);
+  confDiv.appendChild(txtPassword2);
+
+  nameInput.className = 'nameInput doNotCloseThis'; // creates a name for the user
+  nameInput.setAttribute('type', 'text');
+  paragN.innerText = 'Namn';
+  paragN.className = 'paragN';
+  confDiv.className ='slider closed';
+  confDiv.appendChild(paragN);
+  confDiv.appendChild(nameInput);
+
 
   //Login button
   containerUser.appendChild(btnCuHolder);
@@ -319,7 +342,18 @@ function retrieveLoginModalContent(){
       paragSignUp.classList.add('highlight');
       btnCuLogin.classList.add('hide');
       btnCuSignUp.classList.remove('hide');
+<<<<<<< HEAD
       loginModalButtonHolder.classList.add('hide');
+=======
+      paragCp.classList.remove('hide');
+      txtPassword2.classList.remove('hide');
+
+      confDiv.classList.remove('closed');
+      confDiv.classList.add('slideUp');
+
+      btnHolderInside.classList.add('closed');
+      btnHolderInside.classList.remove('slideUp');
+>>>>>>> develop
 
     }else{
       console.log('it is false');
@@ -327,7 +361,18 @@ function retrieveLoginModalContent(){
       paragSignIn.classList.add('highlight');
       btnCuLogin.classList.remove('hide');
       btnCuSignUp.classList.add('hide');
+<<<<<<< HEAD
       loginModalButtonHolder.classList.remove('hide');
+=======
+      paragCp.classList.add('hide');
+      txtPassword2.classList.add('hide');
+
+      confDiv.classList.add('closed');
+      confDiv.classList.remove('slideUp');
+
+      btnHolderInside.classList.remove('closed');
+      btnHolderInside.classList.add('slideUp');
+>>>>>>> develop
     }
   });
 
@@ -338,6 +383,7 @@ function retrieveLoginModalContent(){
     //get email and password
     const email = txtEmail.value;
     const password = txtPassword.value;
+    const password2 = txtPassword2.value;
     //Sign in
     const promise = firebase.auth().signInWithEmailAndPassword(email, password);
     promise
@@ -348,19 +394,40 @@ function retrieveLoginModalContent(){
   });
 
     btnCuSignUp.addEventListener('click', function(event){
-      //get email and password
+      //Sign-up
+      //passwordMatch();
       const email = txtEmail.value;
       const password = txtPassword.value;
-      //Sign-up user
-      const promise = firebase.auth().createUserWithEmailAndPassword(email, password);
-      promise
+      const password2 = txtPassword2.value;
+      const name = nameInput.value;
+      if (password != password2) {
+          printMessage('error', ' fel lösenordet matchar inte');
+          txtPassword.style.borderColor = "#E34234";
+          txtPassword2.style.borderColor = "#E34234";
+      }else{
+        //Sign-up user if password match
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(function(){
+          var user = firebase.auth().currentUser;
+              user.updateProfile({
+              displayName: name
+              }).then(function() {
+                location.reload(); //Laddar om sidan
+              }).catch(function(error) {
+                printMessage('error', "något hände...")
+              });
+          })
         .catch(function(error){
-          console.log(error.message);
-          //printMessage('error', 'ah ah ah you didnt say the magic word..') // If some error occurs it will print the message
-        });
+            console.log(error.message);
+            //printMessage('error', 'ah ah ah you didnt say the magic word..') // If some error occurs it will print the message
+          });
+      }
     });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
   // Create button Wrappers
   let googleButtonWrapper = document.createElement('div');
   let facebookButtonWrapper = document.createElement('div');
@@ -388,7 +455,7 @@ function retrieveLoginModalContent(){
   btnHolderInside.appendChild(facebookButtonWrapper);
 
   btnHolder.appendChild(btnHolderInside);
-  btnHolderInside.className = 'loginModalButtonHolder';
+  btnHolderInside.className = 'loginModalButtonHolder slider';
 
 
   lmc.appendChild(headerDiv);
@@ -693,6 +760,7 @@ function displayNotifications(displayList){
 
         acceptInviteBtn.addEventListener('click', function(e){
           joinMeetup(localUser, meetupKey, eventID);
+          printMessage('success', 'Du gick med i meetupet');
         });
 
       } else if(action == 'friendRequest'){
@@ -820,6 +888,7 @@ function joinMeetup(user, meetupKey, eventID){
       db.ref('meetups/' + eventID + '/' + meetupKey + '/members').push(userObject);
       console.log('Vi la till dig i meetupet!');
       new SystemMessage(meetupKey, userObject.fullname + ' gick med i meetupet.').push();
+
 
       // Lägg till meetup i användarens profil.
       addUserMeetup(userObject.uniqueID,eventID, meetupKey);
