@@ -6,6 +6,10 @@ html * {
 html{
   scroll-behavior: smooth;
 }
+#menu li:hover>a {
+	transition: 0.3s;
+	color: #6C0CCC;
+}
 
 #helloUser{
   position: absolute;
