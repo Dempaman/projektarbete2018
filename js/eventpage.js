@@ -717,6 +717,8 @@ function createMessage(event){
 
         let chattWrapperDiv = event.target.previousSibling;
         // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
+
+
         chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
         let htmlScroll = document.getElementsByTagName('html')[0];
 
@@ -779,6 +781,7 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
             noMoreMessages.className = 'noMessage';
             chattWrapperDiv.insertBefore(noMoreMessages,chattWrapperDiv.firstChild);
             chattWrapperDiv.removeEventListener('scroll', loadMoreMessages);
+            chatMessagesChildAdded(1, false);
           }
         }
       }
@@ -942,7 +945,18 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
 
         // To scroll down or not to scroll down. Only if there's a user message outputted and not the scroll.
         if(!scroll){
-          chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+
+          let scrollHeight = chattWrapperDiv.scrollHeight;
+          let scrollTop = chattWrapperDiv.scrollTop;
+
+          if(scrollHeight - 760 < scrollTop){
+            chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+          } else {
+            // console.log('scrollHeight is: ', scrollHeight);
+            // console.log('scrollTop is: ', scrollTop);
+            // console.log('scrollHeight - 760 is: ', scrollHeight - 760);
+            console.log('not scrolling, too far up.');
+          }
         }
         messageCounter += 1;
       } else {
@@ -1063,6 +1077,10 @@ function displayEventInfo(event){
   googleMapImg.style.backgroundSize = 'cover';
   googleMapImg.style.backgroundPosition = 'center';
 
+  // Display mainCategory
+  let mainCategory = document.getElementById('mainCategory');
+  mainCategory.innerText = event.mainCategory;
+
   // Set the Date
   document.getElementById('eventDate').innerText = displayDate(event.date, event.weekDay, event.offsale);
   document.getElementById('eventTitle').innerText = event.name;
@@ -1070,14 +1088,75 @@ function displayEventInfo(event){
 
 
   // Om platsen inte finns (Göteborg - Ullevi) så skriver vi bara ut staden.
+  let completePlace, venuePlace = false;
   if(event.place == undefined){
-    document.getElementById('eventPlace').innerText = event.city;
+    completePlace = event.city;
   } else {
-    document.getElementById('eventPlace').innerText = event.place + ', ' + event.city;
+    completePlace = event.place + ', ' + event.city;
+    venuePlace = true;
+  }
+  document.getElementById('eventPlace').innerText = completePlace;
+
+  let infoTextDatum;
+  if(event.date){
+    infoTextDatum = displayDate(event.date, event.weekDay, event.offsale, true);
+  } else {
+    infoTextDatum = '.'
   }
 
-  retrieveMeetupInfo(event.date);
-  //updateEventInfo(event.name, event.priceRange, event.currency, event.onsale);
+
+  let infoTextPlace;
+  if(venuePlace){
+    infoTextPlace = 'på ' + event.place + ' i ' + event.city + infoTextDatum;
+  } else {
+    infoTextPlace = 'i ' + event.city + infoTextDatum;
+  }
+
+  let ticketsAvailable;
+  if(event.offsale){
+    ticketsAvailable = 'Om du inte redan har en biljett kan du klicka dig in på biljettsidan via knappen nedan för att köpa en.';
+  } else {
+    ticketsAvailable = 'Biljetterna för detta evenemang är tyvärr slut men du kan fortfarande skapa ett meetup om du redan har en biljett.';
+  }
+
+  let artister = [];
+  for(let i = 0; i < event.attractions.length; i++){
+    let artist = event.attractions[i];
+
+    if(i != 0) {
+      if(i != event.attractions.length-1){
+        artister.push(' ' + artist.name);
+      } else {
+        artister.push(' och ' + artist.name.replace(',', '') + ' ');
+      }
+    }
+  }
+
+  let promoter;
+  if(event.promoter){
+    if(event.mainCategory == 'Festivaler'){
+      promoter = 'Promotor för festivalen är ' + event.promoter.name+'.';
+    } else {
+      promoter = 'Promotor för evenemanget är ' + event.promoter.name +'.';
+    }
+  }
+  if(event.minage){
+    promoter += ' Åldersgräns: ' + event.minage + ' år';
+  }
+
+  /* skriv ut information om eventet */
+  let attractionText;
+  if(event.attractions.length > 1){
+    attractionText = `${event.attractions[0].name} arrangeras ${infoTextPlace}. ${artister} kommer finnas på plats. ${ticketsAvailable} <br><span>${promoter}</span>`;
+  } else if(event.attractions){
+    attractionText = `${event.attractions[0].name} kommer att spela ${infoTextPlace} ${ticketsAvailable} <br> <span>${promoter}</span>`;
+  }
+  let eventInfoText = document.getElementById('eventInfoText');
+
+  eventInfoText.innerHTML = `<p>${attractionText}</p>`;
+
+  //retrieveMeetupInfo(event.date);
+  updateEventInfo(event);
 }
 
 function retrieveEventInfo(){
@@ -1106,8 +1185,11 @@ function retrieveEventInfo(){
           let address = venue.location.address;
           let date = event.localeventdate;
           let offsale = event.offsale.value;
-
+          let mainCategory = event.categories[0].name;
+          let promoter = event.promoter;
           console.log('Date is: ', date);
+          console.log('Straight from the API: ', json);
+          console.log('Main category is: ', mainCategory);
           if(!date){
             date = event.date;
           }
@@ -1115,7 +1197,7 @@ function retrieveEventInfo(){
           // createMarker(latitude, longitude);
           //console.log('ImageUrl', imageURL);
 
-          let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale);
+          let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale, mainCategory, event.attractions, promoter);
 
           console.log('EVENTOBJECT: ',eventObject);
 
@@ -1140,7 +1222,7 @@ function retrieveEventInfo(){
 
 
 //Funktion för att visa datumet lite finare :)
-function displayDate(dateStr, weekDay, offsale){
+function displayDate(dateStr, weekDay, offsale, attractionText = false){
 
   let date, time, year, month, day;
 
@@ -1153,7 +1235,14 @@ function displayDate(dateStr, weekDay, offsale){
     dateStr = dateStr.split('T');
 
     console.log('datestr: ',dateStr);
+
+
+
+    /* Now we have an array with two objects, TIME with Z on [1] and date on [0] */
     time = dateStr[1];
+
+    /* Split it again */
+    dateStr = dateStr[0].split('-');
 
     year = dateStr[0];
     month = dateStr[1];
@@ -1196,8 +1285,15 @@ function displayDate(dateStr, weekDay, offsale){
   }
 
 
-  console.log(date + ' - ' + time);
-  if(weekDay){
+  if(attractionText){
+    if(weekDay){
+      return ' ' + weekDay.toLowerCase() + 'en den ' + day + ' ' + getMonth(month-0) + ' klockan ' + time + '.';
+    } else {
+      return ' den ' + day + ' ' + getMonth(month-0) + ' klockan ' + time + '.';
+    }
+
+
+  } else if(weekDay){
     return weekDay + ', ' + day + '/' + month + ' kl ' + time;
   } else {
     return day + '/' + month + ' - ' + year + ' kl ' + time;
@@ -1259,32 +1355,58 @@ function getLocationInfo(){
 }
 
 // Wikipedia api retriever
-function updateEventInfo(eventName, priceRange, currency, onsale){
+function updateEventInfo(event){
 
-  fetch(`https://sv.wikipedia.org/w/api.php?action=opensearch&search=${eventName}&limit=1&format=json`)
-  .then(function(response){
-    console.log(response);
-    return response.json();
-  })
-  .then(function(json){
-    if(json[2].length === 0){
-      let tickets = '';
-      if(onsale){
-        tickets = '<p>Biljetter finns för detta event finns!</p>';
-      }
-      document.getElementById('eventInfoText').innerHTML = `
-      ${tickets}
-      <p>Pris:</p>
+  /* Create the search string based on the event */
+  if(event.attractions){
+    if(event.attractions.length >= 1){
+      let searchStr = event.attractions[0].name;
+      let eventInfoText = document.getElementById('eventInfoText');
+      fetch(`https://sv.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=${searchStr}`)
+      .then(function(response){
+        console.log(response);
+        return response.json();
+      })
+      .then(function(json){
 
-      <span>${priceRange[0] + currency} - ${priceRange[1] + currency}</span>
+        //console.log('Json version: ', json);
+        if(json.length === 0){
 
-      <p>Ingenting om detta event hittades på Wikipedia</p>`;
-    } else {
-      document.getElementById('eventInfoText').innerHTML = json[2].toString();
+          console.log('ingenting hittades på wikipedia');
+        } else {
+          /* Retrieve the info */
+          let pages = json.query.pages;
+          let text;
+          //console.log(pages);
+          for(let page in pages) {
+
+            text = pages[page].extract;
+
+            if(text.includes('Denna artikel handlar')){
+              text = text.split(/\n/)[1];
+            } else if(text.includes('\n')){
+              text = text.split(/\n/);
+              text = text[0] + ' ' + text[1];
+            }
+
+            //console.log('what is this', text.split[" "][0]);
+            //console.log('Text:',text);
+          }
+
+          let infoTextParagraf = document.createElement('p');
+          infoTextParagraf.innerText = text;
+          eventInfoText.insertBefore(infoTextParagraf, eventInfoText.firstChild);
+        }
+        console.log(json);
+
+      });
+
+      console.log('It is only one person. Lets find the info about this artist.');
     }
-    console.log(json);
+  } else {
+    console.log('No information to display about this person.');
+  }
 
-  });
 }
 
 function toggleLike(meetupKey, messageKey){
@@ -1629,6 +1751,7 @@ function popupProfile(event, eventID, meetupKey){
 
   let kickBtn = document.createElement('button');
   kickBtn.innerHTML = '<i class="mdi mdi-account-remove mdi-24px"></i>';
+  kickBtn.className = 'kickBtn';
   let admin = getAdmin(localUser.uniqueID);
 
 
@@ -1643,10 +1766,13 @@ function popupProfile(event, eventID, meetupKey){
     if(localUser){
       if(localUser.sid == user.sid || friendList.includes(user.sid)){
         addFriendBtn.className = 'disabledBtn doNotCloseThis';
+        console.log('You are already friends! Or this is u..');
+        console.log('localUser sid: ', localUser.sid, 'userSid: ', user.sid);
+
       } else {
         addFriendBtn.addEventListener('click', function(){
 
-          sendNotification()
+          sendNotification(user.sid, 'friendRequest');
 
           addFriend(user.sid);
           addFriendBtn.disabled = true;
@@ -1679,13 +1805,17 @@ function popupProfile(event, eventID, meetupKey){
     console.log(data);
     console.log('THE EFFING CCREATOR IS: ', data);
     if(user.sid || admin){
-      if(localUser.sid == user.sid){
+      console.log('The user has a SID');
+      if(localUser.sid == user.sid && !admin){
         console.log('Man kan inte kicka sig själv, lul');
       } else if(admin || data.uniqueID == localUser.uniqueID){
-        //btnHolder.appendChild(kickBtn);
+        console.log('Admin or creator');
+        btnHolder.appendChild(kickBtn);
         kickBtn.addEventListener('click', function(){
           confirmRemoveMeetup(null, null, 'Vill du verkligen ta bort ' + user.fullname + ' ifrån meetupet?', 'Hell yeah', function(){
             printMessage('success', 'Du sparkade på riktigt ut ' + user.fullname + '. Skäms!');
+
+            kickUserFromMeetup(eventID, meetupKey, user.sid);
           });
         });
       }
@@ -2073,6 +2203,7 @@ function sendNotification(userOrSid = false, action){
 
 
     } else if(action == 'friendRequest'){
+      console.log('Vänförfrågan skickad');
       notificationObject = {
         fromID: localUser.uniqueID,
         fromSID: localUser.sid,
@@ -2105,4 +2236,60 @@ function retrieveFriends(){
     }
   }
   return friendList;
+}
+
+function kickUserFromMeetup(eventid, meetupKey, sid){
+  db.ref('meetups/' + eventid + '/' + meetupKey + '/members').once('value', function(snapshot){
+    let data = snapshot.val();
+    for(let user in data){
+      let userKey = user;
+      user = data[user];
+
+      if(sid){
+        console.log('Sid is: ', sid);
+        if(user.sid){
+          console.log('User in database sid: ', user.sid);
+          if(sid == user.sid){
+            console.log('Match found');
+            /* Remove from the database at this position */
+            db.ref('meetups/' + eventid + '/' + meetupKey + '/members/' + userKey).remove();
+          }
+        }
+      } else {
+        console.error('Abort, no sid found.');
+      }
+    }
+  });
+}
+
+function getMonth(int){
+
+  switch (int) {
+  case 1:
+    return 'januari';
+  case 2:
+    return 'februari';
+  case 3:
+    return 'mars';
+  case 4:
+    return 'april';
+  case 5:
+    return 'maj';
+  case 6:
+    return 'juni';
+  case 7:
+    return 'juli';
+  case 8:
+    return 'augusti'
+  case 9:
+    return 'september';
+  case 10:
+    return 'oktober';
+  case 11:
+    return 'november';
+  case 12:
+    return 'december';
+  default:
+    return 'okänd';
+  }
 }

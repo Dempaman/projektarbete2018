@@ -319,4 +319,14 @@ a {
 	#menuToggle {
 		display: none
 	}
+
+	/* Notifications MEDIQ QUERIES */
+	#notificationWrapper {
+		width: 40%;
+		max-width: 400px;
+		height: auto;
+		position: absolute;
+		margin: 80px 20px 0;
+		box-shadow: 1px 3px 4px #8c8c8c;
+	}
 }

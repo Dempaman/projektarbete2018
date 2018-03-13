@@ -58,12 +58,22 @@ html, body {
 
 /* Real shit below */
 
-
+#eventHolder {
+  position: relative;
+}
+h2#mainCategory {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: -10px 25px !important;
+  font-size: 1.2em !important;
+  color: #4a4a4a;
+}
 
 #eventHolder > div > p {
   font-family: 'Roboto', sans-serif;
   padding: 0px;
-  margin: 0px 20px 0px;
+  margin: 0px 20px 10px;
 }
 #eventHolder #eventPlace {
   margin: 2px 21px 0px;
@@ -94,6 +104,12 @@ html, body {
 
 #eventInfoText {
   margin: 5px 0px 40px;
+}
+#eventInfoText span {
+  font-size: 0.8em;
+  color: #535353;
+  margin: 15px 0px 0px;
+  display: inline-block;
 }
 #eventDivButtons {
   text-align: center;

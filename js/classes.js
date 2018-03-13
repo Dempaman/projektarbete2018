@@ -84,7 +84,7 @@ class MeetupClass {
 }
 
 class EventClass {
-  constructor(eventid, eventName, date, place, address, city, onsale, minage, priceRange, currency, eventInformation, imageURL, weekDay, offsale){
+  constructor(eventid, eventName, date, place, address, city, onsale, minage, priceRange, currency, eventInformation, imageURL, weekDay, offsale, mainCategory, attractions, promoter){
     this.eventid = eventid;
     this.name = eventName;
     this.date = date;
@@ -99,6 +99,9 @@ class EventClass {
     this.imageURL = imageURL;
     this.weekDay = weekDay;
     this.offsale = offsale;
+    this.mainCategory = mainCategory;
+    this.attractions = attractions;
+    this.promoter = promoter;
   }
 }
 

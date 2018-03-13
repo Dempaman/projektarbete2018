@@ -64,8 +64,8 @@
 .profileHolder > div > div > button:last-child {
   color: #fcfcfc;
   background-color: #ff8181;
-  padding: 0px 7px 0px 6px;
-  margin: 3px 2px;
+  padding: 6px 10px;
+  margin: 4px 0px;
 }
 
 /* Hover for buttons */
@@ -268,6 +268,12 @@
 
 }
 
+/* Kick Btn */
+.profileHolder > div > div > button.kickBtn {
+  padding: 0px 6px 0px 5px;
+  margin: 4px 4px;
+}
+
 
 /* Media Queries */
 
@@ -323,4 +329,8 @@
     margin: 3px 0 0;
   }
 
+  .profileHolder > div > div > button.kickBtn {
+    padding: 0px;
+    margin: 4px 0px;
+  }
 }
