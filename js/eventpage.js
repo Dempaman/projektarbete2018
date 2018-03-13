@@ -1147,9 +1147,9 @@ function displayEventInfo(event){
   /* skriv ut information om eventet */
   let attractionText;
   if(event.attractions.length > 1){
-    attractionText = `${event.attractions[0].name} arrangeras ${infoTextPlace}. ${artister} kommer finnas på plats. ${ticketsAvailable} <br><span>${promoter}</span>`;
+    attractionText = `${event.attractions[0].name} arrangeras ${infoTextPlace}<br><br> ${artister} kommer finnas på plats. <br>${ticketsAvailable} <br><span>${promoter}</span>`;
   } else if(event.attractions){
-    attractionText = `${event.attractions[0].name} kommer att spela ${infoTextPlace} ${ticketsAvailable} <br> <span>${promoter}</span>`;
+    attractionText = `${event.attractions[0].name} kommer att spela ${infoTextPlace}<br> ${ticketsAvailable} <br> <span>${promoter}</span>`;
   }
   let eventInfoText = document.getElementById('eventInfoText');
 
