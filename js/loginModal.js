@@ -693,6 +693,7 @@ function displayNotifications(displayList){
 
         acceptInviteBtn.addEventListener('click', function(e){
           joinMeetup(localUser, meetupKey, eventID);
+          printMessage('success', 'Du gick med i meetupet');
         });
 
       } else if(action == 'friendRequest'){
@@ -820,6 +821,7 @@ function joinMeetup(user, meetupKey, eventID){
       db.ref('meetups/' + eventID + '/' + meetupKey + '/members').push(userObject);
       console.log('Vi la till dig i meetupet!');
       new SystemMessage(meetupKey, userObject.fullname + ' gick med i meetupet.').push();
+
 
       // Lägg till meetup i användarens profil.
       addUserMeetup(userObject.uniqueID,eventID, meetupKey);

@@ -1869,9 +1869,7 @@ function displayInviteFriendsResults(event, searchArray, printList, btn){
                 /* The person has a friend ! */
                   if(user.sid){
                     /* the found person has a SID defined! They might be friends :o */
-                    console.log('sid again:' + user.sid);
                     if(friendList.includes(user.sid)){
-                      console.log('They are friends!!');
                       friend = true;
                     }
                   }
@@ -1891,9 +1889,7 @@ function displayInviteFriendsResults(event, searchArray, printList, btn){
               /* The person has a friend ! */
                 if(user.sid){
                   /* the found person has a SID defined! They might be friends :o */
-                  console.log('sid again:' + user.sid);
                   if(friendList.includes(user.sid)){
-                    console.log('They are friends!!');
                     friend = true;
                   }
                 }
@@ -1986,23 +1982,40 @@ function downloadUsersToArray(array){
 
 function sendNotification(userOrSid = false, action){
   console.log('Does this fire?');
+  /* Get localUser */
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+  /* Get the EventID */
+  eventID = getLocationInfo()[0];
+
   /* start by getting the friendList of the localUser */
   let friendList = retrieveFriends();
   let sid, user, friend;
+
   if(typeof userOrSid == 'string'){
     sid = userOrSid;
+    console.log('This is a SID');
     user = false;
   } else {
+    console.log('This is a USER');
     user = true;
     sid = false;
+  }
+
+  /* Kolla vänlistan */
+  if(friendList.includes(sid)){
+    friend = true;
+  } else {
+    friend = false;
   }
 
   /* Find the one who should get the message */
   let retriever;
   if(user){
     /* We should use the USER to send the message. */
-    retriever = user.uniqueID;
-    sid = user.sid;
+    retriever = userOrSid.uniqueID;
+    sid = userOrSid.sid;
+    createAndSend(retriever);
   } else if(sid){
     /* We should use the SID to send the message. */
 
@@ -2018,6 +2031,7 @@ function sendNotification(userOrSid = false, action){
           if(user.sid == userOrSid){
             /* If they match, this is the retriever. */
             retriever = user.uniqueID;
+            console.log('Create and send');
             createAndSend(retriever);
           }
         }
@@ -2027,29 +2041,21 @@ function sendNotification(userOrSid = false, action){
     console.error('Something went wrong when we tried to send a notification.');
   }
 
-  /* Kolla vänlistan */
-  if(friendList.includes(sid)){
-    friend = true;
-  } else {
-    friend = false;
-  }
 
   /* If the user is logged in check */
-  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
   if(!localUser){
     printMessage('error', 'Du är inte inloggad! :o');
     throw('There is not a user logged in.');
   }
 
-  /* Get the EventID */
-  eventID = getLocationInfo()[0];
 
   function createAndSend(retriever){
     /* Create the object to be sent! */
     let notificationObject;
     /* If the action is a invite create the invite here */
     if(action == 'invite'){
-
+      console.log('invite being sent..');
       /* Get the currentMeetupKey we put in localStorage before */
       let meetupKey = localStorage.getItem('currentMeetupKey');
 
@@ -2064,6 +2070,8 @@ function sendNotification(userOrSid = false, action){
         meetupKey: meetupKey,
         time: firebase.database.ServerValue.TIMESTAMP
       }
+
+
     } else if(action == 'friendRequest'){
       notificationObject = {
         fromID: localUser.uniqueID,
