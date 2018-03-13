@@ -116,10 +116,10 @@ firebase.auth().onAuthStateChanged(user => {
 
   } else {
     console.log('wubalubadub dub');
-      helloUser.classList.add("hidden");
       let bell = document.getElementById('notificationBell');
       if(bell != undefined){
         bell.classList.add('hidden');
+        helloUser.classList.add("hidden");
       }
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
