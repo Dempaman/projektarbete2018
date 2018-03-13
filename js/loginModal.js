@@ -683,7 +683,6 @@ function displayNotifications(displayList){
             /* Tacka nej */
             db.ref('users/' + localUser.uniqueID + '/notifications/'+notificationKey).remove();
             displayList.removeChild(listItem);
-            printMessage('success', 'Du tackade nej');
         });
 
         acceptInviteBtn.addEventListener('click', function(e){
@@ -700,7 +699,6 @@ function displayNotifications(displayList){
             /* Tacka nej */
             db.ref('users/' + localUser.uniqueID + '/notifications/'+notificationKey).remove();
             displayList.removeChild(listItem);
-            printMessage('success', 'Du tackade nej');
         });
 
         acceptInviteBtn.addEventListener('click', function(e){

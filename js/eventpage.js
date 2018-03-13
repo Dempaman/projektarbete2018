@@ -2098,5 +2098,3 @@ function retrieveFriends(){
   }
   return friendList;
 }
-
-sendNotification('anton#1337', 'friendRequest');
