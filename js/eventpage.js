@@ -1989,7 +1989,7 @@ function sendNotification(userOrSid = false, action){
   /* start by getting the friendList of the localUser */
   let friendList = retrieveFriends();
   let sid, user, friend;
-  if(userOrSid.includes('#')){
+  if(typeof userOrSid == 'string'){
     sid = userOrSid;
     user = false;
   } else {
