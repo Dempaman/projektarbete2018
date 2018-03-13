@@ -150,6 +150,29 @@ function ifUserIsTrue() {
 
     });
 
+    // Hämta alla anmälda Meetups
+    db.ref('users/' + uniqueID + '/meetups').on('value', function(snapshot) {
+      // child_added
+      let meetupsJoind = snapshot.val();
+      let eventID = snapshot.key;
+      console.log(meetupsJoind);
+
+      if (meetupsJoind) {
+        let counter = 0;
+        for (let obj in meetupsJoind) {
+          counter += Object.keys(meetupsJoind[obj]).length;
+          //let currentEvent = eventObjects[obj];
+
+          // Lägg till html kod som ska loppa igenom alla meetups
+
+          console.log('meetup obj ', obj);
+          console.log('meetupsJoind ', Object.keys(meetupsJoind[obj]).length);
+        }
+          meetupCount.innerText = counter;
+
+      }
+    });
+
 
   }else {
     console.log('Sorry! No Web Storage support');
