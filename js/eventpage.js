@@ -1155,7 +1155,7 @@ function displayEventInfo(event){
 
   eventInfoText.innerHTML = `<p>${attractionText}</p>`;
 
-  //retrieveMeetupInfo(event.date);
+  retrieveMeetupInfo(event.date);
   updateEventInfo(event);
 }
 
