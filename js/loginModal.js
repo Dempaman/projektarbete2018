@@ -51,7 +51,10 @@ firebase.auth().onAuthStateChanged(user => {
     userName.innerText = user.displayName;
 
     let bell = document.getElementById('notificationBell');
-    bell.classList.remove('hidden');
+    if(bell){
+      bell.classList.remove('hidden');
+    }
+
 
     bell.addEventListener('click', showNotifications);
 
@@ -114,7 +117,10 @@ firebase.auth().onAuthStateChanged(user => {
   } else {
     console.log('wubalubadub dub');
       helloUser.classList.add("hidden");
-      bell.classList.add('hidden');
+      let bell = document.getElementById('notificationBell');
+      if(bell != undefined){
+        bell.classList.add('hidden');
+      }
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
       localStorage.removeItem('loggedInUser');

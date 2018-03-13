@@ -58,7 +58,7 @@ a {
 	margin: 0;
 }
 #notificationWrapper h2 {
-	flex: 1;
+	color: #5f5f5f;
 }
 #notificationWrapper h2 + span {
 	margin: 0px 10px;
