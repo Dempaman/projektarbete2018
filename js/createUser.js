@@ -15,6 +15,7 @@ window.addEventListener('load', function(event){
 //Get elements
 const txtEmail = document.getElementById('txtEmail');
 const txtPassword = document.getElementById('txtPassword');
+const txtPassword2 = document.getElementById('txtPassword2');
 const btnCLogin = document.getElementById('btnCLogin');
 const btnCSignUp = document.getElementById('btnCSignUp');
 const btnCLogout = document.getElementById('btnCLogout');
@@ -37,25 +38,25 @@ btnCLogin.addEventListener('click', function(event){
     const email = txtEmail.value;
     const password = txtPassword.value;
     //Sign in
-    const promise = firebase.auth().createUserWithEmailAndPassword(email, password);
-    promise
-      .catch(e => console.log(e.message));
+    passwordMatch();
   });
 
   firebase.auth().onAuthStateChanged(function(user){
     if(user){
       console.log(user);
-      console.log("Now logged in")
+      console.log("Now logged in");
       btnCLogout.classList.remove('hide');
     }else{
       console.log('not logged in');
-      btnCLogout.classList.add('hide')
+      btnCLogout.classList.add('hide');
     }
   });
 
   btnCLogout.addEventListener('click', function(event){
     firebase.auth().signOut();
-    console.log('Tack för du loggade ut!!')
+    console.log('Tack för du loggade ut!!');
   });
+
+  
 
 });//window.load

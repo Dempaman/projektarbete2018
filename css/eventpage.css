@@ -27,7 +27,6 @@ html, body {
 .eventImage {
   height: 100%;
   width: 305px;
-
 }
 
 @media screen and (min-width: 620px){
