@@ -49,7 +49,10 @@
   background-color: #ffe99a;
   color: #212121;
 }
-
+.notificationprintMessage {
+  background-color: #2a3e7a;
+  color: #fefefe;
+}
 
 /* Animation Classes */
 .fadeout {

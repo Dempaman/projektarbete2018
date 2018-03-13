@@ -12,6 +12,190 @@ a {
 	transition: color 0.3s ease;
 }
 
+/* Hello User CSS */
+#helloUser {
+	position: absolute;
+	left: 70px;
+	padding: 15px 0;
+	font-size: 1.2em;
+  /* text-transform: uppercase; */
+}
+#userName {
+  color:#fff;
+  font-weight: 600;
+  /* text-transform: uppercase; */
+}
+
+/* Notifications */
+#notificationBell {
+	margin: 5px;
+	vertical-align: -3px;
+}
+
+#notificationBell:hover {
+	color: #6c0ccc;
+	cursor: pointer;
+}
+
+#notificationBell > i {
+	padding: 0px;
+}
+
+/* Notificationwrapper */
+#notificationWrapper {
+	width: 100%;
+	height: 100%;
+	background-color: #eaeaea;
+	position: fixed;
+	z-index: 2;
+	color: #414141;
+	overflow-y: auto;
+}
+
+/* Notificationwrapper Header */
+#notificationWrapper i {
+	padding: 0;
+	margin: 0;
+}
+#notificationWrapper h2 {
+	color: #5f5f5f;
+}
+#notificationWrapper h2 + span {
+	margin: 0px 10px;
+}
+#notificationWrapper h2 + span:hover {
+	color: #e0e0e0;
+}
+#notificationWrapper > div:first-child {
+	display: flex;
+	background-color: #f3f3f3;
+	color: #5f5f5f;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #e0e0e0;
+	box-shadow: 0px 1px 5px #909090;
+}
+/* Notificationwrapper Content */
+#notificationList {
+	margin: 10px;
+}
+#navigation #notificationList img {
+	margin: 0px;
+	margin-right: 10px;
+}
+#notificationList > div:nth-child(odd) {
+	font-size: 0.8em;
+	background-color: #f2f2f2;
+	padding: 12px 8px;
+	color: #3b3b3b;
+	border-bottom: 1px solid #b9b9b9;
+	box-shadow: 1px 1px 3px #a5a5a5;
+	position: relative;
+	margin: 3px 0;
+}
+
+#notificationList > div:nth-child(even) {
+	font-size: 0.8em;
+	background-color: #e6e6e6;
+	padding: 12px 8px;
+	color: #333333;
+	border-bottom: 1px solid #9d9a9a;
+	box-shadow: 1px 1px 3px #a5a5a5;
+	position: relative;
+	margin: 5px 0;
+}
+
+/* Actual text */
+#notificationList > div > div.hidden {
+	display: none;
+	opacity: 0;
+}
+#notificationList > div > div {
+	padding: 14px 10px;
+	display: flex;
+	margin-top: 6px;
+	align-items: center;
+}
+#notificationList > div > div:last-child {
+	padding: 0;
+	justify-content: space-around;
+	flex-direction: column;
+}
+
+/* time */
+.notificationTime {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 6px 11px;
+	color: #848484;
+}
+
+/* Show more btn */
+#notificationList button {
+	border: none;
+	background-color: inherit;
+	margin: 0px;
+	padding: 0px;
+	outline: none;
+	color: #6b6b6b;
+	cursor: pointer;
+	flex: 1;
+	text-align: right;
+}
+.mdi-30px.mdi {
+	font-size: 30px;
+}
+
+
+/* SHOW MORE INFO */
+#notificationList .showMoreInfoDiv {
+	margin: 5px auto;
+}
+#notificationList .infoWrapper {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	padding: 0px 15px;
+	margin-bottom: 20px;
+}
+#notificationList .infoWrapper > div {
+	display: flex;
+	width: 50%;
+	flex-direction: column;
+	margin: 4px 0px;
+}
+#notificationList .infoWrapper > div > span:first-child {
+	color: #666;
+	font-size: 0.9em;
+}
+
+
+
+/* Buttons */
+#notificationList button.gotoBtn:first-child {
+	color: #8d8d8d;
+	font-size: 1.1em;
+	margin: 0px 20px;
+	padding: 4px 20px;
+}
+
+#notificationList button.gotoBtn:last-child {
+	color: #f0f0f0;
+	background-color: #78a5e1;
+	padding: 6px 14px 7px;
+	box-shadow: 1px 1px 4px #c3c3c3;
+}
+
+/* Button Hovers */
+#notificationList button.gotoBtn:first-child:hover{
+	color: #393939;
+	background: #ececec;
+}
+#notificationList button.gotoBtn:last-child:hover{
+	background-color: #7bc281;
+}
+
 #navigation {
 	background-color: #232323;
 	/*position: absolute;*/
