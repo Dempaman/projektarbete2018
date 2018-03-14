@@ -432,9 +432,11 @@ function checkForNumber(type, number){
     if(isNaN(number)){
       return printMessage('error', type + ' måste vara ett tal');
     } else if( number < 2){
-      printMessage('error', type + ' är för få platser')
+      printMessage('error', type + ' är för få platser');
+      return false;
     } else if ( number > 100){
       printMessage('error', type + ' är för många platser');
+      return false;
     }
       return true;
 }

@@ -50,6 +50,9 @@
   transition-duration: .5s;
   transition-timing-function: linear;
 }
+input.errorBorder{
+  border: 1px solid #b6000099;
+}
 
 
 #lmw button.btnCuLogin{
