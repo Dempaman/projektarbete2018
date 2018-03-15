@@ -244,6 +244,7 @@ function createMeetupListener(event){
 
     let creator = {
         uniqueID: localUser.uniqueID,
+        sid: localUser.sid,
         fullname: localUser.fullname,
         mail: localUser.mail,
         avatarURL: localUser.avatarURL
