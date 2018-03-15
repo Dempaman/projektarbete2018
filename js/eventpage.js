@@ -603,9 +603,15 @@ function displayMembersAndChat(md, meetupKey){
     chattWrapperDiv.className = 'chattWrapperDiv';
 
     // Inputbox box
+    let inputBoxWrapper = document.createElement('div');
+    inputBoxWrapper.className = 'inputBoxWrapper';
+    let sendIcon = document.createElement('div');
+    sendIcon.innerHTML = '<i class="mdi mdi-send mdi-24px"></i>';
+
     let inputBox = document.createElement('input');
     inputBox.setAttribute('placeholder', 'Skriv ett meddelande');
-
+    inputBoxWrapper.appendChild(inputBox);
+    inputBoxWrapper.appendChild(sendIcon);
     // Variables for the message
     let senderID = currentUser.uniqueID;
     let avatarURL = currentUser.avatarURL;
@@ -613,6 +619,10 @@ function displayMembersAndChat(md, meetupKey){
     // Add Eventlistener for the inputBox
     console.log('ADDING EVENTLISTENER FOR KEYPRESS');
     inputBox.addEventListener('keypress', createMessage);
+
+    inputBox.nextSibling.addEventListener('click', function(event){
+      createMessage(inputBox, true);
+    });
 
     let noMessage = document.createElement('p');
     noMessage.innerText = 'Inga meddelanden ännu.';
@@ -659,7 +669,7 @@ function displayMembersAndChat(md, meetupKey){
     chatWrapperWithLabel.appendChild(chattWrapperDiv);
 
     //Append inputBox
-    chatWrapperWithLabel.appendChild(inputBox);
+    chatWrapperWithLabel.appendChild(inputBoxWrapper);
 
     //Append chatWrapperWithLabel
     moreMeetupInfoDiv.appendChild(chatWrapperWithLabel);
@@ -679,22 +689,28 @@ function stopListenToChat(meetupKey){
   db.ref('chats/' + meetupKey).off();
 }
 
-function createMessage(event){
-  if(event.keyCode == 13){
+function createMessage(event, sendBtn = false){
+  if(event.keyCode == 13 || sendBtn){
+    let target;
+    if(sendBtn){
+      target = event;
+    } else {
+      target = event.target
+    }
     if(localStorage.getItem('loggedInUser')){
       updateTimeStamps();
       // Some easy checks.
-      if(event.target.value == "" || event.target.value == undefined || event.target.value == " "){
+      if(target.value == "" || target.value == undefined || target.value == " "){
         console.log('No message specified!');
-      } else if(event.target.value.length < 3){
+      } else if(target.value.length < 3){
         console.log('Message too short!');
-      } else if(event.target.value.length > 200){
+      } else if(target.value.length > 200){
         console.log('Message too long!');
       } else {
         // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
-        let textmessage = event.target.value;
+        let textmessage = target.value;
         let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        let md = event.target.parentNode.parentNode.parentNode; // Meetup Div
+        let md = target.parentNode.parentNode.parentNode.parentNode; // Meetup Div
         let ms = md.getAttribute('id'); // meetup String
 
         let meetupKey = ms.replace('-', '&').split('&')[1]
@@ -715,7 +731,7 @@ function createMessage(event){
 
 
 
-        let chattWrapperDiv = event.target.previousSibling;
+        let chattWrapperDiv = target.parentNode.previousSibling;
         // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
 
 
@@ -723,7 +739,8 @@ function createMessage(event){
         let htmlScroll = document.getElementsByTagName('html')[0];
 
         // Clear Inputbox
-        event.target.value = '';
+        target.value = '';
+        target.focus();
       }
     } else {
       console.log('You are not logged in');
@@ -1495,6 +1512,19 @@ function pageLoaded(){
   if(document.getElementsByClassName('spinner')[0]){
     document.getElementsByClassName('spinner')[0].className = 'hidden';
   }
+
+    // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+    let htmlScroll = document.getElementsByTagName('html')[0];
+
+    let meetup = document.getElementById('meetup-' + getLocationInfo()[1]);
+
+    if(meetup){
+      meetup.scrollIntoView({behavior: 'smooth'});
+      console.log('Scrolling into view!');
+    } else {
+      console.warn('Meetup is not yet in the dom. Or doesn\'t exist.');
+    }
+
 }
 
 function addEditBtns(meetupKey){
@@ -1741,8 +1771,8 @@ function popupProfile(event, eventID, meetupKey){
   gotoBtn.className = 'doNotCloseThis';
   if(user.sid){
     gotoBtn.addEventListener('click', function(){
-      //window.location.assign('profile.html?user=' + event.target.getAttribute('sid'));
-      printMessage('default', 'Denna ska leda till användarens profil. SiteID: ' + user.sid);
+      window.location.assign('profil.html?user=' + event.target.getAttribute('sid'));
+      //printMessage('default', 'Denna ska leda till användarens profil. SiteID: ' + user.sid);
     });
   } else {
     gotoBtn.className = 'disabledBtn doNotCloseThis';
@@ -1947,6 +1977,7 @@ function displayInviteFriends(event){
 }
 
 function displayInviteFriendsResults(event, searchArray, printList, btn){
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
   /* check if it's empty first */
   let friendList = retrieveFriends();
   if(searchArray.length){
@@ -1983,6 +2014,13 @@ function displayInviteFriendsResults(event, searchArray, printList, btn){
       let fullname = user.fullname;
       let sid = user.sid;
       let friend = false;
+
+      if(localUser){
+        if(user.uniqueID == localUser.uniqueID){
+          /* do not show the user at all*/
+          continue;
+        }
+      }
 
 
       if(fullname || sid){
@@ -2074,9 +2112,10 @@ function displayMatch(user, printList, friend, foundBySid = false){
 
   let inviteBtn = document.createElement('button');
   inviteBtn.innerHTML = '<i class="mdi mdi-plus mdi-24px"> </i>';
+  console.log('What does user contain?', user);
   inviteBtn.addEventListener('click', function(e){
     inviteBtn.disabled = true;
-    printMessage('default', 'Inbjudan skickad!', undefined, undefined, 1);
+    printMessage('success', 'Inbjudan skickad!', undefined, undefined, 1);
     e.target.children[0].className += ' fadeout';
 
     sendNotification(user, 'invite');

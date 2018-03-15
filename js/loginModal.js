@@ -21,16 +21,21 @@ firebase.auth().onAuthStateChanged(user => {
     /* start to listen for invites for this person */
     let initTime = new Date().getTime();
     db.ref('users/' + user.uid + '/notifications').on('child_added', function(snapshot){
-      let bell = document.getElementById('notificationBell');
-      if(bell){
-        bell.innerHTML = '<i class="mdi mdi-bell-ring mdi-24px"> </i>'
-      }
       let data = snapshot.val();
 
       if(initTime > data.time){
         console.log('This is an old invite.');
       } else {
+
+        /* Activate the BELL */
+        let bell = document.getElementById('notificationBell');
+
+        if(bell){
+          bell.innerHTML = '<i class="mdi mdi-bell-ring mdi-24px"> </i>'
+        }
+
         if(data.action == 'invite'){
+
           printMessage('notification', data.fullname + ' bjöd precis in dig till ett meetup!');
         } else if(data.action == 'friendRequest'){
           printMessage('notification', data.fullname + ' la precis till dig som vän!');
@@ -520,7 +525,10 @@ function showNotifications(event){
     let notificationList = document.createElement('div');
     notificationList.setAttribute('id', 'notificationList');
 
-
+    let ingaNotifikationer = document.createElement('span');
+    ingaNotifikationer.innerText = 'Inga notifikationer';
+    ingaNotifikationer.setAttribute('id', 'ingaNotifikationer');
+    notificationList.appendChild(ingaNotifikationer);
     /* append everything */
     let header = document.getElementsByClassName('header')[0];
 
@@ -543,6 +551,7 @@ function showNotifications(event){
 function toggleNotifications(){
   let wrapper = document.getElementById('notificationWrapper');
   let bell = document.getElementById('notificationBell');
+
   if(wrapper.className.includes('hidden')){
     wrapper.classList.remove('hidden');
   } else {
@@ -557,6 +566,11 @@ function displayNotifications(displayList){
   /* Check if user is logged in */
   if(localUser){
     db.ref('users/' + localUser.uniqueID + '/notifications').on('child_added', function(snapshot){
+
+      /* Atleast one notification */
+      let ingaNotifikationer = document.getElementById('ingaNotifikationer');
+      ingaNotifikationer.classList.add('hidden');
+
       let data = snapshot.val();
       let notificationKey = snapshot.key;
       let action = data.action;
@@ -673,53 +687,62 @@ function displayNotifications(displayList){
       /* append Btns */
       let btnHolder = document.createElement('div');
 
-      let gotoEventBtn = document.createElement('button');
+      let nejBtn = document.createElement('button');
       let acceptInviteBtn = document.createElement('button');
 
 
       /* Om det är en inbjudan till ett meetup */
       if(action == 'invite'){
 
-        gotoEventBtn.innerText = 'Tacka nej';
+        nejBtn.innerText = 'Tacka nej';
         acceptInviteBtn.innerText = 'Acceptera';
-        gotoEventBtn.className = 'gotoBtn';
+        nejBtn.className = 'gotoBtn';
         acceptInviteBtn.className = 'gotoBtn';
 
-        gotoEventBtn.addEventListener('click', function(e){
+        nejBtn.addEventListener('click', function(e){
             /* Tacka nej */
-            db.ref('users/' + localUser.uniqueID + '/notifications/'+notificationKey).remove();
+            removeNotification(localUser.uniqueID, notificationKey);
             displayList.removeChild(listItem);
+            noNotificationsAppend();
         });
 
         acceptInviteBtn.addEventListener('click', function(e){
           joinMeetup(localUser, meetupKey, eventID);
-          printMessage('success', 'Du gick med i meetupet');
+          //printMessage('success', 'Du gick med i meetupet');
+          removeNotification(localUser.uniqueID, notificationKey);
+          displayList.removeChild(listItem);
+          noNotificationsAppend();
         });
 
       } else if(action == 'friendRequest'){
-        gotoEventBtn.innerText = 'Tacka nej';
+        nejBtn.innerText = 'Tacka nej';
         acceptInviteBtn.innerText = 'Acceptera';
-        gotoEventBtn.className = 'gotoBtn';
+        nejBtn.className = 'gotoBtn';
         acceptInviteBtn.className = 'gotoBtn';
 
-        gotoEventBtn.addEventListener('click', function(e){
+        nejBtn.addEventListener('click', function(e){
             /* Tacka nej */
-            db.ref('users/' + localUser.uniqueID + '/notifications/'+notificationKey).remove();
+            removeNotification(localUser.uniqueID, notificationKey);
             displayList.removeChild(listItem);
+            noNotificationsAppend();
         });
 
         acceptInviteBtn.addEventListener('click', function(e){
           addFriend(data.fromSID);
-          db.ref('users/' + localUser.uniqueID + '/notifications/'+notificationKey).remove()
+          removeNotification(localUser.uniqueID, notificationKey);
           displayList.removeChild(listItem);
+          noNotificationsAppend();
         });
       }
 
 
-      btnHolder.appendChild(gotoEventBtn);
+      btnHolder.appendChild(nejBtn);
       btnHolder.appendChild(acceptInviteBtn);
 
-      showMoreDiv.appendChild(btnHolder);
+      setTimeout(function(){
+        showMoreDiv.appendChild(btnHolder);
+      },200);
+
 
 
       /* Append final stuff */
@@ -733,6 +756,18 @@ function displayNotifications(displayList){
         displayList.appendChild(listItem);
       }
     });
+  }
+}
+
+function removeNotification(userID, noteKey){
+  db.ref('users/' + userID + '/notifications/'+noteKey).remove();
+}
+
+function noNotificationsAppend(){
+  let notificationList = document.getElementById('notificationList');
+
+  if(notificationList.children.length == 1){
+    notificationList.children[0].classList.remove('hidden');
   }
 }
 
@@ -821,7 +856,7 @@ function joinMeetup(user, meetupKey, eventID){
       db.ref('meetups/' + eventID + '/' + meetupKey + '/members').push(userObject);
       console.log('Vi la till dig i meetupet!');
       new SystemMessage(meetupKey, userObject.fullname + ' gick med i meetupet.').push();
-
+      printMessage('success', 'Du gick med i meetupet');
 
       // Lägg till meetup i användarens profil.
       addUserMeetup(userObject.uniqueID,eventID, meetupKey);

@@ -21,7 +21,8 @@
 
 .profileHolder > div > div:first-child {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 0px 3px 0px 4px;
 }
 
 .profileHolder > div > div:last-child {
@@ -116,8 +117,8 @@
   background-color: #ececec;
   top: 0;
   left: 0;
-  color: #222;
   z-index: 1;
+  color: #636363;
 }
 .friendWrapper h3.hidden {
   display: none;
@@ -129,7 +130,6 @@
   display: flex;
   justify-content: center;
   margin: 20px;
-  color: #636363;
   border-bottom: 2px solid #ddd;
   padding: 0px 2px 6px;
 }
@@ -174,7 +174,7 @@
   border-bottom-left-radius: 0px;
 }
 .friendWrapper .searchBtn:hover {
-  background-color: #c684c0;
+  background-color: #878787;
 }
 
 /* resultDiv */
@@ -230,7 +230,7 @@
   border-top: 2px solid #d17d7d;
 }
 .closeWrapperBtn:hover {
-  background-color: #da9393;
+  background-color: #f66;
 }
 
 /* spans, names etc */
@@ -276,6 +276,31 @@
 
 
 /* Media Queries */
+@media screen and (min-width: 600px){
+  .friendWrapper {
+    display: inline-block;
+    position: fixed;
+    height: 77%;
+    width: 400px;
+    background-color: #636363;
+    color: #f9f9f9;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px #757575;
+  }
+
+  .friendWrapper > div:nth-child(3){
+    height: calc(100% - 190px);
+  }
+
+  .closeWrapperBtn {
+    margin: 8px 20px;
+  }
+}
+
 
 @media screen and (max-width: 600px){
   .profileHolder {

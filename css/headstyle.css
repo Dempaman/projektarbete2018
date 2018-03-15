@@ -5,7 +5,7 @@
 /* Class Header CSS */
 
 .hidden {
-  display: none;
+  display: none !important;
   opacity: 0;
 }
 
