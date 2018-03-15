@@ -262,7 +262,7 @@ function printMessage(type, message, timer = 8000, delay = 0, limit = 2){
     setTimeout(function(){
       messageHolder.removeChild(messageWrapper);
       count--;
-    }, 450)
+    }, 440)
   });
 
   /* If we have a delay */
