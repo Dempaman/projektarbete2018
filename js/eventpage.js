@@ -370,7 +370,8 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
       // Uppdaterar tid! - Splittar datumet för att kunna plocka bort tiden. Uppdaterar den sedan.
       let childOne = meetupWrapper.children[1];
-      childOne.innerText = childOne.innerText.split(' - ')[0] + ' - ' + meetup.time;
+      let timeStr = childOne.innerText.split(' - ')[0] + ' - ' + meetup.time;
+      childOne.innerText = timeStr;
 
       let creatorDiv = meetupWrapper.children[2];
       //Img of the user avatar
@@ -399,8 +400,17 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
       let adressDiv = meetupWrapper.children[5];
       adressDiv.children[1].innerText = meetup.address;
 
-      // Google map is meetupWrapper.children[6]
+      // Address card is meetupWrapper.children[6]
+      let addressCard = meetupWrapper.children[6];
 
+      let addressCardPlace = addressCard.children[1];
+      addressCardPlace.innerText = meetup.placeName;
+
+      let addressCardAdress = addressCard.children[3];
+      addressCardAdress.innerText = meetup.address;
+
+      let dateAndTime = addressCard.children[5];
+      dateAndTime.innerText = timeStr;
 
       let infoBox = meetupWrapper.children[7];
       infoBox.children[1].innerText = meetup.info;

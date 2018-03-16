@@ -273,6 +273,8 @@ div.googleMapDiv > img {
   margin: 9px 15px;
   display: flex;
   flex-wrap: wrap;
+  max-height: 230px;
+  overflow: auto;
 }
 #meetupWrapper > div .membersWrappingDiv + p {
   margin-top: 12px;
@@ -865,7 +867,7 @@ div.googleMapDiv > img {
   }
   .moreMeetupInfoDiv > div {
     flex: 1;
-    margin: 0px 70px;
+    margin-right: 70px;
   }
 
   .moreMeetupInfoDiv > div.chatWrapperWithLabel {
@@ -886,6 +888,6 @@ div.googleMapDiv > img {
     position: absolute;
     bottom: 0;
     left: 0;
-    margin: 3px 0px 30px 119px;
+    margin: 3px 0px 50px 119px;
   }
 }
