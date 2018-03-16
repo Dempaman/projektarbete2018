@@ -3,11 +3,13 @@ console.log('this should be printed');
 const ticketMasterApiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
 const googleApiKey2 = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
 
+
 // Initalize the page based on window location.
 window.onload = function(){
 console.log(chatMessageTimeStamp(1519755958554));
 console.log(chatMessageTimeStamp(1516758062943));
-
+//printMessage('error', 'Testprint', 200000); // Type, message, timer (antal millisekunder)
+let user = localStorage.getItem('loggedInUser');
 
 
   // Turned off for debug purposes
@@ -38,7 +40,6 @@ function createEventListenersForBtns(eventid, url, onsale){
     // Init the skapa meetup modal HERE
     toggleCreateMeetupModal();
     initSliderAndMoreShit();
-    console.log('DOES THIS EVEN FIRE?!');
     // Create meetup btn Function
 
   });
@@ -55,6 +56,8 @@ function retrieveMeetupInfo(eventDate){
   // This one listens to new Meetups and posts them in the DOM!
     db.ref('meetups/'+eventID).on('child_added', function(snapshot){
 
+
+
       let eventID = getLocationInfo()[0];
       let obj = snapshot.val();
       let meetupKey = snapshot.key;
@@ -65,316 +68,288 @@ function retrieveMeetupInfo(eventDate){
 
       //console.log(obj);
 
-      // Skapa funktion här som lägger till ett meetupkort!
-      let md = document.createElement('div');
-      md.setAttribute('id', 'meetup-' + meetupKey);
+      if(!meetupKey.includes('info')){
+        // Skapa funktion här som lägger till ett meetupkort!
+        let md = document.createElement('div');
+        md.setAttribute('id', 'meetup-' + meetupKey);
 
-      let meetupDivTitle = document.createElement('h2');
-      meetupDivTitle.innerText = obj.name;
+        let meetupDivTitle = document.createElement('h2');
+        meetupDivTitle.innerText = obj.name;
 
-      let meetupDivDate = document.createElement('p');
-      meetupDivDate.innerText = eventDate + ' - ' + obj.time;
-
-
-      // Namn på skaparen av meetup och label med bild.
-
-      let creatorDiv = document.createElement('div');
-      creatorDiv.className = 'creatorDiv';
-      let insideCreatorDiv = document.createElement('div');
-
-      let creatorNameLabel = document.createElement('p');
-      creatorNameLabel.innerText = 'Skapare';
-      let creatorName = document.createElement('p');
-      creatorName.innerText = obj.creator.fullname;
+        let meetupDivDate = document.createElement('p');
+        meetupDivDate.innerText = eventDate + ' - ' + obj.time;
 
 
-      insideCreatorDiv.appendChild(creatorNameLabel);
-      insideCreatorDiv.appendChild(creatorName);
+        // Namn på skaparen av meetup och label med bild.
 
-      // ProfilbildsURL
-      let creatorAvatarURL = document.createElement('img');
-      creatorAvatarURL.setAttribute('alt', obj.creator.name + '\'s avatar.');
-      creatorAvatarURL.setAttribute('src', obj.creator.avatarURL);
-      creatorAvatarURL.className = 'avatar';
+        let creatorDiv = document.createElement('div');
+        creatorDiv.className = 'creatorDiv';
+        let insideCreatorDiv = document.createElement('div');
 
-      creatorDiv.appendChild(creatorAvatarURL);
-      creatorDiv.appendChild(insideCreatorDiv);
-
-      // Skaparns mail
-      let creatorMailDiv = document.createElement('div');
-      creatorMailDiv.className = 'infoDiv';
-      let creatorMailLabel = document.createElement('p');
-      creatorMailLabel.innerText = 'Kontaktinformation';
-      let creatorMail = document.createElement('p');
-      creatorMail.innerText = obj.creator.mail;
-
-      creatorMailDiv.appendChild(creatorMailLabel);
-      creatorMailDiv.appendChild(creatorMail);
+        let creatorNameLabel = document.createElement('p');
+        creatorNameLabel.innerText = 'Skapare';
+        let creatorName = document.createElement('p');
+        creatorName.innerText = obj.creator.fullname;
 
 
-      //Deltagare + Åldersgräns wrapper
-      let ageAntalWrapper = document.createElement('div');
-      ageAntalWrapper.className = 'infoDivWrapper';
+        insideCreatorDiv.appendChild(creatorNameLabel);
+        insideCreatorDiv.appendChild(creatorName);
 
-      // Deltagare
+        // ProfilbildsURL
+        let creatorAvatarURL = document.createElement('img');
+        creatorAvatarURL.setAttribute('alt', obj.creator.name + '\'s avatar.');
+        creatorAvatarURL.setAttribute('src', obj.creator.avatarURL);
+        creatorAvatarURL.className = 'avatar';
 
-      let currentMembers = 0;
+        creatorDiv.appendChild(creatorAvatarURL);
+        creatorDiv.appendChild(insideCreatorDiv);
 
-      for(let thisisnotused in obj.members){
-        currentMembers++;
-      }
+        // Skaparns mail
+        let creatorMailDiv = document.createElement('div');
+        creatorMailDiv.className = 'infoDiv';
+        let creatorMailLabel = document.createElement('p');
+        creatorMailLabel.innerText = 'Kontaktinformation';
+        let creatorMail = document.createElement('p');
+        creatorMail.innerText = obj.creator.mail;
 
-
-      let antalDiv = document.createElement('div');
-      antalDiv.className = 'infoDiv';
-
-      let antalLabel = document.createElement('p');
-      antalLabel.innerText = 'Deltagare';
-      let antal = document.createElement('p');
-      antal.innerText = currentMembers + '/' + obj.spots;
-
-
-
-      antalDiv.appendChild(antalLabel);
-      antalDiv.appendChild(antal);
-
-      // Åldersgräns
-      let ageDiv = document.createElement('div');
-      ageDiv.className = 'infoDiv';
-
-      let ageIntervalLabel = document.createElement('p');
-      ageIntervalLabel.innerText = 'Åldersgräns';
-      let ageInterval = document.createElement('p');
-      ageInterval.innerText = obj.ageInterval[0] + ' - ' + obj.ageInterval[1];
-
-      ageDiv.appendChild(ageIntervalLabel);
-      ageDiv.appendChild(ageInterval);
-
-      ageAntalWrapper.appendChild(ageDiv);
-      ageAntalWrapper.appendChild(antalDiv);
-
-      // Adress
-      let addressDiv = document.createElement('div');
-      addressDiv.className = 'infoDiv';
-
-      let addressLabel = document.createElement('p');
-      addressLabel.innerText = 'Adress';
-      let address = document.createElement('p');
-      address.innerText = obj.address;
-
-      addressDiv.appendChild(addressLabel);
-      addressDiv.appendChild(address);
+        creatorMailDiv.appendChild(creatorMailLabel);
+        creatorMailDiv.appendChild(creatorMail);
 
 
-      /* MAKE THE CARD HERE, PLACED RIGHT IN THE MEETUP */
+        //Deltagare + Åldersgräns wrapper
+        let ageAntalWrapper = document.createElement('div');
+        ageAntalWrapper.className = 'infoDivWrapper';
 
-      // Kort wrapper!
-      let addressCard = document.createElement('div');
-      addressCard.className = 'addressCard';
+        // Deltagare
 
-      // Plats
-      let placeNameLabel = document.createElement('p');
-      let placeName = document.createElement('p');
-      placeNameLabel.innerText = 'Plats';
-      placeName.innerText = obj.placeName;
+        let currentMembers = 0;
 
-      //Address!
-      let cardAddressLabel = document.createElement('p');
-      let cardAddress = document.createElement('p');
-      cardAddress.innerText = obj.address;
-      cardAddressLabel.innerText = 'Adress';
-
-      let cardDateLabel = document.createElement('p');
-      let cardDate = document.createElement('p');
-      cardDateLabel.innerText = 'Datum & Tid';
-      cardDate.innerText = eventDate + ' kl ' + obj.time;
-
-      // Splice latitude and longitude
-      let latitude = obj.latitude.substring(0,9);
-      let longitude = obj.longitude.substring(0,9);
-      //console.log('LATITUDE!!', latitude);
-      //console.log('LONGITUDE!!', longitude);
+        for(let thisisnotused in obj.members){
+          currentMembers++;
+        }
 
 
-      let googleMapDiv = document.createElement('div');
-      let googleMap = document.createElement('img');
-      googleMapDiv.className = 'googleMapDiv';
-      // Just src
-      googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
-      googleMap.setAttribute('zoom', '16');
+        let antalDiv = document.createElement('div');
+        antalDiv.className = 'infoDiv';
 
-      googleMap.addEventListener('click', function(){
-        let currentZoom = googleMap.getAttribute('zoom');
-        let newZoom = (currentZoom-0) + 1;
-        googleMap.setAttribute('zoom', newZoom);
-        googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
-      });
-      googleMap.addEventListener('contextmenu', function(event){
-        event.preventDefault();
-        let currentZoom = googleMap.getAttribute('zoom');
-        let newZoom = (currentZoom-0) - 1;
-        googleMap.setAttribute('zoom', newZoom);
-        googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
-      });
-
-      // Data-src - Debug shit
-      // googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
-
-      googleMapDiv.appendChild(googleMap);
-
-      //Append into the card:
-
-      addressCard.appendChild(placeNameLabel);
-      addressCard.appendChild(placeName);
-
-      addressCard.appendChild(cardAddressLabel);
-      addressCard.appendChild(cardAddress);
-
-      addressCard.appendChild(cardDateLabel);
-      addressCard.appendChild(cardDate);
-
-      addressCard.appendChild(googleMapDiv);
-
-      let infoDiv = document.createElement('div');
-      infoDiv.className = 'meetupInfo';
-
-      let infoTextLabel = document.createElement('p')
-      infoTextLabel.innerText = 'Information';
-      let infoText = document.createElement('p');
-      infoText.innerText = obj.info;
-
-      infoDiv.appendChild(infoTextLabel);
-      infoDiv.appendChild(infoText);
-
-      let meetupWrapper = document.getElementById('meetupWrapper');
-
-      // Gå med knapp
-      let btnDiv = document.createElement('div');
-      btnDiv.className = 'btnHolder';
-      let joinMeetupBtn = document.createElement('button');
-
-      joinMeetupBtn.className = 'purple';
-      joinMeetupBtn.innerText = 'Gå med i meetup';
-
-      let editBtn = document.createElement('button');
-      editBtn.className = 'editBtn purple';
-      editBtn.innerHTML = 'Redigera Meetup';
-
-      let editSmallBtn = document.createElement('button');
-      editSmallBtn.className = 'editBtn iconBtn';
-      editSmallBtn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
+        let antalLabel = document.createElement('p');
+        antalLabel.innerText = 'Deltagare';
+        let antal = document.createElement('p');
+        antal.innerText = currentMembers + ' / ' + obj.spots;
 
 
-      editBtn.addEventListener('click', function(){
-        editMeetup(meetupKey);
-      });
-      editSmallBtn.addEventListener('click', function(){
-        editMeetup(meetupKey);
-      });
 
-      btnDiv.appendChild(joinMeetupBtn);
+        antalDiv.appendChild(antalLabel);
+        antalDiv.appendChild(antal);
 
-      md.appendChild(meetupDivTitle);
-      md.appendChild(meetupDivDate);
-      md.appendChild(creatorDiv);
-      md.appendChild(creatorMailDiv);
-      md.appendChild(ageAntalWrapper);
-      md.appendChild(addressDiv);
-      md.appendChild(addressCard);
-      md.appendChild(infoDiv);
+        // Åldersgräns
+        let ageDiv = document.createElement('div');
+        ageDiv.className = 'infoDiv';
 
-      // Display button based on if the user is in the meetup or not.
-      let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        let ageIntervalLabel = document.createElement('p');
+        ageIntervalLabel.innerText = 'Åldersgräns';
+        let ageInterval = document.createElement('p');
+        ageInterval.innerText = obj.ageInterval[0] + ' - ' + obj.ageInterval[1];
 
-      if(currentUser){
-        // Skriva om denna så att vi kan kolla ifall personen är admin / ägare.
-          let comingMembers = obj.members;
-          let admins = obj.admins;
-          console.log('The Admins of this meetup are: ' + admins);
-            // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
-            if(comingMembers != null){
-              console.log('Members coming to this Meetup: ',comingMembers);
+        ageDiv.appendChild(ageIntervalLabel);
+        ageDiv.appendChild(ageInterval);
 
-              //Get dem admins first.
-              let adminBool = false;
-              for(let admin in admins){
-                if(admins[admin] == currentUser.uniqueID){
-                  console.log('You are the effing admin man!');
-                  adminBool = true;
+        ageAntalWrapper.appendChild(ageDiv);
+        ageAntalWrapper.appendChild(antalDiv);
+
+        // Adress
+        let addressDiv = document.createElement('div');
+        addressDiv.className = 'infoDiv';
+
+        let addressLabel = document.createElement('p');
+        addressLabel.innerText = 'Adress';
+        let address = document.createElement('p');
+        address.innerText = obj.address;
+
+        addressDiv.appendChild(addressLabel);
+        addressDiv.appendChild(address);
+
+
+        /* MAKE THE CARD HERE, PLACED RIGHT IN THE MEETUP */
+
+        // Kort wrapper!
+        let addressCard = document.createElement('div');
+        addressCard.className = 'addressCard';
+
+        // Plats
+        let placeNameLabel = document.createElement('p');
+        let placeName = document.createElement('p');
+        placeNameLabel.innerText = 'Plats';
+        placeName.innerText = obj.placeName;
+
+        //Address!
+        let cardAddressLabel = document.createElement('p');
+        let cardAddress = document.createElement('p');
+        cardAddress.innerText = obj.address;
+        cardAddressLabel.innerText = 'Adress';
+
+        let cardDateLabel = document.createElement('p');
+        let cardDate = document.createElement('p');
+        cardDateLabel.innerText = 'Datum & Tid';
+        cardDate.innerText = eventDate + ' kl ' + obj.time;
+
+        // Splice latitude and longitude
+        let latitude = obj.latitude.substring(0,9);
+        let longitude = obj.longitude.substring(0,9);
+        //console.log('LATITUDE!!', latitude);
+        //console.log('LONGITUDE!!', longitude);
+
+
+        let googleMapDiv = document.createElement('div');
+        let googleMap = document.createElement('img');
+        googleMapDiv.className = 'googleMapDiv';
+        googleMapDiv.setAttribute('lat', latitude);
+        googleMapDiv.setAttribute('lng', longitude);
+        // Just src
+        googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+        googleMap.setAttribute('zoom', '16');
+
+        googleMap.addEventListener('click', function(){
+          let currentZoom = googleMap.getAttribute('zoom');
+          let newZoom = (currentZoom-0) + 1;
+          googleMap.setAttribute('zoom', newZoom);
+          googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+        });
+        googleMap.addEventListener('contextmenu', function(event){
+          event.preventDefault();
+          let currentZoom = googleMap.getAttribute('zoom');
+          let newZoom = (currentZoom-0) - 1;
+          googleMap.setAttribute('zoom', newZoom);
+          googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+        });
+
+        // Data-src - Debug shit
+        // googleMap.setAttribute('data-src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+
+        googleMapDiv.appendChild(googleMap);
+
+        //Append into the card:
+
+        addressCard.appendChild(placeNameLabel);
+        addressCard.appendChild(placeName);
+
+        addressCard.appendChild(cardAddressLabel);
+        addressCard.appendChild(cardAddress);
+
+        addressCard.appendChild(cardDateLabel);
+        addressCard.appendChild(cardDate);
+
+        addressCard.appendChild(googleMapDiv);
+
+        let infoDiv = document.createElement('div');
+        infoDiv.className = 'meetupInfo';
+
+        let infoTextLabel = document.createElement('p')
+        infoTextLabel.innerText = 'Information';
+        let infoText = document.createElement('p');
+        infoText.innerText = obj.info;
+
+        infoDiv.appendChild(infoTextLabel);
+        infoDiv.appendChild(infoText);
+
+        let meetupWrapper = document.getElementById('meetupWrapper');
+
+        // Gå med knapp
+        let btnDiv = document.createElement('div');
+        btnDiv.className = 'btnHolder';
+        let joinMeetupBtn = document.createElement('button');
+
+        joinMeetupBtn.className = 'purple';
+        joinMeetupBtn.innerText = 'Gå med i meetup';
+
+        let editBtn = document.createElement('button');
+        editBtn.className = 'editBtn purple doNotCloseThis';
+        editBtn.innerHTML = 'Redigera Meetup';
+
+        let editSmallBtn = document.createElement('button');
+        editSmallBtn.className = 'editBtn iconBtn doNotCloseThis' ;
+        editSmallBtn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
+
+
+        editBtn.addEventListener('click', function(event){
+          toggleMeetupDropDown(event, meetupKey, eventID);
+        });
+        editSmallBtn.addEventListener('click', function(event){
+          toggleMeetupDropDown(event, meetupKey, eventID);
+        });
+
+        btnDiv.appendChild(joinMeetupBtn);
+
+        md.appendChild(meetupDivTitle);
+        md.appendChild(meetupDivDate);
+        md.appendChild(creatorDiv);
+        md.appendChild(creatorMailDiv);
+        md.appendChild(ageAntalWrapper);
+        md.appendChild(addressDiv);
+        md.appendChild(addressCard);
+        md.appendChild(infoDiv);
+
+        // Display button based on if the user is in the meetup or not.
+        let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        if(currentUser){
+          // Skriva om denna så att vi kan kolla ifall personen är admin / ägare.
+            let comingMembers = obj.members;
+            let admins = obj.admins;
+            console.log('The Admins of this meetup are: ' + admins);
+              // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
+              if(comingMembers != null){
+                console.log('Members coming to this Meetup: ',comingMembers);
+
+                //Get dem admins first.
+                let adminBool = false;
+                for(let admin in admins){
+                  if(admins[admin] == currentUser.uniqueID){
+                    console.log('You are the effing admin man!');
+                    adminBool = true;
+                  } else {
+                    console.log('No admin here.');
+                  }
+                }
+
+                // Gå igenom användaregenskaperna under denna medlem
+                let show = null;
+                for(let user in comingMembers){
+                  // Om användaren som är inloggad finns i detta meetup så sätter vi userIsInMeetup till true
+                  if(comingMembers[user].uniqueID == currentUser.uniqueID){
+                    show = true;
+                  }
+                }
+                if(show){
+                  if(adminBool){
+                    console.log('You are admin!');
+                    md.appendChild(editBtn);
+                    md.appendChild(editSmallBtn);
+                  }
+                  displayMembersAndChat(md, meetupKey);
                 } else {
-                  console.log('No admin here.');
+                  md.appendChild(btnDiv);
                 }
-              }
-
-              // Gå igenom användaregenskaperna under denna medlem
-              let show = null;
-              for(let user in comingMembers){
-                // Om användaren som är inloggad finns i detta meetup så sätter vi userIsInMeetup till true
-                if(comingMembers[user].uniqueID == currentUser.uniqueID){
-                  show = true;
-                }
-              }
-              if(show){
-                if(adminBool){
-                  console.log('You are admin!');
-                  md.appendChild(editBtn);
-                  md.appendChild(editSmallBtn);
-                }
-                displayMembersAndChat(md, meetupKey);
               } else {
-                md.appendChild(btnDiv);
+                console.warn('Data is null for the members of this meeup!');
               }
-            } else {
-              console.warn('Data is null for the members of this meeup!');
-            }
 
-      } else {
-        md.appendChild(btnDiv);
-        console.log('NO EFFING USER');
+        } else {
+          md.appendChild(btnDiv);
+          console.log('NO EFFING USER');
+        }
+
+
+        // Append MAINDIV (md)
+        meetupWrapper.appendChild(md);
+
+        // Create Eventlistener for the joinMeetupBtn
+        joinBtnListener(joinMeetupBtn, meetupKey);
       }
-
-
-      // Append MAINDIV (md)
-      meetupWrapper.appendChild(md);
-
-      // Create Eventlistener for the joinMeetupBtn
-      joinBtnListener(joinMeetupBtn, meetupKey);
-
     });
   }
 }
 
-// Funktion för att gå med i ett meetup!
-function joinMeetup(userID, avatarURL, fullname, meetupID, eventID){
-
-  // joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
-  db.ref('meetups/' + eventID + '/' + meetupID + '/members').once('value', function(snap){
-
-    let data = snap.val();
-    let userIsNotComing = false;
-
-    for(let comingUser in data){
-      if(data[comingUser].uniqueID == userID) {
-        userIsNotComing = true;
-      }
-    }
-
-    let userObject = {
-      uniqueID: userID,
-      fullname: fullname,
-      avatarURL: avatarURL,
-      joined: firebase.database.ServerValue.TIMESTAMP
-    }
-
-    if(!userIsNotComing){
-      db.ref('meetups/' + eventID + '/' + meetupID + '/members').push(userObject);
-      console.log('Vi la till dig i meetupet!');
-      new SystemMessage(meetupID, userObject.fullname + ' gick med i meetupet.').push();
-    } else {
-      console.log('Du är redan med i detta meetup! Något måste gått fel!');
-    }
-  });
-}
 
 // Denna funktion uppdaterar dom:en när det sker en ändring i databasen!
 function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
@@ -388,107 +363,136 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
     let meetupWrapper = document.getElementById('meetup-' + meetupKey);
     console.log(meetupWrapper);
 
-    // Dags att uppdatera det appropriatly.
+    /* Börja med att kolla om meetpet finns kvar i databasen */
+    if(meetupWrapper){
+      //Uppdaterar titeln
+      meetupWrapper.children[0].innerText = meetup.name;
 
-    //Uppdaterar titeln
-    meetupWrapper.children[0].innerText = meetup.name;
+      // Uppdaterar tid! - Splittar datumet för att kunna plocka bort tiden. Uppdaterar den sedan.
+      let childOne = meetupWrapper.children[1];
+      childOne.innerText = childOne.innerText.split(' - ')[0] + ' - ' + meetup.time;
 
-    // Uppdaterar tid! - Splittar datumet för att kunna plocka bort tiden. Uppdaterar den sedan.
-    let childOne = meetupWrapper.children[1];
-    childOne.innerText = childOne.innerText.split(' - ')[0] + ' - ' + meetup.time;
+      let creatorDiv = meetupWrapper.children[2];
+      //Img of the user avatar
+      creatorDiv.children[0].setAttribute('src', meetup.creator.avatarURL);
 
-    let creatorDiv = meetupWrapper.children[2];
-    //Img of the user avatar
-    creatorDiv.children[0].setAttribute('src', meetup.creator.avatarURL);
+      // This is the path to the creator name displayed in the dom.
+      creatorDiv.children[1].children[1].innerText = meetup.creator.fullname;
 
-    // This is the path to the creator name displayed in the dom.
-    creatorDiv.children[1].children[1].innerText = meetup.creator.fullname;
-
-    let contactInfoDiv = meetupWrapper.children[3];
-    contactInfoDiv.children[1].innerText = meetup.creator.mail;
-
-
-    // Åldersgräns samt Deltagare
-    let ageAndMembersDiv = meetupWrapper.children[4];
-    ageAndMembersDiv.children[0].children[1].innerText = meetup.ageInterval[0] + ' - ' + meetup.ageInterval[1];
-
-    // Count current members.
-    let i = 0;
-    for(let member in meetup.members){
-      i++;
-    }
-
-    ageAndMembersDiv.children[1].children[1].innerText = i + '/' + meetup.spots;
-
-    //Adressen
-    let adressDiv = meetupWrapper.children[5];
-    adressDiv.children[1].innerText = meetup.address;
-
-    // Google map is meetupWrapper.children[6]
+      let contactInfoDiv = meetupWrapper.children[3];
+      contactInfoDiv.children[1].innerText = meetup.creator.mail;
 
 
-    let infoBox = meetupWrapper.children[7];
-    infoBox.children[1].innerText = meetup.info;
+      // Åldersgräns samt Deltagare
+      let ageAndMembersDiv = meetupWrapper.children[4];
+      ageAndMembersDiv.children[0].children[1].innerText = meetup.ageInterval[0] + ' - ' + meetup.ageInterval[1];
 
-    let memberOrButton = document.getElementsByClassName('moreMeetupInfoDiv ' + meetupKey)[0];
-    if(!memberOrButton){
-      memberOrButton = meetupWrapper.children[8];
-    }
+      // Count current members.
+      let i = 0;
+      for(let member in meetup.members){
+        i++;
+      }
 
-    // Display members and shit!
-    if(!memberOrButton.className){
-      console.log('It must be the btnHolder then?');
+      ageAndMembersDiv.children[1].children[1].innerText = i + ' / ' + meetup.spots;
 
-    } else if(memberOrButton.className.includes('moreMeetupInfoDiv')){
-          // If the user that is logged in isn't in the meetup anymore. Hide this.
-          let found = false;
-          console.log('Members are displayed!');
+      //Adressen
+      let adressDiv = meetupWrapper.children[5];
+      adressDiv.children[1].innerText = meetup.address;
 
-          let membersWrapper = memberOrButton.children[0].children[1]; // Emptying the members list with this method: https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
-          while(membersWrapper.firstChild){
-            membersWrapper.removeChild(membersWrapper.firstChild);
-          }
+      // Google map is meetupWrapper.children[6]
 
-          // Update the member list!
-          for(let member in meetup.members){
-            if(currentUser.uniqueID == meetup.members[member].uniqueID) { found = true; }
+
+      let infoBox = meetupWrapper.children[7];
+      infoBox.children[1].innerText = meetup.info;
+
+      let memberOrButton = document.getElementsByClassName('moreMeetupInfoDiv ' + meetupKey)[0];
+      if(!memberOrButton){
+        memberOrButton = meetupWrapper.children[8];
+      }
+
+      // Display members and shit!
+      if(!memberOrButton.className){
+        console.log('It must be the btnHolder then?');
+
+      } else if(memberOrButton.className.includes('moreMeetupInfoDiv')){
+            // If the user that is logged in isn't in the meetup anymore. Hide this.
+            let found = false;
+            console.log('Members are displayed!');
+
+            let membersWrapper = memberOrButton.children[0].children[1]; // Emptying the members list with this method: https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
+            while(membersWrapper.firstChild){
+              membersWrapper.removeChild(membersWrapper.firstChild);
+            }
+
+            // Update the member list!
+            for(let member in meetup.members){
+              let user = meetup.members[member];
+              if(currentUser.uniqueID == user.uniqueID) { found = true; }
+              let memberDiv = document.createElement('div');
+              memberDiv.className = 'memberDiv';
+
+              let memberImage = document.createElement('img');
+              memberImage.setAttribute('src', user.avatarURL);
+              memberImage.setAttribute('sid', user.sid);
+              memberImage.addEventListener('click', gotoProfile);
+              memberImage.meetupKey = meetupKey;
+              memberImage.eventID = eventID;
+
+              let hoverMessage = document.createElement('p');
+              hoverMessage.innerText = user.fullname;
+              hoverMessage.className = 'hoverMessage';
+
+              memberDiv.appendChild(memberImage);
+              memberDiv.appendChild(hoverMessage);
+              membersWrapper.appendChild(memberDiv);
+            }
             let memberDiv = document.createElement('div');
             memberDiv.className = 'memberDiv';
+            // let imageWrapper = document.createElement('div');
+            // let plus = document.createElement('span');
+            // plus.innerHTML = '<i class="mdi mdi-account-plus"></i>';
+            let addMemberDiv = document.createElement('div');
+            addMemberDiv.className = 'addMemberDiv';
+            addMemberDiv.innerHTML = '<i class="mdi mdi-plus mdi-36px"></i>';
+            addMemberDiv.addEventListener('click', inviteFriend);
+            addMemberDiv.meetupKey = meetupKey;
 
-            let memberImage = document.createElement('img');
-            memberImage.setAttribute('src', meetup.members[member].avatarURL);
 
             let hoverMessage = document.createElement('p');
-            hoverMessage.innerText = meetup.members[member].fullname;
+            hoverMessage.innerText = 'Bjud in en vän!';
             hoverMessage.className = 'hoverMessage';
 
-            memberDiv.appendChild(memberImage);
+            // imageWrapper.appendChild(plus);
+            // imageWrapper.appendChild(memberImage);
+            memberDiv.appendChild(addMemberDiv);
             memberDiv.appendChild(hoverMessage);
             membersWrapper.appendChild(memberDiv);
-          }
 
-      } else if(memberOrButton.className == 'btnHolder'){
-          console.log('This is a button.'); // This most likely the btn to join the meetup.
+        } else if(memberOrButton.className == 'btnHolder'){
+            console.log('This is a button.'); // This most likely the btn to join the meetup.
 
-          // Now check if the logged in user just got added to the database!
-          for(let member in meetup.members){
-            let userStr = localStorage.getItem('loggedInUser');
-            let user = JSON.parse(userStr);
-            if(user){
-              if(user.uniqueID == meetup.members[member].uniqueID){
-                console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
-                addEditBtns(meetupKey);
-                if(memberOrButton.parentNode){
-                  memberOrButton.parentNode.removeChild(memberOrButton);
+            // Now check if the logged in user just got added to the database!
+            for(let member in meetup.members){
+              let userStr = localStorage.getItem('loggedInUser');
+              let user = JSON.parse(userStr);
+              if(user){
+                if(user.uniqueID == meetup.members[member].uniqueID){
+                  console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
+                  addEditBtns(meetupKey);
+                  if(memberOrButton.parentNode){
+                    memberOrButton.parentNode.removeChild(memberOrButton);
+                  }
+                  displayMembersAndChat(null, meetupKey);
+
                 }
-                displayMembersAndChat(null, meetupKey);
-
+              } else {
+                console.log('No user logged in!');
               }
-            } else {
-              console.log('No user logged in!');
             }
-          }
-      }
+        }
+    } else {
+      console.log('It just got removed, sry!');
+    }
   });
 }
 
@@ -528,21 +532,26 @@ function displayMembersAndChat(md, meetupKey){
 
       let data = snap.val();
       for(let comingUser in data){
+        let user = data[comingUser];
         let memberDiv = document.createElement('div');
         memberDiv.className = 'memberDiv';
 
         let memberDivAvatar = document.createElement('img');
         memberDivAvatar.setAttribute('alt', 'User picture');
-        memberDivAvatar.setAttribute('src', data[comingUser].avatarURL);
+        memberDivAvatar.setAttribute('src', user.avatarURL);
+        memberDivAvatar.setAttribute('sid', user.sid);
+        memberDivAvatar.addEventListener('click', gotoProfile);
+        memberDivAvatar.meetupKey = meetupKey;
+        memberDivAvatar.eventID = eventID;
 
         let hoverMessage = document.createElement('p');
-        hoverMessage.innerText = data[comingUser].fullname;
+        hoverMessage.innerText = user.fullname;
         hoverMessage.className = 'hoverMessage';
 
         if(comingUser != 'creator'){
           if(data[comingUser].uniqueID == currentUser.uniqueID){
             console.log('This is the user right now! Set the joinedTime');
-            joinedTime = data[comingUser].joined;
+            joinedTime = user.joined;
           } else {
             console.log('This is not the current user. This person joined the meetup at: ' + data[comingUser].joined);
           }
@@ -558,6 +567,29 @@ function displayMembersAndChat(md, meetupKey){
         memberWrapperWithLabel.appendChild(membersWrappingDiv);
       }
 
+      let memberDiv = document.createElement('div');
+      memberDiv.className = 'memberDiv';
+      // let imageWrapper = document.createElement('div');
+      // let plus = document.createElement('span');
+      // plus.innerHTML = '<i class="mdi mdi-account-plus"></i>';
+      let addMemberDiv = document.createElement('div');
+      addMemberDiv.className = 'addMemberDiv';
+      addMemberDiv.innerHTML = '<i class="mdi mdi-plus mdi-36px"></i>';
+      addMemberDiv.addEventListener('click', inviteFriend);
+      addMemberDiv.meetupKey = meetupKey;
+
+      console.log('attribute here is: ', addMemberDiv.attribute);
+
+      let hoverMessage = document.createElement('p');
+      hoverMessage.innerText = 'Bjud in en vän!';
+      hoverMessage.className = 'hoverMessage';
+
+      // imageWrapper.appendChild(plus);
+      // imageWrapper.appendChild(memberImage);
+      memberDiv.appendChild(addMemberDiv);
+      memberDiv.appendChild(hoverMessage);
+      membersWrappingDiv.appendChild(memberDiv);
+
     });
 
     // Append the members inside a div into the wrapper.
@@ -571,9 +603,15 @@ function displayMembersAndChat(md, meetupKey){
     chattWrapperDiv.className = 'chattWrapperDiv';
 
     // Inputbox box
+    let inputBoxWrapper = document.createElement('div');
+    inputBoxWrapper.className = 'inputBoxWrapper';
+    let sendIcon = document.createElement('div');
+    sendIcon.innerHTML = '<i class="mdi mdi-send mdi-24px"></i>';
+
     let inputBox = document.createElement('input');
     inputBox.setAttribute('placeholder', 'Skriv ett meddelande');
-
+    inputBoxWrapper.appendChild(inputBox);
+    inputBoxWrapper.appendChild(sendIcon);
     // Variables for the message
     let senderID = currentUser.uniqueID;
     let avatarURL = currentUser.avatarURL;
@@ -581,6 +619,10 @@ function displayMembersAndChat(md, meetupKey){
     // Add Eventlistener for the inputBox
     console.log('ADDING EVENTLISTENER FOR KEYPRESS');
     inputBox.addEventListener('keypress', createMessage);
+
+    inputBox.nextSibling.addEventListener('click', function(event){
+      createMessage(inputBox, true);
+    });
 
     let noMessage = document.createElement('p');
     noMessage.innerText = 'Inga meddelanden ännu.';
@@ -591,7 +633,7 @@ function displayMembersAndChat(md, meetupKey){
     let first = true;
 
     // start listening to chat messages on this meetupKey
-    listenToChat(meetupKey, joinedTime);
+    listenToChat(chattWrapperDiv, meetupKey, joinedTime);
     // End of chat
 
 
@@ -627,7 +669,7 @@ function displayMembersAndChat(md, meetupKey){
     chatWrapperWithLabel.appendChild(chattWrapperDiv);
 
     //Append inputBox
-    chatWrapperWithLabel.appendChild(inputBox);
+    chatWrapperWithLabel.appendChild(inputBoxWrapper);
 
     //Append chatWrapperWithLabel
     moreMeetupInfoDiv.appendChild(chatWrapperWithLabel);
@@ -647,37 +689,58 @@ function stopListenToChat(meetupKey){
   db.ref('chats/' + meetupKey).off();
 }
 
-function createMessage(event){
-  if(event.keyCode == 13){
+function createMessage(event, sendBtn = false){
+  if(event.keyCode == 13 || sendBtn){
+    let target;
+    if(sendBtn){
+      target = event;
+    } else {
+      target = event.target
+    }
     if(localStorage.getItem('loggedInUser')){
       updateTimeStamps();
       // Some easy checks.
-      if(event.target.value == "" || event.target.value == undefined || event.target.value == " "){
+      if(target.value == "" || target.value == undefined || target.value == " "){
         console.log('No message specified!');
-      } else if(event.target.value.length < 3){
+      } else if(target.value.length < 3){
         console.log('Message too short!');
-      } else if(event.target.value.length > 200){
+      } else if(target.value.length > 200){
         console.log('Message too long!');
       } else {
         // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
-        let textmessage = event.target.value;
+        let textmessage = target.value;
         let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        let md = event.target.parentNode.parentNode.parentNode; // Meetup Div
+        let md = target.parentNode.parentNode.parentNode.parentNode; // Meetup Div
         let ms = md.getAttribute('id'); // meetup String
 
         let meetupKey = ms.replace('-', '&').split('&')[1]
+        let eventID = getLocationInfo()[0];
+        db.ref('meetups/' + eventID + '/' + meetupKey + '/creator').once('value', function(snapshot){
+          let creator = snapshot.val();
+          console.log('Creator is:', creator);
 
-        let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage);
+          if(creator.uniqueID == currentUser.uniqueID){
+            creator = true;
+          } else {
+            creator = false;
+          }
+          let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage, creator);
+          newMessage.push();
+        });
 
-        newMessage.push();
 
-        let chattWrapperDiv = event.target.previousSibling;
+
+
+        let chattWrapperDiv = target.parentNode.previousSibling;
         // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
+
+
         chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
         let htmlScroll = document.getElementsByTagName('html')[0];
 
         // Clear Inputbox
-        event.target.value = '';
+        target.value = '';
+        target.focus();
       }
     } else {
       console.log('You are not logged in');
@@ -686,105 +749,242 @@ function createMessage(event){
 }
 
 // Start to listen to chat messages on this meetupKey
-function listenToChat(meetupKey, joinedTime){
-  let first = true;
-  let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
-  for(let wrapperDiv in document.getElementsByClassName('chattWrapperDiv')){
-    wrapperDiv.scrollTop = wrapperDiv.scrollHeight;
-  }
+function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
 
-  db.ref('chats/' + meetupKey).on('child_added', function(snapshot){
-    let chattWrapperDiv = document.getElementById('chat' + meetupKey);
-    let message = snapshot.val();
-    let messageKey = snapshot.key;
-    // Should we display the message? If the message was made before the player joined we don't show it.
-    if(joinedTime <= message.time){
+    // Fire scroll event.
+    let likeArray = [];
+    let doScroll = true;
+    let messageCounter = 0;
+    let count = 25;
 
-      if(first){
-        while(chattWrapperDiv.firstChild){
-          chattWrapperDiv.removeChild(chattWrapperDiv.firstChild);
+    chatMessagesChildAdded(count);
+
+    function loadMoreMessages(event){
+      // Check if we're at the top.
+      if(event.target.scrollTop == 0 && event.target.scrollHeight > 1200){
+        // If we are and the fire scroll is active:
+        if(doScroll){
+          // Disable scroll event. We activate it later.
+          doScroll = false;
+
+          // Remove old listener. (Stop listening to new messages)
+          stopListenToChat(meetupKey);
+
+          // console.log('Count: ', count);
+          // console.log('MessageCount: ', messageCounter);
+
+          // If the counter + 15 is greater than messageCounter we've reached the top!
+          if(count <= messageCounter + 15){
+
+            console.log(chattWrapperDiv.scrollHeight);
+            let scrollToThis = chattWrapperDiv.scrollHeight
+            console.log(chattWrapperDiv.scrollTop);
+            // Start to listen to the chat again. This time add 25 to the counter.
+            chatMessagesChildAdded(count += 25, true);
+            //console.log('Count increased by 25! Currently displaying ' + messageCounter + ' messages');
+            //chattWrapperDiv.className += ' smooth-scroll'
+            setTimeout(function(){
+              //Set a timeout to scroll down.
+              chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight - scrollToThis;
+              console.log(chattWrapperDiv.scrollHeight);
+              console.log(chattWrapperDiv.scrollTop);
+              //Reset the scroll
+              doScroll = true;
+            },180);
+          } else {
+            console.log('No more messages to display.');
+            let noMoreMessages = document.createElement('p');
+            noMoreMessages.innerText = 'Inga fler meddelanden.';
+            noMoreMessages.className = 'noMessage';
+            chattWrapperDiv.insertBefore(noMoreMessages,chattWrapperDiv.firstChild);
+            chattWrapperDiv.removeEventListener('scroll', loadMoreMessages);
+            chatMessagesChildAdded(1, false);
+          }
         }
-        first = false;
       }
-
-      // Create the message DIV to be printed on the DOM
-      let messageDiv = document.createElement('div');
-      messageDiv.className = 'chattMessageDiv';
-
-      // Create the avatar picture
-      let avatarImg = document.createElement('img');
-      avatarImg.setAttribute('src', message.avatarURL);
-      messageDiv.appendChild(avatarImg);
-
-      // Create the timeStamp
-      let timeStamp = document.createElement('p');
-      timeStamp.innerText = chatMessageTimeStamp(message.time);
-      timeStamp.setAttribute('timeStamp', message.time);
-      timeStamp.className = 'timeStamp';
-
-      // Create the fullname
-      let fullname = document.createElement('p');
-      fullname.innerText = message.fullname;
-
-      // Create the actual message
-      let textmessage = document.createElement('p');
-      textmessage.innerText = message.textmessage;
-
-      // Create a div to hold name + timeStamp
-      let messageWrapper = document.createElement('div');
-      messageWrapper.className = 'messageWrapper';
-
-      messageWrapper.appendChild(fullname);
-      messageWrapper.appendChild(timeStamp);
-
-      //Create textmessage wrapperDiv
-      let textmessageWrapper = document.createElement('div');
-      textmessageWrapper.className = 'textmessageWrapper';
-
-      // Create Like Button and counter
-      let likeCount = document.createElement('span');
-      likeCount.className = 'likeCount ' + messageKey;
-      let likeBtn = document.createElement('span');
-
-      // If the current user has liked this message, put this as a filled heart already!
-      db.ref('likes/' + messageKey  + '/' + currentUser.uniqueID).once('value', function(newShot){
-        if(newShot.val()){
-          likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
-        } else {
-          likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
-        }
-      });
-
-
-      // Add eventListener for the likeButton
-      likeBtn.addEventListener('click', function(event){
-        if(likeBtn.innerHTML == '<i class="mdi mdi-heart-outline"></i>'){
-          toggleLike(messageKey);
-          likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
-        } else {
-          toggleLike(messageKey);
-          likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
-        }
-      });
-
-      likeListenerOn(messageKey);
-      // Append it into the textmessageWrapper
-      textmessageWrapper.appendChild(textmessage);
-      textmessageWrapper.appendChild(likeCount);
-      textmessageWrapper.appendChild(likeBtn);
-      messageWrapper.appendChild(textmessageWrapper);
-
-      // Append everything into the messageDiv
-      messageDiv.appendChild(avatarImg);
-      messageDiv.appendChild(messageWrapper);
-
-
-      chattWrapperDiv.appendChild(messageDiv);
-
-      chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
     }
 
-  });
+    chattWrapperDiv.addEventListener('scroll', loadMoreMessages);
+
+
+  let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  // chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+  let displayedMessages = [];
+  let first = true;
+  function chatMessagesChildAdded(count, scroll = false){
+
+    messageCounter = 0;
+    let firstInsert = true, insertBefore = null;
+    db.ref('chats/' + meetupKey).limitToLast(count).on('child_added', function(snapshot){
+
+      let chattWrapperDiv = document.getElementById('chat' + meetupKey);
+      let message = snapshot.val();
+      let messageKey = snapshot.key;
+      let doNotAppend = false;
+
+      // Should we display the message? If the message was made before the player joined we don't show it.
+      if(joinedTime <= message.time || getAdmin(currentUser.uniqueID)){
+
+        if(first){
+          while(chattWrapperDiv.firstChild){
+            chattWrapperDiv.removeChild(chattWrapperDiv.firstChild);
+          }
+          first = false;
+        }
+        if(displayedMessages.includes(messageKey)){
+          //console.log('Stop code plox');
+          doNotAppend = true;
+        }
+
+        // Create the message DIV to be printed on the DOM
+        let messageDiv = document.createElement('div');
+        messageDiv.className = 'chattMessageDiv';
+
+        // Create the avatar picture
+        let avatarImg = document.createElement('img');
+        avatarImg.setAttribute('src', message.avatarURL);
+        messageDiv.appendChild(avatarImg);
+
+        // Create the timeStamp
+        let timeStamp = document.createElement('p');
+        timeStamp.innerText = chatMessageTimeStamp(message.time);
+        timeStamp.setAttribute('timeStamp', message.time);
+        timeStamp.className = 'timeStamp';
+
+        // Create the fullname
+        let fullname = document.createElement('p');
+        fullname.innerText = message.fullname;
+
+        //Create Icon hoverMessage
+        let iconHoverMessage = document.createElement('span');
+
+
+        // Here we got the fullname, hehe! append appropriate icons?
+        if(message.system){
+            fullname.innerHTML += '<i class="mdi mdi-wrench"></i>';
+            iconHoverMessage.innerText = 'Systembot';
+            iconHoverMessage.className = 'hoverMessage';
+            fullname.appendChild(iconHoverMessage);
+        } else if(getAdmin(message.sender)){
+            fullname.innerHTML += '<i class="mdi mdi-verified"></i>';
+            iconHoverMessage.innerText = 'Administratör';
+            iconHoverMessage.className = 'hoverMessage';
+            fullname.appendChild(iconHoverMessage);
+        } else if(message.creator){
+            fullname.innerHTML += '<i class="mdi mdi-approval"></i>';
+            iconHoverMessage.innerText = 'Skapare';
+            iconHoverMessage.className = 'hoverMessage';
+            fullname.appendChild(iconHoverMessage);
+          }
+
+        // Then if the user is owner of the meetup append approval
+
+
+        // Create the actual message
+        let textmessage = document.createElement('p');
+        textmessage.innerText = message.textmessage;
+
+        // Create a div to hold name + timeStamp
+        let messageWrapper = document.createElement('div');
+        messageWrapper.className = 'messageWrapper';
+
+        messageWrapper.appendChild(fullname);
+        messageWrapper.appendChild(timeStamp);
+
+        //Create textmessage wrapperDiv
+        let textmessageWrapper = document.createElement('div');
+        textmessageWrapper.className = 'textmessageWrapper';
+
+        // Create Like Button and counter
+        let likeCount = document.createElement('span');
+        likeCount.className = 'likeCount ' + messageKey;
+        let likeBtn = document.createElement('span');
+
+        // If the current user has liked this message, put this as a filled heart already!
+        db.ref('likes/' + meetupKey + '/' + messageKey  + '/' + currentUser.uniqueID).once('value', function(newShot){
+          if(newShot.val()){
+            likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
+          } else {
+            likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+          }
+        });
+
+
+        // Add eventListener for the likeButton
+          if(!likeArray.includes(messageKey)){
+            likeListenerOn(meetupKey, messageKey);
+            likeArray.push(messageKey);
+          } else {
+            //console.log('This btn has already a likeListenerOn');
+          }
+
+          likeBtn.addEventListener('click', function(event){
+            if(likeBtn.innerHTML == '<i class="mdi mdi-heart-outline"></i>'){
+              toggleLike(meetupKey, messageKey);
+              likeBtn.innerHTML = '<i class="mdi mdi-heart"></i>';
+              likeBtn.className += ' heartbeat';
+            } else {
+              toggleLike(meetupKey, messageKey);
+              likeBtn.innerHTML = '<i class="mdi mdi-heart-outline"></i>';
+              likeBtn.className = likeBtn.className.replace(' heartbeat', '');
+            }
+          });
+
+        // Append it into the textmessageWrapper
+        textmessageWrapper.appendChild(textmessage);
+        textmessageWrapper.appendChild(likeCount);
+        textmessageWrapper.appendChild(likeBtn);
+        messageWrapper.appendChild(textmessageWrapper);
+
+        // Append everything into the messageDiv
+        messageDiv.appendChild(avatarImg);
+        messageDiv.appendChild(messageWrapper);
+
+
+
+        if(doNotAppend){
+          //console.log('Not appending!');
+        } else if(scroll && !insertBefore){
+          // First insert!
+          //console.log('Scroll is true!');
+          insertBefore = chattWrapperDiv.firstChild;
+          chattWrapperDiv.insertBefore(messageDiv, chattWrapperDiv.firstChild);
+        } else if(insertBefore && !doNotAppend && scroll){
+          //console.log('This one!');
+          chattWrapperDiv.insertBefore(messageDiv, insertBefore);
+        } else if(!scroll){
+          //console.log('Appending normally, apparently scroll is false.');
+          chattWrapperDiv.appendChild(messageDiv);
+        }
+
+          displayedMessages.push(messageKey);
+
+
+        // To scroll down or not to scroll down. Only if there's a user message outputted and not the scroll.
+        if(!scroll){
+
+          let scrollHeight = chattWrapperDiv.scrollHeight;
+          let scrollTop = chattWrapperDiv.scrollTop;
+
+          if(scrollHeight - 760 < scrollTop){
+            chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+          } else {
+            // console.log('scrollHeight is: ', scrollHeight);
+            // console.log('scrollTop is: ', scrollTop);
+            // console.log('scrollHeight - 760 is: ', scrollHeight - 760);
+            console.log('not scrolling, too far up.');
+          }
+        }
+        messageCounter += 1;
+      } else {
+        console.log('Did not print message again.');
+      }
+    });
+    setTimeout(function(){
+      scroll = false;
+      insertBefore = null;
+    }, 500);
+  }
 }
 
 // Denna funktion uppdaterar tiden på meddelanden!
@@ -806,7 +1006,7 @@ function restoreJoinBtn(meetupKey){
     let data = snapshot.val();
     let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
     console.log('This was removed: ',data);
-
+    removeUserMeetup(data.uniqueID, eventid,  meetupKey);
         if(currentUser.uniqueID == data.uniqueID){
           // Alert('It was you who left!');
           let md = document.getElementById('meetup-'+meetupKey);
@@ -894,6 +1094,10 @@ function displayEventInfo(event){
   googleMapImg.style.backgroundSize = 'cover';
   googleMapImg.style.backgroundPosition = 'center';
 
+  // Display mainCategory
+  let mainCategory = document.getElementById('mainCategory');
+  mainCategory.innerText = event.mainCategory;
+
   // Set the Date
   document.getElementById('eventDate').innerText = displayDate(event.date, event.weekDay, event.offsale);
   document.getElementById('eventTitle').innerText = event.name;
@@ -901,14 +1105,75 @@ function displayEventInfo(event){
 
 
   // Om platsen inte finns (Göteborg - Ullevi) så skriver vi bara ut staden.
+  let completePlace, venuePlace = false;
   if(event.place == undefined){
-    document.getElementById('eventPlace').innerText = event.city;
+    completePlace = event.city;
   } else {
-    document.getElementById('eventPlace').innerText = event.place + ', ' + event.city;
+    completePlace = event.place + ', ' + event.city;
+    venuePlace = true;
+  }
+  document.getElementById('eventPlace').innerText = completePlace;
+
+  let infoTextDatum;
+  if(event.date){
+    infoTextDatum = displayDate(event.date, event.weekDay, event.offsale, true);
+  } else {
+    infoTextDatum = '.'
   }
 
+
+  let infoTextPlace;
+  if(venuePlace){
+    infoTextPlace = 'på ' + event.place + ' i ' + event.city + infoTextDatum;
+  } else {
+    infoTextPlace = 'i ' + event.city + infoTextDatum;
+  }
+
+  let ticketsAvailable;
+  if(event.offsale){
+    ticketsAvailable = 'Om du inte redan har en biljett kan du klicka dig in på biljettsidan via knappen nedan för att köpa en.';
+  } else {
+    ticketsAvailable = 'Biljetterna för detta evenemang är tyvärr slut men du kan fortfarande skapa ett meetup om du redan har en biljett.';
+  }
+
+  let artister = [];
+  for(let i = 0; i < event.attractions.length; i++){
+    let artist = event.attractions[i];
+
+    if(i != 0) {
+      if(i != event.attractions.length-1){
+        artister.push(' ' + artist.name);
+      } else {
+        artister.push(' och ' + artist.name.replace(',', '') + ' ');
+      }
+    }
+  }
+
+  let promoter;
+  if(event.promoter){
+    if(event.mainCategory == 'Festivaler'){
+      promoter = 'Promotor för festivalen är ' + event.promoter.name+'.';
+    } else {
+      promoter = 'Promotor för evenemanget är ' + event.promoter.name +'.';
+    }
+  }
+  if(event.minage){
+    promoter += ' Åldersgräns: ' + event.minage + ' år';
+  }
+
+  /* skriv ut information om eventet */
+  let attractionText;
+  if(event.attractions.length > 1){
+    attractionText = `${event.attractions[0].name} arrangeras ${infoTextPlace}<br><br> ${artister} kommer finnas på plats. <br>${ticketsAvailable} <br><span>${promoter}</span>`;
+  } else if(event.attractions){
+    attractionText = `${event.attractions[0].name} kommer att spela ${infoTextPlace}<br> ${ticketsAvailable} <br> <span>${promoter}</span>`;
+  }
+  let eventInfoText = document.getElementById('eventInfoText');
+
+  eventInfoText.innerHTML = `<p>${attractionText}</p>`;
+
   retrieveMeetupInfo(event.date);
-  //updateEventInfo(event.name, event.priceRange, event.currency, event.onsale);
+  updateEventInfo(event);
 }
 
 function retrieveEventInfo(){
@@ -937,8 +1202,11 @@ function retrieveEventInfo(){
           let address = venue.location.address;
           let date = event.localeventdate;
           let offsale = event.offsale.value;
-
+          let mainCategory = event.categories[0].name;
+          let promoter = event.promoter;
           console.log('Date is: ', date);
+          console.log('Straight from the API: ', json);
+          console.log('Main category is: ', mainCategory);
           if(!date){
             date = event.date;
           }
@@ -946,7 +1214,7 @@ function retrieveEventInfo(){
           // createMarker(latitude, longitude);
           //console.log('ImageUrl', imageURL);
 
-          let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale);
+          let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale, mainCategory, event.attractions, promoter);
 
           console.log('EVENTOBJECT: ',eventObject);
 
@@ -969,56 +1237,9 @@ function retrieveEventInfo(){
   }
 }
 
-// Denna funktion beräknar vad som ska visas som tid på varje chattmeddelande!
-function chatMessageTimeStamp(timeStamp){
-  let currTime = new Date().getTime();
-  //console.log('Current time is: ', currTime);
-  let difference = currTime - timeStamp;
-  //console.log('Difference:', difference);
-  let seconds = Math.floor((difference / 1000));
-  let minutes = Math.floor((difference / 1000 / 60));
-  let hours = Math.floor((difference / 1000 / 60 / 60));
-  let days = Math.floor((difference / 1000 / 60 / 60 / 24));
-  // console.log('Divided by 1000 then 60:', difference / 1000 / 60);
-  // console.log('Current date: ', new Date(currTime));
-  // console.log('Timestamp date:', new Date(timeStamp));
-  //console.log(timeStamp);
-
-  // console.log('Sekunder: ' + seconds);
-  // console.log('Minuter: ' + minutes);
-  // console.log('Timmar: ' + hours);
-
-  if(days > 0){
-    if(days == 1){
-      return ' en dag sedan';
-    } else {
-      return days + ' dagar sedan';
-    }
-  } else if(hours > 0){
-    if(hours == 1){
-      return hours + ' timme sedan';
-    } else {
-      return hours + ' timmar sedan';
-    }
-  } else if(minutes > 0){
-      if(minutes == 1){
-        return minutes + ' minut sedan';
-      } else {
-        return minutes + ' minuter sedan';
-      }
-  } else if (seconds > 0){
-      if(seconds == 1){
-        return seconds + ' sekund sedan';
-      } else {
-        return seconds + ' sekunder sedan';
-      }
-  } else {
-    return 'nu';
-  }
-}
 
 //Funktion för att visa datumet lite finare :)
-function displayDate(dateStr, weekDay, offsale){
+function displayDate(dateStr, weekDay, offsale, attractionText = false){
 
   let date, time, year, month, day;
 
@@ -1031,7 +1252,14 @@ function displayDate(dateStr, weekDay, offsale){
     dateStr = dateStr.split('T');
 
     console.log('datestr: ',dateStr);
+
+
+
+    /* Now we have an array with two objects, TIME with Z on [1] and date on [0] */
     time = dateStr[1];
+
+    /* Split it again */
+    dateStr = dateStr[0].split('-');
 
     year = dateStr[0];
     month = dateStr[1];
@@ -1074,8 +1302,15 @@ function displayDate(dateStr, weekDay, offsale){
   }
 
 
-  console.log(date + ' - ' + time);
-  if(weekDay){
+  if(attractionText){
+    if(weekDay){
+      return ' ' + weekDay.toLowerCase() + 'en den ' + day + ' ' + getMonth(month-0) + ' klockan ' + time + '.';
+    } else {
+      return ' den ' + day + ' ' + getMonth(month-0) + ' klockan ' + time + '.';
+    }
+
+
+  } else if(weekDay){
     return weekDay + ', ' + day + '/' + month + ' kl ' + time;
   } else {
     return day + '/' + month + ' - ' + year + ' kl ' + time;
@@ -1120,7 +1355,15 @@ function getLocationInfo(){
         }
 
         // Radera eventuella #
-        eventID = eventID.replace('#', '');
+        // eventID = eventID.replace('#', '');
+
+        // Om eventID innerhåller # så splitta och ta bort det efteråt.
+        if(eventID.includes('#')){
+          eventID = eventID.split('#')[0];
+        }
+
+
+
         return [eventID, meetupID];
     }
   } else {
@@ -1129,63 +1372,89 @@ function getLocationInfo(){
 }
 
 // Wikipedia api retriever
-function updateEventInfo(eventName, priceRange, currency, onsale){
+function updateEventInfo(event){
 
-  fetch(`https://sv.wikipedia.org/w/api.php?action=opensearch&search=${eventName}&limit=1&format=json`)
-  .then(function(response){
-    console.log(response);
-    return response.json();
-  })
-  .then(function(json){
-    if(json[2].length === 0){
-      let tickets = '';
-      if(onsale){
-        tickets = '<p>Biljetter finns för detta event finns!</p>';
-      }
-      document.getElementById('eventInfoText').innerHTML = `
-      ${tickets}
-      <p>Pris:</p>
+  /* Create the search string based on the event */
+  if(event.attractions){
+    if(event.attractions.length >= 1){
+      let searchStr = event.attractions[0].name;
+      let eventInfoText = document.getElementById('eventInfoText');
+      fetch(`https://sv.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=${searchStr}`)
+      .then(function(response){
+        console.log(response);
+        return response.json();
+      })
+      .then(function(json){
 
-      <span>${priceRange[0] + currency} - ${priceRange[1] + currency}</span>
+        //console.log('Json version: ', json);
+        if(json.length === 0){
 
-      <p>Ingenting om detta event hittades på Wikipedia</p>`;
-    } else {
-      document.getElementById('eventInfoText').innerHTML = json[2].toString();
+          console.log('ingenting hittades på wikipedia');
+        } else {
+          /* Retrieve the info */
+          let pages = json.query.pages;
+          let text;
+          //console.log(pages);
+          for(let page in pages) {
+
+            text = pages[page].extract;
+
+            if(text.includes('Denna artikel handlar')){
+              text = text.split(/\n/)[1];
+            } else if(text.includes('\n')){
+              text = text.split(/\n/);
+              text = text[0] + ' ' + text[1];
+            }
+
+            //console.log('what is this', text.split[" "][0]);
+            //console.log('Text:',text);
+          }
+
+          let infoTextParagraf = document.createElement('p');
+          infoTextParagraf.innerText = text;
+          eventInfoText.insertBefore(infoTextParagraf, eventInfoText.firstChild);
+        }
+        console.log(json);
+
+      });
+
+      console.log('It is only one person. Lets find the info about this artist.');
     }
-    console.log(json);
+  } else {
+    console.log('No information to display about this person.');
+  }
 
-  });
 }
 
-function toggleLike(key){
+function toggleLike(meetupKey, messageKey){
   let user = JSON.parse(localStorage.getItem('loggedInUser'));
-  db.ref('likes/' + key).once('value', function(snapshot){
+  db.ref('likes/' + meetupKey + '/' + messageKey).once('value', function(snapshot){
     let data = snapshot.val();
     if(data){
       let found = false;
       for(let uid in data){
         if(uid == user.uniqueID){
-          db.ref('likes/'+key+'/'+uid).remove();
+          db.ref('likes/'+ meetupKey + '/'+ messageKey + '/' + uid).remove();
           found = true;
           console.log('unlike');
         }
       }
       if(!found){
-        db.ref('likes/' + key + '/' + user.uniqueID ).set(true);
+        db.ref('likes/'+ meetupKey + '/'+ messageKey + '/' + user.uniqueID ).set(true);
         console.log('like');
       }
     } else {
-      db.ref('likes/' + key + '/' + user.uniqueID ).set(true);
+      db.ref('likes/'+ meetupKey + '/'+ messageKey + '/' + user.uniqueID ).set(true);
       console.log('like');
     }
   });
 }
 
-function likeListenerOn(key){
+function likeListenerOn(meetupKey, messageKey){
   //Listen for likes
-  db.ref('likes/' + key).on('child_added', function(){
+  db.ref('likes/' + meetupKey + '/'+ messageKey).on('child_added', function(){
     console.log('New like!');
-    let likeCounters = document.getElementsByClassName('likeCount '+key);
+    let likeCounters = document.getElementsByClassName('likeCount '+messageKey);
     for(let likeCount of likeCounters){
       console.log(likeCount);
       if(likeCount.innerText){
@@ -1196,10 +1465,10 @@ function likeListenerOn(key){
     }
   });
   //Listen for unlikes
-  db.ref('likes/' + key).on('child_removed', function(){
+  db.ref('likes/' + meetupKey + '/'+ messageKey).on('child_removed', function(){
     console.log('Someone unliked :(');
 
-    let likeCounters = document.getElementsByClassName('likeCount '+key);
+    let likeCounters = document.getElementsByClassName('likeCount '+messageKey);
 
     for(let likeCount of likeCounters){
       console.log(likeCount);
@@ -1210,7 +1479,6 @@ function likeListenerOn(key){
       }
     }
   });
-
 }
 
 function joinBtnListener(joinMeetupBtn, meetupKey){
@@ -1220,7 +1488,7 @@ function joinBtnListener(joinMeetupBtn, meetupKey){
     let eventID = getLocationInfo()[0];
 
     if(currentUser){
-      joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
+      joinMeetup(currentUser, meetupKey, eventID);
 
     } else {
       console.log('Setup login modal here?');
@@ -1234,13 +1502,29 @@ function joinBtnListener(joinMeetupBtn, meetupKey){
 }
 
 function pageLoaded(){
+
   let header = document.getElementById('navigation');
   header.className = header.className.replace('hidden', '');
   document.getElementById('imageHolder').className = '';
   document.getElementById('eventHolder').className = '';
+  document.getElementById('divBorderEventPage').className = '';
+  document.getElementsByClassName('footer-box hidden')[0].className = 'footer-box';
   if(document.getElementsByClassName('spinner')[0]){
     document.getElementsByClassName('spinner')[0].className = 'hidden';
   }
+
+    // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+    let htmlScroll = document.getElementsByTagName('html')[0];
+
+    let meetup = document.getElementById('meetup-' + getLocationInfo()[1]);
+
+    if(meetup){
+      meetup.scrollIntoView({behavior: 'smooth'});
+      console.log('Scrolling into view!');
+    } else {
+      console.warn('Meetup is not yet in the dom. Or doesn\'t exist.');
+    }
+
 }
 
 function addEditBtns(meetupKey){
@@ -1302,10 +1586,7 @@ function editMeetup(meetupKey){
     console.log('This does not exist :o');
   } else {
 
-
-
   }
-
 }
 
 function removeEditBtn(meetupKey){
@@ -1333,6 +1614,7 @@ function removeEditBtn(meetupKey){
   }
 }
 
+// Funktion som lyssnar på när meetups tas bort ur databasen.
 function listenToRemovedMeetups(){
     let eventID = getLocationInfo()[0];
 
@@ -1340,6 +1622,10 @@ function listenToRemovedMeetups(){
       let data = snapshot.val();
       let meetupKey = snapshot.key;
 
+      // Remove the meetup from the database.
+      removeMeetupEntirelyFromTheDatabase(eventID, data, meetupKey);
+
+      // Remove the meetup from the DOM
       let meetup = document.getElementById('meetup-'+meetupKey);
       let wrapper = document.getElementById('meetupWrapper');
 
@@ -1383,6 +1669,7 @@ function listenToRemovedMeetups(){
     });
 }
 
+// Ta bort meetupet ur databasen
 function destroyMeetup(meetupKey, eventID){
   if(!eventID){
     eventID = getLocationInfo()[0];
@@ -1390,4 +1677,658 @@ function destroyMeetup(meetupKey, eventID){
 
   console.log('Meetup with ID: '+meetupKey+' under eventID: '+eventID+'is being removed from the database...');
   db.ref('meetups/' +eventID+ '/' +meetupKey).remove();
+}
+
+// Tanken med denna funktion är att lägga till meetupets meetupKey på användarens profil under "meetups".
+function addUserMeetup(userID, eventID, meetupKey){
+  //console.log('Lägga till meetup på användarens profil kördes.');
+  db.ref('users/' + userID + '/meetups/' + eventID + '/' + meetupKey).set(true);
+}
+
+// Ta bort meetups personen ska gå på ifrån profilen
+function removeUserMeetup(userID, eventID, meetupKey){
+  //console.log('Ta bort meetup från användarens profil kördes.');
+  db.ref('users/' + userID + '/meetups/' + eventID + '/' +meetupKey).remove();
+}
+
+// Ta bort allting kring ett meetup i databasen.
+function removeMeetupEntirelyFromTheDatabase(eventID, data, meetupKey){
+
+  /* Some variables */
+  let creator = data.creator;
+  let members = data.members;
+
+  /* Some logs */
+  console.log('This meetup was removed entirely.', data);
+  console.log('It had the key', meetupKey);
+
+  /* Start by removing it from the user profile of the creator */
+  db.ref('users/' + creator.uniqueID + '/createdMeetups/' + eventID + '/' + meetupKey).remove();
+
+  /* Remove the likes */
+  db.ref('likes/' + meetupKey).remove();
+
+  /* Remove the chat for this meetup */
+  db.ref('chats/' + meetupKey).remove();
+
+  /* Remove the meetups from peoples user profiles.. */
+  for(let member in members){
+    /* Remove from the players profile */
+    removeUserMeetup(members[member].uniqueID, meetupKey);
+  }
+
+  /* Decrease the meetupCounter */
+  decreaseMeetupCount(eventID);
+
+}
+
+// Bjud in vänner till ett meetup!
+
+function inviteFriend(event){
+  let target = event.target;
+  if(event.target.nodeName == 'I'){
+    target = target.parentNode;
+  }
+  localStorage.setItem('currentMeetupKey', target.meetupKey);
+  // console.log('Key is: ', target.meetupKey);
+  // console.log('Event target is: ', event.target);
+  //printMessage('error', 'You cannot invite friends yet, sorry :(');
+  displayInviteFriends(event);
+}
+
+function gotoProfile(event){
+  popupProfile(event, event.target.eventID, event.target.meetupKey);
+}
+
+// function to popup the userProfile when pressed on their avatar.
+function popupProfile(event, eventID, meetupKey){
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  let user = {
+    sid: event.target.getAttribute('sid'),
+    avatarURL: event.target.getAttribute('src'),
+    fullname: event.target.nextSibling.innerText
+  }
+  if(user.sid == 'undefined'){
+    user.sid = false;
+  }
+
+  let profileHolder = document.createElement('div');
+  profileHolder.className = 'profileHolder fadein';
+
+  let avatarImage = document.createElement('img');
+  avatarImage.setAttribute('src', user.avatarURL);
+
+  let nameAndSidHolder = document.createElement('div');
+  let fullname = document.createElement('span');
+  fullname.innerText = user.fullname;
+
+  let sid = document.createElement('span');
+  sid.innerText = '[' + user.sid + ']' ;
+
+  let btnHolder = document.createElement('div');
+  let gotoBtn = document.createElement('button');
+  gotoBtn.innerText = 'Gå till profil';
+  gotoBtn.className = 'doNotCloseThis';
+  if(user.sid){
+    gotoBtn.addEventListener('click', function(){
+      window.location.assign('profil.html?user=' + event.target.getAttribute('sid'));
+      //printMessage('default', 'Denna ska leda till användarens profil. SiteID: ' + user.sid);
+    });
+  } else {
+    gotoBtn.className = 'disabledBtn doNotCloseThis';
+  }
+
+
+  let kickBtn = document.createElement('button');
+  kickBtn.innerHTML = '<i class="mdi mdi-account-remove mdi-24px"></i>';
+  kickBtn.className = 'kickBtn';
+  let admin = getAdmin(localUser.uniqueID);
+
+
+
+  let addFriendBtn = document.createElement('button');
+  addFriendBtn.innerText = 'Lägg till vän';
+  addFriendBtn.className = 'doNotCloseThis';
+
+  let friendList = retrieveFriends();
+  /* Some small checks */
+  if(user.sid){
+    if(localUser){
+      if(localUser.sid == user.sid || friendList.includes(user.sid)){
+        addFriendBtn.className = 'disabledBtn doNotCloseThis';
+        console.log('You are already friends! Or this is u..');
+        console.log('localUser sid: ', localUser.sid, 'userSid: ', user.sid);
+
+      } else {
+        addFriendBtn.addEventListener('click', function(){
+
+          sendNotification(user.sid, 'friendRequest');
+
+          addFriend(user.sid);
+          addFriendBtn.disabled = true;
+          addFriendBtn.className += ' disabledBtn doNotCloseThis';
+        });
+      }
+    } else {
+      printMessage('error', 'Du är inte inloggad :o');
+    }
+  } else {
+    addFriendBtn.className = 'disabledBtn doNotCloseThis';
+  }
+
+  let closeBtn = document.createElement('span');
+  closeBtn.innerHTML = '<i class="mdi mdi-close mdi-24px"></i>'
+  closeBtn.className = 'closeBtn';
+
+  closeBtn.addEventListener('click', function(event){
+    profileHolder.parentNode.removeChild(profileHolder);
+  })
+
+  let nameAndBtnWrapper = document.createElement('div');
+
+  /* Append Everything */
+  btnHolder.appendChild(gotoBtn);
+  btnHolder.appendChild(addFriendBtn);
+
+  db.ref('meetups/'+eventID+'/'+meetupKey+'/creator').once('value', function(snapshot){
+    let data = snapshot.val();
+    console.log(data);
+    console.log('THE EFFING CCREATOR IS: ', data);
+    if(user.sid || admin){
+      console.log('The user has a SID');
+      if(localUser.sid == user.sid && !admin){
+        console.log('Man kan inte kicka sig själv, lul');
+      } else if(admin || data.uniqueID == localUser.uniqueID){
+        console.log('Admin or creator');
+        btnHolder.appendChild(kickBtn);
+        kickBtn.addEventListener('click', function(){
+          confirmRemoveMeetup(null, null, 'Vill du verkligen ta bort ' + user.fullname + ' ifrån meetupet?', 'Hell yeah', function(){
+            printMessage('success', 'Du sparkade på riktigt ut ' + user.fullname + '. Skäms!');
+
+            kickUserFromMeetup(eventID, meetupKey, user.sid);
+          });
+        });
+      }
+    }
+  });
+
+
+  nameAndSidHolder.appendChild(fullname);
+
+  if(user.sid){ nameAndSidHolder.appendChild(sid); }
+    else {nameAndSidHolder.className = 'noSid'; }
+  nameAndSidHolder.appendChild(closeBtn);
+
+  nameAndBtnWrapper.appendChild(nameAndSidHolder);
+  nameAndBtnWrapper.appendChild(btnHolder);
+
+  profileHolder.appendChild(avatarImage);
+  profileHolder.appendChild(nameAndBtnWrapper);
+
+  event.target.parentNode.appendChild(profileHolder);
+
+  window.addEventListener('click', function(e){
+
+    if(e.target.className != profileHolder && !e.target.className.includes('doNotCloseThis') && e.target.className != 'noSid'){
+      if(e.target == event.target){
+        if(document.getElementsByClassName('profileHolder').length >= 2){
+          if(profileHolder.parentNode){
+            profileHolder.parentNode.removeChild(profileHolder);
+          }
+        }
+      } else if(profileHolder.parentNode){
+        profileHolder.parentNode.removeChild(profileHolder);
+      }
+    }
+  });
+}
+
+// Add a friend with SID, (currentUser)
+function addFriend(sid){
+  let user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+  let friendList = retrieveFriends();
+
+  if(user){
+    if(friendList.includes(sid)){
+      printMessage('error', 'Ni är redan vänner! :o');
+    } else if(sid == user.sid){
+      printMessage('error', 'Du kan inte lägga till dig själv som vän!');
+    } else {
+      printMessage('success', 'Du la till en ny vän!');
+      db.ref('users/' + user.uniqueID + '/friends').push(sid);
+    }
+  } else {
+    printMessage('error', 'Du är inte inloggad :o');
+  }
+}
+
+function displayInviteFriends(event){
+  let array = [];
+  downloadUsersToArray(array);
+  let friendWrapper = document.createElement('div');
+  friendWrapper.className = 'friendWrapper';
+  let friendTitle = document.createElement('h2');
+  friendTitle.innerText = 'Bjud in vänner';
+
+  let searchDiv = document.createElement('div');
+  let searchIcon = document.createElement('span');
+  searchIcon.className = 'icon';
+  let searchBar = document.createElement('input');
+  searchBar.setAttribute('placeholder', 'Sök efter namn eller #tag');
+  searchIcon.innerHTML = '<i class="mdi mdi-magnify mdi-24px"></i>';
+
+  let searchBtn = document.createElement('span');
+  searchBtn.className = 'searchBtn';
+  searchBtn.innerText = 'Sök';
+
+  searchDiv.appendChild(searchIcon);
+  searchDiv.appendChild(searchBar);
+  searchDiv.appendChild(searchBtn);
+
+  /* Resultat från sökningen */
+  let resultDiv = document.createElement('div');
+  resultDiv.className += 'resultHolder';
+
+  let friendsResultTitle = document.createElement('h3');
+  friendsResultTitle.innerText = 'Vänner';
+  friendsResultTitle.className = 'hidden';
+  let otherResultTitle = document.createElement('h3');
+  otherResultTitle.innerText = 'Andra';
+  otherResultTitle.className = 'hidden';
+  let resultDivFriends = document.createElement('div');
+  let resultDivAndra = document.createElement('div');
+  resultDivFriends.className = 'friendList';
+  resultDivAndra.className = 'otherList';
+
+  resultDiv.appendChild(friendsResultTitle);
+  resultDiv.appendChild(resultDivFriends);
+  resultDiv.appendChild(otherResultTitle);
+  resultDiv.appendChild(resultDivAndra);
+
+  let closeWrapperBtn = document.createElement('div');
+  closeWrapperBtn.className = 'closeWrapperBtn';
+  closeWrapperBtn.innerText = 'Stäng';
+
+
+  let friendList = retrieveFriends();
+
+  searchBtn.addEventListener('click', function(e){
+    displayInviteFriendsResults(e, array, resultDiv, true);
+  })
+
+  searchBar.addEventListener('change', function(e){
+    displayInviteFriendsResults(e, array, resultDiv);
+  });
+
+  /* Append Everything */
+  friendWrapper.appendChild(friendTitle);
+  friendWrapper.appendChild(searchDiv);
+  friendWrapper.appendChild(resultDiv);
+  friendWrapper.appendChild(closeWrapperBtn);
+
+  let body = document.getElementsByTagName('body')[0];
+  body.appendChild(friendWrapper);
+
+  closeWrapperBtn.addEventListener('click', function(){
+    body.removeChild(friendWrapper);
+  });
+
+}
+
+function displayInviteFriendsResults(event, searchArray, printList, btn){
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  /* check if it's empty first */
+  let friendList = retrieveFriends();
+  if(searchArray.length){
+    let searchStr;
+    if(btn){
+      searchStr = event.target.previousSibling.value.toLowerCase();
+    } else {
+      searchStr = event.target.value.toLowerCase();
+    }
+
+    if(searchStr == ""){
+      printMessage('success', 'Visar alla användare  :\') ');
+    }
+    /* Filter the users based on value */
+    let found = false;
+
+    /* Remove all currently displayed persons & hide the titels*/
+    while(printList.children[1].firstChild){
+      printList.children[1].removeChild(printList.children[1].firstChild);
+    }
+    while(printList.children[3].firstChild){
+      printList.children[3].removeChild(printList.children[3].firstChild);
+    }
+    /* hide titles */
+    for(let title of printList.children){
+      if(title.nodeName == 'H3'){
+        title.className = 'hidden';
+      }
+    }
+
+    /* Search through users in the usersArray */
+
+    for(let user of searchArray){
+      let fullname = user.fullname;
+      let sid = user.sid;
+      let friend = false;
+
+      if(localUser){
+        if(user.uniqueID == localUser.uniqueID){
+          /* do not show the user at all*/
+          continue;
+        }
+      }
+
+
+      if(fullname || sid){
+
+        /* Search by sid */
+        if(searchStr.includes('#')){
+          if(sid){
+            /* Set SID to toLowerCase */
+            sid = sid.toLowerCase();
+
+            if(sid.includes(searchStr)){
+              /* We found a match! */
+              if(friendList){
+                /* The person has a friend ! */
+                  if(user.sid){
+                    /* the found person has a SID defined! They might be friends :o */
+                    if(friendList.includes(user.sid)){
+                      friend = true;
+                    }
+                  }
+              }
+              displayMatch(user, printList, friend, true);
+              found = true;
+            }
+          }
+        } else if(fullname){
+          /* Set fullname to toLowerCase */
+          fullname = fullname.toLowerCase();
+          /* Search by name */
+          if(fullname.includes(searchStr)){
+            /* We found a match! */
+            /* Display based on friendShip! */
+            if(friendList){
+              /* The person has a friend ! */
+                if(user.sid){
+                  /* the found person has a SID defined! They might be friends :o */
+                  if(friendList.includes(user.sid)){
+                    friend = true;
+                  }
+                }
+            }
+            displayMatch(user, printList, friend, false);
+            found = true;
+          }
+        }
+
+      }
+    }
+    if(!found){
+      printMessage('error', 'Vi kunde tyvärr inte hitta en användare :(', undefined, undefined, 1);
+    }
+  } else {
+    printMessage('error', 'Sorry, we couldn\t find any users :(');
+  }
+}
+
+function displayMatch(user, printList, friend, foundBySid = false){
+  /* If the user we want to display is a friend of the current user put them in the friendsDiv */
+  if(friend){
+    printList.children[0].className = '';
+    printList = printList.children[1];
+  } else {
+    printList.children[2].className = '';
+    printList = printList.children[3];
+  }
+
+  let userDiv = document.createElement('div');
+  userDiv.className = 'userProfile fadein';
+
+  if(friend){
+    userDiv.className += ' friend';
+  }
+  let avatarImage = document.createElement('img');
+  avatarImage.setAttribute('src', user.avatarURL);
+
+  let nameAndSidHolder = document.createElement('div');
+  nameAndSidHolder.className = 'nameAndSidHolder';
+
+  let fullname = document.createElement('span');
+  fullname.innerText = user.fullname;
+
+  let sid = document.createElement('span');
+  sid.innerText = '[' + user.sid + ']' ;
+
+  if(foundBySid){
+    sid.className = 'foundBySid';
+    fullname.className = 'foundBySid';
+  }
+
+  let inviteBtn = document.createElement('button');
+  inviteBtn.innerHTML = '<i class="mdi mdi-plus mdi-24px"> </i>';
+  console.log('What does user contain?', user);
+  inviteBtn.addEventListener('click', function(e){
+    inviteBtn.disabled = true;
+    printMessage('success', 'Inbjudan skickad!', undefined, undefined, 1);
+    e.target.children[0].className += ' fadeout';
+
+    sendNotification(user, 'invite');
+
+    setTimeout(function(){
+      e.target.innerHTML = '<i class="mdi mdi-check mdi-24px fadein"> </i>';
+    }, 500);
+
+  });
+
+  nameAndSidHolder.appendChild(fullname);
+  if(user.sid){
+    nameAndSidHolder.appendChild(sid);
+  }
+
+  userDiv.appendChild(avatarImage);
+  userDiv.appendChild(nameAndSidHolder);
+  userDiv.appendChild(inviteBtn);
+
+  printList.appendChild(userDiv);
+
+}
+
+function downloadUsersToArray(array){
+  db.ref('users/').on('child_added', function(snapshot){
+    let user = snapshot.val();
+
+    array.push(user);
+  });
+}
+
+/* This function sends a notification to someone. Either by SID or uniqueID. */
+
+function sendNotification(userOrSid = false, action){
+  console.log('Does this fire?');
+  /* Get localUser */
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+  /* Get the EventID */
+  eventID = getLocationInfo()[0];
+
+  /* start by getting the friendList of the localUser */
+  let friendList = retrieveFriends();
+  let sid, user, friend;
+
+  if(typeof userOrSid == 'string'){
+    sid = userOrSid;
+    console.log('This is a SID');
+    user = false;
+  } else {
+    console.log('This is a USER');
+    user = true;
+    sid = false;
+  }
+
+  /* Kolla vänlistan */
+  if(friendList.includes(sid)){
+    friend = true;
+  } else {
+    friend = false;
+  }
+
+  /* Find the one who should get the message */
+  let retriever;
+  if(user){
+    /* We should use the USER to send the message. */
+    retriever = userOrSid.uniqueID;
+    sid = userOrSid.sid;
+    createAndSend(retriever);
+  } else if(sid){
+    /* We should use the SID to send the message. */
+
+    /* Find the user with that SID and get their uniqueID */
+    db.ref('users/').once('value', function(snapshot){
+      let data = snapshot.val();
+      for(let user in data){
+        user = data[user];
+        /* Check if they have a SID we can compare to. */
+
+        if(user.sid){
+          /* there is a sid */
+          if(user.sid == userOrSid){
+            /* If they match, this is the retriever. */
+            retriever = user.uniqueID;
+            console.log('Create and send');
+            createAndSend(retriever);
+          }
+        }
+      }
+    });
+  } else {
+    console.error('Something went wrong when we tried to send a notification.');
+  }
+
+
+  /* If the user is logged in check */
+
+  if(!localUser){
+    printMessage('error', 'Du är inte inloggad! :o');
+    throw('There is not a user logged in.');
+  }
+
+
+  function createAndSend(retriever){
+    /* Create the object to be sent! */
+    let notificationObject;
+    /* If the action is a invite create the invite here */
+    if(action == 'invite'){
+      console.log('invite being sent..');
+      /* Get the currentMeetupKey we put in localStorage before */
+      let meetupKey = localStorage.getItem('currentMeetupKey');
+
+      notificationObject = {
+        fromID: localUser.uniqueID,
+        fromSID: localUser.sid,
+        fullname: localUser.fullname,
+        avatarURL: localUser.avatarURL,
+        action: action,
+        friend: friend,
+        eventid: eventID,
+        meetupKey: meetupKey,
+        time: firebase.database.ServerValue.TIMESTAMP
+      }
+
+
+    } else if(action == 'friendRequest'){
+      console.log('Vänförfrågan skickad');
+      notificationObject = {
+        fromID: localUser.uniqueID,
+        fromSID: localUser.sid,
+        fullname: localUser.fullname,
+        avatarURL: localUser.avatarURL,
+        action: action,
+        friend: friend,
+        time: firebase.database.ServerValue.TIMESTAMP
+      }
+    }
+
+    /* If there is something to send */
+    if(notificationObject){
+      db.ref('users/' + retriever + '/notifications').push(notificationObject);
+    } else {
+      console.warn('No object was sent!');
+    }
+  }
+}
+
+function retrieveFriends(){
+  /* Skapa vänlistan */
+  let friendList = [];
+
+  /* Check if there is a localUser. Should always be one.. */
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  if(localUser){
+    for(let friend in localUser.friends){
+      friendList.push(localUser.friends[friend]);
+    }
+  }
+  return friendList;
+}
+
+function kickUserFromMeetup(eventid, meetupKey, sid){
+  db.ref('meetups/' + eventid + '/' + meetupKey + '/members').once('value', function(snapshot){
+    let data = snapshot.val();
+    for(let user in data){
+      let userKey = user;
+      user = data[user];
+
+      if(sid){
+        console.log('Sid is: ', sid);
+        if(user.sid){
+          console.log('User in database sid: ', user.sid);
+          if(sid == user.sid){
+            console.log('Match found');
+            /* Remove from the database at this position */
+            db.ref('meetups/' + eventid + '/' + meetupKey + '/members/' + userKey).remove();
+          }
+        }
+      } else {
+        console.error('Abort, no sid found.');
+      }
+    }
+  });
+}
+
+function getMonth(int){
+
+  switch (int) {
+  case 1:
+    return 'januari';
+  case 2:
+    return 'februari';
+  case 3:
+    return 'mars';
+  case 4:
+    return 'april';
+  case 5:
+    return 'maj';
+  case 6:
+    return 'juni';
+  case 7:
+    return 'juli';
+  case 8:
+    return 'augusti'
+  case 9:
+    return 'september';
+  case 10:
+    return 'oktober';
+  case 11:
+    return 'november';
+  case 12:
+    return 'december';
+  default:
+    return 'okänd';
+  }
 }

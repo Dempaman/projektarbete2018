@@ -1,31 +1,172 @@
-.hide{
+
+
+#lmw button.btnCu {
+  display: flex;
+  justify-content: center;
+  transition: 0.2s ease;
+  margin: 10px auto;
+  padding: 12px 57px;
+  border-radius: 3px;
+  font-family: 'Questrial',sans-serif;
+  color: #515151;
+  font-size: 0.8em;
+  background-color: #b9b9b966;
+  font-weight: 100;
+  cursor: pointer;
+  width: 220px;
+  transition:all 0.8s ease;
+}
+
+#lmw button.btnCu:hover {
+  background-color: #ececec;
+}
+
+#lmw button.hide{
   display: none;
 }
 
-.btn {
-  border: none;
-  margin: 5px auto;
-  margin-bottom: 5px;
-  width: 150px;
-  outline: 0;
-  border-radius: 5px;
-  padding: 9px 20px;
-  font-family: 'Questrial', sans-serif;
-  background-color: #6C0CCC;
+
+.slider{
+  overflow-y: hidden;
+  	max-height: 200px; /* approximate max height */
+
+  	transition-property: all;
+  	transition-duration: .5s;
+  	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.slider.closed{
+  max-height: 0px;
+  transition-property: all;
+  transition-duration: .8s;
+  transition-timing-function: cubic-bezier(0,.84,.49,.97);
+}
+
+.slideUp{
+  transform: translateY(0%);
+  transition-property: all;
+  transition-duration: .5s;
+  transition-timing-function: linear;
+}
+
+
+#lmw button.btnCuLogin{
+  background-color: rgba(108, 12, 204, 0.59);
   color: #fff;
-}
-.btn:hover{
-  background-color: #56139a;
+  margin-top: 20px;
 }
 
-.btn-action2{
-  border: 2px solid green;
-  color: green;
-  background-color: #fff;
-  box-sizing: border-box;
+#lmw button.btnCuSignUp{
+  background-color: rgba(108, 12, 204, 0.59);
+  color: #fff;
+  margin-top: 20px;
 }
 
-input{
-  width: 250px;
-  height: 25px;
+.paragE, .paragP, .paragCp, .paragN{
+  color: #4E5F71
+}
+
+.txtEmail, .txtPassword, .txtPassword2, .nameInput{
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Roboto', sans-serif;
+  width: 300px;
+  height: 33px;
+  margin: 10px auto;
+  font-size: 0.5;
+  background: #0F1316;
+  color: #4E5F71;
+  border: none;
+  border-radius: 32px;
+  outline: none;
+  padding-left: 15px;
+}
+.containerUser{
+  margin: 0 0 20px 0;
+}
+
+.containerUserInput{
+  padding-bottom: 20px;
+  text-align: center;
+  font-size: 0.8em;
+  max-width: 300px;
+  margin: 22px auto 0;
+  border-bottom: 1px solid #4E5F7166;
+  border-top: 1px solid #4E5F7166;
+}
+
+.switchHolder{
+  display: flex;
+  justify-content: center;
+  max-width: 300px;
+  margin: 50px auto 0;
+}
+.labelSwitch{
+  margin: 0 12px 0;
+}
+
+.paragSignUp, .paragSignIn {
+  font-size: 0.8em;
+  color: #4E5F71;
+  transition:all 0.8s ease;
+}
+
+.paragE{
+  margin-top: 30px;
+}
+
+.highlight{
+  color: #AEAEAE;
+  transition:all 0.8s ease;
+}
+
+.divBorder{
+  height: 5px;
+  width: 100%;
+  background-image: linear-gradient(93deg,rgba(108, 12, 204, 0.59) ,rgba(18, 163, 86, 0.65));
+  margin-top: 50px;
+}
+
+
+
+/*   Switch CSS      */
+
+.switchInput{
+	height: 0;
+	width: 0;
+	visibility: hidden;
+  display: none;
+}
+
+label {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: 50px;
+	height: 25px;
+	background: #121619;
+	display: block;
+	border-radius: 100px;
+	position: relative;
+  margin: 0 auto;
+}
+
+label:after {
+	content: '';
+	position: absolute;
+	top: 1px;
+	left: 2px;
+	width: 24px;
+	height: 24px;
+	background: #fff;
+	border-radius: 90px;
+	transition: 0.3s;
+}
+
+.switchInput:checked + label {
+	background: #121619;
+}
+
+.switchInput:checked + label:after {
+	left: calc(100% - 5px);
+	transform: translateX(-100%);
 }

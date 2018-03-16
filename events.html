@@ -5,7 +5,7 @@
   	<title>MeWent | Alla evenemang</title>
 
     <!-- Fonts & Icons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="img/logo-design2.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/logo-design-white-frame.png">
   	<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Questrial" rel="stylesheet">
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
@@ -13,81 +13,95 @@
 
     <!-- Stylesheet libraries -->
     <link rel="stylesheet" href="slider/css/rSlider.min.css">
-
     <!-- Stylesheet -->
     <link rel="stylesheet" type="text/css" href="css/loginModal.css">
   	<link rel="stylesheet" type="text/css" href="css/events.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
+  	<link rel="stylesheet" type="text/css" href="css/evenemangskort.css">
     <link rel="stylesheet" type="text/css" href="css/menu.css">
     <link rel="stylesheet" type="text/css" href="css/headstyle.css">
-    
-    <!-- FireBase 
-    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-    -->
+    <link rel="stylesheet" type="text/css" href="css/eventpage.css">
+    <link rel="stylesheet" type="text/css" href="css/createUser.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
 
-    <!-- JavaScript 
+    <!-- FireBase -->
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+
+
+    <!-- JavaScript -->
     <script src="js/classes.js"></script>
-    <script src="js/loginModal.js"></script>
-    -->
     <script src="js/events.js"></script>
+    <script src="js/loginModal.js"></script>
+    <script src="js/menu.js"></script>
 
   </head>
   <body>
-    <!--------------------Menu-------------------->
-    <nav id="navigation">
+    <!-- Menu -->
+    <nav id="navigation" class="">
       <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
-      
       <div class="header">
-      
-      <!-- HTML för desktopläge i nav -->
+        <img src="img/logo-design3.png" alt="Event">
+        <div id="helloUser" class="hidden">
+          <span id="userName"></span>
+          <span id="notificationBell" class="hidden">
+            <i class="mdi mdi-bell mdi-24px"></i>
+          </span>
+        </div>
+        <!-- HTML för desktopläge i nav -->
         <ul class="deskNav">
-          <li>MIN PROFIL</li>
-          <li>ALLA EVENT</li>
-          <li>KONTAKTA OSS</li>
-          <li class= "loginInMenu">LOGGA IN</li>
+          <a href="/index.html"><li>HEM</li></a>
+          <a href="/profil.html"><li id="myProfile" class="hidden">MIN PROFIL</li></a>
+          <a href="/events.html" ><li>ALLA EVENTS</li></a>
+          <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+          <li class="loginInMenu">LOGGA IN</li>
         </ul>
-      
+
       </div>
-      
-      
       <div id="menuToggle">
-        <!--A fake / hidden checkbox is used as click reciever, so you can use the :checked selector on it. -->
+        <!--
+        A fake / hidden checkbox is used as click reciever,
+        so you can use the :checked selector on it.
+        -->
         <input type="checkbox"/>
 
-        <!-- Some spans to act as a hamburger. -->
+        <!--
+        Some spans to act as a hamburger.
+        -->
         <span></span>
         <span></span>
         <span></span>
 
-        <!-- Too bad the menu has to be inside of the button
-        but hey, it's pure CSS magic. -->
+        <!--
+        Too bad the menu has to be inside of the button
+        but hey, it's pure CSS magic.
+        -->
         <ul id="menu">
-          <a href="#"><li>HEM</li></a>
-          <a href="#"><li>MIN PROFIL</li></a>
-          <a href="#" class="active"><li>ALLA EVENTS</li></a>
-          <a href="#"><li>KONTAKTA OSS</li></a>
-          <a href=""><li>LOGGA IN</li></a>
+          <a href="/landingpage.html" class="active"><li>HEM</li></a>
+          <a href="/profil.html"><li id="myProfileMob" class="hidden">MIN PROFIL</li></a>
+          <a href="/events.html"><li>ALLA EVENTS</li></a>
+          <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+          <a ><li class="loginInMenu">LOGGA IN</li></a>
         </ul>
       </div>
     </nav>
-    <!--------------------Menu End-------------------->
-    
+    <!-- Menu End -->
+
+    <div id="menuDiv"></div>
 
     <!--Korten innehåller: Datum, evenemangsnamn, bild samt antal meetups för detta event. -->
     <div id="all-events-main">
       <div class="big-photo-wrapper">
           <div class="events-search">
-              <h1>me<span style="color: #6C0CCC">W</span>ent</h1>
+              <img src="img/logo-design-white-frame.png">
                <!--SEARCH WITH INPUT VALUE-->
                 <form class="search-events" style="margin:auto;max-width:400px">
                   <input type="text" name="searchevent" placeholder="Sök stad..">
                   <button id="search-button"><i class="fa fa-search"></i></button>
                 </form>
-                
+
                 <!--SELECT DEFAULT OPTIONS-->
                 <div class="select-default">
-                <select class="all-events-search"> 
-                  <option value="">Alla events </option>
+                <select class="all-events-search">
+                  <option value="">Alla events</option>
                   <option value="10001">Musik</option>
                   <option value="10101">Festival</option>
                   <option value="10004">Sports</option>
@@ -103,8 +117,7 @@
                 <select class="all-events-search">
                   <option value="month">Denna månaden</option>
                   <option value="week">Denna veckan</option>
-                  <option value="tomorrow">Imorgon</option>
-                  <option value="today">Idag</option>
+                  <option value="tomorrow">Idag &amp; Imorgon</option>
                 </select>
                 </div>
           </div>
@@ -114,10 +127,13 @@
       </div>
       <div id="testOutPut">
       </div>
+      <br />
+      <br />
+      <br />
     </div>
 
 
-  <footer class="footer-box">
+ <footer class="footer-box">
       <div class="adress">
         <img id="footer-logo" src="img/logo-design4.png" alt="meWent logo">
         <div class="adress-menu">
@@ -149,7 +165,7 @@
             </div>
           </div>
         </div>
-        <div class="contact-form">
+        <div id="contactUs" class="contact-form">
           <h4>Kontakta oss</h4>
           <input type="text" name="" value="" placeholder="Namn" >
           <input type="text" name="" value="" placeholder="E-post">
@@ -163,7 +179,7 @@
         <a href="#"><i class="fab fa-twitter-square fa-2x"></i></a>
       </div>
       <div class="copyright">
-        <h4 style="letter-spacing: 0px;">Copyright &copy; 2018 meWent. All rigths reserved </h4>
+        <h4 style="font-size: 0.8em;">Copyright &copy; 2018 meWent. All rigths reserved </h4>
       </div>
 
   </footer>

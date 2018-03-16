@@ -2,165 +2,354 @@
 <html>
 
 <head>
-  <link rel="icon" href="img/logo-design2.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="img/logo-design-white-frame.png" type="image/png" sizes="16x16">
   <!--Meta tags-->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!--Google fonts-->
   <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto" rel="stylesheet">
-
+  <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
   <!--Title of page-->
   <title>Profil</title>
 
   <!--CSS links-->
+  <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/headstyle.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/loginModal.css">
   <link rel="stylesheet" href="css/profil.css">
 
   <!--Script tags-->
   <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-  <!-- <script src="js/classes.js"></script> -->
+  <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+  <script src="js/classes.js"></script>
+  <!-- <script src="js/menu.js"></script>
+  <script src="js/loginModal.js"></script>  -->
   <script src="js/profil.js"></script>
 
 
 </head>
 
 <body>
-  <header>
-    <!--Sätt in kod för navigation-->
-  </header>
+
+  <!-- Menu -->
+  <nav id="navigation" class="">
+    <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
+    <div class="header">
+      <img src="img/logo-design3.png" alt="Event">
+      <div id="helloUser" class="hidden">
+        <span id="userName"></span>
+        <span id="notificationBell" class="hidden">
+          <i class="mdi mdi-bell mdi-24px"></i>
+        </span>
+      </div>
+      <!-- HTML för desktopläge i nav -->
+      <ul class="deskNav">
+        <a href="/landingpage.html" class="active">
+          <li>HEM</li>
+        </a>
+        <a href="/profil.html">
+          <li id="myProfile" class="hidden">MIN PROFIL</li>
+        </a>
+        <a href="/events.html">
+          <li>ALLA EVENTS</li>
+        </a>
+        <a href="#contactUs">
+          <li>KONTAKTA OSS</li>
+        </a>
+        <li class="loginInMenu">LOGGA IN</li>
+      </ul>
+
+    </div>
+    <div id="menuToggle">
+      <!--
+      A fake / hidden checkbox is used as click reciever,
+      so you can use the :checked selector on it.
+      -->
+      <input type="checkbox" />
+
+      <!--
+      Some spans to act as a hamburger.
+      -->
+      <span></span>
+      <span></span>
+      <span></span>
+
+      <!--
+      Too bad the menu has to be inside of the button
+      but hey, it's pure CSS magic.
+      -->
+      <ul id="menu">
+        <a href="/landingpage.html" class="active">
+          <li>HEM</li>
+        </a>
+        <a href="/profil.html">
+          <li id="myProfileMob" class="hidden">MIN PROFIL</li>
+        </a>
+        <a href="/events.html">
+          <li>ALLA EVENTS</li>
+        </a>
+        <a href="#contactUs">
+          <li>KONTAKTA OSS</li>
+        </a>
+        <a>
+          <li class="loginInMenu">LOGGA IN</li>
+        </a>
+      </ul>
+    </div>
+  </nav>
+  <!-- Menu End -->
 
   <main>
     <div class="user">
+      <div class="image-background" style="background-image:url('img/simple-purple-wallpapers.jpg'); background-repeat: no-repeat; background-size: cover">
+        <img id="user-img" src="img/user.png" alt="Profilbild">
+      </div>
+
+      <h3 id="user-name"></h3>
+      <!-- <div class="change">
+      <a href="" id="edit-user"><i class="fas fa-edit"></i></a>
+    </div> -->
+      <form class="user-story">
+        <label for="">Användarnamn</label>
+        <input type="text" placeholder="Jon Doe" name="" value="">
+        <label for="">Intressen</label>
+        <input type="text" name="" value="">
+        <label for="">Födelsedag</label>
+        <input type="date" name="" value="">
+
+        <label for="">Berätta om dig själv</label>
+        <textarea name="name" rows="8" cols="80" placeholder="vem är du?..."></textarea>
+      </form>
+
       <div class="photo-menu">
-        <div class="change">
-          <a href="" id="edit-user"><i class="fas fa-edit"></i></a>
-        </div>
-        <img src="img/user-img-test.jpg" alt="Foto av användare">
-        <h3 id="user-name">jon doe</h3>
-        <div class="created-meetups">
-
-        </div>
-        <div class="attending">
-
-        </div>
         <div class="user-info">
           <p id="user-description">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-            in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...
           </p>
-          <div class="white-cover">
-          </div>
+          <!-- <div class="white-cover">
+          </div> -->
         </div>
-        <a id="user-info-more" href="">
+        <button id="tellMeMore" type="button" name="button">Berätta om dig själv</button>
+        <!-- <a id="user-info-more" href="">
             <span class="show-more">visa mer</span>
             <i class="fas fa-angle-down fa-2x"></i>
-          </a>
+          </a> -->
       </div>
     </div>
 
-        <!-- <div class="meetup-count">
-          <div class="created">
-            <p>Skapade meetups</p>
-            <p>12</p>
+    <div class="meetup-count">
+      <div class="created">
+        <h4>Skapade meetups</h4>
+        <p id="user-created-meetups">0</p>
 
+      </div>
+      <div class="person">
+        <!-- <h4>3</h4> -->
+        <!-- <i id="logo-person" class="fas fa-child"></i> -->
+        <!-- <p>Successful Meetups</p> -->
+      </div>
+      <div class="attending">
+        <h4>joinade meetups</h4>
+        <p id="user-joind-meetups">0</p>
+      </div>
+    </div>
+
+    <div class="meetups-container">
+
+      <h2>Skapade Meetups</h2>
+      <div class="created-meetups-container">
+
+        <div class="single-meetup">
+          <div class="event-backgound">
           </div>
-          <div class="attending">
-            <p>joinade meetups</p>
-              <p>3</p>
+          <div class="img-text-holder">
+            <div class="img-holder">
+              <img id="meetup-img" src="img/user.png" alt="user name">
+            </div>
+            <div class="user-meetup-text">
+              <div class="event-holder">
+                <p class="min-text">1</p>
+                <p class="main-text">1</p>
+              </div>
+              <div class="meetup-holder">
+                <p class="main-text">1</p>
+              </div>
+              <div class="time-holder">
+                <p class="min-text">1</p>
+                <p class="main-text">1</p>
+              </div>
+              <div class="adress-holder">
+                <p class="min-text">1</p>
+                <p class="main-text">1</p>
+              </div>
+            </div>
+          </div>
+          <div class="change-status">
+            <a href="">Gå till Meetup > </a>
+          </div>
+        </div>
+
+        <div class="single-meetup">
+          <div class="event-backgound">
+          </div>
+          <div class="img-text-holder">
+            <div class="img-holder">
+              <img id="meetup-img" src="img/user.png" alt="user name">
+            </div>
+            <div class="user-meetup-text">
+              <div class="event-holder">
+                <p class="min-text">1</p>
+                <p class="main-text">1</p>
+              </div>
+              <div class="meetup-holder">
+                <p class="main-text">1</p>
+              </div>
+              <div class="time-holder">
+                <p class="min-text">1</p>
+                <p class="main-text">1</p>
+              </div>
+              <div class="adress-holder">
+                <p class="min-text">1</p>
+                <p class="main-text">1</p>
+              </div>
+            </div>
+          </div>
+          <div class="change-status">
+            <a href="">Gå till Meetup > </a>
+          </div>
+        </div>
+
+
+
+        <div class="single-meetup">
+          <div class="event-backgound">
+          </div>
+          <div class="img-text-holder">
+            <div class="img-holder">
+              <img id="meetup-img" src="img/user.png" alt="user name">
+            </div>
+            <div class="user-meetup-text">
+              <div class="event-holder">
+                <p class="min-text">1</p>
+                <p class="main-text">1</p>
+              </div>
+              <div class="meetup-holder">
+                <p class="main-text">1</p>
+              </div>
+              <div class="time-holder">
+                <p class="min-text">1</p>
+                <p class="main-text">1</p>
+              </div>
+              <div class="adress-holder">
+                <p class="min-text">1</p>
+                <p class="main-text">1</p>
+              </div>
+            </div>
+          </div>
+          <div class="change-status">
+            <a href="">Gå till Meetup > </a>
+          </div>
+        </div>
+        <!-- <div class="single-meetup">
+          <div class="event-backgound">
+            <img id="meetup-img" src="img/user.png" alt="user name">
+          </div>
+
+
+          <div class="user-meetup-text">
+            <p>Taco and Tequila inför Summerburst</p>
+            <div>
+              <p>Tid</p>
+              <p class="time">Torsdag, 1/3 - kl 18:30</p>
+            </div>
+            <div>
+              <p>adress</p>
+              <p class="adress">Tredje långgatan 9</p>
+            </div>
+          </div>
+          <div class="change-status">
+            <div class="gotoo-remove-meetup">
+              <a class="show-hidden-nav" href=""><i class="fas fa-ellipsis-v"></i></a>
+            </div>
+          </div>
+          <div class="hidden-nav">
+            <nav>
+              <a class="go-too" href="">Gå till meetup</a>
+              <a class="remove-meetup" href="">ta bort meetup</a>
+              <a class="close-small-menu" href="">&times;</i></a>
+            </nav>
           </div>
         </div> -->
-
-    <h2>Mina Meetups</h2>
-    <div class="user-meetups-container">
-      <div class="single-meetup">
-        <div class="user-image">
-          <img src="img/user.png" alt="user name">
-        </div>
-        <div class="user-meetup-text">
-          <p>Taco and Tequila inför Summerburst</p>
-          <div>
-            <p>Tid</p>
-            <p class="time">Torsdag, 1/3 - kl 18:30</p>
-          </div>
-          <div>
-            <p>adress</p>
-            <p class="adress">Tredje långgatan 9</p>
-          </div>
-        </div>
-        <div class="change-status">
-          <div class="gotoo-remove-meetup">
-            <a class="show-hidden-nav" href=""><i class="fas fa-ellipsis-v"></i></a>
-          </div>
-        </div>
-        <div class="hidden-nav">
-          <nav>
-            <a class="go-too" href="">Gå till meetup</a>
-            <a class="remove-meetup" href="">ta bort meetup</a>
-            <a class="close-small-menu" href="">&times</i></a>
-          </nav>
-        </div>
       </div>
 
-      <div class="single-meetup">
-        <div class="user-image">
-          <img src="img/user.png" alt="user name">
-        </div>
-        <div class="user-meetup-text">
-          <p>Taco and Tequila inför Summerburst</p>
-          <div>
-            <p>Tid</p>
-            <p class="time">Torsdag, 1/3 - kl 18:30</p>
-          </div>
-          <div>
-            <p>adress</p>
-            <p class="adress">Tredje långgatan 9</p>
-          </div>
-        </div>
-        <div class="change-status">
-          <div class="gotoo-remove-meetup">
-            <a class="show-hidden-nav" href=""><i class="fas fa-ellipsis-v"></i></a>
-          </div>
-        </div>
-        <div class="hidden-nav">
-          <nav>
-            <a class="go-too" href="">Gå till meetup</a>
-            <a class="remove-meetup" href="">ta bort meetup</a>
-            <a class="close-small-menu" href="">&times</i></a>
-          </nav>
-        </div>
+      <h2>Joind Meetups</h2>
+      <div class="joind-meetups-container">
+
       </div>
 
-      <div class="single-meetup">
-        <div class="user-image">
-          <img src="img/user.png" alt="user name">
-        </div>
-        <div class="user-meetup-text">
-          <p>Taco and Tequila inför Summerburst</p>
-          <div>
-            <p>Tid</p>
-            <p class="time">Torsdag, 1/3 - kl 18:30</p>
-          </div>
-          <div>
-            <p>adress</p>
-            <p class="adress">Tredje långgatan 9</p>
-          </div>
-        </div>
-        <div class="change-status">
-          <div class="gotoo-remove-meetup">
-            <a class="show-hidden-nav" href=""><i class="fas fa-ellipsis-v"></i></a>
-          </div>
-        </div>
-        <div class="hidden-nav">
-          <nav>
-            <a class="go-too" href="">Gå till meetup</a>
-            <a class="remove-meetup" href="">ta bort meetup</a>
-            <a class="close-small-menu" href="">&times</i></a>
-          </nav>
-        </div>
-      </div>
     </div>
   </main>
 
+  <footer class="footer-box">
+    <div class="adress">
+      <img id="footer-logo" src="img/logo-design4.png" alt="meWent logo">
+      <div class="adress-menu">
+        <div class="adress-box">
+          <div class="place">
+            <i class="fas fa-home"></i>
+            <div class="route">
+              <p>Mölndalsvägen 81 </p>
+              <p>421 42 Göteborg</p>
+            </div>
+          </div>
+          <div class="phone">
+            <i class="fas fa-phone-square"></i>
+            <p>00 - 030 53 52 24</p>
+          </div>
+          <div class="mail">
+            <i class="fas fa-envelope"></i>
+            <p>info@mewent.com </p>
+          </div>
+        </div>
+        <div class="menu-box">
+          <div class="footer-menu">
+            <ul>
+              <a href="#">
+                <li>HEM</li>
+              </a>
+              <a href="#">
+                <li>EVENTS</li>
+              </a>
+              <a href="#">
+                <li>LOGGA IN</li>
+              </a>
+              <a href="#">
+                <li>BLI MEDLEM</li>
+              </a>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div id="contactUs" class="contact-form">
+        <h4>Kontakta oss</h4>
+        <input type="text" name="" value="" placeholder="Namn">
+        <input type="text" name="" value="" placeholder="E-post">
+        <textarea name="name" rows="8" cols="50" placeholder="Meddelande"></textarea>
+        <button id="contact-send" type="button" name="button">Skicka</button>
+      </div>
+    </div>
+    <div class="social-links">
+      <a href="#"><i class="fab fa-facebook fa-2x" ></i></a>
+      <a href="#"><i class="fab fa-instagram fa-2x"></i></a>
+      <a href="#"><i class="fab fa-twitter-square fa-2x"></i></a>
+    </div>
+    <div class="copyright">
+      <h4>Copyright &copy; 2018 meWent. All rigths reserved </h4>
+    </div>
+
+  </footer>
 
 
 </body>

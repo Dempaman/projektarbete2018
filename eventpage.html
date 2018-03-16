@@ -6,10 +6,10 @@
   	<title>MeWent</title>
 
     <!-- Fonts & Icons -->
-    <link rel="icon" href="img/logo-design3.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="img/logo-design-white-frame.png" type="image/png" sizes="16x16">
   	<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Questrial" rel="stylesheet">
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+  	<!-- <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script> -->
     <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
 
     <!-- Stylesheet libraries -->
@@ -17,12 +17,19 @@
     <link rel="stylesheet" href="slider/css/rSlider.min.css">
 
     <!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="css/animations.css">
     <link rel="stylesheet" type="text/css" href="css/headstyle.css">
     <link rel="stylesheet" type="text/css" href="css/menu.css">
     <link rel="stylesheet" type="text/css" href="css/auth.css">
     <link rel="stylesheet" type="text/css" href="css/eventpage.css">
     <link rel="stylesheet" type="text/css" href="css/meetupModal.css">
     <link rel="stylesheet" type="text/css" href="css/loginModal.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
+    <link rel="stylesheet" type="text/css" href="css/headstyle.css">
+    <link rel="stylesheet" type="text/css" href="css/printMessage.css">
+    <link rel="stylesheet" type="text/css" href="css/createUser.css">
+    <link rel="stylesheet" type="text/css" href="css/profileholder.css">
+
 
     <!-- FireBase -->
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
@@ -31,6 +38,7 @@
   	<script src="js/classes.js"></script>
     <script src="slider/js/rSlider.min.js"></script>
     <script src="js/meetupModal.js"></script>
+    <script src="js/meetupDropDown.js"></script>
     <script src="js/eventpage.js"></script>
     <script src="js/loginModal.js"></script>
     <script src="js/menu.js"></script>
@@ -47,12 +55,19 @@
       <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
       <div class="header">
         <img src="img/logo-design3.png" alt="Event">
+        <div id="helloUser" class="hidden">
+          <span id="userName"></span>
+          <span id="notificationBell" class="hidden">
+            <i class="mdi mdi-bell mdi-24px"></i>
+          </span>
+        </div>
         <!-- HTML för desktopläge i nav -->
         <ul class="deskNav">
-          <li>MIN PROFIL</li>
-          <li>ALLA EVENT</li>
-          <li>KONTAKTA OSS</li>
-          <li class= "loginInMenu">LOGGA IN</li>
+          <a href="/" class="active"><li>HEM</li></a>
+          <a href="/profil.html"><li id="myProfile" class="hidden">MIN PROFIL</li></a>
+          <a href="/events.html"><li>ALLA EVENTS</li></a>
+          <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+          <li class="loginInMenu">LOGGA IN</li>
         </ul>
 
       </div>
@@ -75,11 +90,11 @@
         but hey, it's pure CSS magic.
         -->
         <ul id="menu">
-          <a href="#" class="active"><li>HEM</li></a>
-          <a href="#"><li>MIN PROFIL</li></a>
-          <a href="#"><li>ALLA EVENTS</li></a>
-          <a href="#"><li>KONTAKTA OSS</li></a>
-          <a href="#"><li class="loginInMenu">LOGGA IN</li></a>
+          <a href="/landingpage.html" class="active"><li>HEM</li></a>
+          <a href="/profil.html"><li id="myProfileMob" class="hidden">MIN PROFIL</li></a>
+          <a href="/events.html"><li>ALLA EVENTS</li></a>
+          <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+          <a ><li class="loginInMenu">LOGGA IN</li></a>
         </ul>
       </div>
     </nav>
@@ -100,11 +115,15 @@
       </div>
       <!-- Här ska bild var för eventet (tex Summerburst 2018) -->
     </div>
+    <div id="divBorderEventPage" class="hidden"></div>
     <div class="hidden" id="eventHolder">
       <div>
         <p id="eventDate">23/6 2018</p>
         <h2 id="eventTitle">Summerburst 2018</h2>
         <p id="eventPlace" class="eventPlace">Göteborg, Ullevi</p>
+      </div>
+      <div>
+        <h2 id="mainCategory"></h2>
       </div>
       <p>Information</p>
       <div id="eventInfoText">
@@ -130,28 +149,53 @@
         </div>
 
         <div class="content"> <!-- Innehåller allt som ska finnas i modalen -->
-          <input id="nameInput" placeholder="Namn" type="text">
-          <input id="addressInput" placeholder="Adress" type="text">
-          <input id="placeNameInput" placeholder="Platsnamn" type="text">
-          <input id="timeInput" placeholder="Tid" type="text">
+          <div class="labelsAndMap">
+            <div class="nameAdressPlacelabels">
+              <div>
+                <span>Namn</span>
+                <input id="nameInput" placeholder="Namn" type="text">
+              </div>
+              <div>
+                <span>Adress</span>
+                <input id="addressInput" placeholder="Adress" type="text">
+              </div>
+              <div>
+                <span class="inputLabel">Platsnamn</span>
+                <input id="placeNameInput" placeholder="Platsnamn" type="text">
+              </div>
 
-          <div class="sliderHolder"> <!-- Själva wrappern för slidern -->
-            <input type="text" id="ageSlider" class="slider"/>
+              <div class="sliderHolder"> <!-- Själva wrappern för slidern -->
+                <input type="text" id="ageSlider" class="slider"/>
+              </div>
+
+              <div id="ageIntervalDisplayer"> <!-- Printar ut vilka år slidern står på med JavaScript -->
+              </div>
+            </div>
+
+            <div class="mapWrapWrapp">
+              <div id=mapWrap>
+                <div id="map" lat="59" lng="12"></div>
+              </div>
+
+              <div class="timeOrSpots">
+                <div>
+                  <span>Antal platser</span>
+                  <input id="spotsInput" class="timeOrSpots" placeholder="Antal platser" type="text"> <!-- Input för antal platser -->
+                </div>
+                <div>
+                  <span>Tid</span>
+                  <input id="timeInput" class="timeOrSpots" placeholder="Tid" type="text">
+                </div>
+              </div>
+            </div>
           </div>
-
-          <div id="ageIntervalDisplayer"> <!-- Printar ut vilka år slidern står på med JavaScript -->
-          </div>
-
-          <div id=mapWrap>
-            <div id="map"></div>
-          </div>
-
-          <input id="spotsInput" placeholder="Antal platser" type="text"> <!-- Input för antal platser -->
-
-          <div id="textareaDiv" maxlength="25">
+          <div id="textareaDiv" >
             <p>Information</p>
-            <textarea placeholder="Skriv lite information om ditt meetup här!"></textarea>
+            <textarea maxlength="900" placeholder="Skriv lite information om ditt meetup här!"></textarea>
+            <span class="characterCounter">Antal tecken: <span>0/900</span></span>
           </div>
+
+          <div class="smallLine"></div>
 
           <button id="createMeetupButton"></button>
 
@@ -171,6 +215,55 @@
         </div>
     </div>
 
+    <footer class="footer-box hidden">
+        <div class="adress">
+          <img id="footer-logo" src="img/logo-design4.png" alt="meWent logo">
+          <div class="adress-menu">
+            <div class="adress-box">
+              <div class="place">
+                <i class="mdi mdi-home mdi-24px"></i>
+                <div class="route">
+                  <p>Mölndalsvägen 81 </p>
+                  <p>421 42 Göteborg</p>
+                </div>
+              </div>
+              <div class="phone">
+                <i class="mdi mdi-phone mdi-24px"></i>
+                <p>00 - 030 53 52 24</p>
+              </div>
+              <div class="mail">
+                <i class="mdi mdi-email-outline mdi-24px"></i>
+                <p>info@mewent.com </p>
+              </div>
+            </div>
+            <div class="menu-box">
+              <div class="footer-menu">
+                <ul>
+                  <a href="/index.html"><li>HEM</li></a>
+                  <a href="/events.html"><li>ALLA EVENTS</li></a>
+                  <a><li class="loginInMenu">LOGGA IN</li></a>
+
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="contactUs" class="contact-form">
+            <h4>Kontakta oss</h4>
+            <input type="text" name="" value="" placeholder="Namn" >
+            <input type="email" name="" value="" placeholder="E-post">
+            <textarea name="name" rows="8" cols="50" placeholder="Meddelande"></textarea>
+            <button id="contact-send" type="button" name="button">Skicka</button>
+          </div>
+        </div>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook fa-2x" ></i></a>
+          <a href="#"><i class="fab fa-instagram fa-2x"></i></a>
+          <a href="#"><i class="fab fa-twitter-square fa-2x"></i></a>
+        </div>
+        <div class="copyright">
+          <h4 >Copyright &copy; 2018 meWent. All rigths reserved </h4>
+        </div>
+    </footer>
 
   </body>
 </html>

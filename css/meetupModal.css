@@ -3,6 +3,13 @@ html, body {
   padding: 0;
   font-family: 'Roboto', sans-serif;
 }
+.smallLine {
+  height: 1px;
+  background-color: #d5d5d5;
+  width: 90%;
+  margin: 0px auto 25px;
+  max-width: 400px;
+}
 
 button.verifySend {
   display: inline-block;
@@ -24,6 +31,10 @@ button.verifySend:hover {
 }
 button.logInBtn {
   background-color: #a0bf9e;
+  position: static;
+  bottom: auto;
+  left: auto;
+  margin: 5px auto 40px;
 }
 .content > button.logInBtn:hover {
   background-color: #a9c3a9;
@@ -64,9 +75,9 @@ button.logInBtn {
   font-size: 1.7em;
   font-weight: 100;
 }
-#modalContent > .header i {
-  align-self: center;
-  padding: 15px;
+#modalContent > .header > #menuDiv{
+  padding: 8px 2px;
+  cursor: pointer;
 }
 #modalContent > .content {
   position: relative;
@@ -76,15 +87,53 @@ button.logInBtn {
   border: none;
   outline: none;
   padding: 15px 0px 15px 15px;
-  width: calc(80% - 15px);
+  width: 100%;
   display: flex;
-  margin: 8px auto;
+  margin: 0px auto 12px;
   box-shadow: 1px 1px 3px #a2a2a2;
   border: 1px solid #f0f0f0;
 }
 
+#modalContent .content > input[type="text"]:first-child {
+  margin-top: 20px;
+}
+
+#modalContent div.timeOrSpots{
+  display: flex;
+  justify-content: center;
+}
+.nameAdressPlacelabels {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: calc(80% - 15px);
+  margin: 20px auto;
+}
+#modalContent div.timeOrSpots > div {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  width: 40%;
+}
+
+#modalContent span {
+  margin: 2px 7px;
+  font-family: 'Roboto',sans-serif;
+  color: #656565;
+  font-size: 0.8em;
+}
+#modalContent .nameAdressPlacelabels span {
+  margin: 2px 0px;
+}
+
+#modalContent input[type="text"].timeOrSpots {
+  width: auto;
+  margin: 0px 5px 15px;
+}
+
 #modalContent .sliderHolder {
-  width: 70%;
+  width: 75%;
   margin: 25px auto 0px;
 }
 
@@ -100,7 +149,7 @@ button.logInBtn {
   color: #666;
   font-size: 0.9em;
   display: flex;
-  width: calc(70% + 34px);
+  width: calc(75% + 34px);
   min-height: 50px;
   margin: -15px auto 0;
   justify-content: space-between;
@@ -111,6 +160,7 @@ button.logInBtn {
   cursor: pointer;
   max-width: 23%;
 }
+
 /* Slider input */
 #ageIntervalDisplayer > div > input[type="text"] {
   color: #222;
@@ -118,12 +168,17 @@ button.logInBtn {
   border-radius: 2px;
   padding: 5px 12px;
   margin: -9px auto -50px;
-  max-width: 28px;
+  max-width: 55px;
 }
 #textareaDiv {
   width: 90%;
+  position: relative;
   margin: 0px auto 50px auto;
   height: 230px;
+}
+#textareaDiv > p {
+  color: #656565;
+  font-size: 0.8em;
 }
 #textareaDiv > textarea {
   resize: none;
@@ -163,16 +218,8 @@ button.logInBtn {
 }
 
 .content > button {
-  border: none;
-  margin: 0;
-  padding: 10px 25px;
-  cursor: pointer;
-  margin: 5px auto 0;
-  width: 100%;
-  height: 60px;
-  display: inline-block;
-  text-align: center;
-  border-radius: 0px;
+  display: flex;
+  justify-content: center;
 }
 .content > button:hover {
   background-color: #ddd;
@@ -187,4 +234,69 @@ button.logInBtn {
   display: flex;
   justify-content: center;
   margin-bottom: 40px;
+}
+
+/* Antal Tecken CSS för telefon. */
+#modalContent .characterCounter {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: -17px 6px -11px -1px;
+  color: #393939;
+  font-size: 0.9em;
+}
+
+  #fokenHide {
+    display: none;
+  }
+/* Media queries */
+@media screen and (min-width: 1000px){
+
+  #fokenHide {
+    display: flex;
+  }
+
+  #modalContent > .header > #menuDiv:hover {
+    color: #e1e1e1;
+  }
+
+  #modalWrapper {
+    background-color: #2226;
+    width: 100%;
+    z-index: 2;
+    height: auto;
+  }
+
+  #modalContent {
+    width: 80%;
+    background-color: #fff;
+    margin: 81px auto 300px;
+    padding: 0px 0px 1px;
+    max-width: 990px;
+  }
+
+  .labelsAndMap {
+    display: flex;
+    padding: 25px;
+  }
+
+  #modalContent div.timeOrSpots {
+    width: 90%;
+    margin: 0px auto;
+    justify-content: space-between
+  }
+
+  #mapWrap {
+    margin-bottom: 20px;
+  }
+  #map {
+    width: 300px;
+    height: 300px;
+    border-radius: 8px;
+  }
+
+  .nameAdressPlacelabels {
+    justify-content: start;
+    margin: -2px auto;
+  }
 }

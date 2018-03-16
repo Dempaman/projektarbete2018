@@ -1,6 +1,6 @@
 /* footer style */
 
-html * {
+html *{
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -10,7 +10,9 @@ body {
   box-sizing: border-box;
 }
 
-
+footer.footer-box.hidden {
+  display: none;
+}
 
 footer.footer-box {
   background-color: #232323;
@@ -32,7 +34,7 @@ footer.footer-box {
   width: 100%;
 }
 
-.adress-menu{
+.adress-menu {
   align-self: center;
   display: flex;
   justify-content: flex-start;
@@ -51,8 +53,11 @@ footer.footer-box {
 .place, .phone, .mail {
   display: flex;
   margin-bottom: 10px;
-}
 
+}
+.phone>p, .mail>p{
+    padding-top: 5px;
+}
 .phone {
   display: flex;
 }
@@ -87,14 +92,15 @@ a {
   color: #F4F4F4;
 }
 
-.footer-menu>ul>a>li {
+.footer-menu>ul>li>a {
   margin-right: 2rem;
   font-weight: bold;
   color: #AFAFAF;
+  cursor: pointer;
   margin:5px;
 }
 
-.footer-menu>ul>a>li:hover {
+.footer-menu>ul>li>a:hover {
   color: #FFFFFF;
 }
 
@@ -176,6 +182,7 @@ div.copyright {
   color: #AFAFAF;
   letter-spacing: 3px;
   text-align: center;
+  font-weight: 100;
 }
 
 /*

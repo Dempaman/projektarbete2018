@@ -1,28 +1,161 @@
-
-<html lang="en">
+<!DOCTYPE html>
+<html>
 
 <head>
-	<meta charset="utf-8" name="viewport" content="Width=device-width, initial-scale=1.0">
-	<title>Leetup</title>
-	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Anton|Oswald" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/main.css">
-	<script src="js/main.js"></script>
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/logo-design-white-frame.png">
+  <!-- <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script> -->
+
+  <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+  <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+
+  <script src="js/classes.js"></script>
+  <script src="js/loginModal.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/faq.js"></script>
+  <script src="js/index.js"></script>
+
+  <!-- Stylesheet -->
+
+  <link rel="stylesheet" type="text/css" href="css/events.css">
+  <link rel="stylesheet" type="text/css" href="css/eventpage.css">
+  <link rel="stylesheet" type="text/css" href="css/createUser.css">
+  <link rel="stylesheet" type="text/css" href="css/loginModal.css">
+  <link rel="stylesheet" href="css/faq.css">
+  <link rel="stylesheet" href="css/evenemangskort.css">
+  <link rel="stylesheet" href="css/footer.css" type="text/css">
+  <link rel="stylesheet" href="css/menu.css" type="text/css">
+  <link rel="stylesheet" href="css/headstyle.css" type="text/css">
+  <link rel="stylesheet" href="css/index.css">
+
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+
+  <title>MeWent | Välkommen</title>
+
 </head>
 <body>
-<div id="wrapper">
-<h1>mewent.se</h1>
-<div class="video-background">
-    <div class="video-foreground">
-      <iframe src="https://www.youtube.com/embed/OtOPF8nowpY?controls=0&showinfo=0&rel=0&autoplay=1&loop=1&playlist=OtOPF8nowpY" frameborder="0" allowfullscreen></iframe>
+  <!-- Menu -->
+  <nav id="navigation">
+    <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
+    <div class="header">
+    <a href="/index.html"> <img src="img/logo-design3.png" alt="Event"></a> 
+      <div id="helloUser" class="hidden">
+        <span id="userName"></span>
+        <span id="notificationBell" class="hidden">
+          <i class="mdi mdi-bell mdi-24px"></i>
+        </span>
+      </div>
+      <!-- HTML för desktopläge i nav -->
+      <ul class="deskNav">
+        <a href="/index.html"><li>HEM</li></a>
+        <a href="/profil.html"><li id="myProfile" class="hidden">MIN PROFIL</li></a>
+        <a href="/events.html"><li>ALLA EVENTS</li></a>
+        <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+        <li class="loginInMenu">LOGGA IN</li>
+      </ul>
+
     </div>
-  </div>
-<div id="vidtop-content">
-</div>
-</div>
+    <div id="menuToggle">
+      <!--
+      A fake / hidden checkbox is used as click reciever,
+      so you can use the :checked selector on it.
+      -->
+      <input type="checkbox"/>
+
+      <!--Some spans to act as a hamburger.-->
+      <span></span>
+      <span></span>
+      <span></span>
+
+      <!--Too bad the menu has to be inside of the button but hey, it's pure CSS magic.  -->
+      <ul id="menu">
+        <a href="/index.html" class="active"><li>HEM</li></a>
+        <a href="/profil.html"><li id="myProfileMob" class="hidden">MIN PROFIL</li></a>
+        <a href="/events.html"><li>ALLA EVENTS</li></a>
+        <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+        <a ><li class="loginInMenu">LOGGA IN</li></a>
+      </ul>
+    </div>
+  </nav>
+  <!-- Menu End -->
+
+  <div id="menuDiv"></div>
+
+  <main>
+    <div class="background-img">
+      <img class="logo-landing" src="img/logo-design.png" alt="meWent logo">
+      <h1 class="heading1">Meetups för alla</h1>
+      <a href="events.html" id="landingpageBtn">Hitta eventet för dig</a>
+      <h2>Träffa nya människor med samma intressen</h2>
+    </div>
+    <div class="title">
+      <h1>Populära events</h1>
+    </div>
+
+      <div id="testOutPut">
+    </div>
+    <div class="title">
+      <h1><a href="events.html">Alla events <span>&#187;</span></a></h1>
+    </div>
+
+    <!-- <a class="showMore" href="events.html"><h2>Visa alla events <span>&#187;</span></h2><a> -->
+
+  </main>
+  <footer class="footer-box">
+      <div class="adress">
+        <img id="footer-logo" src="img/logo-design4.png" alt="meWent logo">
+        <div class="adress-menu">
+          <div class="adress-box">
+            <div class="place">
+              <i class="mdi mdi-home mdi-24px"></i>
+
+              <div class="route">
+                <p>Mölndalsvägen 81 </p>
+                <p>421 42 Göteborg</p>
+              </div>
+            </div>
+            <div class="phone">
+              <i class="mdi mdi-phone mdi-24px"></i>
+              <p>00 - 030 53 52 51</p>
+            </div>
+            <div class="mail">
+                <i class="mdi mdi-email-outline mdi-24px"></i>
+              <p>info@mewent.com </p>
+            </div>
+          </div>
+          <div class="menu-box">
+            <div class="footer-menu">
+              <ul>
+                <li><a href="/index.html">HEM</a></li>
+                <li><a href="/events.html">ALLA EVENTS</a></li>
+                <li><a id="faqBtn" href="#contactUs">FAQ</a></li>
+                <!-- <li class="loginInMenu"><a>LOGGA IN</a></li> -->
+
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="contactUs" class="contact-form">
+          <h4>Kontakta oss</h4>
+          <input type="text" name="namn" value="" placeholder="Namn" >
+          <input type="email" name="e-post" value="" placeholder="E-post">
+          <textarea name="name" rows="8" cols="50" placeholder="Meddelande"></textarea>
+          <button id="contact-send" type="button" name="button">Skicka</button>
+        </div>
+      </div>
+      <div class="social-links">
+        <a href="#"><i class="mdi mdi-facebook-box mdi-36px" ></i></a>
+        <a href="#"><i class="mdi mdi-instagram mdi-36px"></i></a>
+        <a href="#"><i class="mdi mdi-twitter-box mdi-36px"></i></a>
+      </div>
+      <div class="copyright">
+        <h4 >Copyright &copy; 2018 meWent. All rigths reserved </h4>
+      </div>
+
+  </footer>
+
 </body>
 
 </html>

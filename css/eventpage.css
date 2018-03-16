@@ -6,31 +6,9 @@ html, body {
   scroll-behavior: smooth;
 }
 
-.hidden {
-  display: none;
-  opacity: 0;
-}
 .show{
   display: block;
   opacity: 1;
-}
-.header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-content: center;
-  width: 100%;
-  height: 60px;
-  background-color: #222;
-  color: #fff;
-}
-
-.header h2 {
-  margin: 0;
-  padding: 13px 18px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.7em;
-  font-weight: 100;
 }
 
 .header i {
@@ -41,35 +19,60 @@ html, body {
 #imageHolder {
   background-color: #eee;
   display: flex;
-  height: 200px;
+  justify-content: center;
+  height: 225px;
+  padding: 10px 0 10px;
 }
 
 .eventImage {
   height: 100%;
-  width: 100%;
+  width: 305px;
 }
 
-@media screen and (min-width: 500px){
+@media screen and (min-width: 620px){
   .eventImage, .googleMapImg {
     height: 100%;
-    width: 50%;
+    width: 305px;
+
   }
+
   #imageHolder {
     background-color: #eee;
     display: flex;
-    height: 230px;
+    height: 265px;
+    padding: 20px 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
+}
+
+#divBorderEventPage{
+    height: 5px;
+    width: 100%;
+    background-image: linear-gradient(93deg,rgba(108, 12, 204, 0.59) ,rgba(18, 163, 86, 0.65));
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 
 /* Real shit below */
 
-
+#eventHolder {
+  position: relative;
+}
+h2#mainCategory {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: -10px 25px !important;
+  font-size: 1.2em !important;
+  color: #4a4a4a;
+}
 
 #eventHolder > div > p {
   font-family: 'Roboto', sans-serif;
   padding: 0px;
-  margin: 0px 20px 0px;
+  margin: 0px 20px 10px;
 }
 #eventHolder #eventPlace {
   margin: 2px 21px 0px;
@@ -100,6 +103,12 @@ html, body {
 
 #eventInfoText {
   margin: 5px 0px 40px;
+}
+#eventInfoText span {
+  font-size: 0.8em;
+  color: #535353;
+  margin: 15px 0px 0px;
+  display: inline-block;
 }
 #eventDivButtons {
   text-align: center;
@@ -273,29 +282,54 @@ div.googleMapDiv > img {
   color: #777;
 }
 .moreMeetupInfoDiv > div > div > div.memberDiv > img {
+  cursor: pointer;
   margin: 0px 4px 4px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  background-color: #bcbcbc;
+  box-shadow: 1px 1px 2px #bdbdbd;
 }
+.addMemberDiv {
+  cursor: pointer;
+  margin: 0px 4px 4px;
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #8f8f8f;
+  box-shadow: 1px 1px 2px #bdbdbd;
+  border: 1px solid #5f5f5f;
+}
+.addMemberDiv:hover {
+  color: #686868;
+  border: 1px solid #444;
+  box-shadow: 1px 1px 3px #838383;
+}
+
+
 #meetupWrapper > div > div > div p.hoverMessage {
   display: none;
   background-color: #454545;
   position: absolute;
   color: #eee;
   margin: -66px 0px;
-  padding: 4px 9px;
-  border-radius: 7px;
   font-size: 0.8em;
+  padding: 5px 9px;
+  border-radius: 4px;
 }
 
-#meetupWrapper > div .moreMeetupInfoDiv > div > div > div.memberDiv > img:hover + .hoverMessage {
+#meetupWrapper > div .moreMeetupInfoDiv > div > div > div.memberDiv > img:hover + .hoverMessage, #meetupWrapper > div .moreMeetupInfoDiv > div > div > div.memberDiv > div:hover + .hoverMessage {
   display: block;
   opacity: 1;
 }
 
 /* Chatt css */
 .chattWrapperDiv {
+
   height: 230px;
   overflow: auto;
   width: calc(100% - 40px);
@@ -332,6 +366,43 @@ div.googleMapDiv > img {
   color: red;
 }
 
+/* Chat Icons */
+.chattWrapperDiv .mdi-wrench {
+  font-size: 0.8em;
+  margin-left: 2px;
+  vertical-align: 0.4pt;
+}
+.chattWrapperDiv .mdi-verified {
+  font-size: 0.9em;
+  margin-left: 1px;
+}
+.chattWrapperDiv .mdi-approval {
+  font-size: 0.9em;
+  margin-left: 1px;
+}
+
+/* Hover Message on icon */
+#meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i + span.hoverMessage {
+  padding: 3px 9px;
+  border-radius: 4px;
+  margin: -50px 4px;
+  vertical-align: 0px;
+  background-color: #505050;
+  color: #eee;
+  display: none;
+  z-index: 1;
+  position: relative;
+}
+
+#meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i:hover + span.hoverMessage, #meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i:focus + span.hoverMessage {
+  display: inline;
+  opacity: 1;
+}
+
+#meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i:hover ~ .mdi-approval,  #meetupWrapper > div .moreMeetupInfoDiv > div div.chattMessageDiv > div.messageWrapper i:focus ~ .mdi-approval{
+  display: none;
+}
+
 .messageWrapper {
   width: 100%;
   position: relative;
@@ -343,12 +414,14 @@ div.googleMapDiv > img {
   display: flex;
 }
 .textmessageWrapper span {
-  margin-bottom: -10px;
+  margin-bottom: -2px;
+  display: flex;
+  align-items: end;
 }
 .likeCount {
-  color: #b6b6b6;
+  color: #9b9b9b;
   font-size: 0.7em;
-  margin: 3px 1px 0px;
+  margin: 0px 2px -1px !important;
   display: inline-block;
   min-width: 5px;
   text-align: right;
@@ -377,7 +450,7 @@ div.googleMapDiv > img {
 }
 
 /* No Message */
-#meetupWrapper > div > div.moreMeetupInfoDiv p.noMessage {
+#meetupWrapper > div > div.moreMeetupInfoDiv > div p.noMessage:first-child {
   font-size: 1.3em;
   color: #ececec;
   width: auto;
@@ -386,17 +459,29 @@ div.googleMapDiv > img {
 }
 
 /* Inputbox */
-
-.chattWrapperDiv + input {
-  border: none;
-  outline: none;
-  color: #4A4A4A;
+.chattWrapperDiv + div.inputBoxWrapper {
+  color: #696969;
   border-top: 3px solid #cccc;
-  box-sizing: border-box;
   height: 45px;
-  padding: 10px 15px;
   width: calc(100% - 40px);
   align-self: center;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0px 15px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.chattWrapperDiv + div.inputBoxWrapper > input {
+  border: none;
+  outline: none;
+  flex: 1;
+  padding-right: 15px;
+}
+.chattWrapperDiv + div.inputBoxWrapper > div > i:hover, .chattWrapperDiv + div.inputBoxWrapper > div > i:focus {
+  cursor: pointer;
+  color: #7aba71;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -411,6 +496,107 @@ div.googleMapDiv > img {
 ::-ms-input-placeholder { /* Microsoft Edge */
     color: #ABABAB;
 }
+
+/* Css for the dropDownMenu */
+.dropDownWrapper {
+  font-family: 'Questrial', sans-serif;
+  font-size: 0.9em;
+  position: absolute;
+  margin: 57px 88px 0px;
+  box-shadow: 1px 1px 3px #c5c5c5;
+}
+
+.dropDownWrapper > ul {
+  margin: 0px;
+  padding: 0px;
+}
+.dropDownWrapper > ul > li {
+  cursor: pointer;
+  margin: 0px;
+  padding: 13px 18px;
+  color: #4a4a4a;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #efefef;
+}
+.dropDownWrapper > ul > li:hover {
+  color: #ededed;
+  background-color: #8f8f8f;
+  border-bottom: 1px solid #7e7e7e;
+}
+.dropDownWrapper > ul > li:last-child {
+  background-color: #ff8181;
+  color: #fbfbfb;
+}
+.dropDownWrapper > ul > li:last-child:hover {
+  background-color: #e86060;
+  color: #fbfbfb;
+  border-bottom: 1px solid #fbfbfb;
+}
+
+/* Css for the confirmModal */
+.confirmModal {
+  background-color: #fff;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  box-shadow: 1px 2px 6px #d4d4d4;
+}
+
+/* The Divs */
+.confirmModal > div:first-child {
+  background-color: #ec8282;
+  padding: 40px;
+  color: #fbfbfb;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+.confirmModal > div:first-child > p > i {
+  vertical-align: -7px;
+  margin: 0px 3px;
+}
+.confirmModal > div:last-child {
+  display: flex;
+  background-color: #222;
+  color: #fff;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+/* Buttons */
+.confirmModal > div:last-child > button {
+  cursor: pointer;
+  font-family: 'Questrial', sans-serif;
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 18px;
+  margin: 0;
+  font-size: 1em;
+}
+
+.confirmModal > div:last-child > button:first-child {
+  color: #ededed;
+  background-color: #767876;
+  border-bottom-left-radius: 4px;
+}
+.confirmModal > div:last-child > button:last-child  {
+  color: #585858;
+  background-color: #f2f2f2;
+  border-bottom-right-radius: 4px;
+}
+
+/* Hovers */
+.confirmModal > div:last-child > button:first-child:hover {
+  color: #ededed;
+  background-color: #626262;
+}
+.confirmModal > div:last-child > button:last-child:hover {
+  color: #1e1e1e;
+  background-color: #f8f8f8;
+}
+
+
 
 /* Animations */
 .spinner {
@@ -450,22 +636,6 @@ div.googleMapDiv > img {
   animation-delay: -0.8s;
 }
 
-@-webkit-keyframes sk-stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
-  20% { -webkit-transform: scaleY(1.0) }
-}
-
-@keyframes sk-stretchdelay {
-  0%, 40%, 100% {
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% {
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
-}
-
-
 .addressCard > p {
   display: none;
   opacity: 0;
@@ -485,7 +655,23 @@ div.googleMapDiv > img {
   -webkit-animation-iteration-count: 1;
   -webkit-animation-delay: .2s
 }
+
 /* Animation for overlay */
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% {
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
 
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes fade-out {
@@ -506,6 +692,39 @@ div.googleMapDiv > img {
   .purple.editBtn {
     display: none;
   }
+
+  /* CSS for editBtn dropdown */
+  .dropDownWrapper {
+    margin: 5px;
+    top: 0;
+    right: 0;
+    position: absolute;
+    z-index: 2;
+    box-shadow: -3px 5px 7px #bcbcbc;
+    animation-name: fadein;
+    animation-duration: 0.5s;
+  }
+  .dropDownWrapper > ul > li {
+    padding: 17px 35px;
+    margin: 0px;
+    color: #6e6e6e;
+    background-color: #fff;
+    border-bottom: 1px solid #efefef;
+  }
+  .dropDownWrapper > ul > li:first-child {
+    border-top: 2px solid #878787;
+  }
+  .dropDownWrapper > ul > li:hover {
+    color: #222;
+    background-color: #fff;
+    border-bottom: 1px solid #efefef;
+  }
+  /* Css for the confirmModal */
+  .confirmModal {
+    width: calc(100% - 80px);
+    margin: 20px auto;
+  }
+
   .iconBtn.editBtn {
     outline: none;
     margin: 14px 6px;
@@ -518,24 +737,35 @@ div.googleMapDiv > img {
     right: 0;
     border: none;
     }
+    .iconBtn.editBtn:focus {
+      color: #757575;
+    }
     #meetupWrapper > div {
       position: relative;
     }
   }
-
+  #meetupWrapper > div div.meetupInfo p:nth-child(2){
+    word-wrap: break-word;
+    max-height: 337px;
+    overflow-y: auto;
+  }
 
 /* MEDIA QUERIES ENSKILT EVENT */
 @media screen and (min-width: 1000px){
 
-  .iconBtn.editBtn {
-    display: none;
+
+  /* Entire Meetup */
+  #meetupWrapper > div {
+    position: relative;
+    padding: 15px 0px 30px 30px;
   }
 
+
   #meetupWrapper > div div.meetupInfo p:nth-child(2){
-    max-width: 300px;
-  }
-  #meetupWrapper > div > div p {
-    max-width: 200px;
+    max-width: 370px;
+    word-wrap: break-word;
+    max-height: 337px;
+    overflow-y: auto;
   }
 
   div.meetupInfo {
@@ -553,6 +783,7 @@ div.googleMapDiv > img {
   }
   .purple.editBtn {
     width: auto;
+    min-width: 140px;
     margin: 20px 0px 35px 88px;
     box-shadow: 1px 1px 3px #cbcbcb;
     padding: 9px 14px;
@@ -565,6 +796,7 @@ div.googleMapDiv > img {
     background-color: #fff;
     color: #2d2d2d;
   }
+  /* addressCard */
   .addressCard {
     display: inline-block;
     opacity: 1;
@@ -572,7 +804,7 @@ div.googleMapDiv > img {
     right: 0;
     top: 0;
     width: 18%;
-    margin: 42px 50px;
+    margin: 42px 90px 42px 50px;
     background-color: #f3f3f3;
     padding: 5px 20px 0px;
     border-radius: 7px;
@@ -594,11 +826,13 @@ div.googleMapDiv > img {
     color: #555;
   }
 
+  /* The Creator Div */
   #meetupWrapper > div > div.creatorDiv {
     margin: 5px 0px -22px;
     max-width: 30%;
   }
 
+  /* Google Map */
   .googleMapDiv {
     margin: -7px -20px -28px;
   }
@@ -606,25 +840,52 @@ div.googleMapDiv > img {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
   }
-  #meetupWrapper > div {
-    position: relative;
-    padding: 15px 0px 15px 30px;
-    min-height: 485px;
-  }
 
   #meetupWrapper, #eventHolder {
     max-width: 1200px;
     margin: 0px auto 0px;
   }
 
+  /* background-color on body (??) */
   body {
     background-color: #fafafa;
   }
 
   /* Css for the chatt and members */
-  /* start by fixing the heart */
 
   #meetupWrapper > div > div div.textmessageWrapper p {
     max-width: 100%;
+  }
+
+  .moreMeetupInfoDiv {
+    display: flex;
+    flex-direction: row;
+    margin-top: 90px;
+    justify-content: center;
+  }
+  .moreMeetupInfoDiv > div {
+    flex: 1;
+    margin: 0px 70px;
+  }
+
+  .moreMeetupInfoDiv > div.chatWrapperWithLabel {
+    flex: 2;
+  }
+
+  /* Edit Button */
+  .iconBtn.editBtn {
+    display: none;
+  }
+  /* Join Button */
+  .btnHolder {
+    margin: 48px 0px -30px 90px;
+  }
+
+  /* Leave Meetup Btn */
+  button.leaveMeetupBtn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 3px 0px 30px 119px;
   }
 }
