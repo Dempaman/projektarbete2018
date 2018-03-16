@@ -454,7 +454,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         //Annas kod
         eDay.innerText =  `${day}`;
         eMonth.innerText = `${month}`;
-        eMeetUps.innerHTML = ` <i class="fas fa-users fa-1x"></i>`;
+        eMeetUps.innerHTML = ` <i class="mdi mdi-account-multiple mdi-24px"></i>`;
         meetups.innerHTML = ``;
 
 

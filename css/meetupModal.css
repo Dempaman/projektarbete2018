@@ -31,6 +31,10 @@ button.verifySend:hover {
 }
 button.logInBtn {
   background-color: #a0bf9e;
+  position: static;
+  bottom: auto;
+  left: auto;
+  margin: 5px auto 40px;
 }
 .content > button.logInBtn:hover {
   background-color: #a9c3a9;
@@ -164,7 +168,7 @@ button.logInBtn {
   border-radius: 2px;
   padding: 5px 12px;
   margin: -9px auto -50px;
-  max-width: 28px;
+  max-width: 55px;
 }
 #textareaDiv {
   width: 90%;
