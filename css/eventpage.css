@@ -404,7 +404,7 @@ div.googleMapDiv > img {
 }
 
 .messageWrapper {
-  width: 100%;
+  width: calc(100% - 65px);
   position: relative;
   border-radius: 5px;
   background-color: #f2f2f2;
@@ -412,6 +412,7 @@ div.googleMapDiv > img {
 }
 .textmessageWrapper {
   display: flex;
+  word-wrap: break-word;
 }
 .textmessageWrapper span {
   margin-bottom: -2px;
@@ -439,9 +440,8 @@ div.googleMapDiv > img {
 }
 
 #meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:first-child {
-  width: 0;
   margin: 0px 4px;
-  width: 100%;
+  width: calc(100% - 33px);
 }
 #meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:last-child {
   margin: 0px 3px;
