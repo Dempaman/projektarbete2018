@@ -273,6 +273,8 @@ div.googleMapDiv > img {
   margin: 9px 15px;
   display: flex;
   flex-wrap: wrap;
+  max-height: 230px;
+  overflow: auto;
 }
 #meetupWrapper > div .membersWrappingDiv + p {
   margin-top: 12px;
@@ -404,7 +406,7 @@ div.googleMapDiv > img {
 }
 
 .messageWrapper {
-  width: 100%;
+  width: calc(100% - 65px);
   position: relative;
   border-radius: 5px;
   background-color: #f2f2f2;
@@ -412,6 +414,7 @@ div.googleMapDiv > img {
 }
 .textmessageWrapper {
   display: flex;
+  word-wrap: break-word;
 }
 .textmessageWrapper span {
   margin-bottom: -2px;
@@ -439,9 +442,8 @@ div.googleMapDiv > img {
 }
 
 #meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:first-child {
-  width: 0;
   margin: 0px 4px;
-  width: 100%;
+  width: calc(100% - 33px);
 }
 #meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:last-child {
   margin: 0px 3px;
@@ -865,7 +867,7 @@ div.googleMapDiv > img {
   }
   .moreMeetupInfoDiv > div {
     flex: 1;
-    margin: 0px 70px;
+    margin-right: 70px;
   }
 
   .moreMeetupInfoDiv > div.chatWrapperWithLabel {
@@ -886,6 +888,6 @@ div.googleMapDiv > img {
     position: absolute;
     bottom: 0;
     left: 0;
-    margin: 3px 0px 30px 119px;
+    margin: 3px 0px 50px 119px;
   }
 }
