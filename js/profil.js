@@ -1,5 +1,8 @@
 window.addEventListener('load', profilFunction);
 
+//eventpage.html?eventid=501710&meetup=-z1458127xasd
+//VIKTIG
+
 
 // EXTRA CODE SAVE JUST IN charse
 // db.ref('users/'+this.creator.uniqueID+'/createdMeetups').on('child_added', function(snapshot){
@@ -132,18 +135,41 @@ function ifUserIsTrue() {
     db.ref('users/' + uniqueID + '/createdMeetups').on('value', function(snapshot) {
       // child_added
       let eventObjects = snapshot.val();
-      let eventID = snapshot.key;
+      //let eventID = snapshot.key;
 
       if (eventObjects) {
         let counter = 0;
+        let eventId;
+        let meetupId;
         for (let obj in eventObjects) {
           counter += Object.keys(eventObjects[obj]).length;
-          //let currentEvent = eventObjects[obj];
+
+          eventId = obj;
+          meetupId = eventObjects[obj];
+
+          let list = [];
+          for (let x in meetupId) {
+            console.log('x is ', x);
+          }
+
+
+          console.log('event id ',eventId);
+          console.log('meetupid ', meetupId);
+
+          db.ref('meetups/' +  eventId).on('value', function(snapshot){
+            let snap = snapshot.val();
+
+              console.log(snap);
+          });
+          let currentEvent = eventObjects[obj];
+
+
 
           // Lägg till html kod som ska loppa igenom alla meetups
 
-          console.log('eventObj ', obj);
-          console.log('eventObjects ', Object.keys(eventObjects[obj]).length);
+          console.log('userLog skapade meetups obj = ', obj);
+          console.log('userLog skapade meetups eventObjects = ', eventObjects[obj]);
+          //console.log('eventObjects ', Object.keys(eventObjects[obj]).length);
         }
           createdCount.innerText = counter;
       }
