@@ -6,23 +6,6 @@ html * {
 html{
   scroll-behavior: smooth;
 }
-#menu li:hover>a {
-	transition: 0.3s;
-	color: #6C0CCC;
-}
-
-#helloUser{
-  position: absolute;
-  left: 80px;
-	padding: 17px 0;
-	font-size: 1.2em;
-  /* text-transform: uppercase; */
-}
-#userName{
-  color:#fff;
-  font-weight: 600;
-  /* text-transform: uppercase; */
-}
 
 .eventLink {
 	position: absolute;

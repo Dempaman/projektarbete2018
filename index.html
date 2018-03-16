@@ -8,11 +8,12 @@
 
   <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
   <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-  <script src="js/index.js"></script>
 
   <script src="js/classes.js"></script>
   <script src="js/loginModal.js"></script>
   <script src="js/menu.js"></script>
+  <script src="js/faq.js"></script>
+  <script src="js/index.js"></script>
 
   <!-- Stylesheet -->
 
@@ -20,18 +21,18 @@
   <link rel="stylesheet" type="text/css" href="css/eventpage.css">
   <link rel="stylesheet" type="text/css" href="css/createUser.css">
   <link rel="stylesheet" type="text/css" href="css/loginModal.css">
-
+  <link rel="stylesheet" href="css/faq.css">
   <link rel="stylesheet" href="css/evenemangskort.css">
-  <link rel="stylesheet" href="css/headstyle.css" type="text/css">
-  <link rel="stylesheet" href="css/menu.css" type="text/css">
   <link rel="stylesheet" href="css/footer.css" type="text/css">
+  <link rel="stylesheet" href="css/menu.css" type="text/css">
+  <link rel="stylesheet" href="css/headstyle.css" type="text/css">
   <link rel="stylesheet" href="css/index.css">
 
 
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
 
-  <title>meWent | Välkommen</title>
+  <title>MeWent | Välkommen</title>
 
 </head>
 <body>
@@ -39,7 +40,7 @@
   <nav id="navigation">
     <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
     <div class="header">
-      <img src="img/logo-design3.png" alt="Event">
+    <a href="/index.html"> <img src="img/logo-design3.png" alt="Event"></a> 
       <div id="helloUser" class="hidden">
         <span id="userName"></span>
         <span id="notificationBell" class="hidden">
@@ -48,7 +49,7 @@
       </div>
       <!-- HTML för desktopläge i nav -->
       <ul class="deskNav">
-        <a href="/index.html" class="active"><li>HEM</li></a>
+        <a href="/index.html"><li>HEM</li></a>
         <a href="/profil.html"><li id="myProfile" class="hidden">MIN PROFIL</li></a>
         <a href="/events.html"><li>ALLA EVENTS</li></a>
         <a href="#contactUs"><li>KONTAKTA OSS</li></a>
@@ -129,7 +130,7 @@
               <ul>
                 <li><a href="/index.html">HEM</a></li>
                 <li><a href="/events.html">ALLA EVENTS</a></li>
-                <li><a href="#contactUs">FAQ</a></li>
+                <li><a id="faqBtn" href="#contactUs">FAQ</a></li>
                 <!-- <li class="loginInMenu"><a>LOGGA IN</a></li> -->
 
               </ul>
