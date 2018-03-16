@@ -19,7 +19,7 @@ span.loginModalCloseButton {
 
 .centered {
   position: fixed;
-  top: 51%;
+  top: 54%;
   left: 50%;
   transform: translate(-50%, -50%);
   /*bottom: 0px;*/
@@ -29,8 +29,7 @@ span.loginModalCloseButton {
   width: 100%;
   font-family: 'Roboto', sans-serif;
   font-size: 1.2em;
-  padding: 25px 0px 20px;
-  margin-top: 10px;
+  padding: 0 0px 20px;
 }
 
 #lmw button {
