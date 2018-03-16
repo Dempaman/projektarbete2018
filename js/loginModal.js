@@ -12,6 +12,11 @@ firebase.auth().getRedirectResult().then(function(result) {
 firebase.auth().onAuthStateChanged(user => {
   console.log('AUTH STATE CHANGE FOUND!');
   if(user) {
+    if(!user.displayName){
+      console.log('No fucking displayName');
+      return false;
+    }
+
     if(document.getElementById('lmw')){
     }
     //window.location = 'eventpage.html'; //After successful login, user will be redirected to home.html
@@ -41,6 +46,7 @@ firebase.auth().onAuthStateChanged(user => {
         }
       }
     });
+
     // The user is logged in.
     console.log('User data:',user);
     //Annas magic
@@ -406,7 +412,8 @@ function retrieveLoginModalContent(){
         .then(function(){
           var user = firebase.auth().currentUser;
               user.updateProfile({
-              displayName: name
+              displayName: name,
+              photoURL: '/img/user.png'
               }).then(function() {
                 location.reload(); //Laddar om sidan
               }).catch(function(error) {
