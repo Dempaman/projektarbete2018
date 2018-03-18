@@ -146,7 +146,7 @@
       eventDiv.appendChild(eMeetUps);
       testOutPut.appendChild(eventDiv);
     }
-  })
+  }) //windows listener end
 
   /* Funktion för meetups  */
   function setMeetupCount(eventID, meetUps) {
@@ -161,3 +161,4 @@
         meetUps.innerHTML = `<i class="mdi mdi-account-multiple mdi-24px"></i>`;
       }
     });
+}
