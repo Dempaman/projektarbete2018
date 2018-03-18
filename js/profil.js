@@ -1,5 +1,8 @@
 window.addEventListener('load', profilFunction);
 
+//eventpage.html?eventid=501710&meetup=-z1458127xasd
+//VIKTIG
+
 
 // EXTRA CODE SAVE JUST IN charse
 // db.ref('users/'+this.creator.uniqueID+'/createdMeetups').on('child_added', function(snapshot){
@@ -50,6 +53,7 @@ function ifUserIsTrue() {
   let userImg = document.getElementById('user-img');
   let meetupCount = document.getElementById('user-joind-meetups');
   let createdCount = document.getElementById('user-created-meetups');
+  let createdContainer = document.getElementsByClassName('created-meetups-container')[0];
 
   // variable för att spara och föra vidare data
   let data;
@@ -65,56 +69,113 @@ function ifUserIsTrue() {
 
   // användarens sid ID querystring
   const pageUserId = window.location.href.split('?sid=')[1];
-  console.log(pageUserId);
+  //console.log(pageUserId);
 
   if (pageUserId && userLog) {
 
-    db.ref('/users/').on('value', function(snapshot){
+    db.ref('/users/').on('value', function(snapshot) {
       let allUsers = snapshot.val();
 
       for (let x in allUsers) {
-
         if (allUsers[x].sid === pageUserId) {
 
           console.log(allUsers[x]);
 
-            userName.innerText = allUsers[x].fullname;
-            userImg.src = allUsers[x].avatarURL;
-            uniqueID = allUsers[x].uniqueID;
+          userName.innerText = allUsers[x].fullname;
+          userImg.src = allUsers[x].avatarURL;
+          uniqueID = allUsers[x].uniqueID;
 
-            userCreated = allUsers[x].createdMeetups;
-            meetups = allUsers[x].meetups;
-            console.log(meetups);
+          userCreated = allUsers[x].createdMeetups;
+          meetups = allUsers[x].meetups;
+          //  console.log(meetups);
 
-            if (userCreated) {
-              let counter = 0;
-              for (let obj in userCreated) {
-                counter += Object.keys(userCreated[obj]).length;
-                //let currentEvent = eventObjects[obj];
+          if (userCreated) {
+            let counter = 0;
+            let otherEventId;
+            let otherMeetUpId;
+            for (let obj in userCreated) {
+              counter += Object.keys(userCreated[obj]).length;
 
-                // Lägg till html kod som ska loppa igenom alla meetups
+              otherEventId = obj;
+              otherMeetUpId = userCreated[obj];
 
-                console.log('eventObj ', obj);
-                console.log('eventObjects ', Object.keys(userCreated[obj]).length);
+              for (let z in otherMeetUpId) {
+
+                db.ref('meetups/' + otherEventId).on('value', function(snapshot) {
+                  let snap = snapshot.val();
+                  console.log(z);
+                  console.log(snap[z]);
+                  if (z) {
+                    let div = document.createElement('div');
+                    div.className = "single-meetup";
+                    div.innerHTML = `<div class="event-backgound">
+                        <div class="meetup-holder">
+                          <p class="meetup-min">Meetup</p>
+
+                            <p class="meetup-name">${snap[z].name}</p>
+                            <p class="hide">${snap[z].name}<br> <br>
+                                ~ Av ${snap[z].creator.fullname}
+                             </p>
+                          <p class="meetup-creator">~ Av ${snap[z].creator.fullname}</p>
+                        </div>
+                      </div>
+                      <div class="text-holder">
+                        <div class="img-holder">
+                          <img id="meetup-img" src="${snap[z].creator.avatarURL}">
+                        </div>
+                        <div class="user-meetup-text">
+                          <div class="event-holder">
+                            <p class="min-text">Event</p>
+                            <p class="main-text">eventnamn</p>
+                            <p class="hide-small">eventnamn</p>
+                          </div>
+                          <div class="time-holder">
+                            <p class="min-text">Tid</p>
+                            <p class="main-text">${snap[z].time}</p>
+                          </div>
+                          <div class="adress-holder">
+                            <p class="min-text">Adress</p>
+                            <p class="main-text">${snap[z].address}</p>
+                            <p class="hide-small">${snap[z].address}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="change-status">
+                        <a href="eventpage.html?eventid=${snap[z].eventID}&meetup=${z}">Gå till Meetup > </a>
+                      </div>`;
+
+                    createdContainer.appendChild(div);
+                  }
+                });
               }
-                createdCount.innerText = counter;
+
+              console.log('other user obj ', obj);
+              console.log('other user userCreated[obj] ', userCreated[obj]);
+              //let currentEvent = eventObjects[obj];
+
+              // Lägg till html kod som ska loppa igenom alla meetups
+
+              // console.log('eventObj ', obj);
+              // console.log('eventObjects ', Object.keys(userCreated[obj]).length);
             }
+            createdCount.innerText = counter;
+          }
 
-            if (meetups) {
-              let secondCounter = 0;
-              for (let obj in meetups) {
-                secondCounter += Object.keys(meetups[obj]).length;
-                //let currentEvent = eventObjects[obj];
+          if (meetups) {
+            let secondCounter = 0;
+            for (let obj in meetups) {
+              secondCounter += Object.keys(meetups[obj]).length;
+              //let currentEvent = eventObjects[obj];
 
-                // Lägg till html kod som ska loppa igenom alla meetups
+              // Lägg till html kod som ska loppa igenom alla meetups
 
-                console.log('meetups ', obj);
-                console.log('meetups ', Object.keys(meetups[obj]).length);
-              }
-                meetupCount.innerText = secondCounter;
+              console.log('meetups ', obj);
+              console.log('meetups ', Object.keys(meetups[obj]).length);
             }
+            meetupCount.innerText = secondCounter;
+          }
 
-        }else {
+        } else {
           console.log('not user');
         }
       }
@@ -122,40 +183,87 @@ function ifUserIsTrue() {
 
     });
 
-  }else if (userLog ) {
+  } else if (userLog) {
 
+    // Form information
     userName.innerText = userLog.fullname;
     userImg.src = userLog.avatarURL;
     uniqueID = userLog.uniqueID;
 
     // Hämta alla skapade Meetups
     db.ref('users/' + uniqueID + '/createdMeetups').on('value', function(snapshot) {
-      // child_added
       let eventObjects = snapshot.val();
-      let eventID = snapshot.key;
 
       if (eventObjects) {
         let counter = 0;
+        let eventId;
+        let meetupId;
         for (let obj in eventObjects) {
           counter += Object.keys(eventObjects[obj]).length;
-          //let currentEvent = eventObjects[obj];
 
-          // Lägg till html kod som ska loppa igenom alla meetups
+          eventId = obj;
+          meetupId = eventObjects[obj];
 
-          console.log('eventObj ', obj);
-          console.log('eventObjects ', Object.keys(eventObjects[obj]).length);
+          for (let x in meetupId) {
+
+            db.ref('meetups/' + eventId).on('value', function(snapshot) {
+              let snap = snapshot.val();
+
+              if (x) {
+                let div = document.createElement('div');
+                div.className = "single-meetup";
+                div.innerHTML = `<div class="event-backgound">
+                    <div class="meetup-holder">
+                      <p class="meetup-min">Meetup</p>
+
+                        <p class="meetup-name">${snap[x].name}</p>
+                        <p class="hide">${snap[x].name}<br> <br>
+                            ~ Av ${snap[x].creator.fullname}
+                         </p>
+                      <p class="meetup-creator">~ Av ${snap[x].creator.fullname}</p>
+                    </div>
+                  </div>
+                  <div class="text-holder">
+                    <div class="img-holder">
+                      <img id="meetup-img" src="${snap[x].creator.avatarURL}">
+                    </div>
+                    <div class="user-meetup-text">
+                      <div class="event-holder">
+                        <p class="min-text">Event</p>
+                        <p class="main-text">eventnamn</p>
+                        <p class="hide-small">eventnamn</p>
+                      </div>
+                      <div class="time-holder">
+                        <p class="min-text">Tid</p>
+                        <p class="main-text">${snap[x].time}</p>
+                      </div>
+                      <div class="adress-holder">
+                        <p class="min-text">Adress</p>
+                        <p class="main-text">${snap[x].address}</p>
+                        <p class="hide-small">${snap[x].address}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="change-status">
+                    <a href="eventpage.html?eventid=${snap[x].eventID}&meetup=${x}">Gå till Meetup > </a>
+                  </div>`;
+
+                createdContainer.appendChild(div);
+              }
+            });
+          } // THE END OF THE ADDED CREATED MEETUPCARD
         }
-          createdCount.innerText = counter;
+        createdCount.innerText = counter;
       }
 
-    });
+    }); // THE END OF Hämta alla skapade Meetups :)
 
     // Hämta alla anmälda Meetups
     db.ref('users/' + uniqueID + '/meetups').on('value', function(snapshot) {
       // child_added
       let meetupsJoind = snapshot.val();
-      let eventID = snapshot.key;
-      console.log(meetupsJoind);
+      //let eventID = snapshot.key;
+      //console.log(meetupsJoind);
 
       if (meetupsJoind) {
         let counter = 0;
@@ -165,16 +273,16 @@ function ifUserIsTrue() {
 
           // Lägg till html kod som ska loppa igenom alla meetups
 
-          console.log('meetup obj ', obj);
-          console.log('meetupsJoind ', Object.keys(meetupsJoind[obj]).length);
+          // console.log('meetup obj ', obj);
+          // console.log('meetupsJoind ', Object.keys(meetupsJoind[obj]).length);
         }
-          meetupCount.innerText = counter;
+        meetupCount.innerText = counter;
 
       }
     });
 
 
-  }else {
+  } else {
     console.log('Sorry! No Web Storage support');
     //let indexPage = '/index.html';
     //let testLocalHost = window.location.protocol + '//' + window.location.hostname + ':8000' + indexPage;
@@ -338,13 +446,13 @@ function profilFunction(event) {
   } // End of -To checkout meetups or remove them - hidden nav
 
   let userEdit = document.getElementById('tellMeMore');
-console.log('userEdit ' + userEdit);
+  console.log('userEdit ' + userEdit);
   userEdit.addEventListener('click', function(event) {
     console.log(event.type);
 
     if (document.getElementsByClassName('user-story')[0].style.display === 'none') {
       document.getElementsByClassName('user-story')[0].style.display = 'block';
-    }else {
+    } else {
       document.getElementsByClassName('user-story')[0].style.display = 'none';
     }
 

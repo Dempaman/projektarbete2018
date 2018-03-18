@@ -370,7 +370,8 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
       // Uppdaterar tid! - Splittar datumet för att kunna plocka bort tiden. Uppdaterar den sedan.
       let childOne = meetupWrapper.children[1];
-      childOne.innerText = childOne.innerText.split(' - ')[0] + ' - ' + meetup.time;
+      let timeStr = childOne.innerText.split(' - ')[0] + ' - ' + meetup.time;
+      childOne.innerText = timeStr;
 
       let creatorDiv = meetupWrapper.children[2];
       //Img of the user avatar
@@ -399,8 +400,17 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
       let adressDiv = meetupWrapper.children[5];
       adressDiv.children[1].innerText = meetup.address;
 
-      // Google map is meetupWrapper.children[6]
+      // Address card is meetupWrapper.children[6]
+      let addressCard = meetupWrapper.children[6];
 
+      let addressCardPlace = addressCard.children[1];
+      addressCardPlace.innerText = meetup.placeName;
+
+      let addressCardAdress = addressCard.children[3];
+      addressCardAdress.innerText = meetup.address;
+
+      let dateAndTime = addressCard.children[5];
+      dateAndTime.innerText = timeStr;
 
       let infoBox = meetupWrapper.children[7];
       infoBox.children[1].innerText = meetup.info;
@@ -701,11 +711,14 @@ function createMessage(event, sendBtn = false){
       updateTimeStamps();
       // Some easy checks.
       if(target.value == "" || target.value == undefined || target.value == " "){
+        printMessage('warn', 'Du behöver specificera ett meddelande');
         console.log('No message specified!');
-      } else if(target.value.length < 3){
+      } else if(target.value.length < 2){
         console.log('Message too short!');
-      } else if(target.value.length > 200){
+        printMessage('warn', 'Meddelandet är lite kort');
+      } else if(target.value.length > 600){
         console.log('Message too long!');
+        printMessage('warn', 'Meddelandet är lite långt');
       } else {
         // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
         let textmessage = target.value;
@@ -1733,7 +1746,7 @@ function inviteFriend(event){
   // console.log('Key is: ', target.meetupKey);
   // console.log('Event target is: ', event.target);
   //printMessage('error', 'You cannot invite friends yet, sorry :(');
-  displayInviteFriends(event);
+  displayInviteFriends(event, target.meetupKey);
 }
 
 function gotoProfile(event){
@@ -1741,6 +1754,7 @@ function gotoProfile(event){
 }
 
 // function to popup the userProfile when pressed on their avatar.
+let localFriendList = [];
 function popupProfile(event, eventID, meetupKey){
   let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
   let user = {
@@ -1794,14 +1808,16 @@ function popupProfile(event, eventID, meetupKey){
   /* Some small checks */
   if(user.sid){
     if(localUser){
-      if(localUser.sid == user.sid || friendList.includes(user.sid)){
+      if(localUser.sid == user.sid || friendList.includes(user.sid) || localFriendList.includes(user.sid)){
         addFriendBtn.className = 'disabledBtn doNotCloseThis';
-        console.log('You are already friends! Or this is u..');
-        console.log('localUser sid: ', localUser.sid, 'userSid: ', user.sid);
-
+        // console.log('You are already friends! Or this is u..');
+        // console.log('localUser sid: ', localUser.sid, 'userSid: ', user.sid);
+        console.log('localFriendList: ', localFriendList);
       } else {
         addFriendBtn.addEventListener('click', function(){
-
+          // console.log('LOCALUSER', localUser);
+          // console.log('JUST USER: ', user);
+          localFriendList.push(user.sid);
           sendNotification(user.sid, 'friendRequest');
 
           addFriend(user.sid);
@@ -1903,9 +1919,10 @@ function addFriend(sid){
   }
 }
 
-function displayInviteFriends(event){
+function displayInviteFriends(event, meetupKey){
   let array = [];
-  downloadUsersToArray(array);
+  /* Retrieve all the users in the databse and put them in an array */
+  downloadUsersToArray(meetupKey, array);
   let friendWrapper = document.createElement('div');
   friendWrapper.className = 'friendWrapper';
   let friendTitle = document.createElement('h2');
@@ -1948,17 +1965,19 @@ function displayInviteFriends(event){
 
   let closeWrapperBtn = document.createElement('div');
   closeWrapperBtn.className = 'closeWrapperBtn';
-  closeWrapperBtn.innerText = 'Stäng';
+  closeWrapperBtn.innerHTML = '<i class="mdi mdi-close mdi-30px"></i>';
 
 
   let friendList = retrieveFriends();
 
   searchBtn.addEventListener('click', function(e){
     displayInviteFriendsResults(e, array, resultDiv, true);
+    console.log('Search btn pressed! array contains: ', array);
   })
 
   searchBar.addEventListener('change', function(e){
     displayInviteFriendsResults(e, array, resultDiv);
+    console.log('SearchBAR! array contains: ', array);
   });
 
   /* Append Everything */
@@ -1976,9 +1995,10 @@ function displayInviteFriends(event){
 
 }
 
+/* This function displays possible invites and displays them in htmlobj-"printList" */
 function displayInviteFriendsResults(event, searchArray, printList, btn){
   let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
-  /* check if it's empty first */
+  /* Check searchStr, if it's empty show all*/
   let friendList = retrieveFriends();
   if(searchArray.length){
     let searchStr;
@@ -2015,10 +2035,12 @@ function displayInviteFriendsResults(event, searchArray, printList, btn){
       let sid = user.sid;
       let friend = false;
 
+      /* Check if logged in */
       if(localUser){
         if(user.uniqueID == localUser.uniqueID){
-          /* do not show the user at all*/
+          /* User is localUser, don't show. */
           continue;
+          /* Check if the user is already in the meetup. */
         }
       }
 
@@ -2073,7 +2095,7 @@ function displayInviteFriendsResults(event, searchArray, printList, btn){
       printMessage('error', 'Vi kunde tyvärr inte hitta en användare :(', undefined, undefined, 1);
     }
   } else {
-    printMessage('error', 'Sorry, we couldn\t find any users :(');
+    printMessage('error', 'Tyvärr kunde vi inte hitta någon att bjuda in!');
   }
 }
 
@@ -2139,12 +2161,35 @@ function displayMatch(user, printList, friend, foundBySid = false){
 
 }
 
-function downloadUsersToArray(array){
-  db.ref('users/').on('child_added', function(snapshot){
-    let user = snapshot.val();
+function downloadUsersToArray(meetupKey, array){
+  let eventid = getLocationInfo()[0];
+  /* Only put those who is not in the meetup. */
+  let meetupMembers = [];
+  db.ref('meetups/' + eventid + '/' + meetupKey + '/members').once('value', function(snapshot){
 
-    array.push(user);
+    let data = snapshot.val();
+    console.log('Members in this meetup are: ', data);
+    for(let member in data){
+      let user = data[member];
+      meetupMembers.push(user.uniqueID);
+    }
+
+    console.log('ids: ', meetupMembers);
+
+    db.ref('users/').on('child_added', function(snap){
+      let compareUser = snap.val();
+
+      if(meetupMembers.includes(compareUser.uniqueID)){
+        console.log('Do not push this person');
+      } else {
+        console.log('Push this person!');
+        array.push(compareUser);
+        console.log('Array now contains: ', array);
+      }
+    });
+
   });
+
 }
 
 /* This function sends a notification to someone. Either by SID or uniqueID. */

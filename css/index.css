@@ -113,9 +113,7 @@ h2{
 
 /* desktop */
 @media screen and (min-width: 1025px){
-  background-img{
-    background-attachment: fixed;
-  }
+
   .logo-landing{
     margin-top: 5rem;
     height: auto;

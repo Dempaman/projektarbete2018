@@ -74,10 +74,14 @@ a {
 	align-items: center;
 	border-bottom: 1px solid #e0e0e0;
 	box-shadow: 0px 1px 5px #909090;
+	position: fixed;
+	width: 100%;
+	z-index: 20;
 }
 /* Notificationwrapper Content */
 #notificationList {
 	margin: 10px;
+	margin-top: 70px;
 }
 #navigation #notificationList img {
 	margin: 0px;
@@ -320,7 +324,7 @@ a {
 #ingaNotifikationer {
 	display: block;
 	text-align: center;
-	margin: 60px 0px;
+	padding: 60px 0px;
 	font-family: 'Montserrat', sans-serif;
 }
 /* #ingaNotifikationer.hidden {
@@ -330,6 +334,10 @@ a {
 @media all and (min-width: 1101px) {
 	#menuToggle {
 		display: none
+	}
+	#notificationWrapper > div:first-child {
+		position: static;
+		width: auto;
 	}
 
 	/* Notifications MEDIQ QUERIES */
@@ -343,5 +351,16 @@ a {
 	}
 	#notificationWrapper h2 {
 		font-size: 1.3em;
+	}
+	#notificationList {
+		overflow: auto;
+		height: 415px;
+		margin: 10px 0px 5px;
+	}
+#notificationList > div:nth-child(odd) {
+		margin: 5px 10px;
+	}
+#notificationList > div:nth-child(even) {
+		margin: 5px 10px;
 	}
 }
