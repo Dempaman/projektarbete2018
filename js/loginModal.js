@@ -12,6 +12,11 @@ firebase.auth().getRedirectResult().then(function(result) {
 firebase.auth().onAuthStateChanged(user => {
   console.log('AUTH STATE CHANGE FOUND!');
   if(user) {
+    if(!user.displayName){
+      console.log('No fucking displayName');
+      return false;
+    }
+
     if(document.getElementById('lmw')){
     }
     //window.location = 'eventpage.html'; //After successful login, user will be redirected to home.html
@@ -41,6 +46,7 @@ firebase.auth().onAuthStateChanged(user => {
         }
       }
     });
+
     // The user is logged in.
     console.log('User data:',user);
     //Annas magic
@@ -406,7 +412,8 @@ function retrieveLoginModalContent(){
         .then(function(){
           var user = firebase.auth().currentUser;
               user.updateProfile({
-              displayName: name
+              displayName: name,
+              photoURL: '/img/user.png'
               }).then(function() {
                 location.reload(); //Laddar om sidan
               }).catch(function(error) {
@@ -887,35 +894,43 @@ function chatMessageTimeStamp(timeStamp){
 function joinMeetup(user, meetupKey, eventID){
 
   // joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
-  db.ref('meetups/' + eventID + '/' + meetupKey + '/members').once('value', function(snap){
+  db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snap){
 
     let data = snap.val();
-    let userIsNotComing = false;
+    let userIsComing = false;
+    let members = data.members;
+    let spots = data.spots, counter = 0;
 
-    for(let comingUser in data){
-      if(data[comingUser].uniqueID == user.uniqueID) {
-        userIsNotComing = true;
+    for(let comingUser in members){
+      counter++;
+      if(members[comingUser].uniqueID == user.uniqueID) {
+        userIsComing = true;
+        console.log('You are coming to this already!!');
       }
     }
 
-    let userObject = {
-      uniqueID: user.uniqueID,
-      sid: user.sid,
-      fullname: user.fullname,
-      avatarURL: user.avatarURL,
-      joined: firebase.database.ServerValue.TIMESTAMP
-    }
-    console.log('DATA IS: ', data);
-    if(!userIsNotComing){
-      db.ref('meetups/' + eventID + '/' + meetupKey + '/members').push(userObject);
-      console.log('Vi la till dig i meetupet!');
-      new SystemMessage(meetupKey, userObject.fullname + ' gick med i meetupet.').push();
-      printMessage('success', 'Du gick med i meetupet');
+    if(counter < spots){
+      let userObject = {
+        uniqueID: user.uniqueID,
+        sid: user.sid,
+        fullname: user.fullname,
+        avatarURL: user.avatarURL,
+        joined: firebase.database.ServerValue.TIMESTAMP
+      }
+      //console.log('DATA IS: ', data);
+      if(!userIsComing){
+        db.ref('meetups/' + eventID + '/' + meetupKey + '/members').push(userObject);
+        //console.log('Vi la till dig i meetupet!');
+        new SystemMessage(meetupKey, userObject.fullname + ' gick med i meetupet.').push();
+        printMessage('success', 'Du gick med i meetupet');
 
-      // Lägg till meetup i användarens profil.
-      addUserMeetup(userObject.uniqueID,eventID, meetupKey);
+        // Lägg till meetup i användarens profil.
+        addUserMeetup(userObject.uniqueID,eventID, meetupKey);
+      } else {
+        console.log('Du är redan med i detta meetup! Något måste gått fel!');
+      }
     } else {
-      console.log('Du är redan med i detta meetup! Något måste gått fel!');
+      printMessage('error', 'Tyvärr får du inte plats här');
     }
   });
 }
