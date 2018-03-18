@@ -152,11 +152,12 @@
   function setMeetupCount(eventID, meetUps) {
     db.ref('meetups/' + eventID + '/info/meetupCounter').on('value', function(snapshot) {
       let data = snapshot.val();
-      //console.log(data);
+      // console.log(data);
       if (true) {
         meetUps.innerHTML = `${data} <i class="mdi mdi-account-multiple mdi-24px"></i>`;
+      }if(data == "0"){
+        meetUps.innerHTML = `<i class="mdi mdi-account-multiple mdi-24px"></i>`;
       }if(data == null){
         meetUps.innerHTML = `<i class="mdi mdi-account-multiple mdi-24px"></i>`;
       }
     });
-  }
