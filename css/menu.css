@@ -324,7 +324,7 @@ a {
 #ingaNotifikationer {
 	display: block;
 	text-align: center;
-	margin: 60px 0px;
+	padding: 60px 0px;
 	font-family: 'Montserrat', sans-serif;
 }
 /* #ingaNotifikationer.hidden {
