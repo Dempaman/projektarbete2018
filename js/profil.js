@@ -43,9 +43,35 @@ function profilePage() {
 
 }
 
-// function getuserCreated() {
-//
-// }
+function ellipsisEvents(mainText,hide) {
+
+  for (let i = 0; i < mainText.length; i++) {
+
+    if (mainText[i].offsetWidth < mainText[i].parentElement.lastElementChild.offsetWidth) {
+      mainText[i].addEventListener('click', function(event){
+
+        if (mainText[i].parentElement.children[2].className === hide) {
+          mainText[i].parentElement.children[2].classList.add('show');
+          console.log(event.target);
+        }else {
+           mainText[i].parentElement.children[2].classList.remove('show');
+        }
+      });
+
+        mainText[i].parentElement.children[2].addEventListener('click', function(event){
+
+          if (mainText[i].parentElement.children[2].className === hide) {
+            mainText[i].parentElement.children[2].classList.add('show');
+            //console.log(event.target);
+          }else {
+             mainText[i].parentElement.children[2].classList.remove('show');
+          }
+        });
+    }else{
+      mainText[i].parentElement.children[2].style.display = "none";
+    }
+  }
+}
 
 function ifUserIsTrue() {
   // Hämta alla element som behöver informationen
@@ -54,6 +80,7 @@ function ifUserIsTrue() {
   let meetupCount = document.getElementById('user-joind-meetups');
   let createdCount = document.getElementById('user-created-meetups');
   let createdContainer = document.getElementsByClassName('created-meetups-container')[0];
+  let joindContainer = document.getElementsByClassName('joind-meetups-container')[0];
 
   // variable för att spara och föra vidare data
   let data;
@@ -72,6 +99,8 @@ function ifUserIsTrue() {
   //console.log(pageUserId);
 
   if (pageUserId && userLog) {
+
+    joindContainer.style.display = "none";
 
     db.ref('/users/').on('value', function(snapshot) {
       let allUsers = snapshot.val();
@@ -103,8 +132,8 @@ function ifUserIsTrue() {
 
                 db.ref('meetups/' + otherEventId).on('value', function(snapshot) {
                   let snap = snapshot.val();
-                  console.log(z);
-                  console.log(snap[z]);
+                  // console.log(z);
+                  // console.log(snap[z]);
                   if (z) {
                     let div = document.createElement('div');
                     div.className = "single-meetup";
@@ -116,6 +145,7 @@ function ifUserIsTrue() {
                             <p class="hide">${snap[z].name}<br> <br>
                                 ~ Av ${snap[z].creator.fullname}
                              </p>
+                             <p class="main-allways-hidden">eventnamn</p>
                           <p class="meetup-creator">~ Av ${snap[z].creator.fullname}</p>
                         </div>
                       </div>
@@ -128,15 +158,17 @@ function ifUserIsTrue() {
                             <p class="min-text">Event</p>
                             <p class="main-text">eventnamn</p>
                             <p class="hide-small">eventnamn</p>
+                            <p class="main-allways-hidden">eventnamn</p>
                           </div>
                           <div class="time-holder">
                             <p class="min-text">Tid</p>
-                            <p class="main-text">${snap[z].time}</p>
+                            <p class="small-main-text ">${snap[z].time}</p>
                           </div>
                           <div class="adress-holder">
                             <p class="min-text">Adress</p>
                             <p class="main-text">${snap[z].address}</p>
                             <p class="hide-small">${snap[z].address}</p>
+                            <p class="main-allways-hidden">${snap[z].address}</p>
                           </div>
                         </div>
                       </div>
@@ -145,6 +177,41 @@ function ifUserIsTrue() {
                       </div>`;
 
                     createdContainer.appendChild(div);
+
+                    let mainText = document.getElementsByClassName('main-text');
+                    let meetupName = document.getElementsByClassName('meetup-name');
+                    ellipsisEvents(mainText, "hide-small");
+                    ellipsisEvents(meetupName,"hide");
+                    //console.log('mainText is ', mainText);
+
+                    // for (let i = 0; i < mainText.length; i++) {
+                    //
+                    //   if (mainText[i].offsetWidth < mainText[i].parentElement.lastElementChild.offsetWidth) {
+                    //     mainText[i].addEventListener('click', function(event){
+                    //
+                    //       if (mainText[i].parentElement.children[2].className === "hide-small") {
+                    //         mainText[i].parentElement.children[2].classList.add('show');
+                    //         console.log(event.target.parentElement.children[2].className);
+                    //       }else {
+                    //          mainText[i].parentElement.children[2].classList.remove('show');
+                    //            console.log(event.target.parentElement.children[2].className);
+                    //       }
+                    //     });
+                    //
+                    //       mainText[i].parentElement.children[2].addEventListener('click', function(event){
+                    //
+                    //         if (mainText[i].parentElement.children[2].className === "hide-small") {
+                    //           mainText[i].parentElement.children[2].classList.add('show');
+                    //           console.log(event.target.parentElement.children[2].className);
+                    //         }else {
+                    //            mainText[i].parentElement.children[2].classList.remove('show');
+                    //              console.log(event.target.parentElement.children[2].className);
+                    //         }
+                    //       });
+                    //   }else{
+                    //     mainText[i].parentElement.children[2].style.display = "none";
+                    //   }
+                    // }
                   }
                 });
               }
@@ -158,6 +225,13 @@ function ifUserIsTrue() {
               // console.log('eventObj ', obj);
               // console.log('eventObjects ', Object.keys(userCreated[obj]).length);
             }
+
+            // let mainText = document.getElementsByClassName('main-text')[0];
+            // let ctx = mainText.getContext('2d');
+            // let text = ctx.measureText('foo');
+            // console.log(mainText);
+            // console.log('test width is ',text.width);
+
             createdCount.innerText = counter;
           }
 
@@ -258,29 +332,78 @@ function ifUserIsTrue() {
 
     }); // THE END OF Hämta alla skapade Meetups :)
 
-    // Hämta alla anmälda Meetups
+    // Hämta alla joind CREATED MEETUPCARD
     db.ref('users/' + uniqueID + '/meetups').on('value', function(snapshot) {
       // child_added
       let meetupsJoind = snapshot.val();
-      //let eventID = snapshot.key;
-      //console.log(meetupsJoind);
 
       if (meetupsJoind) {
-        let counter = 0;
+        let joindCounter = 0;
+        let joindEventId;
+        let joindMeetupId;
         for (let obj in meetupsJoind) {
-          counter += Object.keys(meetupsJoind[obj]).length;
-          //let currentEvent = eventObjects[obj];
+          joindCounter += Object.keys(meetupsJoind[obj]).length;
 
-          // Lägg till html kod som ska loppa igenom alla meetups
+          joindEventId = obj;
+          joindMeetupId = meetupsJoind[obj];
+          console.log('joind obj ', joindEventId);
+          console.log('joind meetup ', joindMeetupId);
 
-          // console.log('meetup obj ', obj);
-          // console.log('meetupsJoind ', Object.keys(meetupsJoind[obj]).length);
+          for (let x in joindMeetupId) {
+
+            db.ref('meetups/' + joindEventId).on('value', function(snapshot) {
+              let snap = snapshot.val();
+
+
+              if (x) {
+
+                console.log('joind snap ',snap[x]);
+                let div = document.createElement('div');
+                div.className = "single-meetup";
+                div.innerHTML = `<div class="event-backgound-joind">
+                    <div class="meetup-holder">
+                      <p class="meetup-min">Meetup</p>
+
+                        <p class="meetup-name">${snap[x].name}</p>
+                        <p class="hide">${snap[x].name}<br> <br>
+                            ~ Av ${snap[x].creator.fullname}
+                         </p>
+                      <p class="meetup-creator">~ Av ${snap[x].creator.fullname}</p>
+                    </div>
+                  </div>
+                  <div class="text-holder">
+                    <div class="img-holder">
+                      <img id="meetup-img" src="${snap[x].creator.avatarURL}">
+                    </div>
+                    <div class="user-meetup-text">
+                      <div class="event-holder">
+                        <p class="min-text">Event</p>
+                        <p class="main-text">eventnamn</p>
+                        <p class="hide-small">eventnamn</p>
+                      </div>
+                      <div class="time-holder">
+                        <p class="min-text">Tid</p>
+                        <p class="main-text">${snap[x].time}</p>
+                      </div>
+                      <div class="adress-holder">
+                        <p class="min-text">Adress</p>
+                        <p class="main-text">${snap[x].address}</p>
+                        <p class="hide-small">${snap[x].address}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="change-status">
+                    <a href="eventpage.html?eventid=${snap[x].eventID}&meetup=${x}">Gå till Meetup > </a>
+                  </div>`;
+
+                joindContainer.appendChild(div);
+              }
+            });
+          } // THE END OF THE joind CREATED MEETUPCARD
         }
-        meetupCount.innerText = counter;
-
+        meetupCount.innerText = joindCounter;
       }
     });
-
 
   } else {
     console.log('Sorry! No Web Storage support');
