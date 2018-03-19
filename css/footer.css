@@ -87,10 +87,10 @@ footer.footer-box {
   list-style: none;
 }
 
-a {
+/* a {
   text-decoration: none;
   color: #F4F4F4;
-}
+} */
 
 .footer-menu>ul>li>a {
   margin-right: 2rem;
