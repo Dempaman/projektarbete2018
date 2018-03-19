@@ -155,7 +155,6 @@ firebase.auth().onAuthStateChanged(user => {
       if(bell != undefined){
         bell.classList.add('hidden');
         helloUser.classList.add("hidden");
-        printMessage('success', 'Du loggade ut');
       }
 
     let localUser = localStorage.getItem('loggedInUser');

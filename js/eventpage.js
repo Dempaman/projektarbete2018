@@ -1336,6 +1336,7 @@ function getLocationInfo(){
     } else {
       console.warn('This page should only be reached with a event specified in the address field.');
       console.log('Om man ändå hamnar här kan vi redirecta till alla event / lägga en sökruta här');
+      location.assign('/');
       //window.location.href = 'events.html';
       stopcode = true;
     }
