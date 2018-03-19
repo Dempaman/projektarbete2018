@@ -51,6 +51,12 @@ span.loginModalCloseButton {
   margin: 6px 10px 0px 13px;
   color: #fff;
 }
+
+#lmw button:hover > span {
+  margin: 6px 10px 0px 13px;
+  color: #0F1316;
+}
+
 #lmw button > i {
   transition: 0.8s ease;
 }
@@ -73,6 +79,7 @@ span.loginModalCloseButton {
 /*Alltid färg på när mobil visas */
 #lmw button:hover {
   background-color: #ececec;
+  color: #0F1316;
 }
 #lmw button > i.mdi-facebook-box {
   color: #45a1e6;
@@ -137,3 +144,13 @@ span.loginModalCloseButton {
     box-shadow: 3px 3px 3px #292929;
   }
 }
+
+/*
+  .containerUserInput{
+    margin: 22px auto 0;
+  }
+
+  span.loginModalCloseButton {
+    margin: 0px -4px;
+  }
+} */
