@@ -247,6 +247,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
                 let month;
                 let meetUps;
 
+
 				if (eventImg !== undefined) {
 					eImg = eventImg[0].url;
 
@@ -437,6 +438,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		let eID = document.createElement('h5');
 		let eName = document.createElement('h4');
 		let ePlace = document.createElement('p');
+		let eCity = document.createElement('p');
 		let eTime = document.createElement('span');
 
         let eDay = document.createElement("span");
@@ -448,7 +450,8 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		eventDiv.classList.add('event-card');
 		eID.innerText = `ID: ${eventId}`;
 		eName.innerText = `${eventName}`;
-		ePlace.innerText = `${eventPlace}, ${eventCity}`;
+		ePlace.innerText = `${eventPlace}`;
+		eCity.innerText = `${eventCity}`;
         eTime.innerText = `${eventTime}`;
 
         //Annas kod
@@ -462,10 +465,10 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         eventDiv.className = "big-card";
         eName.className = "event-name";
         ePlace.className = "event-place";
+				eCity.className = "event-city";
         eDay.className = "day";
         eMonth.className = "month";
         eMeetUps.className = "meetups-box";
-
 
         //Append
 		setMeetupCount(eventId,meetups);
@@ -473,6 +476,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		eventDiv.appendChild(eUrlImg);
 		eventDiv.appendChild(eName);
 		eventDiv.appendChild(ePlace);
+		eventDiv.appendChild(eCity);
         eventDiv.appendChild(eDay);
         eventDiv.appendChild(eMonth);
         eMeetUps.insertBefore(meetups, eMeetUps.childNodes[0]);
@@ -481,6 +485,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		testOutPut.appendChild(eventDiv);
 	}
     /********************Random code before merging with eventcards file END********************/
+
 
 
 
