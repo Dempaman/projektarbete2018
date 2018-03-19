@@ -2,19 +2,6 @@
 const ticketMasterApiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
 const googleApiKey2 = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
 
-
-// Initalize the page based on window location.
-window.onload = function(){
-//printMessage('error', 'Testprint', 200000); // Type, message, timer (antal millisekunder)
-let user = localStorage.getItem('loggedInUser');
-
-
-  // Turned off for debug purposes
-  //document.getElementById('eventTitle').addEventListener('click', retrieveEventInfo);
-
-
-}
-
 function createEventListenersForBtns(eventid, url, onsale){
   let buyBtn = document.getElementById('eventDivButtons').children[0];
 
@@ -1183,7 +1170,7 @@ function displayEventInfo(event){
   eventInfoText.innerHTML = `<p>${attractionText}</p>`;
 
   retrieveMeetupInfo(event.date);
-  updateEventInfo(event);
+  //updateEventInfo(event);
 }
 
 function retrieveEventInfo(){
@@ -1542,7 +1529,7 @@ function pageLoaded(){
       if(meetup){
         meetup.scrollIntoView({behavior: 'smooth', block: 'start'});
         console.log('Scrolling into view!');
-      } else {
+      } else if(getLocationInfo()[1]){
         console.warn('Meetup is not yet in the dom. Or doesn\'t exist.');
       }
     },400);
@@ -1907,25 +1894,6 @@ function popupProfile(event, eventID, meetupKey){
   });
 }
 
-// Add a friend with SID, (currentUser)
-function addFriend(sid){
-  let user = JSON.parse(localStorage.getItem('loggedInUser'));
-
-  let friendList = retrieveFriends();
-
-  if(user){
-    if(friendList.includes(sid)){
-      printMessage('error', 'Ni är redan vänner! :o');
-    } else if(sid == user.sid){
-      printMessage('error', 'Du kan inte lägga till dig själv som vän!');
-    } else {
-      printMessage('success', 'Du la till en ny vän!');
-      db.ref('users/' + user.uniqueID + '/friends').push(sid);
-    }
-  } else {
-    printMessage('error', 'Du är inte inloggad :o');
-  }
-}
 
 function displayInviteFriends(event, meetupKey){
   let array = [];
@@ -2017,7 +1985,8 @@ function displayInviteFriendsResults(event, searchArray, printList, btn){
     }
 
     if(searchStr == ""){
-      printMessage('success', 'Visar alla användare  :\') ');
+      /* type, message, timer = 8000, delay = 0, limit = 2 */
+      printMessage('success', 'Visar alla användare  :\') ', undefined, null, 1);
     }
     /* Filter the users based on value */
     let found = false;
@@ -2143,15 +2112,22 @@ function displayMatch(user, printList, friend, foundBySid = false){
   let inviteBtn = document.createElement('button');
   inviteBtn.innerHTML = '<i class="mdi mdi-plus mdi-24px"> </i>';
   console.log('What does user contain?', user);
+
+
   inviteBtn.addEventListener('click', function(e){
+    let target = e.target;
+    if(e.target.nodeName == 'I'){
+      target = target.parentNode;
+    }
+
     inviteBtn.disabled = true;
     printMessage('success', 'Inbjudan skickad!', undefined, undefined, 1);
-    e.target.children[0].className += ' fadeout';
+    target.children[0].className += ' fadeout';
 
     sendNotification(user, 'invite');
 
     setTimeout(function(){
-      e.target.innerHTML = '<i class="mdi mdi-check mdi-24px fadein"> </i>';
+      target.innerHTML = '<i class="mdi mdi-check mdi-24px fadein"> </i>';
     }, 500);
 
   });
@@ -2314,20 +2290,6 @@ function sendNotification(userOrSid = false, action){
       console.warn('No object was sent!');
     }
   }
-}
-
-function retrieveFriends(){
-  /* Skapa vänlistan */
-  let friendList = [];
-
-  /* Check if there is a localUser. Should always be one.. */
-  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
-  if(localUser){
-    for(let friend in localUser.friends){
-      friendList.push(localUser.friends[friend]);
-    }
-  }
-  return friendList;
 }
 
 function kickUserFromMeetup(eventid, meetupKey, sid){
