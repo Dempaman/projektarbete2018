@@ -9,6 +9,7 @@ body {
 a {
 	text-decoration: none;
 	color: #333;
+	color:#fff;
 	transition: color 0.3s ease;
 }
 
@@ -312,6 +313,10 @@ a {
 	margin-left: -6px;
 }
 #menu li:hover {
+	transition: 0.3s;
+	color: #6C0CCC;
+}
+#menu a:hover{
 	transition: 0.3s;
 	color: #6C0CCC;
 }
