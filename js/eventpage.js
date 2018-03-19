@@ -2,19 +2,6 @@
 const ticketMasterApiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
 const googleApiKey2 = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
 
-
-// Initalize the page based on window location.
-window.onload = function(){
-//printMessage('error', 'Testprint', 200000); // Type, message, timer (antal millisekunder)
-let user = localStorage.getItem('loggedInUser');
-
-
-  // Turned off for debug purposes
-  //document.getElementById('eventTitle').addEventListener('click', retrieveEventInfo);
-
-
-}
-
 function createEventListenersForBtns(eventid, url, onsale){
   let buyBtn = document.getElementById('eventDivButtons').children[0];
 
@@ -459,7 +446,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
             // let plus = document.createElement('span');
             // plus.innerHTML = '<i class="mdi mdi-account-plus"></i>';
             let addMemberDiv = document.createElement('div');
-            addMemberDiv.className = 'addMemberDiv';
+            addMemberDiv.className = 'addMemberDiv doNotCloseThis';
             addMemberDiv.innerHTML = '<i class="mdi mdi-plus mdi-36px"></i>';
             addMemberDiv.addEventListener('click', inviteFriend);
             addMemberDiv.meetupKey = meetupKey;
@@ -580,7 +567,7 @@ function displayMembersAndChat(md, meetupKey){
       // let plus = document.createElement('span');
       // plus.innerHTML = '<i class="mdi mdi-account-plus"></i>';
       let addMemberDiv = document.createElement('div');
-      addMemberDiv.className = 'addMemberDiv';
+      addMemberDiv.className = 'addMemberDiv doNotCloseThis';
       addMemberDiv.innerHTML = '<i class="mdi mdi-plus mdi-36px"></i>';
       addMemberDiv.addEventListener('click', inviteFriend);
       addMemberDiv.meetupKey = meetupKey;
@@ -695,8 +682,9 @@ function displayMembersAndChat(md, meetupKey){
 function stopListenToChat(meetupKey){
   db.ref('chats/' + meetupKey).off();
 }
-
+let lastMessages = [];
 function createMessage(event, sendBtn = false){
+
   if(event.keyCode == 13 || sendBtn){
     let target;
     if(sendBtn){
@@ -704,57 +692,64 @@ function createMessage(event, sendBtn = false){
     } else {
       target = event.target
     }
-    if(localStorage.getItem('loggedInUser')){
-      updateTimeStamps();
-      // Some easy checks.
-      if(target.value == "" || target.value == undefined || target.value == " "){
-        printMessage('warn', 'Du behöver specificera ett meddelande');
-        console.log('No message specified!');
-      } else if(target.value.length < 2){
-        console.log('Message too short!');
-        printMessage('warn', 'Meddelandet är lite kort');
-      } else if(target.value.length > 600){
-        console.log('Message too long!');
-        printMessage('warn', 'Meddelandet är lite långt');
+
+      /* Get the fifth message */
+      if(lastMessages[lastMessages.length - 5] > (new Date().getTime() - 15000)){
+        printMessage('warn', 'Nu går det lite fort här');
       } else {
-        // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
-        let textmessage = target.value;
-        let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        let md = target.parentNode.parentNode.parentNode.parentNode; // Meetup Div
-        let ms = md.getAttribute('id'); // meetup String
-
-        let meetupKey = ms.replace('-', '&').split('&')[1]
-        let eventID = getLocationInfo()[0];
-        db.ref('meetups/' + eventID + '/' + meetupKey + '/creator').once('value', function(snapshot){
-          let creator = snapshot.val();
-          console.log('Creator is:', creator);
-
-          if(creator.uniqueID == currentUser.uniqueID){
-            creator = true;
+        if(localStorage.getItem('loggedInUser')){
+          updateTimeStamps();
+          // Some easy checks.
+          if(target.value == "" || target.value == undefined || target.value == " "){
+            printMessage('warn', 'Du behöver specificera ett meddelande');
+            console.log('No message specified!');
+          } else if(target.value.length < 2){
+            console.log('Message too short!');
+            printMessage('warn', 'Meddelandet är lite kort');
+          } else if(target.value.length > 600){
+            console.log('Message too long!');
+            printMessage('warn', 'Meddelandet är lite långt');
           } else {
-            creator = false;
+            // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
+            let textmessage = target.value;
+            let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            let md = target.parentNode.parentNode.parentNode.parentNode; // Meetup Div
+            let ms = md.getAttribute('id'); // meetup String
+
+            let meetupKey = ms.replace('-', '&').split('&')[1]
+            let eventID = getLocationInfo()[0];
+            db.ref('meetups/' + eventID + '/' + meetupKey + '/creator').once('value', function(snapshot){
+              let creator = snapshot.val();
+              console.log('Creator is:', creator);
+
+              if(creator.uniqueID == currentUser.uniqueID){
+                creator = true;
+              } else {
+                creator = false;
+              }
+              let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage, creator);
+              newMessage.push();
+              lastMessages.push(new Date().getTime());
+            });
+
+
+
+
+            let chattWrapperDiv = target.parentNode.previousSibling;
+            // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
+
+
+            chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
+            let htmlScroll = document.getElementsByTagName('html')[0];
+
+            // Clear Inputbox
+            target.value = '';
+            target.focus();
           }
-          let newMessage = new UserMessage(currentUser.uniqueID, currentUser.avatarURL, meetupKey, currentUser.fullname, textmessage, creator);
-          newMessage.push();
-        });
-
-
-
-
-        let chattWrapperDiv = target.parentNode.previousSibling;
-        // Scroll to the bottom of the div we're typing the message into! From this: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
-
-
-        chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
-        let htmlScroll = document.getElementsByTagName('html')[0];
-
-        // Clear Inputbox
-        target.value = '';
-        target.focus();
+        } else {
+          console.log('You are not logged in');
+        }
       }
-    } else {
-      console.log('You are not logged in');
-    }
   }
 }
 
@@ -1183,7 +1178,7 @@ function displayEventInfo(event){
   eventInfoText.innerHTML = `<p>${attractionText}</p>`;
 
   retrieveMeetupInfo(event.date);
-  updateEventInfo(event);
+  //updateEventInfo(event);
 }
 
 function retrieveEventInfo(){
@@ -1349,6 +1344,7 @@ function getLocationInfo(){
     } else {
       console.warn('This page should only be reached with a event specified in the address field.');
       console.log('Om man ändå hamnar här kan vi redirecta till alla event / lägga en sökruta här');
+      location.assign('/');
       //window.location.href = 'events.html';
       stopcode = true;
     }
@@ -1542,10 +1538,10 @@ function pageLoaded(){
       if(meetup){
         meetup.scrollIntoView({behavior: 'smooth', block: 'start'});
         console.log('Scrolling into view!');
-      } else {
+      } else if(getLocationInfo()[1]){
         console.warn('Meetup is not yet in the dom. Or doesn\'t exist.');
       }
-    },400);
+    },800);
 }
 
 function addEditBtns(meetupKey){
@@ -1907,32 +1903,13 @@ function popupProfile(event, eventID, meetupKey){
   });
 }
 
-// Add a friend with SID, (currentUser)
-function addFriend(sid){
-  let user = JSON.parse(localStorage.getItem('loggedInUser'));
-
-  let friendList = retrieveFriends();
-
-  if(user){
-    if(friendList.includes(sid)){
-      printMessage('error', 'Ni är redan vänner! :o');
-    } else if(sid == user.sid){
-      printMessage('error', 'Du kan inte lägga till dig själv som vän!');
-    } else {
-      printMessage('success', 'Du la till en ny vän!');
-      db.ref('users/' + user.uniqueID + '/friends').push(sid);
-    }
-  } else {
-    printMessage('error', 'Du är inte inloggad :o');
-  }
-}
 
 function displayInviteFriends(event, meetupKey){
   let array = [];
   /* Retrieve all the users in the databse and put them in an array */
   downloadUsersToArray(meetupKey, array);
   let friendWrapper = document.createElement('div');
-  friendWrapper.className = 'friendWrapper';
+  friendWrapper.className = 'friendWrapper doNotCloseThis';
   let friendTitle = document.createElement('h2');
   friendTitle.innerText = 'Bjud in vänner';
 
@@ -1953,7 +1930,7 @@ function displayInviteFriends(event, meetupKey){
 
   /* Resultat från sökningen */
   let resultDiv = document.createElement('div');
-  resultDiv.className += 'resultHolder';
+  resultDiv.className += 'resultHolder doNotCloseThis';
 
   let friendsResultTitle = document.createElement('h3');
   friendsResultTitle.innerText = 'Vänner';
@@ -1963,8 +1940,8 @@ function displayInviteFriends(event, meetupKey){
   otherResultTitle.className = 'hidden';
   let resultDivFriends = document.createElement('div');
   let resultDivAndra = document.createElement('div');
-  resultDivFriends.className = 'friendList';
-  resultDivAndra.className = 'otherList';
+  resultDivFriends.className = 'friendList doNotCloseThis';
+  resultDivAndra.className = 'otherList doNotCloseThis';
 
   resultDiv.appendChild(friendsResultTitle);
   resultDiv.appendChild(resultDivFriends);
@@ -2001,6 +1978,50 @@ function displayInviteFriends(event, meetupKey){
     body.removeChild(friendWrapper);
   });
 
+  /* Init the function */
+  function closeThis(event){
+    let target = event.target;
+
+    /* Chrome fix */
+    if(target.nodeName == 'I'){
+      target = target.parentNode;
+    }
+
+    /* Rekursiv funktion för att kolla className på ovanstående element!! */
+    function recursiveClose(elem, count = 0){
+      console.log('Counter is: ' + count);
+      if(count > 3) {
+        if(friendWrapper.parentNode){
+          friendWrapper.parentNode.removeChild(friendWrapper);
+        }
+        window.removeEventListener('click', closeThis);
+        return false;
+      } else {
+        if(elem){
+          if(elem.className){
+            console.log('Has className');
+            if(elem.className.includes('doNotCloseThis')){
+              console.log('Has doNotCloseThis!!');
+              return true;
+            } else {
+              return recursiveClose(elem.parentNode, count += 1);
+            }
+          } else {
+            return recursiveClose(elem.parentNode, count += 1);
+          }
+        } else {
+          return recursiveClose(elem.parentNode, count += 1);
+        }
+      }
+    }
+    recursiveClose(target);
+    /* If the target doesn't have the doNotCloseThis class, we close it! */
+
+
+  }
+
+  /* add eventListener if clicked outside */
+  window.addEventListener('click', closeThis);
 }
 
 /* This function displays possible invites and displays them in htmlobj-"printList" */
@@ -2017,7 +2038,8 @@ function displayInviteFriendsResults(event, searchArray, printList, btn){
     }
 
     if(searchStr == ""){
-      printMessage('success', 'Visar alla användare  :\') ');
+      /* type, message, timer = 8000, delay = 0, limit = 2 */
+      printMessage('success', 'Visar alla användare  :\') ', undefined, null, 1);
     }
     /* Filter the users based on value */
     let found = false;
@@ -2143,15 +2165,22 @@ function displayMatch(user, printList, friend, foundBySid = false){
   let inviteBtn = document.createElement('button');
   inviteBtn.innerHTML = '<i class="mdi mdi-plus mdi-24px"> </i>';
   console.log('What does user contain?', user);
+
+
   inviteBtn.addEventListener('click', function(e){
+    let target = e.target;
+    if(e.target.nodeName == 'I'){
+      target = target.parentNode;
+    }
+
     inviteBtn.disabled = true;
     printMessage('success', 'Inbjudan skickad!', undefined, undefined, 1);
-    e.target.children[0].className += ' fadeout';
+    target.children[0].className += ' fadeout';
 
     sendNotification(user, 'invite');
 
     setTimeout(function(){
-      e.target.innerHTML = '<i class="mdi mdi-check mdi-24px fadein"> </i>';
+      target.innerHTML = '<i class="mdi mdi-check mdi-24px fadein"> </i>';
     }, 500);
 
   });
@@ -2314,20 +2343,6 @@ function sendNotification(userOrSid = false, action){
       console.warn('No object was sent!');
     }
   }
-}
-
-function retrieveFriends(){
-  /* Skapa vänlistan */
-  let friendList = [];
-
-  /* Check if there is a localUser. Should always be one.. */
-  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
-  if(localUser){
-    for(let friend in localUser.friends){
-      friendList.push(localUser.friends[friend]);
-    }
-  }
-  return friendList;
 }
 
 function kickUserFromMeetup(eventid, meetupKey, sid){
