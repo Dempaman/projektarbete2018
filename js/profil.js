@@ -294,6 +294,7 @@ function ifUserIsTrue() {
                         <p class="hide">${snap[x].name}<br> <br>
                             ~ Av ${snap[x].creator.fullname}
                          </p>
+                         <p class="main-allways-hidden">eventnamn</p>
                       <p class="meetup-creator">~ Av ${snap[x].creator.fullname}</p>
                     </div>
                   </div>
@@ -306,15 +307,17 @@ function ifUserIsTrue() {
                         <p class="min-text">Event</p>
                         <p class="main-text">eventnamn</p>
                         <p class="hide-small">eventnamn</p>
+                        <p class="main-allways-hidden">eventnamn</p>
                       </div>
                       <div class="time-holder">
                         <p class="min-text">Tid</p>
-                        <p class="main-text">${snap[x].time}</p>
+                        <p class="small-main-text ">${snap[x].time}</p>
                       </div>
                       <div class="adress-holder">
                         <p class="min-text">Adress</p>
                         <p class="main-text">${snap[x].address}</p>
                         <p class="hide-small">${snap[x].address}</p>
+                        <p class="main-allways-hidden">${snap[x].address}</p>
                       </div>
                     </div>
                   </div>
@@ -323,6 +326,11 @@ function ifUserIsTrue() {
                   </div>`;
 
                 createdContainer.appendChild(div);
+
+                let mainText = document.getElementsByClassName('main-text');
+                let meetupName = document.getElementsByClassName('meetup-name');
+                ellipsisEvents(mainText, "hide-small");
+                ellipsisEvents(meetupName,"hide");
               }
             });
           } // THE END OF THE ADDED CREATED MEETUPCARD
@@ -361,42 +369,50 @@ function ifUserIsTrue() {
                 let div = document.createElement('div');
                 div.className = "single-meetup";
                 div.innerHTML = `<div class="event-backgound-joind">
-                    <div class="meetup-holder">
-                      <p class="meetup-min">Meetup</p>
+                <div class="meetup-holder">
+                  <p class="meetup-min">Meetup</p>
 
-                        <p class="meetup-name">${snap[x].name}</p>
-                        <p class="hide">${snap[x].name}<br> <br>
-                            ~ Av ${snap[x].creator.fullname}
-                         </p>
-                      <p class="meetup-creator">~ Av ${snap[x].creator.fullname}</p>
-                    </div>
+                    <p class="meetup-name">${snap[x].name}</p>
+                    <p class="hide">${snap[x].name}<br> <br>
+                        ~ Av ${snap[x].creator.fullname}
+                     </p>
+                     <p class="main-allways-hidden">eventnamn</p>
+                  <p class="meetup-creator">~ Av ${snap[x].creator.fullname}</p>
+                </div>
+              </div>
+              <div class="text-holder">
+                <div class="img-holder">
+                  <img id="meetup-img" src="${snap[x].creator.avatarURL}">
+                </div>
+                <div class="user-meetup-text">
+                  <div class="event-holder">
+                    <p class="min-text">Event</p>
+                    <p class="main-text">eventnamn</p>
+                    <p class="hide-small">eventnamn</p>
+                    <p class="main-allways-hidden">eventnamn</p>
                   </div>
-                  <div class="text-holder">
-                    <div class="img-holder">
-                      <img id="meetup-img" src="${snap[x].creator.avatarURL}">
-                    </div>
-                    <div class="user-meetup-text">
-                      <div class="event-holder">
-                        <p class="min-text">Event</p>
-                        <p class="main-text">eventnamn</p>
-                        <p class="hide-small">eventnamn</p>
-                      </div>
-                      <div class="time-holder">
-                        <p class="min-text">Tid</p>
-                        <p class="main-text">${snap[x].time}</p>
-                      </div>
-                      <div class="adress-holder">
-                        <p class="min-text">Adress</p>
-                        <p class="main-text">${snap[x].address}</p>
-                        <p class="hide-small">${snap[x].address}</p>
-                      </div>
-                    </div>
+                  <div class="time-holder">
+                    <p class="min-text">Tid</p>
+                    <p class="small-main-text ">${snap[x].time}</p>
                   </div>
-                  <div class="change-status">
-                    <a href="eventpage.html?eventid=${snap[x].eventID}&meetup=${x}">Gå till Meetup > </a>
-                  </div>`;
+                  <div class="adress-holder">
+                    <p class="min-text">Adress</p>
+                    <p class="main-text">${snap[x].address}</p>
+                    <p class="hide-small">${snap[x].address}</p>
+                    <p class="main-allways-hidden">${snap[x].address}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="change-status">
+                <a href="eventpage.html?eventid=${snap[x].eventID}&meetup=${x}">Gå till Meetup > </a>
+              </div>`;
 
                 joindContainer.appendChild(div);
+
+                let mainText = document.getElementsByClassName('main-text');
+                let meetupName = document.getElementsByClassName('meetup-name');
+                ellipsisEvents(mainText, "hide-small");
+                ellipsisEvents(meetupName,"hide");
               }
             });
           } // THE END OF THE joind CREATED MEETUPCARD
