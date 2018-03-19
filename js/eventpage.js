@@ -1,13 +1,10 @@
 // Globala variabler
-console.log('this should be printed');
 const ticketMasterApiKey = 'wRf3oq4FeoxXWIEZTHBNeexx93wdN8Vq';
 const googleApiKey2 = 'AIzaSyDKH_D_sb0D4yfJy5OwO-SZf5kAFDGX7vo';
 
 
 // Initalize the page based on window location.
 window.onload = function(){
-console.log(chatMessageTimeStamp(1519755958554));
-console.log(chatMessageTimeStamp(1516758062943));
 //printMessage('error', 'Testprint', 200000); // Type, message, timer (antal millisekunder)
 let user = localStorage.getItem('loggedInUser');
 
@@ -1207,6 +1204,12 @@ function retrieveEventInfo(){
       })
       .then(function(json){
         //console.log('EVENTOBJECT without formatting:',json);
+
+        if(json.errors){
+          printMessage('error', json.errors[0].description);
+          return;
+        }
+
           let latitude = 58, longitude = 15;
           let event = json;
           let imageURL = event.images[0].url;
@@ -1217,11 +1220,15 @@ function retrieveEventInfo(){
           let offsale = event.offsale.value;
           let mainCategory = event.categories[0].name;
           let promoter = event.promoter;
-          console.log('Date is: ', date);
           console.log('Straight from the API: ', json);
           console.log('Main category is: ', mainCategory);
           if(!date){
             date = event.date;
+          }
+
+          if(!imageURL){
+            console.log('ImageURL:', imageURL);
+            printMessage('error', 'No image for this event found.');
           }
 
           // createMarker(latitude, longitude);
@@ -1529,15 +1536,16 @@ function pageLoaded(){
     // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
     let htmlScroll = document.getElementsByTagName('html')[0];
 
-    let meetup = document.getElementById('meetup-' + getLocationInfo()[1]);
+    setTimeout(function(){
+      let meetup = document.getElementById('meetup-' + getLocationInfo()[1]);
 
-    if(meetup){
-      meetup.scrollIntoView({behavior: 'smooth'});
-      console.log('Scrolling into view!');
-    } else {
-      console.warn('Meetup is not yet in the dom. Or doesn\'t exist.');
-    }
-
+      if(meetup){
+        meetup.scrollIntoView({behavior: 'smooth', block: 'start'});
+        console.log('Scrolling into view!');
+      } else {
+        console.warn('Meetup is not yet in the dom. Or doesn\'t exist.');
+      }
+    },400);
 }
 
 function addEditBtns(meetupKey){

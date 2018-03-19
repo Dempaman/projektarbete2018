@@ -346,6 +346,7 @@ function retrieveLoginModalContent(){
 
   //Switch changed login- and signup button
   switchInput.addEventListener('change', function(event){
+    let loginModalButtonHolder = document.getElementsByClassName('loginModalButtonHolder')[0];
     if(this.checked){
       console.log("It is true!!");
       paragSignIn.classList.remove('highlight');
@@ -403,9 +404,10 @@ function retrieveLoginModalContent(){
       const password2 = txtPassword2.value;
       const name = nameInput.value;
       if (password != password2) {
+        console.log('Lösenordet matchar inte')
           printMessage('error', ' fel lösenordet matchar inte');
-          txtPassword.style.borderColor = "#E34234";
-          txtPassword2.style.borderColor = "#E34234";
+          txtPassword.classList.add('errorBorder')
+          txtPassword2.classList.add('errorBorder')
       }else{
         //Sign-up user if password match
         firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -421,8 +423,8 @@ function retrieveLoginModalContent(){
               });
           })
         .catch(function(error){
-            console.log(error.message);
-            //printMessage('error', 'ah ah ah you didnt say the magic word..') // If some error occurs it will print the message
+            console.log(error.message); // If some error occurs it will print the message
+            printMessage('error', error.message); //funkar inte..
           });
       }
     });

@@ -34,9 +34,9 @@
 
 .askMore{
   text-align: center;
-  margin-top: 50px;
+  margin-top: 10px;
 }
-.closeBtn{
+.footer-menu .closeBtn{
     height: 46px;
     cursor: pointer;
     color: #fcfcfc;
