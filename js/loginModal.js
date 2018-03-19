@@ -664,12 +664,18 @@ function displayNotifications(displayList){
       let showMoreDiv = document.createElement('div');
       showMoreDiv.className = 'hidden';
       btn.addEventListener('click', function(e){
+
+        let target = e.target;
+        if(target.nodeName == 'I'){
+          target = target.parentNode;
+        }
+        
         if(showMoreDiv.className == 'hidden'){
           showMoreDiv.className = '';
-          e.target.innerHTML = '<i class="mdi mdi-chevron-up mdi-30px"></i>';
+          target.innerHTML = '<i class="mdi mdi-chevron-up mdi-30px"></i>';
         } else {
           showMoreDiv.className = 'hidden';
-          e.target.innerHTML = '<i class="mdi mdi-chevron-down mdi-30px"></i>'
+          target.innerHTML = '<i class="mdi mdi-chevron-down mdi-30px"></i>'
         }
       });
 

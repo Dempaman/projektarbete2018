@@ -2017,7 +2017,8 @@ function displayInviteFriendsResults(event, searchArray, printList, btn){
     }
 
     if(searchStr == ""){
-      printMessage('success', 'Visar alla användare  :\') ');
+      /* type, message, timer = 8000, delay = 0, limit = 2 */
+      printMessage('success', 'Visar alla användare  :\') ', undefined, null, 1);
     }
     /* Filter the users based on value */
     let found = false;
@@ -2143,15 +2144,22 @@ function displayMatch(user, printList, friend, foundBySid = false){
   let inviteBtn = document.createElement('button');
   inviteBtn.innerHTML = '<i class="mdi mdi-plus mdi-24px"> </i>';
   console.log('What does user contain?', user);
+
+
   inviteBtn.addEventListener('click', function(e){
+    let target = e.target;
+    if(e.target.nodeName == 'I'){
+      target = target.parentNode;
+    }
+
     inviteBtn.disabled = true;
     printMessage('success', 'Inbjudan skickad!', undefined, undefined, 1);
-    e.target.children[0].className += ' fadeout';
+    target.children[0].className += ' fadeout';
 
     sendNotification(user, 'invite');
 
     setTimeout(function(){
-      e.target.innerHTML = '<i class="mdi mdi-check mdi-24px fadein"> </i>';
+      target.innerHTML = '<i class="mdi mdi-check mdi-24px fadein"> </i>';
     }, 500);
 
   });
