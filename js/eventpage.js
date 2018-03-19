@@ -41,7 +41,7 @@ function retrieveMeetupInfo(eventDate){
     db.ref('meetups/'+eventID).on('child_added', function(snapshot){
 
 
-
+      let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
       let eventID = getLocationInfo()[0];
       let obj = snapshot.val();
       let meetupKey = snapshot.key;
@@ -254,12 +254,18 @@ function retrieveMeetupInfo(eventDate){
         editSmallBtn.className = 'editBtn iconBtn doNotCloseThis' ;
         editSmallBtn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
 
+        /* check if it's the creator */
+        let creator = false;
+        if(localUser){
+          if(localUser.uniqueID == obj.creator.uniqueID){
+            creator = true;
+          }
+        }
 
-        editBtn.addEventListener('click', function(event){
-          toggleMeetupDropDown(event, meetupKey, eventID);
-        });
         editSmallBtn.addEventListener('click', function(event){
-          toggleMeetupDropDown(event, meetupKey, eventID);
+          let admin = false;
+
+          toggleMeetupDropDown(event, meetupKey, eventID, admin, creator);
         });
 
         btnDiv.appendChild(joinMeetupBtn);
@@ -272,6 +278,7 @@ function retrieveMeetupInfo(eventDate){
         md.appendChild(addressDiv);
         md.appendChild(addressCard);
         md.appendChild(infoDiv);
+
 
         // Display button based on if the user is in the meetup or not.
         let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -305,11 +312,7 @@ function retrieveMeetupInfo(eventDate){
                   }
                 }
                 if(show){
-                  if(adminBool){
-                    console.log('You are admin!');
-                    md.appendChild(editBtn);
-                    md.appendChild(editSmallBtn);
-                  }
+                  md.appendChild(editSmallBtn);
                   displayMembersAndChat(md, meetupKey);
                 } else {
                   md.appendChild(btnDiv);
@@ -339,10 +342,12 @@ function retrieveMeetupInfo(eventDate){
 function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
   db.ref('meetups/'+eventID).on('child_changed', function(snapshot){
+
     // DatabaseObject
     let meetup = snapshot.val();
     let meetupKey = snapshot.key;
     let currentUser = localStorage.getItem('loggedInUser');
+
     // Definiera dom-objektet.
     let meetupWrapper = document.getElementById('meetup-' + meetupKey);
     console.log(meetupWrapper);
@@ -400,8 +405,19 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
       infoBox.children[1].innerText = meetup.info;
 
       let memberOrButton = document.getElementsByClassName('moreMeetupInfoDiv ' + meetupKey)[0];
+
       if(!memberOrButton){
-        memberOrButton = meetupWrapper.children[8];
+        memberOrButton = meetupWrapper.children[9];
+        if(memberOrButton){
+          if(memberOrButton.className.includes('editBtn')){
+            printMessage('error', 'fk this');
+            memberOrButton = meetupWrapper.children[10];
+          }
+        } else {
+          memberOrButton = meetupWrapper.children[8];
+        }
+
+
       }
 
       // Display members and shit!
@@ -1547,62 +1563,21 @@ function pageLoaded(){
 function addEditBtns(meetupKey){
   let meetup = document.getElementById('meetup-' + meetupKey);
   let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  let eventID = getLocationInfo()[0];
+  let admin = false, creator = false;
+  console.log('The addEditBtns ran');
   if(currentUser){
-    //Check if the currentUser is admin or not first.
-    db.ref('meetups/' + getLocationInfo()[0] + '/' + meetupKey + '/admins').once('value', function(snapshot){
-      let admins = snapshot.val();
-      let adminBool = false;
-      console.log('The admins are: ', admins);
+      if(meetup){
+        let btn = document.createElement('button');
+        btn.className = 'editBtn iconBtn doNotCloseThis';
+        btn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
 
-      for(let admin in admins){
-        console.log('This is what we find: ', admins[admin])
-        if(admins[admin] == currentUser.uniqueID){
-          console.log('ALERT ALERT ADMIN FOUND!!');
-          adminBool = true;
-        } else {
-          console.log(admins[admin] + ' vs ' + currentUser.uniqueID);
-          console.log('No admin here.');
-        }
-      }
+        meetup.insertBefore(btn, meetup.lastChild);
 
-      if(meetup && adminBool){
-        let editBtn = document.createElement('button');
-        editBtn.className = 'editBtn purple';
-        editBtn.innerHTML = 'Redigera Meetup';
-
-        meetup.insertBefore(editBtn, meetup.lastChild);
-
-        let editSmallBtn = document.createElement('button');
-        editSmallBtn.className = 'editBtn iconBtn';
-        editSmallBtn.innerHTML = '<i class="mdi mdi-dots-vertical"></i>';
-
-        meetup.insertBefore(editSmallBtn, meetup.lastChild);
-
-        editBtn.addEventListener('click', function(){
-          editMeetup(meetupKey);
+        btn.addEventListener('click', function(event){
+          toggleMeetupDropDown(event, meetupKey, eventID, admin, creator);
         });
-        editSmallBtn.addEventListener('click', function(){
-          editMeetup(meetupKey);
-        });
-      } else {
-        console.log('You are not admin or the meetup was not found.');
       }
-
-    });
-  }
-}
-
-function editMeetup(meetupKey){
-  console.log('This meetup wants to be edited!! :(', meetupKey);
-
-  //Get the Dom meetup.
-  let meetup = document.getElementById('meetup-'+meetupKey);
-
-  // Check if it exsits.
-  if(!meetup){
-    console.log('This does not exist :o');
-  } else {
-
   }
 }
 
@@ -1614,13 +1589,10 @@ function removeEditBtn(meetupKey){
     for(let i = meetup.children.length-1; i >= 0; i--){
       let node = meetup.children[i];
 
-      if(node.className == 'editBtn purple'){
-        meetup.removeChild(node);
-      } else if(node.className == 'editBtn iconBtn'){
+      if(node.className.includes('editBtn')){
         meetup.removeChild(node);
       }
     }
-    //Remove all btns.
   } else {
     let array = document.getElementsByClassName('editBtn');
 
