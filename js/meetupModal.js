@@ -415,6 +415,7 @@ function toggleCreateMeetupModal(redigera = false){
   }
 }
 
+//funktion som kollar en sträng om den inte är för lång eller för kort
 function checkLength(type, str, min, max){
     if(str < min){
       printMessage('error', type + ' är lite för kort.');
@@ -427,31 +428,21 @@ function checkLength(type, str, min, max){
     }
 }
 
+//funktion som kollar så att antal är ett tal och inte något annat
 function checkForNumber(type, number){
     if(isNaN(number)){
       return printMessage('error', type + ' måste vara ett tal');
     } else if( number < 2){
-      printMessage('error', type + ' är för få platser')
+      printMessage('error', type + ' är för få platser');
+      return false;
     } else if ( number > 100){
       printMessage('error', type + ' är för många platser');
+      return false;
     }
       return true;
 }
-/*
-function checkForTime(type, timeVal){
 
-
-    if(isNaN(timeVal)){
-      printMessage('error', type + ' måste vara en tid');
-      //let newtimeVal = timeVal.split(":", 2);
-    }
-    else {
-      let timeToString = timeVal.toString().split('');
-      console.log('fungerar detta', + timeToString)
-      printMessage('success', type + ' är en test!!')
-    }
-} */
-
+//funktion som kollar om tiden är rätt format. Exempel 17:04
 function checkForTime(type, timeInp){
     var timeValue = timeInp;
     if(timeValue == "" || timeValue.indexOf(":")<0){
