@@ -608,8 +608,20 @@ function showNotifications(event){
     let notificationHeader = document.createElement('div');
     let notificationLabel = document.createElement('h2');
     notificationLabel.innerText = 'Notifikationer';
+
+    let notificationRemoveAllBtn = document.createElement('span');
+    notificationRemoveAllBtn.innerHTML = '<i class="mdi mdi-delete mdi-24px"></i>';
+    let removeAllHoverMessage = document.createElement('p');
+    removeAllHoverMessage.className = 'hoverMessage';
+    removeAllHoverMessage.innerText = 'Rensa notifikationer';
+
+    notificationRemoveAllBtn.addEventListener('click', removeAllNotifications);
+
     let notificationCloseIcon = document.createElement('span');
-    notificationCloseIcon.innerHTML = '<i class="mdi mdi-close mdi-36px"></i>'
+    notificationCloseIcon.innerHTML = '<i class="mdi mdi-close mdi-36px"></i>';
+    let closeIconHoverMessage = document.createElement('p');
+    closeIconHoverMessage.className = 'hoverMessage';
+    closeIconHoverMessage.innerText = 'Stäng';
 
     notificationCloseIcon.addEventListener('click', toggleNotifications);
 
@@ -626,7 +638,10 @@ function showNotifications(event){
 
 
     notificationHeader.appendChild(notificationLabel);
+    notificationHeader.appendChild(notificationRemoveAllBtn);
+    notificationHeader.appendChild(removeAllHoverMessage);
     notificationHeader.appendChild(notificationCloseIcon);
+    notificationHeader.appendChild(closeIconHoverMessage);
 
     notificationContent.appendChild(notificationList);
 
@@ -1006,4 +1021,37 @@ function retrieveFriends(){
     }
   }
   return friendList;
+}
+
+function removeAllNotifications(e){
+
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+  if(localUser){
+    db.ref('users/' + localUser.uniqueID).on('child_removed', function(snapshot){
+      let data = snapshot.val();
+      let key = snapshot.key;
+      if(key == 'notifications'){
+        clearDomNotifications();
+
+        printMessage('success', 'Tog bort alla notifikationer', undefined, null, 1);
+      }
+    });
+      /* the user is logged in */
+      db.ref('users/' + localUser.uniqueID + '/notifications').remove();
+  }
+}
+
+function clearDomNotifications(){
+
+  let list = document.getElementById('notificationList');
+
+  while(list.firstChild){
+    list.removeChild(list.firstChild);
+  }
+
+  let ingaNotifikationer = document.createElement('span');
+  ingaNotifikationer.innerText = 'Inga notifikationer';
+  ingaNotifikationer.setAttribute('id', 'ingaNotifikationer');
+  list.appendChild(ingaNotifikationer);
 }
