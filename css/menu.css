@@ -354,7 +354,7 @@ a {
 	}
 	#notificationList {
 		overflow: auto;
-		height: 415px;
+		max-height: 415px;
 		margin: 10px 0px 5px;
 	}
 #notificationList > div:nth-child(odd) {
