@@ -36,7 +36,7 @@
   text-align: center;
   margin-top: 10px;
 }
-.closeBtn{
+.footer-menu .closeBtn{
     height: 46px;
     cursor: pointer;
     color: #fcfcfc;
