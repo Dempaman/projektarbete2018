@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <title>MeWent | Alla evenemang</title>
 
   <!-- Fonts & Icons -->
@@ -55,18 +56,10 @@
       </div>
       <!-- HTML för desktopläge i nav -->
       <ul class="deskNav">
-        <a href="/index.html">
-          <li>HEM</li>
-        </a>
-        <a href="/profil.html">
-          <li id="myProfile" class="hidden">MIN PROFIL</li>
-        </a>
-        <a href="/events.html">
-          <li>ALLA EVENTS</li>
-        </a>
-        <a href="#contactUs">
-          <li>KONTAKTA OSS</li>
-        </a>
+        <li><a href="/index.html">HEM</a></li>
+        <li id="myProfile" class="hidden"><a href="/profil.html">MIN PROFIL</a></li>
+        <li><a href="/events.html">ALLA EVENTS</a></li>
+        <li><a href="#contactUs">KONTAKTA OSS</a></li>
         <li class="loginInMenu">LOGGA IN</li>
       </ul>
 
@@ -90,21 +83,11 @@
         but hey, it's pure CSS magic.
         -->
       <ul id="menu">
-        <a href="/landingpage.html" class="active">
-          <li>HEM</li>
-        </a>
-        <a href="/profil.html">
-          <li id="myProfileMob" class="hidden">MIN PROFIL</li>
-        </a>
-        <a href="/events.html">
-          <li>ALLA EVENTS</li>
-        </a>
-        <a href="#contactUs">
-          <li>KONTAKTA OSS</li>
-        </a>
-        <a>
-          <li class="loginInMenu">LOGGA IN</li>
-        </a>
+        <li><a href="/landingpage.html" class="active">HEM</a></li>
+        <li id="myProfileMob" class="hidden"><a href="/profil.html">MIN PROFIL</a></li>
+        <li><a href="/events.html">ALLA EVENTS</a></li>
+        <li><a href="#contactUs">KONTAKTA OSS</a></li>
+        <li class="loginInMenu"><a>LOGGA IN</a></li>
       </ul>
     </div>
   </nav>
@@ -116,7 +99,7 @@
   <div id="all-events-main">
     <div class="big-photo-wrapper">
       <div class="events-search">
-        <img src="img/logo-design-white-frame.png">
+        <img src="img/logo-design-white-frame.png" alt="search">
         <!--SEARCH WITH INPUT VALUE-->
         <form class="search-events" style="margin:auto;max-width:400px">
           <input type="text" name="searchevent" placeholder="Sök stad..">
