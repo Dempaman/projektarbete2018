@@ -41,12 +41,14 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
     /* Skapa "Notiser" */
     let dropDownNotice = document.createElement('li');
     dropDownNotice.className = 'doNotCloseThis';
-    dropDownNotice.innerHTML = '<i class="mdi mdi-bell"></i> Notifikationer';
+    dropDownNotice.innerHTML = '<i class="mdi mdi-bell-off"></i> Notifikationer'
     dropDownList.appendChild(dropDownNotice);
 
-    /* EventListener för "Notiser" */
-    dropDownNotice.addEventListener('click', toggleEventNotifications);
+    listenForBellChanges(dropDownNotice, meetupKey);
 
+    /* EventListener för "Notiser" */
+    dropDownNotice.addEventListener('click', toggleMeetupNotifications);
+    dropDownNotice.meetupKey = meetupKey;
     /* Skapa "Bjud in en vän" */
     let dropDownInvite = document.createElement('li');
     dropDownInvite.innerHTML = '<i class="mdi mdi-account"></i> Bjud in en vän';
@@ -62,11 +64,10 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
 
     /* EventListener för "Notiser" */
     dropDownShare.addEventListener('click', function(){
-      printMessage('default', 'Share this with the world, lul');
 
       var strWindowFeatures = "height=550,width=530";
 
-      window.open('https://www.facebook.com/sharer/sharer.php?u=https://dempaman.github.io/projektarbete2018-meWent/eventpage.html?event=' + eventID  + '&meetup='+meetupKey, '', strWindowFeatures);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=https://dempaman.github.io/projektarbete2018-meWent/eventpage.html?event=${eventID}&meetup=${meetupKey}&whyDoesThisNotWork=sadFace`, '', strWindowFeatures);
 
     });
 
@@ -202,17 +203,46 @@ function confirmRemoveMeetup(eventID, meetupKey, questionParam, answer, callback
   document.getElementsByTagName('body')[0].appendChild(confirmWrapper);
 }
 
-function toggleEventNotifications(event){
+function toggleMeetupNotifications(event){
   /* Start by toggle in the DOM (To make it look cool :PppPPpPpPp) */
-  if(event.target.innerHTML.includes('bell-off')){
-    event.target.innerHTML = '<i class="mdi mdi-bell"></i> Notifikationer';
-    printMessage('success', 'Du startade notifikationer för detta meetup');
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  if(localUser){
+
+    /* If the user is logged in, do shit. */
+
+    db.ref('users/' + localUser.uniqueID).once('value', function(snapshot){
+      let data = snapshot.val();
+      let meetupKey = event.target.meetupKey;
+      let setting;
+
+      if(data.meetupNotifications){
+        /* There are some notificationSettings */
+        for(let noti in data.meetupNotifications){
+          if(noti == meetupKey){
+            setting = data.meetupNotifications[noti];
+          }
+        }
+      }
+
+
+      if(setting){
+        /* It's true, set it to false. */
+        db.ref('users/' + localUser.uniqueID + '/meetupNotifications/' + meetupKey).set(false);
+
+        /* Skriv ut ett meddelande till användaren */
+        printMessage('success', 'Du stängde av notifikationer för detta meetup');
+      } else {
+        /* It's false, set it to true. */
+        db.ref('users/' + localUser.uniqueID + '/meetupNotifications/' + meetupKey).set(true);
+
+        /* Skriv ut ett meddelande till användaren */
+        printMessage('success', 'Du startade notifikationer för detta meetup');
+      }
+    });
+
   } else {
-    event.target.innerHTML = '<i class="mdi mdi-bell-off"></i> Notifikationer';
-    printMessage('success', 'Du stängde av notifikationer för detta meetup');
+    console.warn('No logged in user found');
   }
-
-
 }
 
 function dropDownEditMeetup(eventID, meetupKey){
@@ -228,4 +258,31 @@ function fadeOutObject(htmlObj){
       htmlObj.parentNode.removeChild(htmlObj);
     }
   },450);
+}
+
+function listenForBellChanges(htmlObj, meetupKey){
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  if(localUser){
+
+    db.ref('users/' + localUser.uniqueID + '/meetupNotifications/').on('value', function(snapshot){
+      let data = snapshot.val();
+      let found = false;
+      for(let noti in data){
+        let bool = data[noti];
+        let key = noti;
+        /* If the key in the database is the same as the meetup we'd like to set notifications on */
+        if(key == meetupKey){
+          found = true;
+          if(bool){
+            htmlObj.innerHTML = '<i class="mdi mdi-bell"></i> Notifikationer';
+          } else {
+            htmlObj.innerHTML = '<i class="mdi mdi-bell-off"></i> Notifikationer';
+          }
+          console.log('Set to: ', bool);
+        }
+      }
+    });
+  } else {
+    console.error('No user logged in');
+  }
 }

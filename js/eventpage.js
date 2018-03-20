@@ -483,10 +483,9 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
             // Now check if the logged in user just got added to the database!
             for(let member in meetup.members){
-              let userStr = localStorage.getItem('loggedInUser');
-              let user = JSON.parse(userStr);
-              if(user){
-                if(user.uniqueID == meetup.members[member].uniqueID){
+              let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+              if(localUser){
+                if(localUser.uniqueID == meetup.members[member].uniqueID){
                   console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
                   addEditBtns(meetupKey);
                   if(memberOrButton.parentNode){
@@ -1218,6 +1217,13 @@ function retrieveEventInfo(){
 
         if(json.errors){
           printMessage('error', json.errors[0].description);
+          setTimeout(function(){
+            printMessage('default', 'Skickar dig till framsidan');
+          },1000);
+          setTimeout(function(){
+            location.assign('/');
+          },4000)
+
           return;
         }
 
@@ -2203,7 +2209,7 @@ function downloadUsersToArray(meetupKey, array){
 
 /* This function sends a notification to someone. Either by SID or uniqueID. */
 
-function sendNotification(userOrSid = false, action){
+function sendNotification(userOrSid = false, action, meetupKey = false){
   console.log('Does this fire?');
   /* Get localUser */
   let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -2266,7 +2272,6 @@ function sendNotification(userOrSid = false, action){
 
 
   /* If the user is logged in check */
-
   if(!localUser){
     printMessage('error', 'Du är inte inloggad! :o');
     throw('There is not a user logged in.');
@@ -2277,10 +2282,14 @@ function sendNotification(userOrSid = false, action){
     /* Create the object to be sent! */
     let notificationObject;
     /* If the action is a invite create the invite here */
-    if(action == 'invite'){
-      console.log('invite being sent..');
+    if(action == 'invite' || action == 'meetupEventJoin' || action == 'meetupEventLeave'){
       /* Get the currentMeetupKey we put in localStorage before */
-      let meetupKey = localStorage.getItem('currentMeetupKey');
+      if(!meetupKey){
+        meetupKey = localStorage.getItem('currentMeetupKey');
+      } else {
+        console.log('We already have a meetupKey specified.');
+        console.log('and that key is: ', meetupKey);
+      }
 
       notificationObject = {
         fromID: localUser.uniqueID,
