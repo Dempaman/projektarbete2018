@@ -46,7 +46,8 @@ html{
   font-size: 1.5rem;
 
 }
-h2{
+
+.heading2{
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;
   color:  #FFFFFF;
@@ -54,6 +55,7 @@ h2{
   text-align: center;
   margin-left: 1rem;
   margin-right: 1rem;
+
 
 }
 
@@ -154,8 +156,10 @@ h2{
     font-size: 2rem;
     margin-left:13%;
   }
-  h2{
-    margin: 2rem;
+  .heading2{
+    margin-top: 6rem;
+    font-size: 2em;
+   text-shadow: 2px 2px 4px #000000;
   }
   .title>h1>a{
     color: #111;
