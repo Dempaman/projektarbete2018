@@ -41,11 +41,19 @@ p {
     padding: 10px;
     min-height: 55px;
 }
+.event-city{
+	flex-direction: row;
+	color: #FFFFFF;
+	font-weight: 300;
+	margin: 0;
+	padding: 10px;
+	padding-top: 0;
+}
 .event-place {
 	flex-direction: row;
 	color: #FFFFFF;
 	margin: 0;
-    padding: 10px;
+  padding: 10px;
 }
 .date {
 	display: inline-flex;

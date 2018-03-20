@@ -2,9 +2,16 @@ function toggleMeetupDropDown(event, meetupKey, eventID){
 
   let dropDownWrapper = document.getElementById('drop'+meetupKey);
   let target = event.target;
+  if(target.nodeName == 'I'){
+    target = target.parentNode;
+  }
 
   function printCloseIfNotCenter(closeEvent){
-      if(!closeEvent.target.className.includes('doNotCloseThis')){
+    let target = closeEvent.target;
+      if(target.nodeName == 'I'){
+        target = target.parentNode;
+      }
+      if(!target.className.includes('doNotCloseThis')){
         toggleWrapper(true);
         window.removeEventListener('click', printCloseIfNotCenter);
         console.log('Closeeed with closeIfNotCenter');
@@ -67,10 +74,10 @@ function toggleMeetupDropDown(event, meetupKey, eventID){
     /* Lägg ut den i dom:en */
 
     /* OM det är mobilknappen vi trycker på så appenda den en framför den framför */
-    if(event.target.className.includes('iconBtn')){
-      event.target.parentNode.insertBefore(dropDownWrapper, event.target.previousSibling);
+    if(target.className.includes('iconBtn')){
+      target.parentNode.insertBefore(dropDownWrapper, target.previousSibling);
     } else {
-      event.target.parentNode.insertBefore(dropDownWrapper, event.target);
+      target.parentNode.insertBefore(dropDownWrapper, target);
     }
   }
 

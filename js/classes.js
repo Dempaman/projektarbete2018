@@ -35,7 +35,7 @@ var config = {
 
 class MeetupClass {
 
-  constructor(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information){
+  constructor(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, eventName, eventDate){
     this.eventID = eventid;
     this.name = name;
     this.address = address;
@@ -46,6 +46,8 @@ class MeetupClass {
     this.spots = spots;
     this.ageInterval = ageInterval;
     this.info = information;
+    this.eventName = eventName;
+    this.eventDate = eventDate;
     this.created = firebase.database.ServerValue.TIMESTAMP;
   }
 

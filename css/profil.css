@@ -189,9 +189,7 @@ main>h2 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* background-color: #fff; */
-  /* padding: 1rem; */
-  /* flex-wrap: wrap; */
+
   border-radius: 5px;
 }
 
@@ -212,17 +210,7 @@ main>h2 {
   /* margin-bottom: 2rem; */
 }
 
-/* .person {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-} */
 
-/* .person>#logo-person{
-  font-size: 3rem;
-  margin: 0.5rem;
-} */
 
 .attending>h4, .created>h4 {
   /* margin-top: 1rem; */
@@ -343,7 +331,6 @@ main>h2 {
 }
 
 
-
 .hide {
     visibility: hidden;
     position: absolute;
@@ -430,6 +417,12 @@ main>h2 {
     -moz-hyphens: auto;
     -webkit-hyphens: auto;
     hyphens: auto;
+
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -ms-transition: 0.5s;
+    -o-transition: 0.5s;
+    transition: 0.5s;
 }
 
 /*TOOLTIP AROW DOWN*/
@@ -584,7 +577,7 @@ main>h2 {
 
 
 
-@media screen and (max-width: 415px) {
+/* @media screen and (max-width: 415px) {
   /* .meetup-count {
     padding: auto;
     flex-direction: column;
@@ -594,37 +587,52 @@ main>h2 {
     justify-content: center;
     align-items: center;
   }
-} */
+}
   @media screen and (min-width: 450px) {
     #user-info-more {
       margin-top: -5rem;
     }
-  }
-  @media screen and (min-width: 650px) {
+  } */
+  @media all and (min-width: 750px) {
     #user-info-more {
       margin-top: -1rem;
     }
-    .white-cover {
+    /* .white-cover {
       background: linear-gradient(rgba(255, 255, 255, 0), #fff, #fff);
-    }
+    } */
     .user {
-      width: 80%;
+
+      width: 90%;
     }
     .meetups-container {
-      width: 80%;
+
+      width: 90%;
     }
     .meetup-count {
-      /* padding: 1rem 7rem; */
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      align-content: center;
       width: 60%;
     }
+    .meetup-count>.created{
+      margin-right: 1rem;
+    }
     .created-meetups-container {
+
       margin: 0;
       flex-direction: row;
       justify-content: space-between;
       flex-wrap: wrap;
     }
+
+    .created-meetups-container>h2{
+      flex-basis: 100%;
+
+    }
     .single-meetup {
-      width: 47%;
-      min-width: 310px;
+      flex-basis: 40%;
+      /* width: 47%;*/
+      /* min-width: 280px; */
     }
   }

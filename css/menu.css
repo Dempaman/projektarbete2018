@@ -9,6 +9,7 @@ body {
 a {
 	text-decoration: none;
 	color: #333;
+	color:#fff;
 	transition: color 0.3s ease;
 }
 
@@ -59,13 +60,36 @@ a {
 }
 #notificationWrapper h2 {
 	color: #5f5f5f;
+	flex: 2;
 }
-#notificationWrapper h2 + span {
-	margin: 0px 10px;
+#notificationWrapper h2 ~ span:hover {
+	color: #f06a6a;
 }
-#notificationWrapper h2 + span:hover {
-	color: #e0e0e0;
+#notificationWrapper h2 ~ span:last-child {
+	margin: 0px 8px 0px 4px;
 }
+#notificationWrapper h2 ~ span:hover {
+	color: #f06a6a;
+}
+
+/* hoverMessage */
+#notificationWrapper span:hover + p.hoverMessage, #notificationWrapper span + p.hoverMessage:hover {
+	display: inline-block;
+}
+#notificationWrapper p.hoverMessage {
+	display: none;
+	background-color: #454545;
+	position: absolute;
+	color: #eee;
+	font-size: 0.8em;
+	padding: 5px 9px;
+	border-radius: 4px;
+	right: 0;
+	margin: 60px 5px 0px;
+}
+
+
+/* Actual header */
 #notificationWrapper > div:first-child {
 	display: flex;
 	background-color: #f3f3f3;
@@ -312,6 +336,10 @@ a {
 	margin-left: -6px;
 }
 #menu li:hover {
+	transition: 0.3s;
+	color: #6C0CCC;
+}
+#menu a:hover{
 	transition: 0.3s;
 	color: #6C0CCC;
 }
