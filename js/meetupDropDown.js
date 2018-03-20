@@ -1,4 +1,4 @@
-function toggleMeetupDropDown(event, meetupKey, eventID){
+function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
 
   let dropDownWrapper = document.getElementById('drop'+meetupKey);
   let target = event.target;
@@ -36,17 +36,7 @@ function toggleMeetupDropDown(event, meetupKey, eventID){
 
     /* Skapa UL */
     let dropDownList = document.createElement('ul');
-
-    /* Skapa "Redigera" */
-    let dropDownEdit = document.createElement('li');
-    dropDownEdit.className += ' doNotCloseThis';
-    dropDownEdit.innerHTML = '<i class="mdi mdi-pencil"></i> Redigera';
-    dropDownList.appendChild(dropDownEdit);
-
-    /* EventListener för "Redigera" */
-    dropDownEdit.addEventListener('click', function(event){
-      dropDownEditMeetup(eventID, meetupKey);
-    });
+    dropDownList.className = 'doNotCloseThis';
 
     /* Skapa "Notiser" */
     let dropDownNotice = document.createElement('li');
@@ -55,15 +45,57 @@ function toggleMeetupDropDown(event, meetupKey, eventID){
     dropDownList.appendChild(dropDownNotice);
 
     /* EventListener för "Notiser" */
-    dropDownNotice.addEventListener('click', toggleNotifications);
+    dropDownNotice.addEventListener('click', toggleEventNotifications);
 
-    /* Skapa "Radera" */
-    let dropDownRemove = document.createElement('li');
-    dropDownRemove.innerHTML = '<i class="mdi mdi-delete"></i> Radera';
-    dropDownList.appendChild(dropDownRemove);
+    /* Skapa "Bjud in en vän" */
+    let dropDownInvite = document.createElement('li');
+    dropDownInvite.innerHTML = '<i class="mdi mdi-account"></i> Bjud in en vän';
+    dropDownList.appendChild(dropDownInvite);
 
-    /* EventListener för "Radera" */
-    dropDownRemove.addEventListener('click', dropDownRemoveMeetup);
+    /* EventListener för "Notiser" */
+    dropDownInvite.addEventListener('click', inviteFriend);
+
+    /* Skapa "Dela" */
+    let dropDownShare = document.createElement('li');
+    dropDownShare.innerHTML = '<i class="mdi mdi-share-variant"></i> Dela';
+    dropDownList.appendChild(dropDownShare);
+
+    /* EventListener för "Notiser" */
+    dropDownShare.addEventListener('click', function(){
+      printMessage('default', 'Share this with the world, lul');
+
+      var strWindowFeatures = "height=550,width=530";
+
+      window.open('https://www.facebook.com/sharer/sharer.php?u=https://dempaman.github.io/projektarbete2018-meWent/eventpage.html?event=' + eventID  + '&meetup='+meetupKey, '', strWindowFeatures);
+
+    });
+
+
+    /* Gör enbart nedanstående om personen är admin eller creator */
+    if(admin || creator){
+      /* Skapa "Redigera" */
+      let dropDownEdit = document.createElement('li');
+      dropDownEdit.className += ' doNotCloseThis';
+      dropDownEdit.innerHTML = '<i class="mdi mdi-pencil"></i> Redigera';
+      dropDownList.appendChild(dropDownEdit);
+
+      /* EventListener för "Redigera" */
+      dropDownEdit.addEventListener('click', function(event){
+        dropDownEditMeetup(eventID, meetupKey);
+      });
+
+
+      /* Skapa "Radera" */
+      let dropDownRemove = document.createElement('li');
+      dropDownRemove.className = 'removeMeetupEntirelyBtn';
+      dropDownRemove.innerHTML = '<i class="mdi mdi-delete"></i> Radera';
+      dropDownList.appendChild(dropDownRemove);
+
+      /* EventListener för "Radera" */
+      dropDownRemove.addEventListener('click', dropDownRemoveMeetup);
+
+    }
+
 
     /* Lägg in listan i wrappern (Själva menyn) */
     dropDownWrapper.appendChild(dropDownList);
@@ -74,11 +106,7 @@ function toggleMeetupDropDown(event, meetupKey, eventID){
     /* Lägg ut den i dom:en */
 
     /* OM det är mobilknappen vi trycker på så appenda den en framför den framför */
-    if(target.className.includes('iconBtn')){
-      target.parentNode.insertBefore(dropDownWrapper, target.previousSibling);
-    } else {
-      target.parentNode.insertBefore(dropDownWrapper, target);
-    }
+    target.parentNode.insertBefore(dropDownWrapper, target);
   }
 
   function toggleWrapper(close = false){
@@ -174,12 +202,14 @@ function confirmRemoveMeetup(eventID, meetupKey, questionParam, answer, callback
   document.getElementsByTagName('body')[0].appendChild(confirmWrapper);
 }
 
-function toggleNotifications(event){
+function toggleEventNotifications(event){
   /* Start by toggle in the DOM (To make it look cool :PppPPpPpPp) */
   if(event.target.innerHTML.includes('bell-off')){
     event.target.innerHTML = '<i class="mdi mdi-bell"></i> Notifikationer';
+    printMessage('success', 'Du startade notifikationer för detta meetup');
   } else {
     event.target.innerHTML = '<i class="mdi mdi-bell-off"></i> Notifikationer';
+    printMessage('success', 'Du stängde av notifikationer för detta meetup');
   }
 
 

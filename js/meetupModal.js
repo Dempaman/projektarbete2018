@@ -33,7 +33,7 @@ function initSliderAndMoreShit(redigera = false, meetupKey) {
     let meetupData = document.getElementById('meetup-'+meetupKey);
     let infoDivWrapper = meetupData.children[4];
     let addressCard = meetupData.children[6];
-    let meetupInfo = meetupData.children[7];
+    let meetupInfo = meetupData.children[8];
     // ageSlider.values = {min: 40, max: 90}; // Sätt värden på slidern.
 
     console.log('Vi ska redigera detta event: ');

@@ -525,11 +525,11 @@ div.googleMapDiv > img {
   background-color: #8f8f8f;
   border-bottom: 1px solid #7e7e7e;
 }
-.dropDownWrapper > ul > li:last-child {
+.dropDownWrapper > ul > li.removeMeetupEntirelyBtn:last-child {
   background-color: #ff8181;
   color: #fbfbfb;
 }
-.dropDownWrapper > ul > li:last-child:hover {
+.dropDownWrapper > ul > li.removeMeetupEntirelyBtn:last-child:hover {
   background-color: #e86060;
   color: #fbfbfb;
   border-bottom: 1px solid #fbfbfb;
@@ -598,7 +598,55 @@ div.googleMapDiv > img {
   background-color: #f8f8f8;
 }
 
+/* Edit Buttons */
+.iconBtn.editBtn {
+  outline: none;
+  margin: 14px 6px;
+  padding: 0px;
+  font-size: 2.8em;
+  color: #8c8c8c;
+  background-color: #fff0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+}
+.iconBtn.editBtn:focus {
+  color: #757575;
+}
 
+/* CSS for editBtn dropdown */
+.dropDownWrapper {
+  margin: 5px;
+  top: 0;
+  right: 0;
+  position: absolute;
+  z-index: 2;
+  box-shadow: -3px 5px 7px #bcbcbc;
+  animation-name: fadein;
+  animation-duration: 0.5s;
+}
+.dropDownWrapper > ul > li {
+  padding: 17px 35px;
+  margin: 0px;
+  color: #6e6e6e;
+  background-color: #fff;
+  border-bottom: 1px solid #efefef;
+}
+.dropDownWrapper > ul > li:first-child {
+  border-top: 2px solid #878787;
+}
+.dropDownWrapper > ul > li:hover {
+  color: #222;
+  background-color: #fff;
+  border-bottom: 1px solid #efefef;
+}
+
+/* Icons */
+.dropDownWrapper > ul > li > i {
+  margin-right: 6px;
+  font-size: 1.2em;
+}
 
 /* Animations */
 .spinner {
@@ -695,53 +743,12 @@ div.googleMapDiv > img {
     display: none;
   }
 
-  /* CSS for editBtn dropdown */
-  .dropDownWrapper {
-    margin: 5px;
-    top: 0;
-    right: 0;
-    position: absolute;
-    z-index: 2;
-    box-shadow: -3px 5px 7px #bcbcbc;
-    animation-name: fadein;
-    animation-duration: 0.5s;
-  }
-  .dropDownWrapper > ul > li {
-    padding: 17px 35px;
-    margin: 0px;
-    color: #6e6e6e;
-    background-color: #fff;
-    border-bottom: 1px solid #efefef;
-  }
-  .dropDownWrapper > ul > li:first-child {
-    border-top: 2px solid #878787;
-  }
-  .dropDownWrapper > ul > li:hover {
-    color: #222;
-    background-color: #fff;
-    border-bottom: 1px solid #efefef;
-  }
   /* Css for the confirmModal */
   .confirmModal {
     width: calc(100% - 80px);
     margin: 20px auto;
   }
 
-  .iconBtn.editBtn {
-    outline: none;
-    margin: 14px 6px;
-    padding: 0px;
-    font-size: 2.8em;
-    color: #8c8c8c;
-    background-color: #fff0;
-    position: absolute;
-    top: 0;
-    right: 0;
-    border: none;
-    }
-    .iconBtn.editBtn:focus {
-      color: #757575;
-    }
     #meetupWrapper > div {
       position: relative;
     }
@@ -876,10 +883,6 @@ div.googleMapDiv > img {
     flex: 2;
   }
 
-  /* Edit Button */
-  .iconBtn.editBtn {
-    display: none;
-  }
   /* Join Button */
   .btnHolder {
     margin: 48px 0px -30px 90px;
