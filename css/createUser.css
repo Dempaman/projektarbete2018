@@ -18,7 +18,8 @@
 }
 
 #lmw button.btnCu:hover {
-  background-color: #ececec;
+  background-color: #f0f0f0;
+  color: #4b4b4b;
 }
 
 #lmw button.hide, #lmw .loginModalButtonHolder.hide {

@@ -37,38 +37,94 @@ window.addEventListener('load', profilFunction);
 
 
 function profilePage() {
-  console.log(window.location.href);
-  console.log(window.location.pathname);
-  console.log('test ' + window.location.search);
+  // console.log(window.location.href);
+  // console.log(window.location.pathname);
+  // console.log('test ' + window.location.search);
 
 }
 
-function ellipsisEvents(mainText,hide) {
+function ellisisTrue(event) {
 
-  for (let i = 0; i < mainText.length; i++) {
+    let labelClick = event.target;
+    let textFakeWidth = event.target.offsetWidth;
+    let textRealWidth = event.target.parentElement.lastElementChild.offsetWidth;
+    let tooltip = event.target.parentElement.children[2];
 
-    if (mainText[i].offsetWidth < mainText[i].parentElement.lastElementChild.offsetWidth) {
-      mainText[i].addEventListener('click', function(event){
 
-        if (mainText[i].parentElement.children[2].className === hide) {
-          mainText[i].parentElement.children[2].classList.add('show');
-          console.log(event.target);
+    if (textFakeWidth < textRealWidth) {
+      //console.log('textFakeWidth is smaller');
+
+      labelClick.addEventListener('click', function(event){
+
+        if (tooltip.className === 'hide-small') {
+          tooltip.classList.add('show');
+          console.log('added show classname = ', tooltip.className);
+          //console.log(event.target);
         }else {
-           mainText[i].parentElement.children[2].classList.remove('show');
+           tooltip.classList.remove('show');
+             console.log('removed show classname = ', tooltip.className);
         }
       });
 
-        mainText[i].parentElement.children[2].addEventListener('click', function(event){
+        tooltip.addEventListener('click', function(event){
 
-          if (mainText[i].parentElement.children[2].className === hide) {
-            mainText[i].parentElement.children[2].classList.add('show');
-            //console.log(event.target);
+          if (tooltip.className === 'hide-small') {
+            tooltip.classList.add('show');
+            console.log(event.target.className);
           }else {
-             mainText[i].parentElement.children[2].classList.remove('show');
+             tooltip.classList.remove('show');
+               console.log(event.target.className);
           }
         });
     }else{
-      mainText[i].parentElement.children[2].style.display = "none";
+      tooltip.style.display = "none";
+      //console.log('textFakeWidth is NOT smaller');
+    }
+}
+
+function ellipsisEvents(mainText,hide) {
+  console.log(mainText);
+  console.log('inside ellipsisEvents function' );
+
+   console.log('length ', mainText.length);
+   console.log('maintext is now ', mainText);
+  for (let i = 0; i < mainText.length; i++) {
+
+    let labelClick = mainText[i];
+    let textFakeWidth = mainText[i].offsetWidth;
+    let textRealWidth = mainText[i].parentElement.lastElementChild.offsetWidth;
+    let tooltip = mainText[i].parentElement.children[2];
+    console.log('textFakeWidth ', textFakeWidth);
+    console.log('textRealWidth ', textRealWidth);
+
+    if (textFakeWidth < textRealWidth) {
+      //console.log('textFakeWidth is smaller');
+
+      labelClick.addEventListener('click', function(event){
+
+        if (tooltip.className === hide) {
+          tooltip.classList.add('show');
+          console.log('added show classname = ', tooltip.className);
+          //console.log(event.target);
+        }else {
+           tooltip.classList.remove('show');
+             console.log('removed show classname = ', tooltip.className);
+        }
+      });
+
+        tooltip.addEventListener('click', function(event){
+
+          if (tooltip.className === hide) {
+            tooltip.classList.add('show');
+            console.log(event.target.className);
+          }else {
+             tooltip.classList.remove('show');
+               console.log(event.target.className);
+          }
+        });
+    }else{
+      tooltip.style.display = "none";
+      //console.log('textFakeWidth is NOT smaller');
     }
   }
 }
@@ -94,8 +150,9 @@ function ifUserIsTrue() {
   // Är användaren inloggad
   const userLog = JSON.parse(localStorage.getItem('loggedInUser'));
 
-  // användarens sid ID querystring
-  const pageUserId = window.location.href.split('?sid=')[1];
+  // användarens user ID querystring
+  const pageUserId = window.location.href.split('?user=')[1];
+  //console.log(pageUserId);
   //console.log(pageUserId);
 
   if (pageUserId && userLog) {
@@ -106,9 +163,10 @@ function ifUserIsTrue() {
       let allUsers = snapshot.val();
 
       for (let x in allUsers) {
+      //  console.log(allUsers[x].sid);
         if (allUsers[x].sid === pageUserId) {
 
-          console.log(allUsers[x]);
+          //console.log(allUsers[x]);
 
           userName.innerText = allUsers[x].fullname;
           userImg.src = allUsers[x].avatarURL;
@@ -178,60 +236,21 @@ function ifUserIsTrue() {
 
                     createdContainer.appendChild(div);
 
-                    let mainText = document.getElementsByClassName('main-text');
-                    let meetupName = document.getElementsByClassName('meetup-name');
+                    // div.getElementsByClassName('main-text')[0].addEventListener('click', ellisisTrue);
+                    // div.getElementsByClassName('main-text')[1].addEventListener('click', ellisisTrue);
+                    let mainText = div.getElementsByClassName('main-text');
+                    let meetupName = div.getElementsByClassName('meetup-name');
                     ellipsisEvents(mainText, "hide-small");
                     ellipsisEvents(meetupName,"hide");
-                    //console.log('mainText is ', mainText);
 
-                    // for (let i = 0; i < mainText.length; i++) {
-                    //
-                    //   if (mainText[i].offsetWidth < mainText[i].parentElement.lastElementChild.offsetWidth) {
-                    //     mainText[i].addEventListener('click', function(event){
-                    //
-                    //       if (mainText[i].parentElement.children[2].className === "hide-small") {
-                    //         mainText[i].parentElement.children[2].classList.add('show');
-                    //         console.log(event.target.parentElement.children[2].className);
-                    //       }else {
-                    //          mainText[i].parentElement.children[2].classList.remove('show');
-                    //            console.log(event.target.parentElement.children[2].className);
-                    //       }
-                    //     });
-                    //
-                    //       mainText[i].parentElement.children[2].addEventListener('click', function(event){
-                    //
-                    //         if (mainText[i].parentElement.children[2].className === "hide-small") {
-                    //           mainText[i].parentElement.children[2].classList.add('show');
-                    //           console.log(event.target.parentElement.children[2].className);
-                    //         }else {
-                    //            mainText[i].parentElement.children[2].classList.remove('show');
-                    //              console.log(event.target.parentElement.children[2].className);
-                    //         }
-                    //       });
-                    //   }else{
-                    //     mainText[i].parentElement.children[2].style.display = "none";
-                    //   }
-                    // }
                   }
                 });
               }
 
-              console.log('other user obj ', obj);
-              console.log('other user userCreated[obj] ', userCreated[obj]);
-              //let currentEvent = eventObjects[obj];
+              // console.log('other user obj ', obj);
+              // console.log('other user userCreated[obj] ', userCreated[obj]);
 
-              // Lägg till html kod som ska loppa igenom alla meetups
-
-              // console.log('eventObj ', obj);
-              // console.log('eventObjects ', Object.keys(userCreated[obj]).length);
             }
-
-            // let mainText = document.getElementsByClassName('main-text')[0];
-            // let ctx = mainText.getContext('2d');
-            // let text = ctx.measureText('foo');
-            // console.log(mainText);
-            // console.log('test width is ',text.width);
-
             createdCount.innerText = counter;
           }
 
@@ -239,22 +258,14 @@ function ifUserIsTrue() {
             let secondCounter = 0;
             for (let obj in meetups) {
               secondCounter += Object.keys(meetups[obj]).length;
-              //let currentEvent = eventObjects[obj];
-
-              // Lägg till html kod som ska loppa igenom alla meetups
-
-              console.log('meetups ', obj);
-              console.log('meetups ', Object.keys(meetups[obj]).length);
+              // Inga Joinade meetups ska visas upp om det någon annan än den egna användaren
             }
             meetupCount.innerText = secondCounter;
           }
-
         } else {
-          console.log('not user');
+        //  console.log('not user or no user with this id could be found');
         }
       }
-
-
     });
 
   } else if (userLog) {
@@ -337,7 +348,6 @@ function ifUserIsTrue() {
         }
         createdCount.innerText = counter;
       }
-
     }); // THE END OF Hämta alla skapade Meetups :)
 
     // Hämta alla joind CREATED MEETUPCARD
@@ -354,18 +364,17 @@ function ifUserIsTrue() {
 
           joindEventId = obj;
           joindMeetupId = meetupsJoind[obj];
-          console.log('joind obj ', joindEventId);
-          console.log('joind meetup ', joindMeetupId);
+          // console.log('joind obj ', joindEventId);
+          // console.log('joind meetup ', joindMeetupId);
 
           for (let x in joindMeetupId) {
 
             db.ref('meetups/' + joindEventId).on('value', function(snapshot) {
               let snap = snapshot.val();
 
-
               if (x) {
 
-                console.log('joind snap ',snap[x]);
+              //  console.log('joind snap ',snap[x]);
                 let div = document.createElement('div');
                 div.className = "single-meetup";
                 div.innerHTML = `<div class="event-backgound-joind">
@@ -422,112 +431,26 @@ function ifUserIsTrue() {
     });
 
   } else {
-    console.log('Sorry! No Web Storage support');
+  //  console.log('Sorry! No Web Storage support');
     //let indexPage = '/index.html';
     //let testLocalHost = window.location.protocol + '//' + window.location.hostname + ':8000' + indexPage;
     //let relocate = window.location.href
     //console.log(window.location.href);
     //console.log(testLocalHost);
     window.location.assign('index.html'); // kan komma att ändras i framtiden
-
   }
-
-
-
-
-
-
-
-
-
-  /*console.log('pageUser ', pageUserId);
-  console.log('pageUser is a ' + typeof(pageUserId));
-
-
-
-  if (userLog) {
-
-    profileName = userLog.fullname;
-    profileImg = userLog.avatarURL;
-    uniqueID = userLog.uniqueID;
-
-
-
-    userName.innerText = profileName;
-    userImg.src = profileImg;
-
-
-    db.ref('/users/' + uniqueID).on('value', function(snapshot) {
-      data = snapshot.val();
-
-      if (data.meetups) {
-        let amontOfMeetups = Object.keys(data.meetups);
-        meetupCount.innerText = amontOfMeetups.length;
-
-        let joindMeetups = data.meetups;
-        console.log(joindMeetups);
-        console.log(joindMeetups.key);
-
-        for (let x in joindMeetups) {
-          console.log(x);
-
-          // Lägg till html kod som ska loppa igenom alla meetups
-
-        }
-
-      } else {
-        meetupCount.innerText = 0;
-        console.log('data[x] is ', data.meetups);
-        console.log('du är anmäld på 0 meetups');
-      }
-
-    });
-
-    // Hämta alla skapade Meetups
-    db.ref('users/' + uniqueID + '/createdMeetups').on('value', function(snapshot) {
-      // child_added
-      let eventObjects = snapshot.val();
-      let eventID = snapshot.key;
-
-      if (eventObjects) {
-        let counter = 0;
-        for (let obj in eventObjects) {
-          counter += Object.keys(eventObjects[obj]).length;
-          //let currentEvent = eventObjects[obj];
-
-          // Lägg till html kod som ska loppa igenom alla meetups
-
-          console.log('eventObj ', obj);
-          console.log('eventObjects ', Object.keys(eventObjects[obj]).length);
-        }
-          createdCount.innerText = counter;
-      }
-
-    });
-
-
-  } else {
-    console.log('Sorry! No Web Storage support');
-    let indexPage = '/index.html';
-    //let testLocalHost = window.location.protocol + '//' + window.location.hostname + ':8000' + indexPage;
-    //let relocate = window.location.href
-    //console.log(window.location.href);
-    //console.log(testLocalHost);
-    window.location.assign('index.html'); // kan komma att ändras i framtiden
-  }*/
-
 }
 
 function profilFunction(event) {
 
-  profilePage();
+//  profilePage();
   ifUserIsTrue();
 
 
   // User info text - show more/ show less
   // let more = document.getElementById('user-info-more');
-  let showMore = document.getElementsByClassName('show-more')[0];
-  let userInfo = document.getElementsByClassName('white-cover')[0];
+  // let showMore = document.getElementsByClassName('show-more')[0];
+  // let userInfo = document.getElementsByClassName('white-cover')[0];
 
   // more.addEventListener('click', function(event) {
   //   event.preventDefault();
@@ -554,40 +477,40 @@ function profilFunction(event) {
 
 
   // To checkout meetups or remove them - hidden nav
-  let smallMenu = document.getElementsByClassName('show-hidden-nav');
-  let closeSmallMenu = document.getElementsByClassName('close-small-menu');
-  let hiddenNav = document.getElementsByClassName('hidden-nav');
-  let goToo = document.getElementsByClassName('go-too')[0];
-  let removeMeetup = document.getElementsByClassName('remove-meetup')[0];
-  console.log(smallMenu);
-  // console.log(smallMenu[1].className);
-
-  for (var i = 0; i < smallMenu.length; i++) {
-    let hide = hiddenNav[i];
-    smallMenu[i].addEventListener('click', function(event) {
-      event.preventDefault();
-      if (hide.className === 'hidden-nav') {
-        hide.classList.add('show');
-      } else {
-        hide.classList.remove('show');
-      }
-    });
-  }
-
-  for (var i = 0; i < closeSmallMenu.length; i++) {
-    let close = hiddenNav[i];
-    closeSmallMenu[i].addEventListener('click', function(event) {
-      event.preventDefault();
-      if (close.className === 'hidden-nav show') {
-        close.classList.remove('show');
-      }
-    });
-  } // End of -To checkout meetups or remove them - hidden nav
+  // let smallMenu = document.getElementsByClassName('show-hidden-nav');
+  // let closeSmallMenu = document.getElementsByClassName('close-small-menu');
+  // let hiddenNav = document.getElementsByClassName('hidden-nav');
+  // let goToo = document.getElementsByClassName('go-too')[0];
+  // let removeMeetup = document.getElementsByClassName('remove-meetup')[0];
+  // console.log(smallMenu);
+  // // console.log(smallMenu[1].className);
+  //
+  // for (var i = 0; i < smallMenu.length; i++) {
+  //   let hide = hiddenNav[i];
+  //   smallMenu[i].addEventListener('click', function(event) {
+  //     event.preventDefault();
+  //     if (hide.className === 'hidden-nav') {
+  //       hide.classList.add('show');
+  //     } else {
+  //       hide.classList.remove('show');
+  //     }
+  //   });
+  // }
+  //
+  // for (var i = 0; i < closeSmallMenu.length; i++) {
+  //   let close = hiddenNav[i];
+  //   closeSmallMenu[i].addEventListener('click', function(event) {
+  //     event.preventDefault();
+  //     if (close.className === 'hidden-nav show') {
+  //       close.classList.remove('show');
+  //     }
+  //   });
+  // } // End of -To checkout meetups or remove them - hidden nav
 
   let userEdit = document.getElementById('tellMeMore');
-  console.log('userEdit ' + userEdit);
+  //console.log('userEdit ' + userEdit);
   userEdit.addEventListener('click', function(event) {
-    console.log(event.type);
+  //  console.log(event.type);
 
     if (document.getElementsByClassName('user-story')[0].style.display === 'none') {
       document.getElementsByClassName('user-story')[0].style.display = 'block';
@@ -596,6 +519,5 @@ function profilFunction(event) {
     }
 
   });
-
 
 }

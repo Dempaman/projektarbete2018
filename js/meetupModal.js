@@ -218,6 +218,8 @@ function createMeetupListener(event){
 
   /* Börja med att hämta alla variabler */
   let eventid = getLocationInfo()[0];
+  let eventName = document.getElementById('eventTitle').innerText;
+  let eventDate = document.getElementById('eventDate').innerText;
   let name = document.getElementById('nameInput').value;
   let address = document.getElementById('addressInput').value;
   let placeName = document.getElementById('placeNameInput').value;
@@ -268,12 +270,12 @@ function createMeetupListener(event){
 
                   // Skapa meetupet.
                   if(meetupKey && redigera){
-                    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information);
+                    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, eventName, eventDate);
                     meetup.key = meetupKey;
                     meetup.save();
                     redigera = false;
                   } else {
-                    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information);
+                    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, eventName, eventDate);
 
                     meetup.creator = creator;
                     meetup.admins = admins;
