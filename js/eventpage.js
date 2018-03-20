@@ -1770,7 +1770,7 @@ function popupProfile(event, eventID, meetupKey){
 
 
   let kickBtn = document.createElement('button');
-  kickBtn.innerHTML = '<i class="mdi mdi-account-remove mdi-24px"></i>';
+  kickBtn.innerHTML = '<i class="mdi mdi-account-remove"></i>';
   kickBtn.className = 'kickBtn';
   let admin = getAdmin(localUser.uniqueID);
 

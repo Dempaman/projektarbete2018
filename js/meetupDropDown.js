@@ -63,6 +63,11 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
     /* EventListener för "Notiser" */
     dropDownShare.addEventListener('click', function(){
       printMessage('default', 'Share this with the world, lul');
+
+      var strWindowFeatures = "height=550,width=530";
+
+      window.open('https://www.facebook.com/sharer/sharer.php?u=https://dempaman.github.io/projektarbete2018-meWent/eventpage.html?event=' + eventID  + '&meetup='+meetupKey, '', strWindowFeatures);
+
     });
 
 

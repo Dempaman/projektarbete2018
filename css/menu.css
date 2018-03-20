@@ -64,6 +64,7 @@ a {
 }
 #notificationWrapper h2 ~ span:hover {
 	color: #f06a6a;
+	cursor: pointer;
 }
 #notificationWrapper h2 ~ span:last-child {
 	margin: 0px 8px 0px 4px;
@@ -85,7 +86,7 @@ a {
 	padding: 5px 9px;
 	border-radius: 4px;
 	right: 0;
-	margin: 60px 5px 0px;
+	top: 45px;
 	z-index: 2;
 }
 
