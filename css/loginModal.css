@@ -78,12 +78,8 @@ span.loginModalCloseButton {
 /* Hover Effects for the WEB */
 /*Alltid färg på när mobil visas */
 #lmw button:hover {
-<<<<<<< HEAD
-  background-color: #ececec;
-  color: #0F1316;
-=======
   background-color: #333b4a;
->>>>>>> develop
+  color: #0F1316;
 }
 #lmw button > i.mdi-facebook-box {
   color: #45a1e6;
