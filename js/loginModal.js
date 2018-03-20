@@ -408,7 +408,6 @@ function retrieveLoginModalContent(){
   });
 
 
-
   //Add login event
   btnCuLogin.addEventListener('click', function(event){
     //get email and password
@@ -456,6 +455,16 @@ function retrieveLoginModalContent(){
           });
       }
     });
+
+    txtEmail.addEventListener('focus', function(event) {
+    event.preventDefault(); event.stopPropagation();
+    window.scrollTo(0,0); //the second 0 marks the Y scroll pos. Setting this to i.e. 100 will push the screen up by 100px.
+    document.body.scrollTop = 0;
+    });
+
+
+
+
 
   // Create button Wrappers
   let googleButtonWrapper = document.createElement('div');
