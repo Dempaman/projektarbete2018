@@ -97,7 +97,7 @@ input.errorBorder{
   text-align: center;
   font-size: 0.8em;
   max-width: 300px;
-  margin: 22px auto 0;
+  margin: 70px auto 0;
   border-bottom: 1px solid #4E5F7166;
   border-top: 1px solid #4E5F7166;
 }
@@ -176,4 +176,16 @@ label:after {
 .switchInput:checked + label:after {
 	left: calc(100% - 5px);
 	transform: translateX(-100%);
+}
+
+@media screen and (max-width: 667px){
+  .containerUserInput {
+      margin: 22px auto 0;
+  }
+}
+
+@media screen and (max-height: 780px){
+  .containerUserInput {
+      margin: 22px auto 0;
+  }
 }
