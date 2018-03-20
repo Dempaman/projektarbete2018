@@ -37,28 +37,20 @@
   margin-top: 10px;
 }
 .faq .closeBtnFaq{
-    height: 46px;
-    cursor: pointer;
-    color: #fcfcfc;
-    display: flex;
-    justify-content: center;
-    background-color: #ff8181;
-    align-items: center;
-    margin: 25px 20px 5px;
-    /* margin-top: 150px; */
-    width: 90%;
-    border-radius: 5px;
-    border-top: 2px solid #d17d7d;
-    position: absolute;
-    bottom: 10px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer
+
+
 }
 @media screen and (min-width: 1025px){
   .faq {
     display: inline-block;
     position: fixed;
-    height: 77%;
+    height: auto;
     /* max-height: 77%; */
-    min-height: 700px;
+    /* min-height: 700px; */
     width: 400px;
     background-color: #636363;
     color: #f9f9f9;
@@ -84,11 +76,7 @@
   .askMore{
     margin: 30px;
   }
-  .faq .closeBtnFaq{
-    margin: 25px 20px 5px;
-    margin-top: 100px;
-  }
   .faq .closeBtnFaq:hover{
-    background-color: #f66;
+    color:#6C0CCC;
   }
 }
