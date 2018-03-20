@@ -1217,6 +1217,13 @@ function retrieveEventInfo(){
 
         if(json.errors){
           printMessage('error', json.errors[0].description);
+          setTimeout(function(){
+            printMessage('default', 'Skickar dig till framsidan');
+          },1000);
+          setTimeout(function(){
+            location.assign('/');
+          },4000)
+
           return;
         }
 

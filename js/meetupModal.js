@@ -80,6 +80,10 @@ function initSliderAndMoreShit(redigera = false, meetupKey) {
 
       let lat = Number.parseFloat(googleMapDiv.getAttribute('lat'));
       let lng = Number.parseFloat(googleMapDiv.getAttribute('lng'));
+      if(!lat || !lng){
+        lat = 59;
+        lng = 12;
+      }
       console.log('Lat:',lat,'Long:',lng);
 
       let myLatLng = new google.maps.LatLng({lat: lat, lng: lng});
