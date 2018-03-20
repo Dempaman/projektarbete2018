@@ -27,6 +27,11 @@ p {
 	background-color: #232323;
 	position: relative;
 	/* cursor: pointer; */
+
+	-webkit-transform: scale(1.0);
+	-ms-transform: scale(1.0);
+	transform: scale(1.0);
+	transition: 0.3s;
 }
 
 .big-card img {

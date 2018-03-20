@@ -49,9 +49,13 @@ firebase.auth().onAuthStateChanged(user => {
         }
 
         if(data.action == 'invite'){
-          printMessage('notification', data.fullname + ' bjöd precis in dig till ett meetup!');
+          printMessage('notification', data.fullname + ' har bjudit in dig till ett meetup');
         } else if(data.action == 'friendRequest'){
-          printMessage('notification', data.fullname + ' la precis till dig som vän!');
+          printMessage('notification', data.fullname + ' vill bli din vän');
+        } else if(data.action == 'meetupEventJoin'){
+          printMessage('notification', data.fullname + ' har gått med i ett meetup du följer');
+        } else if(data.action == 'meetupEventLeave'){
+          printMessage('notification', data.fullname + ' lämnade meetupet: ');
         }
       }
     });
@@ -694,7 +698,7 @@ function displayNotifications(displayList){
       let action = data.action;
       let eventID, meetupKey;
 
-      if(action == 'invite'){
+      if(action == 'invite' || action == 'meetupEventJoin'){
         eventID = data.eventid;
         meetupKey = data.meetupKey;
       }
@@ -750,10 +754,12 @@ function displayNotifications(displayList){
       /* Append stuff into showMoreDiv */
 
       /* If it's an invitation to a meetup */
-      if(action == 'invite'){
+      if(action == 'invite' || action == 'meetupEventJoin'){
+        console.log('eventid is: ', eventID);
+        console.log('meetupKey is: ', meetupKey);
         db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snapshot){
           data = snapshot.val();
-          console.log('WHAT IS MEETUPDATA?!?', data);
+          console.log('IS DATA REALLY NULL? ', data);
           let showMoreInfoDiv = document.createElement('div');
           showMoreInfoDiv.className = 'showMoreInfoDiv';
 
@@ -786,7 +792,7 @@ function displayNotifications(displayList){
           let adressLabel = document.createElement('span');
           adressLabel.innerText = 'Adress';
           let adress = document.createElement('span')
-          adress.innerText = data.adress;
+          adress.innerText = data.address;
           adressDiv.appendChild(adressLabel);
           adressDiv.appendChild(adress);
           let infoWrapper = document.createElement('div');
@@ -804,8 +810,12 @@ function displayNotifications(displayList){
 
 
         });
+      } else if(action == 'meetupEventJoaain'){
+
+      } else if(action == 'meetupEventLeave'){
+
       } else {
-        console.log('LUUUL THIS IS A friendRequest!!!!');
+        console.log('This should be a friend request.');
       }
 
       /* append Btns */
@@ -901,8 +911,11 @@ function getAction(action){
     return ' bjöd in dig till ett meetup';
   } else if(action == 'friendRequest'){
     return ' la till dig som vän';
+  } else if(action == 'meetupEventJoin'){
+    return ' gick med i ett meetup du följer';
+  } else if(action == 'meetupEventLeave'){
+    return ' lämnade ett meetup du följer';
   }
-
 }
 
 // Denna funktion beräknar vad som ska visas som tid på varje chattmeddelande!
@@ -965,12 +978,14 @@ function joinMeetup(user, meetupKey, eventID){
     let spots = data.spots, counter = 0;
 
     for(let comingUser in members){
+      /* here we have all the people coming to the meetup :D */
       counter++;
       if(members[comingUser].uniqueID == user.uniqueID) {
         userIsComing = true;
         console.log('You are coming to this already!!');
       }
     }
+    sendNotificationsToMeetupMembers(meetupKey, 'meetupEventJoin');
 
     if(counter < spots){
       let userObject = {
@@ -996,6 +1011,11 @@ function joinMeetup(user, meetupKey, eventID){
       printMessage('error', 'Tyvärr får du inte plats här');
     }
   });
+
+
+
+
+
 }
 
 // Add a friend with SID, (currentUser)
@@ -1065,4 +1085,40 @@ function clearDomNotifications(){
   ingaNotifikationer.innerText = 'Inga notifikationer';
   ingaNotifikationer.setAttribute('id', 'ingaNotifikationer');
   list.appendChild(ingaNotifikationer);
+}
+
+function sendNotificationsToMeetupMembers(meetupKey, action){
+    let eventID = getLocationInfo()[0];
+    db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snap){
+      let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+      let data = snap.val();
+      let members = data.members;
+
+      /* here we have all the people coming to the meetup :D */
+      for(let comingUser in members){
+        let key = comingUser;
+        comingUser = members[comingUser];
+
+        /* send notification to the people of the meetup with this turned on */
+        db.ref('users/').once('value', function(snapshot){
+          let data = snapshot.val();
+
+          /* Loop it */
+          for(let user in data){
+            let userData = data[user];
+
+            if(userData.meetupNotifications){
+              for(let noti in userData.meetupNotifications){
+                let setting = userData.meetupNotifications[noti];
+                let key = noti;
+                /* this meetup */
+                if(key == meetupKey && setting){
+                  sendNotification(comingUser.sid, action, meetupKey);
+                }
+              }
+            }
+          }
+        });
+      }
+  });
 }
