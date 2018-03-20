@@ -1026,8 +1026,10 @@ function retrieveFriends(){
 function removeAllNotifications(e){
 
   let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
-
-  if(localUser){
+  let list = document.getElementById('notificationList');
+  if(list.children[0].getAttribute('id') == 'ingaNotifikationer'){
+    printMessage('error', 'Det finns inga notifikationer att ta bort', undefined, null, 1);
+  } else if(localUser){
     db.ref('users/' + localUser.uniqueID).on('child_removed', function(snapshot){
       let data = snapshot.val();
       let key = snapshot.key;
