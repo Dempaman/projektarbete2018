@@ -902,7 +902,49 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
 
         // Create the actual message
         let textmessage = document.createElement('p');
-        textmessage.innerText = message.textmessage;
+        let actualMessage = message.textmessage;
+
+        if(actualMessage.includes('>') || actualMessage.includes('<') || actualMessage.includes('&')){
+          textmessage.innerText = 'Detta meddelande kunde inte visas';
+        }
+
+        /* Add links to message */
+        if(message.textmessage.includes('https://')){
+
+          /* Dela vid länkens början */
+          let splitStr = message.textmessage.split('https://');
+
+          /* Dela meddelandet och ta ut länken */
+          let link = 'https://';
+
+          /* Kolla om det inte enbart är en länk vi skickar */
+          if(splitStr[1].includes(' ')){
+
+            /* Kolla om resten av meddelandet innehåller ett mellanslag */
+            /* Om meddelandet innehåller ett mellanslag, byt ut det så vi kan dela det. */
+            splitStr[1] = splitStr[1].replace(' ', '#');
+
+            /* Plocka ut länken */
+            link += splitStr[1].split('#')[0];
+
+            /* Sätt ihop meddelandet */
+            actualMessage = splitStr[0] + '<a href="' + link + '"> ' + link + '</a> ' + splitStr[1].split('#')[1];
+
+
+          } else {
+            /* Om det inte finns ett till mellanslag. Så är länken meddelandet. */
+            link += splitStr[1];
+            actualMessage = splitStr[0] + '<a href="' + link + '"> ' + link + '</a>';
+          }
+        }
+
+        textmessage.innerHTML = actualMessage;
+
+
+
+
+
+
 
         // Create a div to hold name + timeStamp
         let messageWrapper = document.createElement('div');
@@ -1093,7 +1135,7 @@ function leaveMeetup(meetupKey){
           console.log('Raderade användaren ifrån meetupet i databasen?');
 
           /* Remove notification setting */
-          db.ref('users/' + user.uniqueID + '/meetupNotifications/' + meetupKey).set(false);  
+          db.ref('users/' + user.uniqueID + '/meetupNotifications/' + meetupKey).set(false);
         }
       }
     }
@@ -1224,7 +1266,7 @@ function retrieveEventInfo(){
             printMessage('default', 'Skickar dig till framsidan');
           },1000);
           setTimeout(function(){
-            location.assign('/');
+            location.assign('index.html');
           },4000)
 
           return;
@@ -1556,16 +1598,21 @@ function pageLoaded(){
     // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
     let htmlScroll = document.getElementsByTagName('html')[0];
 
-    setTimeout(function(){
+    recursiveScroll();
+    function recursiveScroll(count = 0){
+      console.log('Scrolling: ' + count);
       let meetup = document.getElementById('meetup-' + getLocationInfo()[1]);
-
-      if(meetup){
-        meetup.scrollIntoView({behavior: 'smooth', block: 'start'});
-        console.log('Scrolling into view!');
-      } else if(getLocationInfo()[1]){
+      if(count > 8){
+        console.warn('Failed after 8 retries.');
         console.warn('Meetup is not yet in the dom. Or doesn\'t exist.');
+      } else if(meetup){
+        meetup.scrollIntoView({behavior: 'smooth', block: 'start'});
+      } else {
+        setTimeout(function(){
+          return recursiveScroll(count += 1);
+        }, 600);
       }
-    },800);
+    }
 }
 
 function addEditBtns(meetupKey){
