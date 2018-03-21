@@ -809,6 +809,7 @@ function displayNotifications(displayList){
           showMoreInfoDiv.appendChild(infoWrapper);
 
           showMoreDiv.appendChild(showMoreInfoDiv);
+          console.log('Appending into: ', data.name);
 
 
         });
@@ -1101,31 +1102,49 @@ function sendNotificationsToMeetupMembers(meetupKey, eventID, action){
 
       /* here we have all the people coming to the meetup :D */
       let count = 0;
-      for(let comingUser in members){
-        console.log('Looping ', count++);
-        let key = comingUser;
-        comingUser = members[comingUser];
+      // for(let comingUser in members){
+      //   let key = comingUser;
+      //   comingUser = members[comingUser];
+      // }
 
         /* send notification to the people of the meetup with this turned on */
         db.ref('users/').once('value', function(snapshot){
           let data = snapshot.val();
+          /* Retrieve all the users in the database, Hämta alla användare en gång. */
 
-          /* Loop it */
+          /* Loop the users */
           for(let user in data){
+            /* Gå igenom varje användare */
+            console.log('Looping in loop: ', count++);
             let userData = data[user];
+            /* Lägg användaren i userData */
 
-            if(userData.meetupNotifications){
-              for(let noti in userData.meetupNotifications){
-                let setting = userData.meetupNotifications[noti];
+            let notifications = userData.meetupNotifications;
+            let setting = false;
+
+            if(notifications){
+              /* This person has some meetupNotifications set */
+              for(let noti in notifications){
+                /* loopa igenom personens notifikationsInställningar */
                 let key = noti;
-                /* this meetup */
-                if(key == meetupKey && setting){
-                  sendNotification(comingUser.sid, action, meetupKey);
+                if(notifications[noti]){
+                  if(key == meetupKey){
+                    console.log('Sending a notification to: ', userData.fullname);
+                    if(localUser.uniqueID != userData.uniqueID){
+                      sendNotification(userData.sid, action, meetupKey);
+                    }
+                } else {
+                  console.log('Key is not meetupKey')
                 }
+                console.log('Setting is: ', setting);
+                console.log('Key is: ', key);
+                /* this meetup */
               }
             }
+          } else {
+            console.log('This person has no notifications');
           }
-        });
-      }
+        }
+      });
   });
 }

@@ -1091,6 +1091,9 @@ function leaveMeetup(meetupKey){
           db.ref('meetups/' + eventID + '/' + meetupKey + '/members/'+member).remove();
           new SystemMessage(meetupKey, user.fullname + ' lämnade meetupet.').push();
           console.log('Raderade användaren ifrån meetupet i databasen?');
+
+          /* Remove notification setting */
+          db.ref('users/' + user.uniqueID + '/meetupNotifications/' + meetupKey).set(false);  
         }
       }
     }
@@ -1150,7 +1153,7 @@ function displayEventInfo(event){
   }
 
   let ticketsAvailable;
-  if(event.offsale){
+  if(event.onsale){
     ticketsAvailable = 'Om du inte redan har en biljett kan du klicka dig in på biljettsidan via knappen nedan för att köpa en.';
   } else {
     ticketsAvailable = 'Biljetterna för detta evenemang är tyvärr slut men du kan fortfarande skapa ett meetup om du redan har en biljett.';
@@ -1237,7 +1240,7 @@ function retrieveEventInfo(){
           let offsale = event.offsale.value;
           let mainCategory = event.categories[0].name;
           let promoter = event.promoter;
-          // console.log('Straight from the API: ', json);
+           console.log('Straight from the API: ', json);
           // console.log('Main category is: ', mainCategory);
           if(!date){
             date = event.date;
