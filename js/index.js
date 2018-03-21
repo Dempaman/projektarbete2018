@@ -6,9 +6,9 @@
     getMostPopularEvents();
 
     function getMostPopularEvents() {
-      fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&rows=8&sort_by=popularity&apikey=${apiKey}`)
+      fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&rows=10&sort_by=popularity&apikey=${apiKey}`)
         .then((response) => {
-          console.log(response);
+          //console.log(response);
           return response.json();
         }).then((json) => {
           let event = json.events;
@@ -92,7 +92,7 @@
         }).catch((error) => {
 
           let errorMessage = error.message;
-          console.log('Felmeddelande: ', errorMessage);
+          //console.log('Felmeddelande: ', errorMessage);
 
         })
     }
