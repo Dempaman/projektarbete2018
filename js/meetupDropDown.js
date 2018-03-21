@@ -56,6 +56,7 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
 
     /* EventListener för "Notiser" */
     dropDownInvite.addEventListener('click', inviteFriend);
+    dropDownInvite.meetupKey = meetupKey;
 
     /* Skapa "Dela" */
     let dropDownShare = document.createElement('li');

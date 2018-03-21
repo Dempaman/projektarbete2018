@@ -973,8 +973,8 @@ function joinMeetup(user, meetupKey, eventID){
 
   // joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
   db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snap){
-
     let data = snap.val();
+    console.log('This entire data is? ', data);
     let userIsComing = false;
     let members = data.members;
     let spots = data.spots, counter = 0;
@@ -987,7 +987,7 @@ function joinMeetup(user, meetupKey, eventID){
         console.log('You are coming to this already!!');
       }
     }
-    sendNotificationsToMeetupMembers(meetupKey, 'meetupEventJoin');
+    sendNotificationsToMeetupMembers(meetupKey, eventID, 'meetupEventJoin');
 
     if(counter < spots){
       let userObject = {
@@ -1089,8 +1089,7 @@ function clearDomNotifications(){
   list.appendChild(ingaNotifikationer);
 }
 
-function sendNotificationsToMeetupMembers(meetupKey, action){
-    let eventID = getLocationInfo()[0];
+function sendNotificationsToMeetupMembers(meetupKey, eventID, action){
     db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snap){
       let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
       let data = snap.val();

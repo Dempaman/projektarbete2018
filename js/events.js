@@ -465,7 +465,7 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         //Create event-cards (Test)
         let eventLink = document.createElement('a');
         eventLink.className = 'eventLink';
-        eventLink.setAttribute('href', '/eventpage.html?event='+eventId);
+        eventLink.setAttribute('href', 'eventpage.html?event='+eventId);
 
 		let eventDiv = document.createElement('div');
 		let eUrlImg = document.createElement('img');

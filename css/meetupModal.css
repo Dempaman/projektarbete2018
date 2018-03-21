@@ -82,6 +82,7 @@ button.logInBtn {
 #modalContent > .content {
   position: relative;
   width: 100%;
+  background-color: #fff;
 }
 #modalContent input[type="text"]{
   border: none;
