@@ -3,37 +3,13 @@ window.addEventListener('load', profilFunction);
 //eventpage.html?eventid=501710&meetup=-z1458127xasd
 //VIKTIG
 
-
-// EXTRA CODE SAVE JUST IN charse
-// db.ref('users/'+this.creator.uniqueID+'/createdMeetups').on('child_added', function(snapshot){
-//       let eventObjects = snapshot.val();
-//       let eventID = snapshot.key;
-//       console.log(eventID);
-//       for(let eventObj in eventObjects){
-//         let currentEvent = eventObjects[eventObj];
-//
-//         console.log(currentEvent);
-//         console.log(eventObj);
-//       }
-//     });
+function saveUserInfo(event) {
 
 
-
-// if (profilId) {
-//   console.log('You have clicked on a profil');
-//   if (userLog === profilId) {
-//     profileName = userLog.fullname;
-//     profileImg = userLog.avatarURL;
-//     uniqueID = userLog.uniqueID;
-//     console.log('This is your profil');
-//   } else {
-//     profileName = profilId.fullname;
-//     profileImg = profilId.avatarURL;
-//     uniqueID = profilId.uniqueID;
-//     console.log('this is ' + profilId.fullname + 'profile');
-//   }
+}
 
 function fetchUserInfo(user) {
+  console.log('inside fetchUserInfo function');
   let nameOnUser = document.getElementById('nameOnUser');
   let yourStory = document.getElementById('yourStory');
   let genders = document.getElementsByName('gender');
@@ -41,20 +17,53 @@ function fetchUserInfo(user) {
   let man = document.getElementById('man');
   let other = document.getElementById('other');
 
+  let userDescription = document.getElementById('user-description');
+  let fullName = document.getElementById('user-name');
+  let saveFormBtn = document.getElementById('save');
+  let genderInfo = document.getElementById('genderInfo');
+
   nameOnUser.setAttribute("placeholder", user.fullname);
 
+  let coloProfile = '#09035F';
+  let joinMeetupColor = '#333333';
+  let createMeetupColor = '#C05454';
+  let toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
+  let genderTrue = '';
+
+  let info = {
+    profilcolor: coloProfile,
+    meetupcolor: joinMeetupColor,
+    createcolor: createMeetupColor,
+    story: toldStory,
+    gender: genderTrue
+  }
+
+
   if (user.info) {
-    let userInfo = user.info;
+    console.log('user.info is true');
+    const userInfo = user.info;
 
     if (userInfo.story) {
+      console.log('user.info.story is true ');
+      userDescription.firstElementChild.innerText = userInfo.story;
       nameOnUser.setAttribute("placeholder", userInfo.story);
+      toldStory = userInfo.story;
     } else {
+      userDescription.firstElementChild.innerText = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
       nameOnUser.setAttribute("placeholder", 'Vem är du?');
+      toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
     }
+
+
     if (userInfo.gender) {
-      nameOnUser.setAttribute("placeholder", 'Vem är du?');
+      genderInfo.style.display = 'block';
+
+      console.log('userinfo.gender is true');
+      //nameOnUser.setAttribute("placeholder", 'Vem är du?');
       if (userInfo.gender === "kvinna") {
         female.checked = true;
+        genderInfo.innerText = userInfo.gender;
+        genderTrue = userInfo.gender;
 
         // var genders = document.getElementsByName("gender");
         // var selectedGender;
@@ -64,13 +73,34 @@ function fetchUserInfo(user) {
         //     selectedGender = genders[i].value;
       } else if (userInfo.gender === "man") {
         man.checked = true;
+        genderInfo.innerText = userInfo.gender;
+        genderTrue = userInfo.gender;
       } else if (userInfo.gender === "other") {
         other.checked = true;
+        genderInfo.innerText = userInfo.gender;
+        genderTrue = userInfo.gender;
       }
+    } else {
+      genderInfo.style.display = 'none';
     }
 
+  } else {
+    console.log('user.info is false');
+    userDescription.firstElementChild.innerText = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
   }
 
+  saveFormBtn.addEventListener('click', function() {
+    for (var i = 0; i < genders.length; i++) {
+      if (genders[i].checked)
+        genderTrue = genders[i].value;
+    }
+
+    if (nameOnUser.value !== '') {
+
+    } else {
+      nameOnUser.value = user.fullname;
+    }
+  });
 
 }
 
@@ -138,7 +168,6 @@ function ellipsisEvents(mainText, hide) {
 
     if (textFakeWidth < textRealWidth) {
       //console.log('textFakeWidth is smaller');
-
       labelClick.addEventListener('click', function(event) {
 
         if (tooltip.className === hide) {
@@ -198,7 +227,7 @@ function ifUserIsTrue() {
 
     joindContainer.style.display = "none";
 
-    db.ref('/users/').on('value', function(snapshot) {
+    db.ref('/users/').once('value', function(snapshot) {
       let allUsers = snapshot.val();
 
       for (let x in allUsers) {
@@ -227,7 +256,7 @@ function ifUserIsTrue() {
 
               for (let z in otherMeetUpId) {
 
-                db.ref('meetups/' + otherEventId).on('value', function(snapshot) {
+                db.ref('meetups/' + otherEventId).once('value', function(snapshot) {
                   let snap = snapshot.val();
                   // console.log(z);
                   // console.log(snap[z]);
@@ -310,13 +339,14 @@ function ifUserIsTrue() {
 
     fetchUserInfo(userLog);
 
+
     // Form information
     userName.innerText = userLog.fullname;
     userImg.src = userLog.avatarURL;
     uniqueID = userLog.uniqueID;
 
     // Hämta alla skapade Meetups
-    db.ref('users/' + uniqueID + '/createdMeetups').on('value', function(snapshot) {
+    db.ref('users/' + uniqueID + '/createdMeetups').once('value', function(snapshot) {
       let eventObjects = snapshot.val();
 
       if (eventObjects) {
@@ -331,7 +361,7 @@ function ifUserIsTrue() {
 
           for (let x in meetupId) {
 
-            db.ref('meetups/' + eventId).on('value', function(snapshot) {
+            db.ref('meetups/' + eventId).once('value', function(snapshot) {
               let snap = snapshot.val();
 
               if (x) {
@@ -391,7 +421,7 @@ function ifUserIsTrue() {
     }); // THE END OF Hämta alla skapade Meetups :)
 
     // Hämta alla joind CREATED MEETUPCARD
-    db.ref('users/' + uniqueID + '/meetups').on('value', function(snapshot) {
+    db.ref('users/' + uniqueID + '/meetups').once('value', function(snapshot) {
       // child_added
       let meetupsJoind = snapshot.val();
 
@@ -409,7 +439,7 @@ function ifUserIsTrue() {
 
           for (let x in joindMeetupId) {
 
-            db.ref('meetups/' + joindEventId).on('value', function(snapshot) {
+            db.ref('meetups/' + joindEventId).once('value', function(snapshot) {
               let snap = snapshot.val();
 
               if (x) {
@@ -486,71 +516,13 @@ function profilFunction(event) {
 
   ifUserIsTrue();
 
-
-  // User info text - show more/ show less
-  // let more = document.getElementById('user-info-more');
-  // let showMore = document.getElementsByClassName('show-more')[0];
-  // let userInfo = document.getElementsByClassName('white-cover')[0];
-
-  // more.addEventListener('click', function(event) {
-  //   event.preventDefault();
-  //   if (showMore.innerText === 'visa mer') {
-  //     showMore.innerText = 'visa mindre';
-  //     let upImg = document.createElement('i');
-  //     upImg.className = "fas fa-angle-up fa-2x";
-  //     more.children[1].parentElement.replaceChild(upImg, more.children[1]);
-  //     userInfo.classList.add('transform');
-  //     more.classList.add('move');
-  //   } else {
-  //     showMore.innerText = 'visa mer';
-  //
-  //     let downImg = document.createElement('i');
-  //     downImg.className = "fas fa-angle-down fa-2x";
-  //     more.children[1].parentElement.replaceChild(downImg, more.children[1]);
-  //
-  //     userInfo.classList.remove('transform');
-  //     more.classList.remove('move');
-  //   }
-  //
-  // }); // End of - User info text
-
-
-
-  // To checkout meetups or remove them - hidden nav
-  // let smallMenu = document.getElementsByClassName('show-hidden-nav');
-  // let closeSmallMenu = document.getElementsByClassName('close-small-menu');
-  // let hiddenNav = document.getElementsByClassName('hidden-nav');
-  // let goToo = document.getElementsByClassName('go-too')[0];
-  // let removeMeetup = document.getElementsByClassName('remove-meetup')[0];
-  // console.log(smallMenu);
-  // // console.log(smallMenu[1].className);
-  //
-  // for (var i = 0; i < smallMenu.length; i++) {
-  //   let hide = hiddenNav[i];
-  //   smallMenu[i].addEventListener('click', function(event) {
-  //     event.preventDefault();
-  //     if (hide.className === 'hidden-nav') {
-  //       hide.classList.add('show');
-  //     } else {
-  //       hide.classList.remove('show');
-  //     }
-  //   });
-  // }
-  //
-  // for (var i = 0; i < closeSmallMenu.length; i++) {
-  //   let close = hiddenNav[i];
-  //   closeSmallMenu[i].addEventListener('click', function(event) {
-  //     event.preventDefault();
-  //     if (close.className === 'hidden-nav show') {
-  //       close.classList.remove('show');
-  //     }
-  //   });
-  // } // End of -To checkout meetups or remove them - hidden nav
-
+  // Form display button
   let userEdit = document.getElementById('tellMeMore');
   let userStory = document.getElementsByClassName('user-story')[0];
   let userDescription = document.getElementById('user-description');
-  let closeTellMeMore = document.getElementById('closeTellMeMore');
+  // let closeTellMeMore = document.getElementById('closeTellMeMore');
+  let saveBtn = document.getElementById('save');
+  console.log(saveBtn);
   //console.log('userEdit ' + userEdit);
   userEdit.addEventListener('click', function(event) {
     console.log(event.type);
@@ -559,13 +531,15 @@ function profilFunction(event) {
     if (userStory.className === 'user-story') {
       userStory.classList.add('show');
       userDescription.style.display = 'none';
-      userEdit.innerText = 'Spara';
-      closeTellMeMore.style.display ='block';
+      userEdit.classList.add('abort');
+      userEdit.innerText = 'Avbryt';
+      saveBtn.style.display = 'block';
     } else {
       userStory.classList.remove('show');
       userDescription.style.display = 'block';
+      userEdit.classList.remove('abort');
       userEdit.innerText = 'Berätta om dig själv';
-      closeTellMeMore.style.display ='none';
+      saveBtn.style.display = 'none';
     }
 
   });
