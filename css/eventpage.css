@@ -526,14 +526,16 @@ div.googleMapDiv > img {
   border-bottom: 1px solid #7e7e7e;
 }
 .dropDownWrapper > ul > li.removeMeetupEntirelyBtn:last-child {
-  background-color: #ff8181;
-  color: #fbfbfb;
+  background-color: #e64f4f;
+  color: #f8f8f8;
+  border-bottom: 1px solid #b65c5c;
 }
 .dropDownWrapper > ul > li.removeMeetupEntirelyBtn:last-child:hover {
-  background-color: #e86060;
-  color: #fbfbfb;
-  border-bottom: 1px solid #fbfbfb;
+  background-color: #ff6363;
+  color: #fff;
+  border-bottom: 1px solid #f67979;
 }
+
 
 /* Css for the confirmModal */
 .confirmModal {

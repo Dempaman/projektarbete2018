@@ -33,14 +33,14 @@ function initSliderAndMoreShit(redigera = false, meetupKey) {
     let meetupData = document.getElementById('meetup-'+meetupKey);
     let infoDivWrapper = meetupData.children[4];
     let addressCard = meetupData.children[6];
-    let meetupInfo = meetupData.children[8];
+    let meetupInfo = meetupData.children[7];
     // ageSlider.values = {min: 40, max: 90}; // Sätt värden på slidern.
 
-    console.log('Vi ska redigera detta event: ');
-    console.log(meetupData.children[0].innerText); // Meetupets namn
-    console.log(meetupData.children[1].innerText); // Tiden för meetupet.
-
-    console.log(infoDivWrapper.children[1].children[1].innerText); // Deltagare
+    // console.log('Vi ska redigera detta event: ');
+    // console.log(meetupData.children[0].innerText); // Meetupets namn
+    // console.log(meetupData.children[1].innerText); // Tiden för meetupet.
+    //
+    // console.log(infoDivWrapper.children[1].children[1].innerText); // Deltagare
     let spots = infoDivWrapper.children[1].children[1].innerText;
     spots = spots.split(' / ')[1];
 
@@ -55,7 +55,7 @@ function initSliderAndMoreShit(redigera = false, meetupKey) {
 
     /* Get the ageInterval */
       let ageInterval = infoDivWrapper.children[0].children[1].innerText;
-      console.log(ageInterval); // Åldersgräns
+      //console.log(ageInterval); // Åldersgräns
 
       /* Split it */
       ageInterval = ageInterval.split(' - ');
@@ -84,7 +84,7 @@ function initSliderAndMoreShit(redigera = false, meetupKey) {
         lat = 59;
         lng = 12;
       }
-      console.log('Lat:',lat,'Long:',lng);
+      //console.log('Lat:',lat,'Long:',lng);
 
       let myLatLng = new google.maps.LatLng({lat: lat, lng: lng});
       initMap(myLatLng);
@@ -94,12 +94,8 @@ function initSliderAndMoreShit(redigera = false, meetupKey) {
 
     /* Set the meetup information */
       document.getElementById('textareaDiv').children[1].value = meetupInfo.children[1].innerText; // Information about the meetup.
-
-    console.log('I guess you where being serious :o');
   } else {
     headerTitle.innerText = 'Skapa meetup';
-
-    console.log('Inte här för att redigera!');
   }
 
 
@@ -110,21 +106,19 @@ function initSliderAndMoreShit(redigera = false, meetupKey) {
 
       if(closeBtn){
         closeBtn.addEventListener('click', function(event){
-          console.log('Target:', event.target);
-          console.log('Closed skapa meetup');
+          // console.log('Target:', event.target);
+          // console.log('Closed skapa meetup');
           //ageSlider.destroy();
           modalWrapper.className = 'hidden';
           meetupWrapper.className = 'show';
           footer.className = 'footer-box';
         });
-      } else {
-        console.log('no btn');
       }
 
 /* Functions that require the DOM to be laoded */
 function displayAgeInterval(values){
         let displayDiv = document.getElementById('ageIntervalDisplayer');
-        console.log('This is the displayAgeInterval', values);
+        //console.log('This is the displayAgeInterval', values);
         let valueArray;
         if(typeof values == 'string'){
           valueArray = getValues(values);
@@ -146,7 +140,7 @@ function displayAgeInterval(values){
 
 function makeInput(target, oldValues, val, pos){
         let ageInput = document.createElement('input');
-        console.log(pos);
+        //console.log(pos);
         ageInput.className = 'ageInput';
         ageInput.setAttribute('type', 'text');
         ageInput.setAttribute('placeholder',val);
@@ -176,7 +170,7 @@ redigera = false;
 function setAgeInterval(event, oldValues, pos, ageSlider){
   let val1 = oldValues.split(',')[0];
   let val2 = oldValues.split(',')[1];
-  console.log(oldValues);
+  //console.log(oldValues);
     // Kolla position
     if(pos == 'start'){
       val1 = Number.parseInt(event.target.value);
@@ -198,7 +192,7 @@ function setAgeInterval(event, oldValues, pos, ageSlider){
       let curTime = new Date().getTime();
       if(inputBox.value.length >= 900){
         if(lastKeyUp > curTime - 5000){
-            console.log('Wait!');
+            //console.log('Wait!');
         } else {
           printMessage('warn', 'Du har nu nått maximalt antal tecken som får plats i beskrivningen.', 4000);
           lastKeyUp = curTime;
@@ -256,9 +250,9 @@ function createMeetupListener(event){
         avatarURL: localUser.avatarURL
     };
 
-    console.log(creator);
+    //console.log(creator);
 
-    console.log('CREATOR LOGGED IN ATM: ', creator);
+    //console.log('CREATOR LOGGED IN ATM: ', creator);
     // Medlemmar - Lägger skaparen av meetupet som medlem direkt i en LISTA.
     let members = {creator};
 
@@ -298,7 +292,6 @@ function createMeetupListener(event){
                     let newMeetup = document.getElementById('meetup-' + meetupKey);
 
                     newMeetup.scrollIntoView({behavior: 'smooth'});
-                    console.log(htmlScroll.scrollHeight);
 
                   },200);
 
