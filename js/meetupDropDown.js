@@ -14,7 +14,7 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
       if(!target.className.includes('doNotCloseThis')){
         toggleWrapper(true);
         window.removeEventListener('click', printCloseIfNotCenter);
-        console.log('Closeeed with closeIfNotCenter');
+        console.log('Closed with closeIfNotCenter');
       }
   }
 
@@ -125,11 +125,6 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
         window.addEventListener('click', printCloseIfNotCenter);
         dropDownWrapper.className = dropDownWrapper.className.replace(' hidden', '');
       } else if(!dropDownWrapper.className.includes('hidden')){
-          if(target.className.includes('purple')){
-            target.innerText = 'Redigera Meetup';
-          } else if(target.previousSibling.className.includes('purple')){
-            target.previousSibling.innerText = 'Redigera Meetup';
-          }
           dropDownWrapper.className += ' hidden';
           console.log('Removing listener');
           window.removeEventListener('click', printCloseIfNotCenter);
