@@ -101,7 +101,7 @@
 
 
       let eventLink = document.createElement('a');
-      eventLink.setAttribute('href', '/eventpage.html?event='+ eventId);
+      eventLink.setAttribute('href', 'eventpage.html?event='+ eventId);
       //console.log(eventLink);
       let eventDiv = document.createElement('div');
       let eUrlImg = document.createElement('img');
