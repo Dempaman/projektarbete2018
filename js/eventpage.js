@@ -905,7 +905,7 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
         let actualMessage = message.textmessage;
         let failed = false, onlyOneSpotify = true;
 
-        if(actualMessage.includes('>') || actualMessage.includes('<') || actualMessage.includes('&')){
+        if(actualMessage.includes('>') || actualMessage.includes('<')){
           actualMessage = 'Oops, nåt gick fel.';
           failed = true;
         }
