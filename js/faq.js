@@ -36,7 +36,7 @@ window.addEventListener("load", function(event){
 
     let closeBtnFaq = document.createElement("div");
     closeBtnFaq.className ="closeBtnFaq";
-    closeBtnFaq.innerText = "Stäng";
+    closeBtnFaq.innerHTML= `<i class="mdi mdi-close mdi-36px"></i>`;
 
     let askMore = document.createElement("h4");
     askMore.innerText = `Hittade du inte svar på din fråga? Ring 00 - 030 53 52 51 eller skicka mail på info@mewent.com!`;
@@ -44,6 +44,7 @@ window.addEventListener("load", function(event){
 
 
     faqBody.appendChild(faqQuestionOne);
+    faqTitle.appendChild(closeBtnFaq);
     faqBody.appendChild(faqAnswerOne);
     faqBody.appendChild(faqQuestionTwo);
     faqBody.appendChild(faqAnswerTwo);
@@ -53,7 +54,7 @@ window.addEventListener("load", function(event){
     faqWrap.appendChild(faqTitle);
     faqWrap.appendChild(faqBody);
     faqWrap.appendChild(askMore);
-    faqWrap.appendChild(closeBtnFaq);
+
     let body = document.getElementsByTagName('body')[0];
     body.appendChild(faqWrap);
 
