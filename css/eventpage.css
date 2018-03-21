@@ -656,6 +656,12 @@ div.googleMapDiv > img {
   height: 82px;
   text-align: center;
   font-size: 10px;
+
+  
+  position: fixed;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .spinner > div {

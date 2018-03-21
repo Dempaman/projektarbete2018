@@ -372,6 +372,9 @@ a {
 	#menuToggle {
 		display: none
 	}
+}
+@media all and (min-width: 800px) {
+
 	#notificationWrapper > div:first-child {
 		position: static;
 		width: auto;
