@@ -61,6 +61,28 @@ firebase.auth().onAuthStateChanged(user => {
       }
     });
 
+    /* Start to listen to notificationRemovals */
+
+    console.log('does this fire', user.uid);
+    db.ref('users/' + user.uid + '/notifications').on('child_removed', function(snapshot){
+      let data = snapshot.val();
+      /* Remove all notifications with this meetupKey if they have the same action */
+      console.log('Notification removed', data);
+      if(data.action == 'invite'){
+        /* Remove all other invites to this meetup */
+        db.ref('users/' + user.uid + '/notifications').once('value', function(snap){
+          let newData = snap.val();
+          for(let notification in newData){
+            let key = notification;
+            notification = newData[notification];
+            if(notification.meetupKey == data.meetupKey){
+              db.ref('users/' + user.uid + '/notifications/' + key).remove();
+            }
+          }
+        });
+      }
+    });
+
     // The user is logged in.
     //console.log('User data:',user);
 
