@@ -707,6 +707,7 @@ function displayNotifications(displayList){
       let eventID, meetupKey;
 
       if(action == 'invite' || action == 'meetupEventJoin'){
+        console.log('EvendID is actually:' + data.eventid);
         eventID = data.eventid;
         meetupKey = data.meetupKey;
       }
@@ -770,6 +771,12 @@ function displayNotifications(displayList){
           console.log('IS DATA REALLY NULL? ', data);
           let showMoreInfoDiv = document.createElement('div');
           showMoreInfoDiv.className = 'showMoreInfoDiv';
+
+          if(!data){
+            console.warn('Data is null. We cannot display anything here.');
+            console.warn('This is because the user accepted the meetup on another eventid. Fix eventid PLOX');
+            return;
+          }
 
           let skapareDiv = document.createElement('div');
           let skapareLabel = document.createElement('span');
@@ -1153,4 +1160,15 @@ function sendNotificationsToMeetupMembers(meetupKey, eventID, action){
         }
       });
   });
+}
+
+// Denna funktion uppdaterar tiden på meddelanden!
+function updateTimeStamps(){
+  let timestamps = document.getElementsByClassName('timeStamp');
+
+  // We should limit this to the latest 10-30 messages?, will create weird stuff later if noticed.
+  for(let stamp of timestamps){
+    let messageTime = stamp.getAttribute('timeStamp');
+    stamp.innerText = chatMessageTimeStamp(messageTime);
+  }
 }

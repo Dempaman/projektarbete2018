@@ -112,14 +112,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 let day;
                 let month;
                 let meetUps;
-                
+
                 //if eventPlace and eventCity includes cityname
                 let eventIncludesCity = ", " + eventCity;
-                
+
                 if (eventPlace.includes(eventIncludesCity)) {
                     let newPlace = eventPlace.replace(eventIncludesCity, "");
                     eventPlace = newPlace;
-                    
+
                 } else {
                     let newPlace = eventPlace;
                 }
@@ -206,6 +206,12 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		let selCity = selectedCity.value;
 		let selWhen = selectedWhen.value;
 
+		//This year
+		let nextYearDate = new Date(Date.now() + (365 * 24 * 60 * 60 * 1000));
+		let year = nextYearDate.toISOString();
+		year = year.slice(0, 10) + ISO;
+
+
 		//Todays date
 		let currentDate = new Date();
 		let today = currentDate.toISOString();
@@ -238,7 +244,11 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 		} else if (selWhen == 'month') {
 			selWhen = month;
+
+		} else if (selWhen == 'year') {
+			selWhen = year;
 		}
+
 
 		fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&category_ids=${selCategory}&city_ids=${selCity}&eventdate_from=${today}&eventdate_to=${selWhen}&rows=15&sort_by=popularity&apikey=${apiKey}`).then((response) => {
 
@@ -263,11 +273,11 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 								//if eventPlace and eventCity includes cityname
                 let eventIncludesCity = ", " + eventCity;
-                
+
                 if (eventPlace.includes(eventIncludesCity)) {
                     let newPlace = eventPlace.replace(eventIncludesCity, "");
                     eventPlace = newPlace;
-                    
+
                 } else {
                     let newPlace = eventPlace;
                 }
@@ -370,11 +380,11 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 
 				//if eventPlace and eventCity includes cityname
                 let eventIncludesCity = ", " + eventCity;
-                
+
                 if (eventPlace.includes(eventIncludesCity)) {
                     let newPlace = eventPlace.replace(eventIncludesCity, "");
                     eventPlace = newPlace;
-                    
+
                 } else {
                     let newPlace = eventPlace;
                 }
