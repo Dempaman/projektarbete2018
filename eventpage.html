@@ -2,12 +2,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-  	<title>MeWent</title>
+    <!-- Meta tags -->
+    <meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <meta property="og:image" content="img/logo-design3.png" />
+    <meta property="og:url" content="https://dempaman.github.io/projektarbete2018-meWent/eventpage.html?event=476885">
+    <title>MeWent</title>
 
     <!-- Fonts & Icons -->
     <link rel="icon" href="img/logo-design-white-frame.png" type="image/png" sizes="16x16">
-  	<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Questrial" rel="stylesheet">
+  	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  	<link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet">
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   	<!-- <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script> -->
     <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
@@ -17,20 +23,18 @@
     <link rel="stylesheet" href="slider/css/rSlider.min.css">
 
     <!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="css/printmessage.css">
     <link rel="stylesheet" type="text/css" href="css/animations.css">
     <link rel="stylesheet" type="text/css" href="css/headstyle.css">
     <link rel="stylesheet" type="text/css" href="css/menu.css">
-    <link rel="stylesheet" href="css/faq.css">
+    <link rel="stylesheet" type="text/css" href="css/faq.css">
     <link rel="stylesheet" type="text/css" href="css/auth.css">
     <link rel="stylesheet" type="text/css" href="css/eventpage.css">
     <link rel="stylesheet" type="text/css" href="css/meetupModal.css">
-    <link rel="stylesheet" type="text/css" href="css/loginModal.css">
+    <link rel="stylesheet" type="text/css" href="css/loginmodal.css">
     <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/headstyle.css">
-    <link rel="stylesheet" type="text/css" href="css/printMessage.css">
     <link rel="stylesheet" type="text/css" href="css/createUser.css">
     <link rel="stylesheet" type="text/css" href="css/profileholder.css">
-    <link rel="stylesheet" href="css/faq.css">
 
 
     <!-- FireBase -->
@@ -58,7 +62,7 @@
     <nav id="navigation" class="hidden">
       <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
       <div class="header">
-        <img src="img/logo-design3.png" alt="Event">
+        <a href="index.html"><img src="img/logo-design3.png" alt="Event"></a>
         <div id="helloUser" class="hidden">
           <span id="userName"></span>
           <span id="notificationBell" class="hidden">
@@ -67,10 +71,10 @@
         </div>
         <!-- HTML för desktopläge i nav -->
         <ul class="deskNav">
-          <a href="/"><li>HEM</li></a>
-          <a href="/profil.html"><li id="myProfile" class="hidden">MIN PROFIL</li></a>
-          <a href="/events.html"><li>ALLA EVENTS</li></a>
-          <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+          <li><a href="index.html">HEM</a></li>
+          <li id="myProfile" class="hidden"><a href="profil.html">MIN PROFIL</a></li>
+          <li><a href="events.html">ALLA EVENTS</a></li>
+          <li><a href="#contactUs">KONTAKTA OSS</a></li>
           <li class="loginInMenu">LOGGA IN</li>
         </ul>
 
@@ -94,11 +98,11 @@
         but hey, it's pure CSS magic.
         -->
         <ul id="menu">
-          <a href="/landingpage.html" class="active"><li>HEM</li></a>
-          <a href="/profil.html"><li id="myProfileMob" class="hidden">MIN PROFIL</li></a>
-          <a href="/events.html"><li>ALLA EVENTS</li></a>
-          <a href="#contactUs"><li>KONTAKTA OSS</li></a>
-          <a ><li class="loginInMenu">LOGGA IN</li></a>
+          <li><a href="index.html" >HEM</a></li>
+          <li id="myProfileMob" class="hidden"><a href="profil.html">MIN PROFIL</a></li>
+          <li><a href="events.html">ALLA EVENTS</a></li>
+          <li><a href="#contactUs">KONTAKTA OSS</a></li>
+          <li class="loginInMenu"><a>LOGGA IN</a></li>
         </ul>
       </div>
     </nav>
@@ -127,7 +131,7 @@
         <p id="eventPlace" class="eventPlace">Göteborg, Ullevi</p>
       </div>
       <div>
-        <h2 id="mainCategory"></h2>
+        <h2 id="mainCategory">Ospecificerat</h2>
       </div>
       <p>Information</p>
       <div id="eventInfoText">
@@ -178,7 +182,7 @@
 
             <div class="mapWrapWrapp">
               <div id=mapWrap>
-                <div id="map" lat="59" lng="12"></div>
+                <div id="map"></div>
               </div>
 
               <div class="timeOrSpots">

@@ -3,7 +3,7 @@
     position: fixed;
     height: 100%;
     width: 100%;
-    background-color: #ececec;
+    background-color: #ececec;;
     top: 0;
     left: 0;
     z-index: 1;
@@ -23,42 +23,34 @@
 
 .question{
   margin: 20px;
-  font-size: 1.5em;
+  font-size: 1.1em;
 }
 
 .answer{
   margin: 20px;
   font-weight: lighter;
-  font-size: 1.1em;
+  font-size: 1em;
 }
 
 .askMore{
   text-align: center;
   margin-top: 10px;
 }
-.footer-menu .closeBtn{
-    height: 46px;
-    cursor: pointer;
-    color: #fcfcfc;
-    display: flex;
-    justify-content: center;
-    background-color: #ff8181;
-    align-items: center;
-    margin: 25px 20px 5px;
-    /* margin-top: 150px; */
-    width: 90%;
-    border-radius: 5px;
-    border-top: 2px solid #d17d7d;
-    position: absolute;
-    bottom: 10px;
+.faq .closeBtnFaq{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer
+
+
 }
 @media screen and (min-width: 1025px){
   .faq {
     display: inline-block;
     position: fixed;
-    height: 77%;
+    height: auto;
     /* max-height: 77%; */
-    min-height: 700px;
+    /* min-height: 700px; */
     width: 400px;
     background-color: #636363;
     color: #f9f9f9;
@@ -81,11 +73,10 @@
     font-size:1em;
 
   }
-  .closeBtn{
-    margin: 25px 20px 5px;
-    margin-top: 100px;
+  .askMore{
+    margin: 30px;
   }
-  .closeBtn:hover{
-    background-color: #f66;
+  .faq .closeBtnFaq:hover{
+    color:#6C0CCC;
   }
 }

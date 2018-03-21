@@ -27,6 +27,11 @@ p {
 	background-color: #232323;
 	position: relative;
 	/* cursor: pointer; */
+
+	-webkit-transform: scale(1.0);
+	-ms-transform: scale(1.0);
+	transform: scale(1.0);
+	transition: 0.3s;
 }
 
 .big-card img {
@@ -41,11 +46,19 @@ p {
     padding: 10px;
     min-height: 55px;
 }
+.event-city{
+	flex-direction: row;
+	color: #FFFFFF;
+	font-weight: 300;
+	margin: 0;
+	padding: 10px;
+	padding-top: 0;
+}
 .event-place {
 	flex-direction: row;
 	color: #FFFFFF;
 	margin: 0;
-    padding: 10px;
+  padding: 10px;
 }
 .date {
 	display: inline-flex;

@@ -18,7 +18,8 @@
 }
 
 #lmw button.btnCu:hover {
-  background-color: #ececec;
+  background-color: #f0f0f0;
+  color: #4b4b4b;
 }
 
 #lmw button.hide, #lmw .loginModalButtonHolder.hide {
@@ -88,6 +89,7 @@ input.errorBorder{
 }
 .containerUser{
   margin: 0 0 20px 0;
+  padding-bottom: 0 !important;
 }
 
 .containerUserInput{
@@ -95,7 +97,7 @@ input.errorBorder{
   text-align: center;
   font-size: 0.8em;
   max-width: 300px;
-  margin: 22px auto 0;
+  margin: 70px auto 0;
   border-bottom: 1px solid #4E5F7166;
   border-top: 1px solid #4E5F7166;
 }
@@ -174,4 +176,16 @@ label:after {
 .switchInput:checked + label:after {
 	left: calc(100% - 5px);
 	transform: translateX(-100%);
+}
+
+@media screen and (max-width: 667px){
+  .containerUserInput {
+      margin: 22px auto 0;
+  }
+}
+
+@media screen and (max-height: 780px){
+  .containerUserInput {
+      margin: 22px auto 0;
+  }
 }

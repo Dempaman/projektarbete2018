@@ -23,7 +23,7 @@ window.addEventListener("load", function(event){
     faqQuestionThree.className = "question";
 
     let faqAnswerOne = document.createElement("p");
-    faqAnswerOne.innerText = "Det är enklare än man tror! Du kan registrera dig med Google, Facebook eller eget namn och lösenord. Hitta meetup som passar dig och klicka på 'Gå med i meetup'";
+    faqAnswerOne.innerText = "Registrera dig med Google, Facebook eller med eget namn och lösenord. Hitta meetup som passar dig och klicka på 'Gå med i meetup'.";
     faqAnswerOne.className = "answer";
 
     let faqAnswerTwo = document.createElement("p");
@@ -34,17 +34,17 @@ window.addEventListener("load", function(event){
     faqAnswerThree.innerText = "Vill du ändra dina uppgifter i vår databas så går det bra att skicka ett mail till info@mewent.com";
     faqAnswerThree.className = "answer";
 
-    let closeBtn = document.createElement("div");
-    closeBtn.className ="closeBtn";
-    closeBtn.innerText = "Stäng";
+    let closeBtnFaq = document.createElement("div");
+    closeBtnFaq.className ="closeBtnFaq";
+    closeBtnFaq.innerHTML= `<i class="mdi mdi-close mdi-36px"></i>`;
 
-    let askMore = document.createElement("h3");
-    askMore.innerText = `Hittade du inte svar på din fråga? Ring
-    00 - 030 53 52 51 eller skicka mail på info@mewent.com!`;
+    let askMore = document.createElement("h4");
+    askMore.innerText = `Hittade du inte svar på din fråga? Ring 00 - 030 53 52 51 eller skicka mail på info@mewent.com!`;
     askMore.className = "askMore";
 
 
     faqBody.appendChild(faqQuestionOne);
+    faqTitle.appendChild(closeBtnFaq);
     faqBody.appendChild(faqAnswerOne);
     faqBody.appendChild(faqQuestionTwo);
     faqBody.appendChild(faqAnswerTwo);
@@ -54,11 +54,11 @@ window.addEventListener("load", function(event){
     faqWrap.appendChild(faqTitle);
     faqWrap.appendChild(faqBody);
     faqWrap.appendChild(askMore);
-    faqWrap.appendChild(closeBtn);
+
     let body = document.getElementsByTagName('body')[0];
     body.appendChild(faqWrap);
 
-    closeBtn.addEventListener('click', function(){
+    closeBtnFaq.addEventListener('click', function(){
       body.removeChild(faqWrap);
     });
 

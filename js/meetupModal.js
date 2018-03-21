@@ -33,7 +33,7 @@ function initSliderAndMoreShit(redigera = false, meetupKey) {
     let meetupData = document.getElementById('meetup-'+meetupKey);
     let infoDivWrapper = meetupData.children[4];
     let addressCard = meetupData.children[6];
-    let meetupInfo = meetupData.children[7];
+    let meetupInfo = meetupData.children[8];
     // ageSlider.values = {min: 40, max: 90}; // Sätt värden på slidern.
 
     console.log('Vi ska redigera detta event: ');
@@ -80,6 +80,10 @@ function initSliderAndMoreShit(redigera = false, meetupKey) {
 
       let lat = Number.parseFloat(googleMapDiv.getAttribute('lat'));
       let lng = Number.parseFloat(googleMapDiv.getAttribute('lng'));
+      if(!lat || !lng){
+        lat = 59;
+        lng = 12;
+      }
       console.log('Lat:',lat,'Long:',lng);
 
       let myLatLng = new google.maps.LatLng({lat: lat, lng: lng});
@@ -218,6 +222,8 @@ function createMeetupListener(event){
 
   /* Börja med att hämta alla variabler */
   let eventid = getLocationInfo()[0];
+  let eventName = document.getElementById('eventTitle').innerText;
+  let eventDate = document.getElementById('eventDate').innerText;
   let name = document.getElementById('nameInput').value;
   let address = document.getElementById('addressInput').value;
   let placeName = document.getElementById('placeNameInput').value;
@@ -268,12 +274,12 @@ function createMeetupListener(event){
 
                   // Skapa meetupet.
                   if(meetupKey && redigera){
-                    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information);
+                    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, eventName, eventDate);
                     meetup.key = meetupKey;
                     meetup.save();
                     redigera = false;
                   } else {
-                    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information);
+                    let meetup = new MeetupClass(eventid, name, address, placeName, latitude, longitude, time, spots, ageInterval, information, eventName, eventDate);
 
                     meetup.creator = creator;
                     meetup.admins = admins;

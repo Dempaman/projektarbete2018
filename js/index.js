@@ -109,6 +109,7 @@
       let eID = document.createElement('h5');
       let eName = document.createElement('h4');
       let ePlace = document.createElement('p');
+      let eCity = document.createElement('p');
       let eTime = document.createElement('span');
 
       let eDay = document.createElement("span");
@@ -118,7 +119,8 @@
 
       eID.innerText = `ID: ${eventId}`;
       eName.innerText = `${eventName}`;
-      ePlace.innerText = `${eventPlace}, ${eventCity}`;
+      ePlace.innerText = `${eventPlace}`;
+      eCity.innerText = ` ${eventCity}`;
       eTime.innerText = `${eventTime}`;
       eDay.innerText = `${day}`;
       eMonth.innerText = `${month}`;
@@ -129,6 +131,7 @@
       eventDiv.className = "big-card";
       eName.className = "event-name";
       ePlace.className = "event-place";
+      eCity.className = "event-city";
       eDay.className = "day";
       eMonth.className = "month";
       eMeetUps.className = "meetups-box";
@@ -141,6 +144,7 @@
       eventDiv.appendChild(eUrlImg);
       eventDiv.appendChild(eName);
       eventDiv.appendChild(ePlace);
+      eventDiv.appendChild(eCity);
       eventDiv.appendChild(eDay);
       eventDiv.appendChild(eMonth);
       eventDiv.appendChild(eMeetUps);

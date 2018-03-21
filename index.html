@@ -2,7 +2,9 @@
 <html>
 
 <head>
-  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <!-- Meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <link rel="icon" type="image/png" sizes="16x16" href="img/logo-design-white-frame.png">
   <!-- <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script> -->
 
@@ -20,16 +22,19 @@
   <link rel="stylesheet" type="text/css" href="css/events.css">
   <link rel="stylesheet" type="text/css" href="css/eventpage.css">
   <link rel="stylesheet" type="text/css" href="css/createUser.css">
-  <link rel="stylesheet" type="text/css" href="css/loginModal.css">
-  <link rel="stylesheet" href="css/faq.css">
-  <link rel="stylesheet" href="css/evenemangskort.css">
-  <link rel="stylesheet" href="css/footer.css" type="text/css">
-  <link rel="stylesheet" href="css/menu.css" type="text/css">
-  <link rel="stylesheet" href="css/headstyle.css" type="text/css">
-  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" type="text/css" href="css/loginmodal.css">
+  <link rel="stylesheet" type="text/css" href="css/faq.css">
+  <link rel="stylesheet" type="text/css" href="css/evenemangskort.css">
+  <link rel="stylesheet" type="text/css" href="css/footer.css">
+  <link rel="stylesheet" type="text/css" href="css/menu.css" >
+  <link rel="stylesheet" type="text/css" href="css/headstyle.css">
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <link rel="stylesheet" type="text/css" href="css/printmessage.css">
 
 
-  <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto|Questrial" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet">
 
 
   <title>MeWent | Välkommen</title>
@@ -49,10 +54,10 @@
       </div>
       <!-- HTML för desktopläge i nav -->
       <ul class="deskNav">
-        <a href="/index.html"><li>HEM</li></a>
-        <a href="/profil.html"><li id="myProfile" class="hidden">MIN PROFIL</li></a>
-        <a href="/events.html"><li>ALLA EVENTS</li></a>
-        <a href="#contactUs"><li>KONTAKTA OSS</li></a>
+        <li><a href="index.html">HEM</a></li>
+        <li id="myProfile" class="hidden"><a href="profil.html">MIN PROFIL</a></li>
+        <li><a href="events.html">ALLA EVENTS</a></li>
+        <li><a href="#contactUs">KONTAKTA OSS</a></li>
         <li class="loginInMenu">LOGGA IN</li>
       </ul>
 
@@ -71,11 +76,11 @@
 
       <!--Too bad the menu has to be inside of the button but hey, it's pure CSS magic.  -->
       <ul id="menu">
-        <a href="/index.html" ><li>HEM</li></a>
-        <a href="/profil.html"><li id="myProfileMob" class="hidden">MIN PROFIL</li></a>
-        <a href="/events.html"><li>ALLA EVENTS</li></a>
-        <a href="#contactUs"><li>KONTAKTA OSS</li></a>
-        <a ><li class="loginInMenu">LOGGA IN</li></a>
+        <li><a href="index.html" >HEM</a></li>
+        <li id="myProfileMob" class="hidden"><a href="profil.html">MIN PROFIL</a></li>
+        <li><a href="events.html">ALLA EVENTS</a></li>
+        <li><a href="#contactUs">KONTAKTA OSS</a></li>
+        <li class="loginInMenu"><a>LOGGA IN</a></li>
       </ul>
     </div>
   </nav>
@@ -88,7 +93,7 @@
       <img class="logo-landing" src="img/logo-design.png" alt="meWent logo">
       <h1 class="heading1">Meetups för alla</h1>
       <a href="events.html" id="landingpageBtn">Hitta eventet för dig</a>
-      <h2>Träffa nya människor med samma intressen</h2>
+      <h2 class="heading2">Träffa nya människor med samma intressen</h2>
     </div>
     <div class="title">
       <h1>Populära events</h1>

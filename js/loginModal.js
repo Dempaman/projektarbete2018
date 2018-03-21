@@ -1,11 +1,14 @@
 // This document holds the loginModal to be displayed on any page that uses this function!
 firebase.auth().getRedirectResult().then(function(result) {
   console.log('Login Results: ', result);
+
 }).catch(function(err){
   if(err.code == 'auth/account-exists-with-different-credential'){
     printMessage('error', 'Oops! Ett konto med din angivna mail existerar redan på denna webbplats! Logga in med ett annat konto.', 10000);
   }
 })
+
+
 
 
 //Eventlistener to authStateChange
@@ -17,10 +20,17 @@ firebase.auth().onAuthStateChanged(user => {
       return false;
     }
 
-    if(document.getElementById('lmw')){
-    }
-    //window.location = 'eventpage.html'; //After successful login, user will be redirected to home.html
+    /* Remove loginModal */
+    let lmw = document.getElementById('lmw');
+    if(lmw){
+      //lmw.classList.add('hidden');
 
+      /* Om loginModalen är uppe när vi loggar in så laddar vi om sidan */
+
+      /* Reload page */
+      location.reload();
+      return;
+    }
 
     /* start to listen for invites for this person */
     let initTime = new Date().getTime();
@@ -39,98 +49,118 @@ firebase.auth().onAuthStateChanged(user => {
         }
 
         if(data.action == 'invite'){
-
-          printMessage('notification', data.fullname + ' bjöd precis in dig till ett meetup!');
+          printMessage('notification', data.fullname + ' har bjudit in dig till ett meetup');
         } else if(data.action == 'friendRequest'){
-          printMessage('notification', data.fullname + ' la precis till dig som vän!');
+          printMessage('notification', data.fullname + ' vill bli din vän');
+        } else if(data.action == 'meetupEventJoin'){
+          printMessage('notification', data.fullname + ' har gått med i ett meetup du följer');
+        } else if(data.action == 'meetupEventLeave'){
+          printMessage('notification', data.fullname + ' lämnade meetupet: ');
         }
       }
     });
 
     // The user is logged in.
     console.log('User data:',user);
-    //Annas magic
-    let helloUser = document.getElementById("helloUser");
 
-    if(helloUser){
-      helloUser.classList.remove("hidden");
-    }
+      //Annas magic - Denna funktion körs när den hittar helloUser, bell, samt myProfile
+      let runWhenLoaded = function(count = 0){
+        if(count < 10){
 
-    let userName = document.getElementById("userName");
-    // let firstName = user.displayName.split(" ",1);
-    userName.innerText = user.displayName;
+          let helloUser = document.getElementById("helloUser");
+          let bell = document.getElementById('notificationBell');
+          let myProfile =  document.getElementById('myProfile');
+          console.log('This was fired');
+          if(helloUser && bell && myProfile){
+            /* UserName code */
+            helloUser.classList.remove("hidden");
+            userName.innerText = user.displayName;
 
-    let bell = document.getElementById('notificationBell');
-    if(bell){
-      bell.classList.remove('hidden');
-    }
+            /* Bell code */
+            bell.classList.remove('hidden');
+            bell.addEventListener('click', showNotifications);
 
+            /* Profile Code */
+            let myProfileMob = document.getElementById('myProfileMob');
+            myProfile.classList.remove('hidden');
+            myProfileMob.classList.remove('hidden');
 
-    bell.addEventListener('click', showNotifications);
+            /* LoginMenu code */
+            for( let loginInMenu of document.getElementsByClassName('loginInMenu')){
+              loginInMenu.innerText = "LOGGA UT";
+            };
 
-    db.ref("users/" + user.uid).once("value", function(snapshot){
+            // retrieveEventInfo after we've logged in!
+            if(window.location.pathname.includes('eventpage.html')){
+                retrieveEventInfo();
+            }
 
-      let result = snapshot.val();
+            /* Annars försöker vi igen 400 millisekunder senare */
+          } else {
+            console.log('not loaded yet!');
+            setTimeout(function(){
+              runWhenLoaded(count++);
+              console.log('Trying again!');
+            }, 400);
+          }
+        } else {
+          console.log('Failed after 10 retries. Increase timeout?');
+        }
+      }
+      runWhenLoaded();
 
-      if(result){
-        // Print this if the user exists in the database.
+      db.ref("users/" + user.uid).once("value", function(snapshot){
 
-        //console.log(result);
-        console.log('Setting the loggedInUser here #1!');
-        // Put the user information into the  localStorage db
-        localStorage.setItem('loggedInUser', JSON.stringify(result));
+        let result = snapshot.val();
 
-        /* Skapar SID ifall du inte har en! */
-        if(!result.sid){
-          printMessage('default', 'You do not seem to have a SID. Creating one for you now!');
-          requestsid(result);
+        if(result){
+          // Print this if the user exists in the database.
+
+          //console.log(result);
+          console.log('Setting the loggedInUser here #1!');
+          // Put the user information into the  localStorage db
+          localStorage.setItem('loggedInUser', JSON.stringify(result));
+
+          /* Skapar SID ifall du inte har en! */
+          if(!result.sid){
+            printMessage('default', 'You do not seem to have a SID. Creating one for you now!');
+            requestsid(result);
+          }
+
+        } else {
+
+          let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
+
+          //console.log('No user here. Creating user in database.');
+          newUser.push();
+          //console.log('Creating the user for the first time in the database! Welcome message printed.');
+
+          /* Welcome Message */
+          printMessage('success', 'Välkommen ' + user.displayName + '!', 8000, 300);
+
+          /* Setting localStorage */
+          localStorage.setItem('loggedInUser', JSON.stringify(newUser));
         }
 
-      } else {
+        //console.log('THE USER IS NOOOOOOW LOGGED IN');
+      });
 
-        let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
-
-        //console.log('No user here. Creating user in database.');
-        newUser.push();
-        //console.log('Creating the user for the first time in the database! Welcome message printed.');
-
-        /* Welcome Message */
-        printMessage('success', 'Välkommen ' + user.displayName + '!', 8000, 300);
-
-        /* Setting localStorage */
-        localStorage.setItem('loggedInUser', JSON.stringify(newUser));
-      }
-      // retrieveEventInfo after we've logged in!
-      if(window.location.pathname.includes('eventpage.html')){
-        retrieveEventInfo();
-      }
-
-      //console.log('THE USER IS NOOOOOOW LOGGED IN');
-    });
-
-    //Eftersom google sign-in redirect'ar oss så kollar vi om vi är inloggade eller inte.
-    //Är vi detta så skriver vi ut att vi kan logga ut och visar samt "Min profil" i Nav.
-
-    let myProfile =  document.getElementById('myProfile');
-    let myProfileMob = document.getElementById('myProfileMob');
-    myProfile.classList.remove('hidden')
-    myProfileMob.classList.remove('hidden')
-
-    for( let loginInMenu of document.getElementsByClassName('loginInMenu')){
-        if(loginInMenu){
-            loginInMenu.innerText = "LOGGA UT";
-        };
-    };
-
-
+      //Eftersom google sign-in redirect'ar oss så kollar vi om vi är inloggade eller inte.
+      //Är vi detta så skriver vi ut att vi kan logga ut och visar samt "Min profil" i Nav.
 
   } else {
+    /* Detta betyder att vi loggar ut */
     console.log('wubalubadub dub');
       let bell = document.getElementById('notificationBell');
+      let helloUser = document.getElementById('helloUser');
+      let notificationWrapper = document.getElementById('notificationWrapper');
+      let imgHolder = document.getElementById('imageHolder');
+
       if(bell != undefined){
         bell.classList.add('hidden');
         helloUser.classList.add("hidden");
       }
+
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
       localStorage.removeItem('loggedInUser');
@@ -154,8 +184,9 @@ firebase.auth().onAuthStateChanged(user => {
 
       // Om det existerar några meetups. Det vill säga personen loggade ut med sidan uppe.
 
-      let meetupArray = document.getElementById('meetupWrapper').children;
+      let meetupArray = document.getElementById('meetupWrapper');
       if(meetupArray){
+        meetupArray = meetupArray.children;
         for(let meetup of meetupArray){
           if(meetup.lastChild.className.includes('moreMeetupInfoDiv')){
 
@@ -184,12 +215,14 @@ firebase.auth().onAuthStateChanged(user => {
   }
 }); //firebase.auth END...
 
-function toggleLoginModal(){
+
+function toggleLoginModal(onlyClose = false){
 
   let lmw = document.getElementById('lmw');
 
   if(lmw){ // Om LoginModalWrapper finns i dom:en behöver vi bara visa den.
-    if(lmw.className == 'hidden'){
+
+    if(lmw.className == 'hidden' && !onlyClose){
       lmw.className = '';
       setBodyScroll('hidden');
       //addLoginModalListeners();
@@ -202,7 +235,6 @@ function toggleLoginModal(){
   } else {
     retrieveLoginModalContent();
   }
-
 }
 
 
@@ -362,7 +394,7 @@ function retrieveLoginModalContent(){
       btnHolderInside.classList.add('closed');
       btnHolderInside.classList.remove('slideUp');
 
-    }else{
+    } else{
       console.log('it is false');
       paragSignUp.classList.remove('highlight');
       paragSignIn.classList.add('highlight');
@@ -378,7 +410,6 @@ function retrieveLoginModalContent(){
       btnHolderInside.classList.add('slideUp');
     }
   });
-
 
 
   //Add login event
@@ -428,6 +459,16 @@ function retrieveLoginModalContent(){
           });
       }
     });
+
+    txtEmail.addEventListener('focus', function(event) {
+    event.preventDefault(); event.stopPropagation();
+    window.scrollTo(0,0); //the second 0 marks the Y scroll pos. Setting this to i.e. 100 will push the screen up by 100px.
+    document.body.scrollTop = 0;
+    });
+
+
+
+
 
   // Create button Wrappers
   let googleButtonWrapper = document.createElement('div');
@@ -518,7 +559,7 @@ function addWindowClosed(){
 }
 
 function closeModal(){
-  toggleLoginModal();
+  toggleLoginModal(true);
   let btns = document.getElementsByClassName('purple');
   if(btns){
     for(let btn of btns){
@@ -568,10 +609,11 @@ function showNotifications(event){
   console.log('Hi!!');
   let notificationWrapper = document.getElementById('notificationWrapper');
   if(notificationWrapper){
+    console.log('Toggla notifikationer');
     toggleNotifications();
     updateTimeStamps();
   } else {
-
+    console.log('Annars skapar vi notifikationer');
     notificationWrapper = document.createElement('div');
     notificationWrapper.setAttribute('id', 'notificationWrapper');
 
@@ -579,8 +621,20 @@ function showNotifications(event){
     let notificationHeader = document.createElement('div');
     let notificationLabel = document.createElement('h2');
     notificationLabel.innerText = 'Notifikationer';
+
+    let notificationRemoveAllBtn = document.createElement('span');
+    notificationRemoveAllBtn.innerHTML = '<i class="mdi mdi-delete mdi-24px"></i>';
+    let removeAllHoverMessage = document.createElement('p');
+    removeAllHoverMessage.className = 'hoverMessage';
+    removeAllHoverMessage.innerText = 'Rensa notifikationer';
+
+    notificationRemoveAllBtn.addEventListener('click', removeAllNotifications);
+
     let notificationCloseIcon = document.createElement('span');
-    notificationCloseIcon.innerHTML = '<i class="mdi mdi-close mdi-36px"></i>'
+    notificationCloseIcon.innerHTML = '<i class="mdi mdi-close mdi-36px"></i>';
+    let closeIconHoverMessage = document.createElement('p');
+    closeIconHoverMessage.className = 'hoverMessage';
+    closeIconHoverMessage.innerText = 'Stäng';
 
     notificationCloseIcon.addEventListener('click', toggleNotifications);
 
@@ -597,7 +651,10 @@ function showNotifications(event){
 
 
     notificationHeader.appendChild(notificationLabel);
+    notificationHeader.appendChild(notificationRemoveAllBtn);
+    notificationHeader.appendChild(removeAllHoverMessage);
     notificationHeader.appendChild(notificationCloseIcon);
+    notificationHeader.appendChild(closeIconHoverMessage);
 
     notificationContent.appendChild(notificationList);
 
@@ -605,7 +662,7 @@ function showNotifications(event){
     notificationWrapper.appendChild(notificationContent);
 
     header.appendChild(notificationWrapper);
-
+    console.log('Appending to header');
 
     displayNotifications(notificationList);
   }
@@ -616,8 +673,10 @@ function toggleNotifications(){
   let bell = document.getElementById('notificationBell');
 
   if(wrapper.className.includes('hidden')){
+    console.log('Show notifications', wrapper);
     wrapper.classList.remove('hidden');
   } else {
+    console.log('Hide notifications', wrapper);
     wrapper.classList.add('hidden');
     bell.innerHTML = '<i class="mdi mdi-bell mdi-24px"></i>';
   }
@@ -639,7 +698,7 @@ function displayNotifications(displayList){
       let action = data.action;
       let eventID, meetupKey;
 
-      if(action == 'invite'){
+      if(action == 'invite' || action == 'meetupEventJoin'){
         eventID = data.eventid;
         meetupKey = data.meetupKey;
       }
@@ -666,12 +725,18 @@ function displayNotifications(displayList){
       let showMoreDiv = document.createElement('div');
       showMoreDiv.className = 'hidden';
       btn.addEventListener('click', function(e){
+
+        let target = e.target;
+        if(target.nodeName == 'I'){
+          target = target.parentNode;
+        }
+
         if(showMoreDiv.className == 'hidden'){
           showMoreDiv.className = '';
-          e.target.innerHTML = '<i class="mdi mdi-chevron-up mdi-30px"></i>';
+          target.innerHTML = '<i class="mdi mdi-chevron-up mdi-30px"></i>';
         } else {
           showMoreDiv.className = 'hidden';
-          e.target.innerHTML = '<i class="mdi mdi-chevron-down mdi-30px"></i>'
+          target.innerHTML = '<i class="mdi mdi-chevron-down mdi-30px"></i>'
         }
       });
 
@@ -689,10 +754,12 @@ function displayNotifications(displayList){
       /* Append stuff into showMoreDiv */
 
       /* If it's an invitation to a meetup */
-      if(action == 'invite'){
+      if(action == 'invite' || action == 'meetupEventJoin'){
+        console.log('eventid is: ', eventID);
+        console.log('meetupKey is: ', meetupKey);
         db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snapshot){
           data = snapshot.val();
-          console.log('WHAT IS MEETUPDATA?!?', data);
+          console.log('IS DATA REALLY NULL? ', data);
           let showMoreInfoDiv = document.createElement('div');
           showMoreInfoDiv.className = 'showMoreInfoDiv';
 
@@ -725,7 +792,7 @@ function displayNotifications(displayList){
           let adressLabel = document.createElement('span');
           adressLabel.innerText = 'Adress';
           let adress = document.createElement('span')
-          adress.innerText = data.adress;
+          adress.innerText = data.address;
           adressDiv.appendChild(adressLabel);
           adressDiv.appendChild(adress);
           let infoWrapper = document.createElement('div');
@@ -743,8 +810,12 @@ function displayNotifications(displayList){
 
 
         });
+      } else if(action == 'meetupEventJoaain'){
+
+      } else if(action == 'meetupEventLeave'){
+
       } else {
-        console.log('LUUUL THIS IS A friendRequest!!!!');
+        console.log('This should be a friend request.');
       }
 
       /* append Btns */
@@ -840,8 +911,11 @@ function getAction(action){
     return ' bjöd in dig till ett meetup';
   } else if(action == 'friendRequest'){
     return ' la till dig som vän';
+  } else if(action == 'meetupEventJoin'){
+    return ' gick med i ett meetup du följer';
+  } else if(action == 'meetupEventLeave'){
+    return ' lämnade ett meetup du följer';
   }
-
 }
 
 // Denna funktion beräknar vad som ska visas som tid på varje chattmeddelande!
@@ -904,12 +978,14 @@ function joinMeetup(user, meetupKey, eventID){
     let spots = data.spots, counter = 0;
 
     for(let comingUser in members){
+      /* here we have all the people coming to the meetup :D */
       counter++;
       if(members[comingUser].uniqueID == user.uniqueID) {
         userIsComing = true;
         console.log('You are coming to this already!!');
       }
     }
+    sendNotificationsToMeetupMembers(meetupKey, 'meetupEventJoin');
 
     if(counter < spots){
       let userObject = {
@@ -934,5 +1010,115 @@ function joinMeetup(user, meetupKey, eventID){
     } else {
       printMessage('error', 'Tyvärr får du inte plats här');
     }
+  });
+
+
+
+
+
+}
+
+// Add a friend with SID, (currentUser)
+function addFriend(sid){
+  let user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+  let friendList = retrieveFriends();
+
+  if(user){
+    if(friendList.includes(sid)){
+      printMessage('error', 'Ni är redan vänner! :o');
+    } else if(sid == user.sid){
+      printMessage('error', 'Du kan inte lägga till dig själv som vän!');
+    } else {
+      printMessage('success', 'Du la till en ny vän!');
+      db.ref('users/' + user.uniqueID + '/friends').push(sid);
+    }
+  } else {
+    printMessage('error', 'Du är inte inloggad :o');
+  }
+}
+
+function retrieveFriends(){
+  /* Skapa vänlistan */
+  let friendList = [];
+
+  /* Check if there is a localUser. Should always be one.. */
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  if(localUser){
+    for(let friend in localUser.friends){
+      friendList.push(localUser.friends[friend]);
+    }
+  }
+  return friendList;
+}
+
+function removeAllNotifications(e){
+
+  let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  let list = document.getElementById('notificationList');
+  if(list.children[0].getAttribute('id') == 'ingaNotifikationer'){
+    printMessage('error', 'Det finns inga notifikationer att ta bort', undefined, null, 1);
+  } else if(localUser){
+    db.ref('users/' + localUser.uniqueID).on('child_removed', function(snapshot){
+      let data = snapshot.val();
+      let key = snapshot.key;
+      if(key == 'notifications'){
+        clearDomNotifications();
+
+        printMessage('success', 'Tog bort alla notifikationer', undefined, null, 1);
+      }
+    });
+      /* the user is logged in */
+      db.ref('users/' + localUser.uniqueID + '/notifications').remove();
+  }
+}
+
+function clearDomNotifications(){
+
+  let list = document.getElementById('notificationList');
+
+  while(list.firstChild){
+    list.removeChild(list.firstChild);
+  }
+
+  let ingaNotifikationer = document.createElement('span');
+  ingaNotifikationer.innerText = 'Inga notifikationer';
+  ingaNotifikationer.setAttribute('id', 'ingaNotifikationer');
+  list.appendChild(ingaNotifikationer);
+}
+
+function sendNotificationsToMeetupMembers(meetupKey, action){
+    let eventID = getLocationInfo()[0];
+    db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snap){
+      let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
+      let data = snap.val();
+      let members = data.members;
+
+      /* here we have all the people coming to the meetup :D */
+      for(let comingUser in members){
+        let key = comingUser;
+        comingUser = members[comingUser];
+
+        /* send notification to the people of the meetup with this turned on */
+        db.ref('users/').once('value', function(snapshot){
+          let data = snapshot.val();
+
+          /* Loop it */
+          for(let user in data){
+            let userData = data[user];
+
+            if(userData.meetupNotifications){
+              for(let noti in userData.meetupNotifications){
+                let setting = userData.meetupNotifications[noti];
+                let key = noti;
+                /* this meetup */
+                if(key == meetupKey && setting){
+                  sendNotification(comingUser.sid, action, meetupKey);
+                }
+              }
+            }
+          }
+        });
+      }
   });
 }
