@@ -357,7 +357,8 @@ function retrieveLoginModalContent(){
 
   nameInput.className = 'nameInput doNotCloseThis'; // creates a name for the user
   nameInput.setAttribute('type', 'text');
-  paragN.innerText = 'Namn';
+  nameInput.setAttribute('name', 'username');
+  paragN.innerText = 'För- och efternamn';
   paragN.className = 'paragN';
   confDiv.className ='slider closed';
   confDiv.appendChild(paragN);
@@ -438,9 +439,14 @@ function retrieveLoginModalContent(){
       const name = nameInput.value;
       if (password != password2) {
         console.log('Lösenordet matchar inte')
-          printMessage('error', ' fel lösenordet matchar inte');
-          txtPassword.classList.add('errorBorder')
-          txtPassword2.classList.add('errorBorder')
+        printMessage('error', ' fel lösenordet matchar inte');
+        txtPassword.classList.add('errorBorder')
+        txtPassword2.classList.add('errorBorder')
+        
+      }else if (name.length < 3){
+        printMessage('error', 'för kort namn');
+      }else if (name.length > 24){
+        printMessage('error', 'för långt namn');
       }else{
         //Sign-up user if password match
         firebase.auth().createUserWithEmailAndPassword(email, password)
