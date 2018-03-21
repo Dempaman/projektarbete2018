@@ -1240,8 +1240,11 @@ function retrieveEventInfo(){
     if(eventid != undefined){
       // Start to listen if meetups gets removed.
       listenToRemovedMeetups();
+      let options = {
+        credentials: 'same-origin'
+      }
 
-      fetch(`https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_id=sweden&apikey=${ticketMasterApiKey}`, null)
+      fetch(`https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_id=sweden&apikey=${ticketMasterApiKey}`)
       .then(function(response){
 
         //console.log(response);
