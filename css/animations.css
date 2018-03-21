@@ -10,6 +10,18 @@
 }
 
 
+/* Fadeout Classes */
+.fadeout {
+  opacity: 1;
+  animation-name: fadeout !important;
+  animation-duration: .5s;
+}
+
+@keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
 
 /* Beating heart animation */
 .heartbeat {

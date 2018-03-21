@@ -1,6 +1,6 @@
 // This document holds the loginModal to be displayed on any page that uses this function!
 firebase.auth().getRedirectResult().then(function(result) {
-  console.log('Login Results: ', result);
+  //console.log('Login Results: ', result);
 
 }).catch(function(err){
   if(err.code == 'auth/account-exists-with-different-credential'){
@@ -13,10 +13,10 @@ firebase.auth().getRedirectResult().then(function(result) {
 
 //Eventlistener to authStateChange
 firebase.auth().onAuthStateChanged(user => {
-  console.log('AUTH STATE CHANGE FOUND!');
+  //console.log('AUTH STATE CHANGE FOUND!');
   if(user) {
     if(!user.displayName){
-      console.log('No fucking displayName');
+      //console.log('No fucking displayName');
       return false;
     }
 
@@ -37,16 +37,17 @@ firebase.auth().onAuthStateChanged(user => {
     db.ref('users/' + user.uid + '/notifications').on('child_added', function(snapshot){
       let data = snapshot.val();
 
+      /* Activate the BELL */
+      let bell = document.getElementById('notificationBell');
+
+      if(bell){
+        bell.innerHTML = '<i class="mdi mdi-bell-ring mdi-24px"> </i>'
+      }
+
       if(initTime > data.time){
-        console.log('This is an old invite.');
+        //console.log('This is an old invite.');
       } else {
 
-        /* Activate the BELL */
-        let bell = document.getElementById('notificationBell');
-
-        if(bell){
-          bell.innerHTML = '<i class="mdi mdi-bell-ring mdi-24px"> </i>'
-        }
 
         if(data.action == 'invite'){
           printMessage('notification', data.fullname + ' har bjudit in dig till ett meetup');
@@ -61,7 +62,7 @@ firebase.auth().onAuthStateChanged(user => {
     });
 
     // The user is logged in.
-    console.log('User data:',user);
+    //console.log('User data:',user);
 
       //Annas magic - Denna funktion körs när den hittar helloUser, bell, samt myProfile
       let runWhenLoaded = function(count = 0){
@@ -70,7 +71,7 @@ firebase.auth().onAuthStateChanged(user => {
           let helloUser = document.getElementById("helloUser");
           let bell = document.getElementById('notificationBell');
           let myProfile =  document.getElementById('myProfile');
-          console.log('This was fired');
+          //console.log('This was fired');
           if(helloUser && bell && myProfile){
             /* UserName code */
             helloUser.classList.remove("hidden");
@@ -97,14 +98,14 @@ firebase.auth().onAuthStateChanged(user => {
 
             /* Annars försöker vi igen 400 millisekunder senare */
           } else {
-            console.log('not loaded yet!');
+            //console.log('not loaded yet!');
             setTimeout(function(){
               runWhenLoaded(count++);
-              console.log('Trying again!');
+              //console.log('Trying again!');
             }, 400);
           }
         } else {
-          console.log('Failed after 10 retries. Increase timeout?');
+          //console.log('Failed after 10 retries. Increase timeout?');
         }
       }
       runWhenLoaded();
@@ -116,8 +117,8 @@ firebase.auth().onAuthStateChanged(user => {
         if(result){
           // Print this if the user exists in the database.
 
-          //console.log(result);
-          console.log('Setting the loggedInUser here #1!');
+          ////console.log(result);
+          //console.log('Setting the loggedInUser here #1!');
           // Put the user information into the  localStorage db
           localStorage.setItem('loggedInUser', JSON.stringify(result));
 
@@ -131,9 +132,9 @@ firebase.auth().onAuthStateChanged(user => {
 
           let newUser = new UserClass(user.uid, user.displayName, user.email, user.emailVerified, null, null, user.photoURL, false, null, null);
 
-          //console.log('No user here. Creating user in database.');
+          ////console.log('No user here. Creating user in database.');
           newUser.push();
-          //console.log('Creating the user for the first time in the database! Welcome message printed.');
+          ////console.log('Creating the user for the first time in the database! Welcome message printed.');
 
           /* Welcome Message */
           printMessage('success', 'Välkommen ' + user.displayName + '!', 8000, 300);
@@ -142,7 +143,7 @@ firebase.auth().onAuthStateChanged(user => {
           localStorage.setItem('loggedInUser', JSON.stringify(newUser));
         }
 
-        //console.log('THE USER IS NOOOOOOW LOGGED IN');
+        ////console.log('THE USER IS NOOOOOOW LOGGED IN');
       });
 
       //Eftersom google sign-in redirect'ar oss så kollar vi om vi är inloggade eller inte.
@@ -150,7 +151,7 @@ firebase.auth().onAuthStateChanged(user => {
 
   } else {
     /* Detta betyder att vi loggar ut */
-    console.log('wubalubadub dub');
+    //console.log('wubalubadub dub');
       let bell = document.getElementById('notificationBell');
       let helloUser = document.getElementById('helloUser');
       let notificationWrapper = document.getElementById('notificationWrapper');
@@ -164,9 +165,9 @@ firebase.auth().onAuthStateChanged(user => {
     let localUser = localStorage.getItem('loggedInUser');
     if(localUser != undefined){
       localStorage.removeItem('loggedInUser');
-      console.log('Removed logged in user');
+      //console.log('Removed logged in user');
     } else {
-      console.log('Nothing to remove');
+      //console.log('Nothing to remove');
     }
 
     if(window.location.pathname.includes('eventpage.html')){
@@ -175,10 +176,10 @@ firebase.auth().onAuthStateChanged(user => {
       let creatorDivArray = document.getElementsByClassName('creatorDiv');
 
       if(creatorDivArray.length == 0){
-        console.log('Length is 0! Posting!!!');
+        //console.log('Length is 0! Posting!!!');
         retrieveEventInfo();
       } else {
-        console.log('Nah I ain\'t posting that again!');
+        //console.log('Nah I ain\'t posting that again!');
       }
 
 
@@ -202,12 +203,12 @@ firebase.auth().onAuthStateChanged(user => {
 
             meetup.removeChild(meetup.lastChild);
             meetup.appendChild(btnDiv);
-            // Console.log('APPEND BTN');
+            // //console.log('APPEND BTN');
             let meetupKey = meetup.getAttribute('id').replace('-', '&');
             meetupKey = meetupKey.split('&')[1];
             joinBtnListener(joinMeetupBtn, meetupKey);
           } else {
-            console.log('We should not remove this joinMeetupBtn!');
+            //console.log('We should not remove this joinMeetupBtn!');
           }
         }
       }
@@ -383,7 +384,7 @@ function retrieveLoginModalContent(){
   switchInput.addEventListener('change', function(event){
     let loginModalButtonHolder = document.getElementsByClassName('loginModalButtonHolder')[0];
     if(this.checked){
-      console.log("It is true!!");
+      //console.log("It is true!!");
       paragSignIn.classList.remove('highlight');
       paragSignUp.classList.add('highlight');
       btnCuLogin.classList.add('hide');
@@ -398,7 +399,7 @@ function retrieveLoginModalContent(){
       btnHolderInside.classList.remove('slideUp');
 
     } else{
-      console.log('it is false');
+      //console.log('it is false');
       paragSignUp.classList.remove('highlight');
       paragSignIn.classList.add('highlight');
       btnCuLogin.classList.remove('hide');
@@ -425,7 +426,7 @@ function retrieveLoginModalContent(){
     const promise = firebase.auth().signInWithEmailAndPassword(email, password);
     promise
     .catch(function(error){
-      console.log(error.message);
+      //console.log(error.message);
       printMessage('error', error.message);
     });
   });
@@ -438,7 +439,7 @@ function retrieveLoginModalContent(){
       const password2 = txtPassword2.value;
       const name = nameInput.value;
       if (password != password2) {
-        console.log('Lösenordet matchar inte')
+        //console.log('Lösenordet matchar inte')
         printMessage('error', ' fel lösenordet matchar inte');
         txtPassword.classList.add('errorBorder')
         txtPassword2.classList.add('errorBorder')
@@ -462,7 +463,7 @@ function retrieveLoginModalContent(){
               });
           })
         .catch(function(error){
-            console.log(error.message); // If some error occurs it will print the message
+            //console.log(error.message); // If some error occurs it will print the message
             printMessage('error', error.message); //funkar inte..
           });
       }
@@ -546,16 +547,16 @@ function addWindowClosed(){
 
   function closeIfNotCenter(event){
 
-    console.log('This:', event.target);
-    console.log('The class name of target is: ' + event.target.className);
-    console.log('NodeName: ' + event.target.nodeName);
+    //console.log('This:', event.target);
+    //console.log('The class name of target is: ' + event.target.className);
+    //console.log('NodeName: ' + event.target.nodeName);
 
     if(event.target.className != 'centered'){
       if(event.target.className != 'loginModalButtonHolder'){
         if(!event.target.classList.contains('doNotCloseThis')){
           closeModal();
           window.removeEventListener('click', closeIfNotCenter);
-          console.log('Closeeed with closeIfNotCenter');
+          //console.log('Closeeed with closeIfNotCenter');
         }
       }
     }
@@ -580,21 +581,21 @@ function closeModal(){
 function loginGoogle(){
   var providerGoogle = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithRedirect(providerGoogle).catch(function(error){
-    console.log('ERRORRRR: ', error);
+    //console.log('ERRORRRR: ', error);
   });
-  console.log('Google button pressed!');
+  //console.log('Google button pressed!');
 }
 
 function loginFacebook(){
   var providerFacebook = new firebase.auth.FacebookAuthProvider();
   firebase.auth().signInWithRedirect(providerFacebook).then(function(msg){
-    console.log('FACEBOOK LOGMESSAGE', msg);
+    //console.log('FACEBOOK LOGMESSAGE', msg);
   })
 
   .catch(function(error){
-    console.log('FB ERROR: ', error);
+    //console.log('FB ERROR: ', error);
   });
-  console.log('Facebook button pressed!');
+  //console.log('Facebook button pressed!');
 }
 
 function addLoginModalListeners(){
@@ -614,14 +615,14 @@ function removeLoginModalListeners(){
 }
 
 function showNotifications(event){
-  console.log('Hi!!');
+  //console.log('Hi!!');
   let notificationWrapper = document.getElementById('notificationWrapper');
   if(notificationWrapper){
-    console.log('Toggla notifikationer');
+    //console.log('Toggla notifikationer');
     toggleNotifications();
     updateTimeStamps();
   } else {
-    console.log('Annars skapar vi notifikationer');
+    //console.log('Annars skapar vi notifikationer');
     notificationWrapper = document.createElement('div');
     notificationWrapper.setAttribute('id', 'notificationWrapper');
 
@@ -670,7 +671,7 @@ function showNotifications(event){
     notificationWrapper.appendChild(notificationContent);
 
     header.appendChild(notificationWrapper);
-    console.log('Appending to header');
+    //console.log('Appending to header');
 
     displayNotifications(notificationList);
   }
@@ -681,10 +682,10 @@ function toggleNotifications(){
   let bell = document.getElementById('notificationBell');
 
   if(wrapper.className.includes('hidden')){
-    console.log('Show notifications', wrapper);
+    //console.log('Show notifications', wrapper);
     wrapper.classList.remove('hidden');
   } else {
-    console.log('Hide notifications', wrapper);
+    //console.log('Hide notifications', wrapper);
     wrapper.classList.add('hidden');
     bell.innerHTML = '<i class="mdi mdi-bell mdi-24px"></i>';
   }
@@ -707,12 +708,12 @@ function displayNotifications(displayList){
       let eventID, meetupKey;
 
       if(action == 'invite' || action == 'meetupEventJoin'){
-        console.log('EvendID is actually:' + data.eventid);
+        //console.log('EvendID is actually:' + data.eventid);
         eventID = data.eventid;
         meetupKey = data.meetupKey;
       }
 
-      console.log('WHAT IS DATA?!', data);
+      //console.log('WHAT IS DATA?!', data);
       let listItem = document.createElement('div');
       let contentWrapper = document.createElement('div');
 
@@ -764,11 +765,11 @@ function displayNotifications(displayList){
 
       /* If it's an invitation to a meetup */
       if(action == 'invite' || action == 'meetupEventJoin'){
-        console.log('eventid is: ', eventID);
-        console.log('meetupKey is: ', meetupKey);
+        //console.log('eventid is: ', eventID);
+        //console.log('meetupKey is: ', meetupKey);
         db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snapshot){
           data = snapshot.val();
-          console.log('IS DATA REALLY NULL? ', data);
+          //console.log('IS DATA REALLY NULL? ', data);
           let showMoreInfoDiv = document.createElement('div');
           showMoreInfoDiv.className = 'showMoreInfoDiv';
 
@@ -822,7 +823,7 @@ function displayNotifications(displayList){
           showMoreInfoDiv.appendChild(infoWrapper);
 
           showMoreDiv.appendChild(showMoreInfoDiv);
-          console.log('Appending into: ', data.name);
+          //console.log('Appending into: ', data.name);
 
 
         });
@@ -831,7 +832,7 @@ function displayNotifications(displayList){
       } else if(action == 'meetupEventLeave'){
 
       } else {
-        console.log('This should be a friend request.');
+        //console.log('This should be a friend request.');
       }
 
       /* append Btns */
@@ -937,21 +938,21 @@ function getAction(action){
 // Denna funktion beräknar vad som ska visas som tid på varje chattmeddelande!
 function chatMessageTimeStamp(timeStamp){
   let currTime = new Date().getTime();
-  //console.log('Current time is: ', currTime);
+  ////console.log('Current time is: ', currTime);
   let difference = currTime - timeStamp;
-  //console.log('Difference:', difference);
+  ////console.log('Difference:', difference);
   let seconds = Math.floor((difference / 1000));
   let minutes = Math.floor((difference / 1000 / 60));
   let hours = Math.floor((difference / 1000 / 60 / 60));
   let days = Math.floor((difference / 1000 / 60 / 60 / 24));
-  // console.log('Divided by 1000 then 60:', difference / 1000 / 60);
-  // console.log('Current date: ', new Date(currTime));
-  // console.log('Timestamp date:', new Date(timeStamp));
-  //console.log(timeStamp);
+  // //console.log('Divided by 1000 then 60:', difference / 1000 / 60);
+  // //console.log('Current date: ', new Date(currTime));
+  // //console.log('Timestamp date:', new Date(timeStamp));
+  ////console.log(timeStamp);
 
-  // console.log('Sekunder: ' + seconds);
-  // console.log('Minuter: ' + minutes);
-  // console.log('Timmar: ' + hours);
+  // //console.log('Sekunder: ' + seconds);
+  // //console.log('Minuter: ' + minutes);
+  // //console.log('Timmar: ' + hours);
 
   if(days > 0){
     if(days == 1){
@@ -990,7 +991,7 @@ function joinMeetup(user, meetupKey, eventID){
   /* Vi hämtar meetupet som personen går med i samt lägger den i Data */
   db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snap){
     let data = snap.val();
-    console.log('This entire data is? ', data);
+    //console.log('This entire data is? ', data);
     let userIsComing = false;
     let members = data.members;
     let spots = data.spots, counter = 0;
@@ -1000,7 +1001,7 @@ function joinMeetup(user, meetupKey, eventID){
       counter++;
       if(members[comingUser].uniqueID == user.uniqueID) {
         userIsComing = true;
-        console.log('You are coming to this already!!');
+        //console.log('You are coming to this already!!');
       }
     }
     sendNotificationsToMeetupMembers(meetupKey, eventID, 'meetupEventJoin');
@@ -1013,17 +1014,17 @@ function joinMeetup(user, meetupKey, eventID){
         avatarURL: user.avatarURL,
         joined: firebase.database.ServerValue.TIMESTAMP
       }
-      //console.log('DATA IS: ', data);
+      ////console.log('DATA IS: ', data);
       if(!userIsComing){
         db.ref('meetups/' + eventID + '/' + meetupKey + '/members').push(userObject);
-        //console.log('Vi la till dig i meetupet!');
+        ////console.log('Vi la till dig i meetupet!');
         new SystemMessage(meetupKey, userObject.fullname + ' gick med i meetupet.').push();
         printMessage('success', 'Du gick med i meetupet');
 
         // Lägg till meetup i användarens profil.
         addUserMeetup(userObject.uniqueID,eventID, meetupKey);
       } else {
-        console.log('Du är redan med i detta meetup! Något måste gått fel!');
+        //console.log('Du är redan med i detta meetup! Något måste gått fel!');
       }
     } else {
       printMessage('error', 'Tyvärr får du inte plats här');
@@ -1106,12 +1107,12 @@ function clearDomNotifications(){
 }
 
 function sendNotificationsToMeetupMembers(meetupKey, eventID, action){
-  console.log('Sending notifications to all members of this meetup!');
+  //console.log('Sending notifications to all members of this meetup!');
     db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snap){
       let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
       let data = snap.val();
       let members = data.members;
-      console.log('Retrieving the meetup. Members are: ', members);
+      //console.log('Retrieving the meetup. Members are: ', members);
 
       /* here we have all the people coming to the meetup :D */
       let count = 0;
@@ -1128,7 +1129,7 @@ function sendNotificationsToMeetupMembers(meetupKey, eventID, action){
           /* Loop the users */
           for(let user in data){
             /* Gå igenom varje användare */
-            console.log('Looping in loop: ', count++);
+            //console.log('Looping in loop: ', count++);
             let userData = data[user];
             /* Lägg användaren i userData */
 
@@ -1142,20 +1143,20 @@ function sendNotificationsToMeetupMembers(meetupKey, eventID, action){
                 let key = noti;
                 if(notifications[noti]){
                   if(key == meetupKey){
-                    console.log('Sending a notification to: ', userData.fullname);
+                    //console.log('Sending a notification to: ', userData.fullname);
                     if(localUser.uniqueID != userData.uniqueID){
                       sendNotification(userData.sid, action, meetupKey);
                     }
                 } else {
-                  console.log('Key is not meetupKey')
+                  //console.log('Key is not meetupKey')
                 }
-                console.log('Setting is: ', setting);
-                console.log('Key is: ', key);
+                //console.log('Setting is: ', setting);
+                //console.log('Key is: ', key);
                 /* this meetup */
               }
             }
           } else {
-            console.log('This person has no notifications');
+            //console.log('This person has no notifications');
           }
         }
       });

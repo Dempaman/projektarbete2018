@@ -12,10 +12,11 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
         target = target.parentNode;
       }
       if(!target.className.includes('doNotCloseThis')){
+
         toggleWrapper(true);
         toggleShareMenu(true, meetupKey);
         window.removeEventListener('click', printCloseIfNotCenter);
-        console.log('Closed with closeIfNotCenter');
+        //console.log('Closed with closeIfNotCenter');
       }
   }
 
@@ -27,7 +28,7 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
     if(target.className.includes('purple')){
       target.innerText = 'Stäng';
     } else {
-      console.log('Small btn pressed for the first time :3');
+      //console.log('Small btn pressed for the first time :3');
     }
 
     /* Skapa själva dropdownmenyn */
@@ -110,21 +111,18 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
   }
 
   function toggleWrapper(close = false){
-    console.log('Toggled the dropDownMenu');
+    //console.log('Toggled the dropDownMenu');
 
       if(dropDownWrapper.className.includes('hidden') && !close){
-        if(target.className.includes('purple')){
-          target.innerText = 'Stäng';
-          console.log('We are now showing the dropDownMenu');
-        } else if(target.previousSibling.className.includes('purple')){
-          target.previousSibling.innerText = 'Stäng';
-        }
-        console.log('Adding printCloseIfNotCenter');
+        dropDownWrapper.classList.remove('fadeout');
         window.addEventListener('click', printCloseIfNotCenter);
-        dropDownWrapper.className = dropDownWrapper.className.replace(' hidden', '');
+        dropDownWrapper.classList.remove('hidden');
       } else if(!dropDownWrapper.className.includes('hidden')){
-          dropDownWrapper.className += ' hidden';
-          console.log('Removing listener');
+        dropDownWrapper.classList.add('fadeout');
+          setTimeout(function(){
+            dropDownWrapper.classList.add('hidden');
+          },450)
+          //console.log('Removing listener');
           window.removeEventListener('click', printCloseIfNotCenter);
       }
   }
@@ -239,7 +237,7 @@ function toggleMeetupNotifications(event){
 }
 
 function dropDownEditMeetup(eventID, meetupKey){
-  console.log('So you want me to edit this meetup? ', eventID, meetupKey);
+  //console.log('So you want me to edit this meetup? ', eventID, meetupKey);
   toggleCreateMeetupModal(true);
   initSliderAndMoreShit(true, meetupKey);
 }
@@ -271,7 +269,7 @@ function listenForBellChanges(htmlObj, meetupKey){
           } else {
             htmlObj.innerHTML = '<i class="mdi mdi-bell-off"></i> Notifikationer';
           }
-          console.log('Set to: ', bool);
+          //console.log('Set to: ', bool);
         }
       }
     });
@@ -349,9 +347,15 @@ function openShareMenu(event){
         if(shareMenuDiv.className.includes('hidden') && !close){
           //window.addEventListener('click', printCloseIfNotCenter);
           shareMenuDiv.classList.remove('hidden');
+          shareMenuDiv.classList.remove('fadeout');
         } else if(!shareMenuDiv.className.includes('hidden')){
-            shareMenuDiv.classList.add('hidden');
-            console.log('Removing listener');
+          
+            shareMenuDiv.classList.add('fadeout');
+            setTimeout(function(){
+              shareMenuDiv.classList.add('hidden');
+            },450);
+            //console.log('Removing listener');
+
             //window.removeEventListener('click', printCloseIfNotCenter);
         }
       }
@@ -389,7 +393,7 @@ function openShareMenu(event){
     try {
       var successful = document.execCommand('copy');
       var msg = successful ? 'successful' : 'unsuccessful';
-      console.log('Fallback: Copying text command was ' + msg);
+      //console.log('Fallback: Copying text command was ' + msg);
     } catch (err) {
       console.error('Fallback: Oops, unable to copy', err);
     }

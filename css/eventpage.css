@@ -660,6 +660,7 @@ iframe .main {
 /* Share Menu */
 div.shareMenu {
   position: absolute;
+  opacity: 1;
   width: 100%;
   right: 100%;
   top: 33%;

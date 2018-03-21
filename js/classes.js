@@ -59,7 +59,7 @@ class MeetupClass {
     /* Lägg till meetupKey under createdMeetups på användarens profil. */
     db.ref('users/' + this.creator.uniqueID + '/createdMeetups/' + this.eventID + '/' + this.key).set(true);
     printMessage('success', 'Ditt meetup skapades!'); // Visa ett meddelande på sidan att meetupet har skapats!
-    console.log('EventID är lika med:',this.eventID);
+    //console.log('EventID är lika med:',this.eventID);
 
     increaseMeetupCount(this.eventID);
 
@@ -67,7 +67,7 @@ class MeetupClass {
   }
 
   updateCount(){
-    console.log('Hej jag behövs inte');
+    //console.log('Hej jag behövs inte');
   }
 
   removeSelf(){
@@ -79,7 +79,7 @@ class MeetupClass {
 
   save(){
     db.ref('meetups/' + this.eventID + '/' + this.key).update(this);
-    console.log('Update the meetup with information: ', this)
+    //console.log('Update the meetup with information: ', this)
     printMessage('success', 'Meetupet har uppdaterats!');
   }
 
@@ -129,17 +129,17 @@ class UserClass {
     // Get a sid
     createUniqueSid(this).then(function(value){
         // Körs om/när Promise-koden har lyckats (anropat succeed)
-        console.log('Sid found, woohoo');
+        //console.log('Sid found, woohoo');
         db.ref('users/' + value[0].uniqueID + '/sid').set(value[1]);
 
         /* Vi sätter sid i localStorage här också!! */
         let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
         localUser.sid = value[1];
         localStorage.setItem('loggedInUser', JSON.stringify(localUser));
-        console.log('FIND ME IF THIS BREAKS XP');
+        //console.log('FIND ME IF THIS BREAKS XP');
     })
     .catch(function(error){
-      console.log('fel', error);
+      //console.log('fel', error);
     });
 
   }
@@ -172,7 +172,7 @@ class MessageClass {
 
   push(){
     db.ref('chats/' + this.meetupID).push(this);
-    console.log('Message sent to the database with information: ', this);
+    //console.log('Message sent to the database with information: ', this);
   }
 
   removeSelf(){
@@ -293,7 +293,7 @@ function printMessage(type, message, timer = 8000, delay = 0, limit = 2){
           messageHolder.removeChild(messageWrapper);
           count--;
         } else {
-          console.log('Already removed!');
+          //console.log('Already removed!');
         }
       }, 450)
     }, timer-500);
@@ -370,10 +370,10 @@ function createUniqueSid(userObject, requestedSid){
         //       return;
         //     }
         //   } catch(e){
-        //     console.log('No ints found');
+        //     //console.log('No ints found');
         //   }
         // }
-        console.log('Final sid is: ', sid);
+        //console.log('Final sid is: ', sid);
         db.ref('users/').once('value', snapshot => {
           let data = snapshot.val();
           if(data){
@@ -381,7 +381,7 @@ function createUniqueSid(userObject, requestedSid){
               user = data[user];
               if(user.sid){
                 if(user.sid.toString().toLowerCase() == sid){
-                  console.log('Sid already taken, lets create another one!');
+                  //console.log('Sid already taken, lets create another one!');
                   if(requestedSid){
                     printMessage('error', 'Det unika id:et är tyvärr redan taget.');
                     reject('Sid already taken.');
@@ -391,7 +391,7 @@ function createUniqueSid(userObject, requestedSid){
                 }
               }
             }
-            console.log('Sid not taken :o');
+            //console.log('Sid not taken :o');
             resolve([userObject, sid]);
           } else {
             printMessage('error', 'Ingen databasanslutning hittades');
@@ -423,7 +423,7 @@ function requestsid(userObject, sid){
       }
   })
   .catch(function(error){
-    console.log('Något gick snett: ', error);
+    //console.log('Något gick snett: ', error);
   });
 }
 

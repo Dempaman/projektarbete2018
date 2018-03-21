@@ -10,7 +10,7 @@ function createEventListenersForBtns(eventid, url, onsale){
   if(onsale){
     buyBtn.addEventListener('click', function(){
       window.open(url);
-      console.log('Köp biljett hos Ticketmaster!');
+      //console.log('Köp biljett hos Ticketmaster!');
     });
   } else {
     buyBtn.disabled = true;
@@ -33,7 +33,7 @@ function createEventListenersForBtns(eventid, url, onsale){
 function retrieveMeetupInfo(eventDate){
   let eventID = getLocationInfo()[0];
   if(!eventID){
-    console.log('Rip, no eventid somehow!');
+    //console.log('Rip, no eventid somehow!');
   } else {
     advancedListenerThatUpdatesTheDomLikeABoss(eventID);
 
@@ -45,12 +45,12 @@ function retrieveMeetupInfo(eventDate){
       let eventID = getLocationInfo()[0];
       let obj = snapshot.val();
       let meetupKey = snapshot.key;
-      //console.log('NYCKEL:', meetupKey);
+      ////console.log('NYCKEL:', meetupKey);
 
       // Initalize the sick advancedListenerThatUpdatesTheDomLikeABoss HERE
 
 
-      //console.log(obj);
+      ////console.log(obj);
 
       if(!meetupKey.includes('info')){
         // Skapa funktion här som lägger till ett meetupkort!
@@ -180,8 +180,8 @@ function retrieveMeetupInfo(eventDate){
         // Splice latitude and longitude
         let latitude = obj.latitude.substring(0,9);
         let longitude = obj.longitude.substring(0,9);
-        //console.log('LATITUDE!!', latitude);
-        //console.log('LONGITUDE!!', longitude);
+        ////console.log('LATITUDE!!', latitude);
+        ////console.log('LONGITUDE!!', longitude);
 
 
         let googleMapDiv = document.createElement('div');
@@ -287,19 +287,19 @@ function retrieveMeetupInfo(eventDate){
           // Skriva om denna så att vi kan kolla ifall personen är admin / ägare.
             let comingMembers = obj.members;
             let admins = obj.admins;
-            console.log('The Admins of this meetup are: ' + admins);
+            //console.log('The Admins of this meetup are: ' + admins);
               // Om det finns minst en medlem i meetupet. Vilket det alltid ska göra.
               if(comingMembers != null){
-                console.log('Members coming to this Meetup: ',comingMembers);
+                //console.log('Members coming to this Meetup: ',comingMembers);
 
                 //Get dem admins first.
                 let adminBool = false;
                 for(let admin in admins){
                   if(admins[admin] == currentUser.uniqueID){
-                    console.log('You are the effing admin man!');
+                    //console.log('You are the effing admin man!');
                     adminBool = true;
                   } else {
-                    console.log('No admin here.');
+                    //console.log('No admin here.');
                   }
                 }
 
@@ -323,7 +323,7 @@ function retrieveMeetupInfo(eventDate){
 
         } else {
           md.appendChild(btnDiv);
-          console.log('NO EFFING USER');
+          //console.log('NO EFFING USER');
         }
 
 
@@ -350,7 +350,7 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
     // Definiera dom-objektet.
     let meetupWrapper = document.getElementById('meetup-' + meetupKey);
-    console.log(meetupWrapper);
+    //console.log(meetupWrapper);
 
     /* Börja med att kolla om meetpet finns kvar i databasen */
     if(meetupWrapper){
@@ -422,12 +422,12 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
       // Display members and shit!
       if(!memberOrButton.className){
-        console.log('It must be the btnHolder then?');
+        //console.log('It must be the btnHolder then?');
 
       } else if(memberOrButton.className.includes('moreMeetupInfoDiv')){
             // If the user that is logged in isn't in the meetup anymore. Hide this.
             let found = false;
-            console.log('Members are displayed!');
+            //console.log('Members are displayed!');
 
             let membersWrapper = memberOrButton.children[0].children[1]; // Emptying the members list with this method: https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
             while(membersWrapper.firstChild){
@@ -479,14 +479,14 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
             membersWrapper.appendChild(memberDiv);
 
         } else if(memberOrButton.className == 'btnHolder'){
-            console.log('This is a button.'); // This most likely the btn to join the meetup.
+            //console.log('This is a button.'); // This most likely the btn to join the meetup.
 
             // Now check if the logged in user just got added to the database!
             for(let member in meetup.members){
               let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
               if(localUser){
                 if(localUser.uniqueID == meetup.members[member].uniqueID){
-                  console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
+                  //console.log('THIS PERSON JUST JOINED THIS MEETUP!!');
                   addEditBtns(meetupKey);
                   if(memberOrButton.parentNode){
                     memberOrButton.parentNode.removeChild(memberOrButton);
@@ -495,12 +495,12 @@ function advancedListenerThatUpdatesTheDomLikeABoss(eventID){
 
                 }
               } else {
-                console.log('No user logged in!');
+                //console.log('No user logged in!');
               }
             }
         }
     } else {
-      console.log('It just got removed, sry!');
+      //console.log('It just got removed, sry!');
     }
   });
 }
@@ -559,13 +559,13 @@ function displayMembersAndChat(md, meetupKey){
 
         if(comingUser != 'creator'){
           if(data[comingUser].uniqueID == currentUser.uniqueID){
-            console.log('This is the user right now! Set the joinedTime');
+            //console.log('This is the user right now! Set the joinedTime');
             joinedTime = user.joined;
           } else {
-            console.log('This is not the current user. This person joined the meetup at: ' + data[comingUser].joined);
+            //console.log('This is not the current user. This person joined the meetup at: ' + data[comingUser].joined);
           }
         } else {
-          console.log('This is the creator.. No joined time here :/');
+          //console.log('This is the creator.. No joined time here :/');
         }
 
 
@@ -587,7 +587,7 @@ function displayMembersAndChat(md, meetupKey){
       addMemberDiv.addEventListener('click', inviteFriend);
       addMemberDiv.meetupKey = meetupKey;
 
-      console.log('attribute here is: ', addMemberDiv.attribute);
+      //console.log('attribute here is: ', addMemberDiv.attribute);
 
       let hoverMessage = document.createElement('p');
       hoverMessage.innerText = 'Bjud in en vän!';
@@ -626,7 +626,7 @@ function displayMembersAndChat(md, meetupKey){
     let avatarURL = currentUser.avatarURL;
 
     // Add Eventlistener for the inputBox
-    console.log('ADDING EVENTLISTENER FOR KEYPRESS');
+    //console.log('ADDING EVENTLISTENER FOR KEYPRESS');
     inputBox.addEventListener('keypress', createMessage);
 
     inputBox.nextSibling.addEventListener('click', function(event){
@@ -652,9 +652,9 @@ function displayMembersAndChat(md, meetupKey){
 
     db.ref('meetups/' + eventID + '/' + meetupKey + '/creator').once('value', function(snapshot){
       let data = snapshot.val();
-      console.log('Compare', currentUser.uniqueID, data.uniqueID);
+      //console.log('Compare', currentUser.uniqueID, data.uniqueID);
       if(data.uniqueID == currentUser.uniqueID){
-        console.log('Lets not show leave meetup button :)');
+        //console.log('Lets not show leave meetup button :)');
       } else {
         appendBtn = true;
 
@@ -717,12 +717,12 @@ function createMessage(event, sendBtn = false){
           // Some easy checks.
           if(target.value == "" || target.value == undefined || target.value == " "){
             printMessage('warn', 'Du behöver specificera ett meddelande');
-            console.log('No message specified!');
+            //console.log('No message specified!');
           } else if(target.value.length < 2){
-            console.log('Message too short!');
+            //console.log('Message too short!');
             printMessage('warn', 'Meddelandet är lite kort');
           } else if(target.value.length > 600){
-            console.log('Message too long!');
+            //console.log('Message too long!');
             printMessage('warn', 'Meddelandet är lite långt');
           } else {
             // Send message to the database constructor(senderID, avatarURL, meetupID, fullname)
@@ -735,7 +735,7 @@ function createMessage(event, sendBtn = false){
             let eventID = getLocationInfo()[0];
             db.ref('meetups/' + eventID + '/' + meetupKey + '/creator').once('value', function(snapshot){
               let creator = snapshot.val();
-              console.log('Creator is:', creator);
+              //console.log('Creator is:', creator);
 
               if(creator.uniqueID == currentUser.uniqueID){
                 creator = true;
@@ -762,7 +762,7 @@ function createMessage(event, sendBtn = false){
             target.focus();
           }
         } else {
-          console.log('You are not logged in');
+          //console.log('You are not logged in');
         }
       }
   }
@@ -790,29 +790,29 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
           // Remove old listener. (Stop listening to new messages)
           stopListenToChat(meetupKey);
 
-          // console.log('Count: ', count);
-          // console.log('MessageCount: ', messageCounter);
+          // //console.log('Count: ', count);
+          // //console.log('MessageCount: ', messageCounter);
 
           // If the counter + 15 is greater than messageCounter we've reached the top!
           if(count <= messageCounter + 15){
 
-            console.log(chattWrapperDiv.scrollHeight);
+            //console.log(chattWrapperDiv.scrollHeight);
             let scrollToThis = chattWrapperDiv.scrollHeight
-            console.log(chattWrapperDiv.scrollTop);
+            //console.log(chattWrapperDiv.scrollTop);
             // Start to listen to the chat again. This time add 25 to the counter.
             chatMessagesChildAdded(count += 25, true);
-            //console.log('Count increased by 25! Currently displaying ' + messageCounter + ' messages');
+            ////console.log('Count increased by 25! Currently displaying ' + messageCounter + ' messages');
             //chattWrapperDiv.className += ' smooth-scroll'
             setTimeout(function(){
               //Set a timeout to scroll down.
               chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight - scrollToThis;
-              console.log(chattWrapperDiv.scrollHeight);
-              console.log(chattWrapperDiv.scrollTop);
+              //console.log(chattWrapperDiv.scrollHeight);
+              //console.log(chattWrapperDiv.scrollTop);
               //Reset the scroll
               doScroll = true;
             },180);
           } else {
-            console.log('No more messages to display.');
+            //console.log('No more messages to display.');
             let noMoreMessages = document.createElement('p');
             noMoreMessages.innerText = 'Inga fler meddelanden.';
             noMoreMessages.className = 'noMessage';
@@ -852,7 +852,7 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
           first = false;
         }
         if(displayedMessages.includes(messageKey)){
-          //console.log('Stop code plox');
+          ////console.log('Stop code plox');
           doNotAppend = true;
         }
 
@@ -932,33 +932,9 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
 
             actualMessage.push(word);
           }
+          /* Sätt ihop meddelandet igen men separera med mellanslag */
+
           actualMessage = actualMessage.join(' ');
-          //
-          // /* Dela vid länkens början */
-          // let splitStr = message.textmessage.split('https://');
-          //
-          // /* Dela meddelandet och ta ut länken */
-          // let link = 'https://';
-          //
-          // /* Kolla om det inte enbart är en länk vi skickar */
-          // if(splitStr[1].includes(' ')){
-          //
-          //   /* Kolla om resten av meddelandet innehåller ett mellanslag */
-          //   /* Om meddelandet innehåller ett mellanslag, byt ut det så vi kan dela det. */
-          //   splitStr[1] = splitStr[1].replace(' ', '#');
-          //
-          //   /* Plocka ut länken */
-          //   link += splitStr[1].split('#')[0];
-          //
-          //   /* Sätt ihop meddelandet */
-          //   actualMessage = splitStr[0] + '<a href="' + link + '"> ' + link + '</a> ' + splitStr[1].split('#')[1];
-          //
-          //
-          // } else {
-          //   /* Om det inte finns ett till mellanslag. Så är länken meddelandet. */
-          //   link += splitStr[1];
-          //   actualMessage = splitStr[0] + '<a href="' + link + '"> ' + link + '</a>';
-          // }
         }
 
         textmessage.innerHTML = actualMessage;
@@ -1000,7 +976,7 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
             likeListenerOn(meetupKey, messageKey);
             likeArray.push(messageKey);
           } else {
-            //console.log('This btn has already a likeListenerOn');
+            ////console.log('This btn has already a likeListenerOn');
           }
 
           likeBtn.addEventListener('click', function(event){
@@ -1028,17 +1004,17 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
 
 
         if(doNotAppend){
-          //console.log('Not appending!');
+          ////console.log('Not appending!');
         } else if(scroll && !insertBefore){
           // First insert!
-          //console.log('Scroll is true!');
+          ////console.log('Scroll is true!');
           insertBefore = chattWrapperDiv.firstChild;
           chattWrapperDiv.insertBefore(messageDiv, chattWrapperDiv.firstChild);
         } else if(insertBefore && !doNotAppend && scroll){
-          //console.log('This one!');
+          ////console.log('This one!');
           chattWrapperDiv.insertBefore(messageDiv, insertBefore);
         } else if(!scroll){
-          //console.log('Appending normally, apparently scroll is false.');
+          ////console.log('Appending normally, apparently scroll is false.');
           chattWrapperDiv.appendChild(messageDiv);
         }
 
@@ -1054,15 +1030,15 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
           if(scrollHeight - 760 < scrollTop){
             chattWrapperDiv.scrollTop = chattWrapperDiv.scrollHeight;
           } else {
-            // console.log('scrollHeight is: ', scrollHeight);
-            // console.log('scrollTop is: ', scrollTop);
-            // console.log('scrollHeight - 760 is: ', scrollHeight - 760);
-            console.log('not scrolling, too far up.');
+            // //console.log('scrollHeight is: ', scrollHeight);
+            // //console.log('scrollTop is: ', scrollTop);
+            // //console.log('scrollHeight - 760 is: ', scrollHeight - 760);
+            //console.log('not scrolling, too far up.');
           }
         }
         messageCounter += 1;
       } else {
-        console.log('Did not print message again.');
+        //console.log('Did not print message again.');
       }
     });
     setTimeout(function(){
@@ -1080,7 +1056,7 @@ function restoreJoinBtn(meetupKey){
   db.ref('meetups/'+eventid+'/'+meetupKey + '/members').on('child_removed', function(snapshot){
     let data = snapshot.val();
     let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
-    console.log('This was removed: ',data);
+    //console.log('This was removed: ',data);
     removeUserMeetup(data.uniqueID, eventid,  meetupKey);
         if(currentUser.uniqueID == data.uniqueID){
           // Alert('It was you who left!');
@@ -1089,7 +1065,7 @@ function restoreJoinBtn(meetupKey){
 
           // Remove the eventListener for inputBox here for this user. DEBUG CODE, Might be useful.
           // let inputBox = document.getElementById('chat'+meetupKey).nextSibling;
-          // console.log(inputBox);
+          // //console.log(inputBox);
           //
           // inputBox.removeEventListener('keypress', createMessage);
           // inputBox.setAttribute('placeholder', 'You got kicked :(');
@@ -1141,11 +1117,11 @@ function leaveMeetup(meetupKey){
     for(let member in data) {
       if(user.uniqueID == data[member].uniqueID){
         if(member == 'creator'){
-          console.log('Du kan inte lämna detta meetup då du har skapat det! Radera det istället.');
+          //console.log('Du kan inte lämna detta meetup då du har skapat det! Radera det istället.');
         } else {
           db.ref('meetups/' + eventID + '/' + meetupKey + '/members/'+member).remove();
           new SystemMessage(meetupKey, user.fullname + ' lämnade meetupet.').push();
-          console.log('Raderade användaren ifrån meetupet i databasen?');
+          //console.log('Raderade användaren ifrån meetupet i databasen?');
 
           /* Remove notification setting */
           db.ref('users/' + user.uniqueID + '/meetupNotifications/' + meetupKey).set(false);
@@ -1179,7 +1155,7 @@ function displayEventInfo(event){
   // Set the Date
   document.getElementById('eventDate').innerText = displayDate(event.date, event.weekDay, event.offsale);
   document.getElementById('eventTitle').innerText = event.name;
-  console.log('Event is:',event);
+  //console.log('Event is:',event);
 
 
   // Om platsen inte finns (Göteborg - Ullevi) så skriver vi bara ut staden.
@@ -1255,10 +1231,10 @@ function displayEventInfo(event){
 }
 
 function retrieveEventInfo(){
-  //console.log('HREF: '+window.location.pathname);
+  ////console.log('HREF: '+window.location.pathname);
   if(window.location.pathname.includes('eventpage.html')){
     let eventid = getLocationInfo()[0];
-    //console.log('EVENTID IS', eventid);
+    ////console.log('EVENTID IS', eventid);
 
     if(eventid != undefined){
       // Start to listen if meetups gets removed.
@@ -1270,11 +1246,11 @@ function retrieveEventInfo(){
       fetch(`https://app.ticketmaster.eu/mfxapi/v1/event/${eventid}?domain_id=sweden&apikey=${ticketMasterApiKey}`)
       .then(function(response){
 
-        //console.log(response);
+        ////console.log(response);
         return response.json();
       })
       .then(function(json){
-        //console.log('EVENTOBJECT without formatting:',json);
+        ////console.log('EVENTOBJECT without formatting:',json);
 
         if(json.errors){
           printMessage('error', json.errors[0].description);
@@ -1298,23 +1274,23 @@ function retrieveEventInfo(){
           let offsale = event.offsale.value;
           let mainCategory = event.categories[0].name;
           let promoter = event.promoter;
-           console.log('Straight from the API: ', json);
-          // console.log('Main category is: ', mainCategory);
+           //console.log('Straight from the API: ', json);
+          // //console.log('Main category is: ', mainCategory);
           if(!date){
             date = event.date;
           }
 
           if(!imageURL){
-            //console.log('ImageURL:', imageURL);
+            ////console.log('ImageURL:', imageURL);
             printMessage('error', 'No image for this event found.');
           }
 
           // createMarker(latitude, longitude);
-          //console.log('ImageUrl', imageURL);
+          ////console.log('ImageUrl', imageURL);
 
           let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale, mainCategory, event.attractions, promoter);
 
-          //console.log('EVENTOBJECT: ',eventObject);
+          ////console.log('EVENTOBJECT: ',eventObject);
 
           // Eventet hittades, information visas!
           displayEventInfo(eventObject);
@@ -1325,13 +1301,13 @@ function retrieveEventInfo(){
           pageLoaded();
       })
       .catch(function(error){
-        //console.log('Här skedde det ett fel! Försöker vi plocka fram något som inte skickas med?');
+        ////console.log('Här skedde det ett fel! Försöker vi plocka fram något som inte skickas med?');
         console.error('Felmeddelande:',error);
       })
     }
 
   } else {
-    //console.log('This function should not run on this page.');
+    ////console.log('This function should not run on this page.');
   }
 }
 
@@ -1349,7 +1325,7 @@ function displayDate(dateStr, weekDay, offsale, attractionText = false){
   if(dateStr.includes('T')){
     dateStr = dateStr.split('T');
 
-    //console.log('datestr: ',dateStr);
+    ////console.log('datestr: ',dateStr);
 
 
 
@@ -1364,7 +1340,7 @@ function displayDate(dateStr, weekDay, offsale, attractionText = false){
     day = dateStr[2];
 
   } else {
-    //console.log('DateSTRING: ',dateStr);
+    ////console.log('DateSTRING: ',dateStr);
     dateStr = dateStr.split('-');
 
     year = dateStr[0];
@@ -1380,12 +1356,12 @@ function displayDate(dateStr, weekDay, offsale, attractionText = false){
     date = offsale.split('T')[0];
     date = date.split('-');
     if(year == date[0] && month == date[1] && day == date[2]){
-      // console.log('It\'s the same day!');
+      // //console.log('It\'s the same day!');
       time = offsale.split('T')[1];
       time = time.substring(0, time.length-4);
     } else{
-      // console.log('Date:', date);
-      // console.log(year, month, day);
+      // //console.log('Date:', date);
+      // //console.log(year, month, day);
     }
   }
 
@@ -1426,7 +1402,7 @@ function getLocationInfo(){
 
     } else {
       // console.warn('This page should only be reached with a event specified in the address field.');
-      // console.log('Om man ändå hamnar här kan vi redirecta till alla event / lägga en sökruta här');
+      // //console.log('Om man ändå hamnar här kan vi redirecta till alla event / lägga en sökruta här');
       // location.assign('/');
       //window.location.href = 'events.html';
       stopcode = true;
@@ -1480,20 +1456,20 @@ function updateEventInfo(event){
       let eventInfoText = document.getElementById('eventInfoText');
       fetch(`https://sv.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=${searchStr}`)
       .then(function(response){
-        //console.log(response);
+        ////console.log(response);
         return response.json();
       })
       .then(function(json){
 
-        //console.log('Json version: ', json);
+        ////console.log('Json version: ', json);
         if(json.length === 0){
 
-          console.log('ingenting hittades på wikipedia');
+          //console.log('ingenting hittades på wikipedia');
         } else {
           /* Retrieve the info */
           let pages = json.query.pages;
           let text;
-          //console.log(pages);
+          ////console.log(pages);
           for(let page in pages) {
 
             text = pages[page].extract;
@@ -1505,22 +1481,22 @@ function updateEventInfo(event){
               text = text[0] + ' ' + text[1];
             }
 
-            //console.log('what is this', text.split[" "][0]);
-            //console.log('Text:',text);
+            ////console.log('what is this', text.split[" "][0]);
+            ////console.log('Text:',text);
           }
 
           let infoTextParagraf = document.createElement('p');
           infoTextParagraf.innerText = text;
           eventInfoText.insertBefore(infoTextParagraf, eventInfoText.firstChild);
         }
-        //console.log(json);
+        ////console.log(json);
 
       });
 
-      //console.log('It is only one person. Lets find the info about this artist.');
+      ////console.log('It is only one person. Lets find the info about this artist.');
     }
   } else {
-    //console.log('No information to display about this person.');
+    ////console.log('No information to display about this person.');
   }
 
 }
@@ -1535,16 +1511,16 @@ function toggleLike(meetupKey, messageKey){
         if(uid == user.uniqueID){
           db.ref('likes/'+ meetupKey + '/'+ messageKey + '/' + uid).remove();
           found = true;
-          console.log('unlike');
+          //console.log('unlike');
         }
       }
       if(!found){
         db.ref('likes/'+ meetupKey + '/'+ messageKey + '/' + user.uniqueID ).set(true);
-        console.log('like');
+        //console.log('like');
       }
     } else {
       db.ref('likes/'+ meetupKey + '/'+ messageKey + '/' + user.uniqueID ).set(true);
-      console.log('like');
+      //console.log('like');
     }
   });
 }
@@ -1554,7 +1530,7 @@ function likeListenerOn(meetupKey, messageKey){
   db.ref('likes/' + meetupKey + '/'+ messageKey).on('child_added', function(){
     let likeCounters = document.getElementsByClassName('likeCount '+messageKey);
     for(let likeCount of likeCounters){
-      //console.log(likeCount);
+      ////console.log(likeCount);
       if(likeCount.innerText){
         likeCount.innerText = (likeCount.innerText - 0) + 1;
       } else {
@@ -1564,12 +1540,12 @@ function likeListenerOn(meetupKey, messageKey){
   });
   //Listen for unlikes
   db.ref('likes/' + meetupKey + '/'+ messageKey).on('child_removed', function(){
-    //console.log('Someone unliked :(');
+    ////console.log('Someone unliked :(');
 
     let likeCounters = document.getElementsByClassName('likeCount '+messageKey);
 
     for(let likeCount of likeCounters){
-      //console.log(likeCount);
+      ////console.log(likeCount);
       if(likeCount.innerText != 1){
         likeCount.innerText = (likeCount.innerText - 0) - 1;
       } else if(likeCount.innerText == 1){
@@ -1589,7 +1565,7 @@ function joinBtnListener(joinMeetupBtn, meetupKey){
       joinMeetup(currentUser, meetupKey, eventID);
 
     } else {
-      console.log('Setup login modal here?');
+      //console.log('Setup login modal here?');
       toggleLoginModal();
     }
 
@@ -1619,7 +1595,7 @@ function pageLoaded(){
     }
 
     function recursiveScroll(count = 0){
-      console.log('Scrolling: ' + count);
+      //console.log('Scrolling: ' + count);
       let meetup = document.getElementById('meetup-' + getLocationInfo()[1]);
       if(count > 8){
         console.warn('Failed after 8 retries.');
@@ -1639,7 +1615,7 @@ function addEditBtns(meetupKey){
   let currentUser = JSON.parse(localStorage.getItem('loggedInUser'));
   let eventID = getLocationInfo()[0];
   let admin = false, creator = false;
-  console.log('The addEditBtns ran');
+  //console.log('The addEditBtns ran');
   if(currentUser){
       if(meetup){
         let btn = document.createElement('button');
@@ -1701,20 +1677,20 @@ function listenToRemovedMeetups(){
         // Scroll.
         let htmlScroll = document.getElementsByTagName('html')[0];
         let bodyScroll = document.getElementsByTagName('body')[0];
-        // console.log('Window scrollHeight: ', window.scrollHeight);
-        // console.log('bodyScroll scrollHeight: ', bodyScroll.scrollHeight);
-        // console.log('html scrollHeight: ', htmlScroll.scrollHeight);
-        // console.log('ClientHeight body:', bodyScroll.clientHeight);
-        // console.log('ClientHeight html:', htmlScroll.clientHeight);
-        // console.log('scrollTop html:', htmlScroll.scrollTop);
-        // console.log('scrollTop body:', bodyScroll.scrollTop);
+        // //console.log('Window scrollHeight: ', window.scrollHeight);
+        // //console.log('bodyScroll scrollHeight: ', bodyScroll.scrollHeight);
+        // //console.log('html scrollHeight: ', htmlScroll.scrollHeight);
+        // //console.log('ClientHeight body:', bodyScroll.clientHeight);
+        // //console.log('ClientHeight html:', htmlScroll.clientHeight);
+        // //console.log('scrollTop html:', htmlScroll.scrollTop);
+        // //console.log('scrollTop body:', bodyScroll.scrollTop);
 
         // Only scroll if we're at the bottom of the page
-        console.log('Height: ',document.documentElement.scrollHeight);
+        //console.log('Height: ',document.documentElement.scrollHeight);
         if(wrapper.lastChild.getAttribute('id') == meetup.getAttribute('id')){
 
           if((htmlScroll.scrollHeight - htmlScroll.scrollTop) == htmlScroll.clientHeight) {
-            console.log('htmlSrollheight: ', htmlScroll.scrollHeight);
+            //console.log('htmlSrollheight: ', htmlScroll.scrollHeight);
             document.documentElement.className += ' smooth-scroll';
             document.documentElement.scrollTop -= wrapper.lastChild.scrollHeight
             //htmlScroll.scrollTop -= wrapper.lastChild.scrollHeight;
@@ -1726,7 +1702,7 @@ function listenToRemovedMeetups(){
           meetup.parentNode.removeChild(meetup);
         },1500);
 
-        console.log('Successfully removed from the dom!');
+        //console.log('Successfully removed from the dom!');
       }
 
     });
@@ -1738,19 +1714,19 @@ function destroyMeetup(meetupKey, eventID){
     eventID = getLocationInfo()[0];
   }
 
-  console.log('Meetup with ID: '+meetupKey+' under eventID: '+eventID+'is being removed from the database...');
+  //console.log('Meetup with ID: '+meetupKey+' under eventID: '+eventID+'is being removed from the database...');
   db.ref('meetups/' +eventID+ '/' +meetupKey).remove();
 }
 
 // Tanken med denna funktion är att lägga till meetupets meetupKey på användarens profil under "meetups".
 function addUserMeetup(userID, eventID, meetupKey){
-  //console.log('Lägga till meetup på användarens profil kördes.');
+  ////console.log('Lägga till meetup på användarens profil kördes.');
   db.ref('users/' + userID + '/meetups/' + eventID + '/' + meetupKey).set(true);
 }
 
 // Ta bort meetups personen ska gå på ifrån profilen
 function removeUserMeetup(userID, eventID, meetupKey){
-  //console.log('Ta bort meetup från användarens profil kördes.');
+  ////console.log('Ta bort meetup från användarens profil kördes.');
   db.ref('users/' + userID + '/meetups/' + eventID + '/' +meetupKey).remove();
 }
 
@@ -1762,8 +1738,8 @@ function removeMeetupEntirelyFromTheDatabase(eventID, data, meetupKey){
   let members = data.members;
 
   /* Some logs */
-  console.log('This meetup was removed entirely.', data);
-  console.log('It had the key', meetupKey);
+  //console.log('This meetup was removed entirely.', data);
+  //console.log('It had the key', meetupKey);
 
   /* Start by removing it from the user profile of the creator */
   db.ref('users/' + creator.uniqueID + '/createdMeetups/' + eventID + '/' + meetupKey).remove();
@@ -1793,8 +1769,8 @@ function inviteFriend(event){
     target = target.parentNode;
   }
   localStorage.setItem('currentMeetupKey', target.meetupKey);
-  // console.log('Key is: ', target.meetupKey);
-  // console.log('Event target is: ', event.target);
+  // //console.log('Key is: ', target.meetupKey);
+  // //console.log('Event target is: ', event.target);
   //printMessage('error', 'You cannot invite friends yet, sorry :(');
   displayInviteFriends(event, target.meetupKey);
 }
@@ -1860,13 +1836,13 @@ function popupProfile(event, eventID, meetupKey){
     if(localUser){
       if(localUser.sid == user.sid || friendList.includes(user.sid) || localFriendList.includes(user.sid)){
         addFriendBtn.className = 'disabledBtn doNotCloseThis';
-        // console.log('You are already friends! Or this is u..');
-        // console.log('localUser sid: ', localUser.sid, 'userSid: ', user.sid);
-        console.log('localFriendList: ', localFriendList);
+        // //console.log('You are already friends! Or this is u..');
+        // //console.log('localUser sid: ', localUser.sid, 'userSid: ', user.sid);
+        //console.log('localFriendList: ', localFriendList);
       } else {
         addFriendBtn.addEventListener('click', function(){
-          // console.log('LOCALUSER', localUser);
-          // console.log('JUST USER: ', user);
+          // //console.log('LOCALUSER', localUser);
+          // //console.log('JUST USER: ', user);
           localFriendList.push(user.sid);
           sendNotification(user.sid, 'friendRequest');
 
@@ -1898,14 +1874,14 @@ function popupProfile(event, eventID, meetupKey){
 
   db.ref('meetups/'+eventID+'/'+meetupKey+'/creator').once('value', function(snapshot){
     let data = snapshot.val();
-    console.log(data);
-    console.log('THE EFFING CCREATOR IS: ', data);
+    //console.log(data);
+    //console.log('THE EFFING CCREATOR IS: ', data);
     if(user.sid || admin){
-      console.log('The user has a SID');
+      //console.log('The user has a SID');
       if(localUser.sid == user.sid && !admin){
-        console.log('Man kan inte kicka sig själv, lul');
+        //console.log('Man kan inte kicka sig själv, lul');
       } else if(admin || data.uniqueID == localUser.uniqueID){
-        console.log('Admin or creator');
+        //console.log('Admin or creator');
         btnHolder.appendChild(kickBtn);
         kickBtn.addEventListener('click', function(){
           confirmRemoveMeetup(null, null, 'Vill du verkligen ta bort ' + user.fullname + ' ifrån meetupet?', 'Ja', function(){
@@ -2001,12 +1977,12 @@ function displayInviteFriends(event, meetupKey){
 
   searchBtn.addEventListener('click', function(e){
     displayInviteFriendsResults(e, array, resultDiv, true);
-    console.log('Search btn pressed! array contains: ', array);
+    //console.log('Search btn pressed! array contains: ', array);
   })
 
   searchBar.addEventListener('change', function(e){
     displayInviteFriendsResults(e, array, resultDiv);
-    console.log('SearchBAR! array contains: ', array);
+    //console.log('SearchBAR! array contains: ', array);
   });
 
   /* Append Everything */
@@ -2033,7 +2009,7 @@ function displayInviteFriends(event, meetupKey){
 
     /* Rekursiv funktion för att kolla className på ovanstående element!! */
     function recursiveClose(elem, count = 0){
-      console.log('Counter is: ' + count);
+      //console.log('Counter is: ' + count);
       if(count > 3) {
         if(friendWrapper.parentNode){
           friendWrapper.parentNode.removeChild(friendWrapper);
@@ -2043,9 +2019,9 @@ function displayInviteFriends(event, meetupKey){
       } else {
         if(elem){
           if(elem.className){
-            console.log('Has className');
+            //console.log('Has className');
             if(elem.className.includes('doNotCloseThis')){
-              console.log('Has doNotCloseThis!!');
+              //console.log('Has doNotCloseThis!!');
               return true;
             } else {
               return recursiveClose(elem.parentNode, count += 1);
@@ -2208,7 +2184,7 @@ function displayMatch(user, printList, friend, foundBySid = false){
 
   let inviteBtn = document.createElement('button');
   inviteBtn.innerHTML = '<i class="mdi mdi-plus mdi-24px"> </i>';
-  console.log('What does user contain?', user);
+  //console.log('What does user contain?', user);
 
 
   inviteBtn.addEventListener('click', function(e){
@@ -2249,23 +2225,23 @@ function downloadUsersToArray(meetupKey, array){
   db.ref('meetups/' + eventid + '/' + meetupKey + '/members').once('value', function(snapshot){
 
     let data = snapshot.val();
-    console.log('Members in this meetup are: ', data);
+    //console.log('Members in this meetup are: ', data);
     for(let member in data){
       let user = data[member];
       meetupMembers.push(user.uniqueID);
     }
 
-    console.log('ids: ', meetupMembers);
+    //console.log('ids: ', meetupMembers);
 
     db.ref('users/').on('child_added', function(snap){
       let compareUser = snap.val();
 
       if(meetupMembers.includes(compareUser.uniqueID)){
-        console.log('Do not push this person');
+        //console.log('Do not push this person');
       } else {
-        console.log('Push this person!');
+        //console.log('Push this person!');
         array.push(compareUser);
-        console.log('Array now contains: ', array);
+        //console.log('Array now contains: ', array);
       }
     });
 
@@ -2276,7 +2252,7 @@ function downloadUsersToArray(meetupKey, array){
 /* This function sends a notification to someone. Either by SID or uniqueID. */
 
 function sendNotification(userOrSid = false, action, meetupKey = false){
-  console.log('Does this fire?');
+  //console.log('Does this fire?');
   /* Get localUser */
   let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
@@ -2289,10 +2265,10 @@ function sendNotification(userOrSid = false, action, meetupKey = false){
 
   if(typeof userOrSid == 'string'){
     sid = userOrSid;
-    console.log('This is a SID');
+    //console.log('This is a SID');
     user = false;
   } else {
-    console.log('This is a USER');
+    //console.log('This is a USER');
     user = true;
     sid = false;
   }
@@ -2326,7 +2302,7 @@ function sendNotification(userOrSid = false, action, meetupKey = false){
           if(user.sid == userOrSid){
             /* If they match, this is the retriever. */
             retriever = user.uniqueID;
-            console.log('Create and send');
+            //console.log('Create and send');
             createAndSend(retriever);
           }
         }
@@ -2353,8 +2329,8 @@ function sendNotification(userOrSid = false, action, meetupKey = false){
       if(!meetupKey){
         meetupKey = localStorage.getItem('currentMeetupKey');
       } else {
-        console.log('We already have a meetupKey specified.');
-        console.log('and that key is: ', meetupKey);
+        //console.log('We already have a meetupKey specified.');
+        //console.log('and that key is: ', meetupKey);
       }
 
       notificationObject = {
@@ -2371,7 +2347,7 @@ function sendNotification(userOrSid = false, action, meetupKey = false){
 
 
     } else if(action == 'friendRequest'){
-      console.log('Vänförfrågan skickad');
+      //console.log('Vänförfrågan skickad');
       notificationObject = {
         fromID: localUser.uniqueID,
         fromSID: localUser.sid,
@@ -2400,11 +2376,11 @@ function kickUserFromMeetup(eventid, meetupKey, sid){
       user = data[user];
 
       if(sid){
-        console.log('Sid is: ', sid);
+        //console.log('Sid is: ', sid);
         if(user.sid){
-          console.log('User in database sid: ', user.sid);
+          //console.log('User in database sid: ', user.sid);
           if(sid == user.sid){
-            console.log('Match found');
+            //console.log('Match found');
             /* Remove from the database at this position */
             db.ref('meetups/' + eventid + '/' + meetupKey + '/members/' + userKey).remove();
           }
