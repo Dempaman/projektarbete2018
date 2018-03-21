@@ -972,6 +972,8 @@ function chatMessageTimeStamp(timeStamp){
 function joinMeetup(user, meetupKey, eventID){
 
   // joinMeetup(currentUser.uniqueID, currentUser.avatarURL, currentUser.fullname, meetupKey, eventID);
+
+  /* Vi hämtar meetupet som personen går med i samt lägger den i Data */
   db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snap){
     let data = snap.val();
     console.log('This entire data is? ', data);
@@ -1090,13 +1092,17 @@ function clearDomNotifications(){
 }
 
 function sendNotificationsToMeetupMembers(meetupKey, eventID, action){
+  console.log('Sending notifications to all members of this meetup!');
     db.ref('meetups/' + eventID + '/' + meetupKey).once('value', function(snap){
       let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
       let data = snap.val();
       let members = data.members;
+      console.log('Retrieving the meetup. Members are: ', members);
 
       /* here we have all the people coming to the meetup :D */
+      let count = 0;
       for(let comingUser in members){
+        console.log('Looping ', count++);
         let key = comingUser;
         comingUser = members[comingUser];
 
