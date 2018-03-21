@@ -416,6 +416,9 @@ div.googleMapDiv > img {
   display: flex;
   word-wrap: break-word;
 }
+.textmessageWrapper > p > a {
+  color: red;
+}
 .textmessageWrapper span {
   margin-bottom: -2px;
   display: flex;
