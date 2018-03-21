@@ -1839,9 +1839,7 @@ function popupProfile(event, eventID, meetupKey){
         console.log('Admin or creator');
         btnHolder.appendChild(kickBtn);
         kickBtn.addEventListener('click', function(){
-          confirmRemoveMeetup(null, null, 'Vill du verkligen ta bort ' + user.fullname + ' ifrån meetupet?', 'Hell yeah', function(){
-            printMessage('success', 'Du sparkade på riktigt ut ' + user.fullname + '. Skäms!');
-
+          confirmRemoveMeetup(null, null, 'Vill du verkligen ta bort ' + user.fullname + ' ifrån meetupet?', 'Ja', function(){
             kickUserFromMeetup(eventID, meetupKey, user.sid);
           });
         });

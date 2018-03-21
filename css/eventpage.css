@@ -751,9 +751,14 @@ div.googleMapDiv > img {
   }
 
   /* Css for the confirmModal */
-  .confirmModal {
+  .confirmModal.centered {
     width: calc(100% - 80px);
     margin: 20px auto;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
     #meetupWrapper > div {

@@ -231,13 +231,13 @@ function toggleMeetupNotifications(event){
         db.ref('users/' + localUser.uniqueID + '/meetupNotifications/' + meetupKey).set(false);
 
         /* Skriv ut ett meddelande till användaren */
-        printMessage('success', 'Du stängde av notifikationer för detta meetup');
+        printMessage('success', 'Du stängde av notifikationer för detta meetup', undefined, null, 1);
       } else {
         /* It's false, set it to true. */
         db.ref('users/' + localUser.uniqueID + '/meetupNotifications/' + meetupKey).set(true);
 
         /* Skriv ut ett meddelande till användaren */
-        printMessage('success', 'Du startade notifikationer för detta meetup');
+        printMessage('success', 'Du startade notifikationer för detta meetup', undefined, null, 1);
       }
     });
 
