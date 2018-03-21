@@ -90,8 +90,10 @@
         <img id="user-img" src="img/user.png" alt="Profilbild">
       </div>
 
-      <h3 id="user-name"></h3>
-      <p id="genderInfo">Kön: </p>
+      <div class="user-presentation-container">
+        <h3 id="user-name"></h3>
+        <p id="genderInfo">Kön: <span id="genderSelect"></span> </p>
+      </div>
 
       <form class="user-story">
         <span class="section">
@@ -119,9 +121,9 @@
           <span class="bigLabel">Välj dina favoritfäger till din:</span>
         <span class="parentInput">
             <span class="childColor">
-              <input type="color" id="profileCard" name="profileColor" value="#606060">
-              <input type="color" id="createMeetColor" name="createColor" value="#606060">
-              <input type="color" id="joindColor" name="joinColor" value="#606060">
+              <input type="color" id="profileCard" name="profileColor" value="#09035F">
+              <input type="color" id="createMeetColor" name="createColor" value="#C05454">
+              <input type="color" id="joindColor" name="joinColor" value="#333333">
             </span>
         <span class="childInput">
               <label for="profileCard">Profil</label>
@@ -139,11 +141,10 @@
 
       <div class="photo-menu">
         <div class="user-info">
-          <div id="user-description">
-            <p>Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...</p>
+          <p id="user-description">
 
-          </div>
-
+          </p>
+          <p class="userDefaultText">Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...</p>
         </div>
         <div class="buttonContainer">
           <!-- <button id="closeTellMeMore" type="button" name="button">Avbryt</button> -->

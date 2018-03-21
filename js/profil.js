@@ -5,102 +5,178 @@ window.addEventListener('load', profilFunction);
 
 function saveUserInfo(event) {
 
+    let coloProfile = '#09035F';
+    let joinMeetupColor = '#333333';
+    let createMeetupColor = '#C05454';
+    let toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
+    let genderTrue = false;
+
+    let info = {
+      profilcolor: coloProfile,
+      meetupcolor: joinMeetupColor,
+      createcolor: createMeetupColor,
+      story: toldStory,
+      gender: genderTrue
+    }
+  
+
+    // if (user.info) {
+    //   console.log('user.info is true');
+    //   const userInfo = user.info;
+    //
+    //   if (userInfo.story) {
+    //     console.log('user.info.story is true ');
+    //     userDescription.firstElementChild.innerText = userInfo.story;
+    //     nameOnUser.setAttribute("placeholder", userInfo.story);
+    //     toldStory = userInfo.story;
+    //   } else {
+    //     userDescription.firstElementChild.innerText = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
+    //     nameOnUser.setAttribute("placeholder", 'Vem är du?');
+    //     toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
+    //   }
+    //
+    //
+    //   if (userInfo.gender) {
+    //     genderInfo.style.display = 'block';
+    //
+    //     console.log('userinfo.gender is true');
+    //     //nameOnUser.setAttribute("placeholder", 'Vem är du?');
+    //     if (userInfo.gender === "kvinna") {
+    //       female.checked = true;
+    //       genderInfo.innerText = userInfo.gender;
+    //       genderTrue = userInfo.gender;
+    //
+    //       // var genders = document.getElementsByName("gender");
+    //       // var selectedGender;
+    //       //
+    //       // for (var i = 0; i < genders.length; i++) {
+    //       //   if (genders[i].checked)
+    //       //     selectedGender = genders[i].value;
+    //     } else if (userInfo.gender === "man") {
+    //       man.checked = true;
+    //       genderInfo.innerText = userInfo.gender;
+    //       genderTrue = userInfo.gender;
+    //     } else if (userInfo.gender === "other") {
+    //       other.checked = true;
+    //       genderInfo.innerText = userInfo.gender;
+    //       genderTrue = userInfo.gender;
+    //     }
+    //   } else {
+    //     genderInfo.style.display = 'none';
+    //   }
+    //
+    // } else {
+    //   console.log('user.info is false');
+    //   userDescription.firstElementChild.innerText = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
+    // }
+    //
+    // saveFormBtn.addEventListener('click', function() {
+    //   console.log(event.type);
+    //   for (var i = 0; i < genders.length; i++) {
+    //     if (genders[i].checked)
+    //       genderTrue = genders[i].value;
+    //   }
+    //   coloProfile = profileInputColor.value;
+    //   joinMeetupColor = meetupInputColor.value;
+    //   createMeetupColor = createInputColor.value;
+    //
+    //   if (yourStory.value !== '') {
+    //     toldStory = yourStory.value;
+    //   } else {
+    //     toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...'
+    //   }
+    //
+    //   if (nameOnUser.value !== '') {
+    //     db.ref('/users/' + user.uniqueID + '/fullname').set(nameOnUser.value);
+    //   } else {
+    //     nameOnUser.value = user.fullname;
+    //     db.ref('/users/' + user.uniqueID + '/fullname').set(nameOnUser.value);
+    //   }
+    //
+    //     db.ref('/users/' + user.uniqueID + '/info').set(info);
+    //
+    // });
+
 
 }
 
-function fetchUserInfo(user) {
-  console.log('inside fetchUserInfo function');
+
+
+function fetchUserInfo(userId) {
+  // Display user info tags
+  let fullName = document.getElementById('user-name');
+  let genderInfo = document.getElementById('genderInfo');
+  let genderSelect = document.getElementById('genderSelect');
+  let userDescription = document.getElementById('user-description');
+  let userDefaultText = document.getElementsByClassName('userDefaultText')[0];
+
+  // CARD COLORS
+  let jonidCards = document.getElementsByClassName('join-single-meetup');
+  let createdCards = document.getElementsByClassName('create-single-meetup');
+  let profileColorCard = document.getElementsByClassName('user')[0];
+
+  // user info input tags
   let nameOnUser = document.getElementById('nameOnUser');
   let yourStory = document.getElementById('yourStory');
+  // radio
   let genders = document.getElementsByName('gender');
   let female = document.getElementById('kvinna');
   let man = document.getElementById('man');
   let other = document.getElementById('other');
+  // color input tags
+  let profileInputColor = document.getElementById('profileCard');
+  let meetupInputColor = document.getElementById('joindColor');
+  let createInputColor = document.getElementById('createMeetColor');
 
-  let userDescription = document.getElementById('user-description');
-  let fullName = document.getElementById('user-name');
+  // SAVE BUTTON VIKTIG
   let saveFormBtn = document.getElementById('save');
-  let genderInfo = document.getElementById('genderInfo');
-
-  nameOnUser.setAttribute("placeholder", user.fullname);
-
-  let coloProfile = '#09035F';
-  let joinMeetupColor = '#333333';
-  let createMeetupColor = '#C05454';
-  let toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
-  let genderTrue = '';
-
-  let info = {
-    profilcolor: coloProfile,
-    meetupcolor: joinMeetupColor,
-    createcolor: createMeetupColor,
-    story: toldStory,
-    gender: genderTrue
-  }
+  console.log('inside fetchUserInfo function');
 
 
-  if (user.info) {
-    console.log('user.info is true');
-    const userInfo = user.info;
+  db.ref('/users/' + userId).on('value', function(snapshot) {
+    let userInfo = snapshot.val();
+    console.log(userInfo);
 
-    if (userInfo.story) {
-      console.log('user.info.story is true ');
-      userDescription.firstElementChild.innerText = userInfo.story;
-      nameOnUser.setAttribute("placeholder", userInfo.story);
-      toldStory = userInfo.story;
-    } else {
-      userDescription.firstElementChild.innerText = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
-      nameOnUser.setAttribute("placeholder", 'Vem är du?');
-      toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
-    }
+    nameOnUser.setAttribute("placeholder", userInfo.fullname);
+    fullName.innerText = userInfo.fullname;
 
-
-    if (userInfo.gender) {
-      genderInfo.style.display = 'block';
-
-      console.log('userinfo.gender is true');
-      //nameOnUser.setAttribute("placeholder", 'Vem är du?');
-      if (userInfo.gender === "kvinna") {
-        female.checked = true;
-        genderInfo.innerText = userInfo.gender;
-        genderTrue = userInfo.gender;
-
-        // var genders = document.getElementsByName("gender");
-        // var selectedGender;
-        //
-        // for (var i = 0; i < genders.length; i++) {
-        //   if (genders[i].checked)
-        //     selectedGender = genders[i].value;
-      } else if (userInfo.gender === "man") {
-        man.checked = true;
-        genderInfo.innerText = userInfo.gender;
-        genderTrue = userInfo.gender;
-      } else if (userInfo.gender === "other") {
-        other.checked = true;
-        genderInfo.innerText = userInfo.gender;
-        genderTrue = userInfo.gender;
+    if (userInfo.info) {
+      if (userInfo.info.gender) {
+        console.log();
+        for (var i = 0; i < genders.length; i++) {
+          if (genders[i].checked)
+          genderInfo.style.display = 'block';
+          genderSelect.innerText = genders[i].value;
+        }
+      }else {
+        genderInfo.style.display = 'none';
       }
-    } else {
+
+      profileInputColor.value =  userInfo.info.profilcolor;
+      meetupInputColor.value =  userInfo.info.meetupcolor;
+      createInputColor.value = userInfo.info.createcolor;
+
+      if (jonidCards) {
+        for (var i = 0; i < jonidCards.length; i++) {
+          jonidCards[i].firstElementChild.style.backgroundColor = userInfo.info.meetupcolor;
+        }
+      }
+      if (createdCards) {
+        for (var i = 0; i < createdCards.length; i++) {
+          createdCards[i].firstElementChild.style.backgroundColor = userInfo.info.createcolor;
+        }
+      }
+
+      profileColorCard.firstElementChild.style.backgroundColor = userInfo.info.profilcolor;
+
+
+    }else {
+      userDescription.style.display = 'none';
       genderInfo.style.display = 'none';
     }
 
-  } else {
-    console.log('user.info is false');
-    userDescription.firstElementChild.innerText = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
-  }
-
-  saveFormBtn.addEventListener('click', function() {
-    for (var i = 0; i < genders.length; i++) {
-      if (genders[i].checked)
-        genderTrue = genders[i].value;
-    }
-
-    if (nameOnUser.value !== '') {
-
-    } else {
-      nameOnUser.value = user.fullname;
-    }
   });
+
 
 }
 
@@ -262,7 +338,7 @@ function ifUserIsTrue() {
                   // console.log(snap[z]);
                   if (z) {
                     let div = document.createElement('div');
-                    div.className = "single-meetup";
+                    div.className = "create-single-meetup";
                     div.innerHTML = `<div class="event-backgound">
                         <div class="meetup-holder">
                           <p class="meetup-min">Meetup</p>
@@ -337,7 +413,7 @@ function ifUserIsTrue() {
     });
   } else if (userLog) {
 
-    fetchUserInfo(userLog);
+    fetchUserInfo(userLog.uniqueID);
 
 
     // Form information
@@ -366,7 +442,7 @@ function ifUserIsTrue() {
 
               if (x) {
                 let div = document.createElement('div');
-                div.className = "single-meetup";
+                div.className = "create-single-meetup";
                 div.innerHTML = `<div class="event-backgound">
                     <div class="meetup-holder">
                       <p class="meetup-min">Meetup</p>
@@ -446,7 +522,7 @@ function ifUserIsTrue() {
 
                 //  console.log('joind snap ',snap[x]);
                 let div = document.createElement('div');
-                div.className = "single-meetup";
+                div.className = "join-single-meetup";
                 div.innerHTML = `<div class="event-backgound-joind">
                 <div class="meetup-holder">
                   <p class="meetup-min">Meetup</p>
