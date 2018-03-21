@@ -224,8 +224,16 @@ function createMeetupListener(event){
   let time = document.getElementById('timeInput').value;
 
   // Koordinater
-  let latitude = document.getElementById('map').getAttribute('lat').substring(0,9);
-  let longitude = document.getElementById('map').getAttribute('lng').substring(0,9);
+  let latitude = document.getElementById('map').getAttribute('lat');
+  let longitude = document.getElementById('map').getAttribute('lng');
+  
+  if(latitude){
+    latitude = latitude.substring(0,9);
+  }
+  if(longitude){
+    longitude = longitude.substring(0,9);
+  }
+
 
   // ageInterval
   let ageInterval = ageSlider.getValue().split(',');
