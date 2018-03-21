@@ -2,7 +2,7 @@ window.addEventListener("load", function(event){
   let faqBtn = document.getElementById("faqBtn");
 
   faqBtn.addEventListener("click", function(event){
-
+    event.preventDefault();
     let faqWrap = document.createElement('div');
     faqWrap.className = 'faq';
     let faqTitle = document.createElement('h2');
