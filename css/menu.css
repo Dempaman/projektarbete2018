@@ -199,6 +199,10 @@ a {
 	color: #666;
 	font-size: 0.9em;
 }
+#notificationList .infoWrapper > div > span:last-child {
+	max-width: 105px;
+	word-wrap: break-word;
+}
 
 
 
