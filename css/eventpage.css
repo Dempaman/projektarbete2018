@@ -651,14 +651,14 @@ div.googleMapDiv > img {
 }
 
 /* Animations */
-.spinner {
+.spinner.centered {
   width: 107px;
   height: 82px;
   text-align: center;
   font-size: 10px;
 
   position: fixed;
-  top: 54%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }

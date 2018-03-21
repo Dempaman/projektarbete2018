@@ -1197,7 +1197,7 @@ function displayEventInfo(event){
 }
 
 function retrieveEventInfo(){
-  console.log('HREF: '+window.location.pathname);
+  //console.log('HREF: '+window.location.pathname);
   if(window.location.pathname.includes('eventpage.html')){
     let eventid = getLocationInfo()[0];
     //console.log('EVENTID IS', eventid);
@@ -1237,14 +1237,14 @@ function retrieveEventInfo(){
           let offsale = event.offsale.value;
           let mainCategory = event.categories[0].name;
           let promoter = event.promoter;
-          console.log('Straight from the API: ', json);
-          console.log('Main category is: ', mainCategory);
+          // console.log('Straight from the API: ', json);
+          // console.log('Main category is: ', mainCategory);
           if(!date){
             date = event.date;
           }
 
           if(!imageURL){
-            console.log('ImageURL:', imageURL);
+            //console.log('ImageURL:', imageURL);
             printMessage('error', 'No image for this event found.');
           }
 
@@ -1253,7 +1253,7 @@ function retrieveEventInfo(){
 
           let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale, mainCategory, event.attractions, promoter);
 
-          console.log('EVENTOBJECT: ',eventObject);
+          //console.log('EVENTOBJECT: ',eventObject);
 
           // Eventet hittades, information visas!
           displayEventInfo(eventObject);
@@ -1264,13 +1264,13 @@ function retrieveEventInfo(){
           pageLoaded();
       })
       .catch(function(error){
-        console.log('Här skedde det ett fel! Försöker vi plocka fram något som inte skickas med?');
-        console.log('Felmeddelande:',error);
+        //console.log('Här skedde det ett fel! Försöker vi plocka fram något som inte skickas med?');
+        console.error('Felmeddelande:',error);
       })
     }
 
   } else {
-    console.log('This function should not run on this page.');
+    //console.log('This function should not run on this page.');
   }
 }
 
@@ -1288,7 +1288,7 @@ function displayDate(dateStr, weekDay, offsale, attractionText = false){
   if(dateStr.includes('T')){
     dateStr = dateStr.split('T');
 
-    console.log('datestr: ',dateStr);
+    //console.log('datestr: ',dateStr);
 
 
 
@@ -1303,7 +1303,7 @@ function displayDate(dateStr, weekDay, offsale, attractionText = false){
     day = dateStr[2];
 
   } else {
-    console.log('DateSTRING: ',dateStr);
+    //console.log('DateSTRING: ',dateStr);
     dateStr = dateStr.split('-');
 
     year = dateStr[0];
@@ -1319,12 +1319,12 @@ function displayDate(dateStr, weekDay, offsale, attractionText = false){
     date = offsale.split('T')[0];
     date = date.split('-');
     if(year == date[0] && month == date[1] && day == date[2]){
-      console.log('It\'s the same day!');
+      // console.log('It\'s the same day!');
       time = offsale.split('T')[1];
       time = time.substring(0, time.length-4);
     } else{
-      console.log('Date:', date);
-      console.log(year, month, day);
+      // console.log('Date:', date);
+      // console.log(year, month, day);
     }
   }
 
@@ -1364,9 +1364,9 @@ function getLocationInfo(){
       href = href.split('&');
 
     } else {
-      console.warn('This page should only be reached with a event specified in the address field.');
-      console.log('Om man ändå hamnar här kan vi redirecta till alla event / lägga en sökruta här');
-      location.assign('/');
+      // console.warn('This page should only be reached with a event specified in the address field.');
+      // console.log('Om man ändå hamnar här kan vi redirecta till alla event / lägga en sökruta här');
+      // location.assign('/');
       //window.location.href = 'events.html';
       stopcode = true;
     }
@@ -1419,7 +1419,7 @@ function updateEventInfo(event){
       let eventInfoText = document.getElementById('eventInfoText');
       fetch(`https://sv.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=${searchStr}`)
       .then(function(response){
-        console.log(response);
+        //console.log(response);
         return response.json();
       })
       .then(function(json){
@@ -1452,14 +1452,14 @@ function updateEventInfo(event){
           infoTextParagraf.innerText = text;
           eventInfoText.insertBefore(infoTextParagraf, eventInfoText.firstChild);
         }
-        console.log(json);
+        //console.log(json);
 
       });
 
-      console.log('It is only one person. Lets find the info about this artist.');
+      //console.log('It is only one person. Lets find the info about this artist.');
     }
   } else {
-    console.log('No information to display about this person.');
+    //console.log('No information to display about this person.');
   }
 
 }
@@ -1491,10 +1491,9 @@ function toggleLike(meetupKey, messageKey){
 function likeListenerOn(meetupKey, messageKey){
   //Listen for likes
   db.ref('likes/' + meetupKey + '/'+ messageKey).on('child_added', function(){
-    console.log('New like!');
     let likeCounters = document.getElementsByClassName('likeCount '+messageKey);
     for(let likeCount of likeCounters){
-      console.log(likeCount);
+      //console.log(likeCount);
       if(likeCount.innerText){
         likeCount.innerText = (likeCount.innerText - 0) + 1;
       } else {
@@ -1504,12 +1503,12 @@ function likeListenerOn(meetupKey, messageKey){
   });
   //Listen for unlikes
   db.ref('likes/' + meetupKey + '/'+ messageKey).on('child_removed', function(){
-    console.log('Someone unliked :(');
+    //console.log('Someone unliked :(');
 
     let likeCounters = document.getElementsByClassName('likeCount '+messageKey);
 
     for(let likeCount of likeCounters){
-      console.log(likeCount);
+      //console.log(likeCount);
       if(likeCount.innerText != 1){
         likeCount.innerText = (likeCount.innerText - 0) - 1;
       } else if(likeCount.innerText == 1){
