@@ -1049,16 +1049,6 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
   }
 }
 
-// Denna funktion uppdaterar tiden på meddelanden!
-function updateTimeStamps(){
-  let timestamps = document.getElementsByClassName('timeStamp');
-
-  // We should limit this to the latest 10-30 messages?, will create weird stuff later if noticed.
-  for(let stamp of timestamps){
-    let messageTime = stamp.getAttribute('timeStamp');
-    stamp.innerText = chatMessageTimeStamp(messageTime);
-  }
-}
 
 // Denna funktion lyssnar på ifall någonting plockas bort ur databasen!
 function restoreJoinBtn(meetupKey){
