@@ -87,6 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		case "jönköping":
 			userSearchValue = '50792';
 			break;
+        case "borås":
+			userSearchValue = '50655';
+			break;
 		default:
 			userSearchValue = 'Your city sucks!'
 		}
@@ -109,17 +112,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 let day;
                 let month;
                 let meetUps;
-
-								//if eventPlace and eventCity includes cityname
-								if (eventPlace.includes(eventCity)) {
-									let newPlace = eventPlace.replace(eventCity, '');
-									newPlace = newPlace.trim();
-									console.log(newPlace);
-									eventPlace = newPlace;
-								} else {
-									let newPlace = eventPlace;
-									console.log(newPlace);
-								}
+                
+                //if eventPlace and eventCity includes cityname
+                let eventIncludesCity = ", " + eventCity;
+                
+                if (eventPlace.includes(eventIncludesCity)) {
+                    let newPlace = eventPlace.replace(eventIncludesCity, "");
+                    eventPlace = newPlace;
+                    
+                } else {
+                    let newPlace = eventPlace;
+                }
 
 				if (eventImg !== undefined) {
 					eImg = eventImg[0].url;
@@ -259,15 +262,15 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
         let meetUps;
 
 								//if eventPlace and eventCity includes cityname
-								if (eventPlace.includes(eventCity)) {
-									let newPlace = eventPlace.replace(eventCity, '');
-									newPlace = newPlace.trim();
-									console.log(newPlace);
-									eventPlace = newPlace;
-								} else {
-									let newPlace = eventPlace;
-									console.log(newPlace);
-								}
+                let eventIncludesCity = ", " + eventCity;
+                
+                if (eventPlace.includes(eventIncludesCity)) {
+                    let newPlace = eventPlace.replace(eventIncludesCity, "");
+                    eventPlace = newPlace;
+                    
+                } else {
+                    let newPlace = eventPlace;
+                }
 
 				if (eventImg !== undefined) {
 					eImg = eventImg[0].url;
@@ -366,15 +369,15 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 				let numberOfMeetups;
 
 				//if eventPlace and eventCity includes cityname
-				if (eventPlace.includes(eventCity)) {
-					let newPlace = eventPlace.replace(eventCity, '');
-					newPlace = newPlace.trim();
-					console.log(newPlace);
-					eventPlace = newPlace;
-				} else {
-					let newPlace = eventPlace;
-					console.log(newPlace);
-				}
+                let eventIncludesCity = ", " + eventCity;
+                
+                if (eventPlace.includes(eventIncludesCity)) {
+                    let newPlace = eventPlace.replace(eventIncludesCity, "");
+                    eventPlace = newPlace;
+                    
+                } else {
+                    let newPlace = eventPlace;
+                }
 
 				//if img is undefined
 				if (eventImg !== undefined) {
