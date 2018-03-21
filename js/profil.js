@@ -33,7 +33,46 @@ window.addEventListener('load', profilFunction);
 //     console.log('this is ' + profilId.fullname + 'profile');
 //   }
 
+function fetchUserInfo(user) {
+  let nameOnUser = document.getElementById('nameOnUser');
+  let yourStory = document.getElementById('yourStory');
+  let genders = document.getElementsByName('gender');
+  let female = document.getElementById('kvinna');
+  let man = document.getElementById('man');
+  let other = document.getElementById('other');
 
+  nameOnUser.setAttribute("placeholder", user.fullname);
+
+  if (user.info) {
+    let userInfo = user.info;
+
+    if (userInfo.story) {
+      nameOnUser.setAttribute("placeholder", userInfo.story);
+    } else {
+      nameOnUser.setAttribute("placeholder", 'Vem är du?');
+    }
+    if (userInfo.gender) {
+      nameOnUser.setAttribute("placeholder", 'Vem är du?');
+      if (userInfo.gender === "kvinna") {
+        female.checked = true;
+
+        // var genders = document.getElementsByName("gender");
+        // var selectedGender;
+        //
+        // for (var i = 0; i < genders.length; i++) {
+        //   if (genders[i].checked)
+        //     selectedGender = genders[i].value;
+      } else if (userInfo.gender === "man") {
+        man.checked = true;
+      } else if (userInfo.gender === "other") {
+        other.checked = true;
+      }
+    }
+
+  }
+
+
+}
 
 
 function profilePage() {
@@ -45,84 +84,84 @@ function profilePage() {
 
 function ellisisTrue(event) {
 
-    let labelClick = event.target;
-    let textFakeWidth = event.target.offsetWidth;
-    let textRealWidth = event.target.parentElement.lastElementChild.offsetWidth;
-    let tooltip = event.target.parentElement.children[2];
+  let labelClick = event.target;
+  let textFakeWidth = event.target.offsetWidth;
+  let textRealWidth = event.target.parentElement.lastElementChild.offsetWidth;
+  let tooltip = event.target.parentElement.children[2];
 
 
-    if (textFakeWidth < textRealWidth) {
-      //console.log('textFakeWidth is smaller');
+  if (textFakeWidth < textRealWidth) {
+    //console.log('textFakeWidth is smaller');
 
-      labelClick.addEventListener('click', function(event){
+    labelClick.addEventListener('click', function(event) {
 
-        if (tooltip.className === 'hide-small') {
-          tooltip.classList.add('show');
-          console.log('added show classname = ', tooltip.className);
-          //console.log(event.target);
-        }else {
-           tooltip.classList.remove('show');
-             console.log('removed show classname = ', tooltip.className);
-        }
-      });
+      if (tooltip.className === 'hide-small') {
+        tooltip.classList.add('show');
+        //console.log('added show classname = ', tooltip.className);
+        //console.log(event.target);
+      } else {
+        tooltip.classList.remove('show');
+        //console.log('removed show classname = ', tooltip.className);
+      }
+    });
 
-        tooltip.addEventListener('click', function(event){
+    tooltip.addEventListener('click', function(event) {
 
-          if (tooltip.className === 'hide-small') {
-            tooltip.classList.add('show');
-            console.log(event.target.className);
-          }else {
-             tooltip.classList.remove('show');
-               console.log(event.target.className);
-          }
-        });
-    }else{
-      tooltip.style.display = "none";
-      //console.log('textFakeWidth is NOT smaller');
-    }
+      if (tooltip.className === 'hide-small') {
+        tooltip.classList.add('show');
+        //console.log(event.target.className);
+      } else {
+        tooltip.classList.remove('show');
+        // console.log(event.target.className);
+      }
+    });
+  } else {
+    tooltip.style.display = "none";
+    //console.log('textFakeWidth is NOT smaller');
+  }
 }
 
-function ellipsisEvents(mainText,hide) {
-  console.log(mainText);
-  console.log('inside ellipsisEvents function' );
+function ellipsisEvents(mainText, hide) {
+  // console.log(mainText);
+  // console.log('inside ellipsisEvents function' );
 
-   console.log('length ', mainText.length);
-   console.log('maintext is now ', mainText);
+  // console.log('length ', mainText.length);
+  // console.log('maintext is now ', mainText);
   for (let i = 0; i < mainText.length; i++) {
 
     let labelClick = mainText[i];
     let textFakeWidth = mainText[i].offsetWidth;
     let textRealWidth = mainText[i].parentElement.lastElementChild.offsetWidth;
     let tooltip = mainText[i].parentElement.children[2];
-    console.log('textFakeWidth ', textFakeWidth);
-    console.log('textRealWidth ', textRealWidth);
+    // console.log('textFakeWidth ', textFakeWidth);
+    // console.log('textRealWidth ', textRealWidth);
 
     if (textFakeWidth < textRealWidth) {
       //console.log('textFakeWidth is smaller');
 
-      labelClick.addEventListener('click', function(event){
+      labelClick.addEventListener('click', function(event) {
 
         if (tooltip.className === hide) {
           tooltip.classList.add('show');
-          console.log('added show classname = ', tooltip.className);
+          //  console.log('added show classname = ', tooltip.className);
           //console.log(event.target);
-        }else {
-           tooltip.classList.remove('show');
-             console.log('removed show classname = ', tooltip.className);
+        } else {
+          tooltip.classList.remove('show');
+          // console.log('removed show classname = ', tooltip.className);
         }
       });
 
-        tooltip.addEventListener('click', function(event){
+      tooltip.addEventListener('click', function(event) {
 
-          if (tooltip.className === hide) {
-            tooltip.classList.add('show');
-            console.log(event.target.className);
-          }else {
-             tooltip.classList.remove('show');
-               console.log(event.target.className);
-          }
-        });
-    }else{
+        if (tooltip.className === hide) {
+          tooltip.classList.add('show');
+          //console.log(event.target.className);
+        } else {
+          tooltip.classList.remove('show');
+          // console.log(event.target.className);
+        }
+      });
+    } else {
       tooltip.style.display = "none";
       //console.log('textFakeWidth is NOT smaller');
     }
@@ -163,7 +202,7 @@ function ifUserIsTrue() {
       let allUsers = snapshot.val();
 
       for (let x in allUsers) {
-      //  console.log(allUsers[x].sid);
+        //  console.log(allUsers[x].sid);
         if (allUsers[x].sid === pageUserId) {
 
           //console.log(allUsers[x]);
@@ -241,7 +280,7 @@ function ifUserIsTrue() {
                     let mainText = div.getElementsByClassName('main-text');
                     let meetupName = div.getElementsByClassName('meetup-name');
                     ellipsisEvents(mainText, "hide-small");
-                    ellipsisEvents(meetupName,"hide");
+                    ellipsisEvents(meetupName, "hide");
 
                   }
                 });
@@ -263,12 +302,13 @@ function ifUserIsTrue() {
             meetupCount.innerText = secondCounter;
           }
         } else {
-        //  console.log('not user or no user with this id could be found');
+          //  console.log('not user or no user with this id could be found');
         }
       }
     });
-
   } else if (userLog) {
+
+    fetchUserInfo(userLog);
 
     // Form information
     userName.innerText = userLog.fullname;
@@ -338,10 +378,10 @@ function ifUserIsTrue() {
 
                 createdContainer.appendChild(div);
 
-                let mainText = document.getElementsByClassName('main-text');
-                let meetupName = document.getElementsByClassName('meetup-name');
+                let mainText = div.getElementsByClassName('main-text');
+                let meetupName = div.getElementsByClassName('meetup-name');
                 ellipsisEvents(mainText, "hide-small");
-                ellipsisEvents(meetupName,"hide");
+                ellipsisEvents(meetupName, "hide");
               }
             });
           } // THE END OF THE ADDED CREATED MEETUPCARD
@@ -374,7 +414,7 @@ function ifUserIsTrue() {
 
               if (x) {
 
-              //  console.log('joind snap ',snap[x]);
+                //  console.log('joind snap ',snap[x]);
                 let div = document.createElement('div');
                 div.className = "single-meetup";
                 div.innerHTML = `<div class="event-backgound-joind">
@@ -418,10 +458,10 @@ function ifUserIsTrue() {
 
                 joindContainer.appendChild(div);
 
-                let mainText = document.getElementsByClassName('main-text');
-                let meetupName = document.getElementsByClassName('meetup-name');
+                let mainText = div.getElementsByClassName('main-text');
+                let meetupName = div.getElementsByClassName('meetup-name');
                 ellipsisEvents(mainText, "hide-small");
-                ellipsisEvents(meetupName,"hide");
+                ellipsisEvents(meetupName, "hide");
               }
             });
           } // THE END OF THE joind CREATED MEETUPCARD
@@ -431,7 +471,7 @@ function ifUserIsTrue() {
     });
 
   } else {
-  //  console.log('Sorry! No Web Storage support');
+    //  console.log('Sorry! No Web Storage support');
     //let indexPage = '/index.html';
     //let testLocalHost = window.location.protocol + '//' + window.location.hostname + ':8000' + indexPage;
     //let relocate = window.location.href
@@ -443,7 +483,7 @@ function ifUserIsTrue() {
 
 function profilFunction(event) {
 
-//  profilePage();
+
   ifUserIsTrue();
 
 
@@ -508,14 +548,24 @@ function profilFunction(event) {
   // } // End of -To checkout meetups or remove them - hidden nav
 
   let userEdit = document.getElementById('tellMeMore');
+  let userStory = document.getElementsByClassName('user-story')[0];
+  let userDescription = document.getElementById('user-description');
+  let closeTellMeMore = document.getElementById('closeTellMeMore');
   //console.log('userEdit ' + userEdit);
   userEdit.addEventListener('click', function(event) {
-  //  console.log(event.type);
+    console.log(event.type);
+    console.log(userStory.className);
 
-    if (document.getElementsByClassName('user-story')[0].style.display === 'none') {
-      document.getElementsByClassName('user-story')[0].style.display = 'block';
+    if (userStory.className === 'user-story') {
+      userStory.classList.add('show');
+      userDescription.style.display = 'none';
+      userEdit.innerText = 'Spara';
+      closeTellMeMore.style.display ='block';
     } else {
-      document.getElementsByClassName('user-story')[0].style.display = 'none';
+      userStory.classList.remove('show');
+      userDescription.style.display = 'block';
+      userEdit.innerText = 'Berätta om dig själv';
+      closeTellMeMore.style.display ='none';
     }
 
   });

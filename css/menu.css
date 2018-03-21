@@ -85,7 +85,7 @@ a {
 	font-size: 0.8em;
 	padding: 5px 9px;
 	border-radius: 4px;
-	right: 0;
+	right: 5px;
 	top: 45px;
 	z-index: 2;
 }
@@ -103,6 +103,9 @@ a {
 	position: fixed;
 	width: 100%;
 	z-index: 20;
+}
+#notificationWrapper > div:first-child > span:nth-child(4) {
+	margin-right: 5px;
 }
 /* Notificationwrapper Content */
 #notificationList {
@@ -198,6 +201,10 @@ a {
 #notificationList .infoWrapper > div > span:first-child {
 	color: #666;
 	font-size: 0.9em;
+}
+#notificationList .infoWrapper > div > span:last-child {
+	max-width: 105px;
+	word-wrap: break-word;
 }
 
 

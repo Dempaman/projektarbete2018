@@ -211,6 +211,8 @@ firebase.auth().onAuthStateChanged(user => {
           }
         }
       }
+    } else if(window.location.pathname.includes('profil.html')){
+      location.assign('index.html');
     }
   }
 }); //firebase.auth END...
@@ -446,7 +448,7 @@ function retrieveLoginModalContent(){
           var user = firebase.auth().currentUser;
               user.updateProfile({
               displayName: name,
-              photoURL: '/img/user.png'
+              photoURL: 'https://dempaman.github.io/projektarbete2018-meWent/img/user.png'
               }).then(function() {
                 location.reload(); //Laddar om sidan
               }).catch(function(error) {
