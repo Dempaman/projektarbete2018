@@ -15,18 +15,20 @@
 
   <!--CSS links-->
   <link rel="stylesheet" href="css/footer.css">
-  <link rel="stylesheet" href="css/loginModal.css">
+  <link rel="stylesheet" href="css/loginmodal.css">
   <link rel="stylesheet" type="text/css" href="css/printmessage.css">
   <link rel="stylesheet" href="css/menu.css">
   <link rel="stylesheet" href="css/headstyle.css">
+  <link rel="stylesheet" href="css/faq.css">
   <link rel="stylesheet" href="css/profil.css">
 
   <!--Script tags-->
   <!-- <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script> -->
   <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
   <script src="js/classes.js"></script>
-  <!-- <script src="js/menu.js"></script>
-  <script src="js/loginModal.js"></script>  -->
+  <script src="js/menu.js"></script>
+  <script src="js/loginmodal.js"></script>
+  <script type="js/faq.js"></script>
   <script src="js/profil.js"></script>
 
 
@@ -38,7 +40,7 @@
   <nav id="navigation">
     <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
     <div class="header">
-    <a href="/index.html"> <img src="img/logo-design3.png" alt="Event"></a>
+      <a href="/index.html"> <img src="img/logo-design3.png" alt="Event"></a>
       <div id="helloUser" class="hidden">
         <span id="userName"></span>
         <span id="notificationBell" class="hidden">
@@ -60,7 +62,7 @@
       A fake / hidden checkbox is used as click reciever,
       so you can use the :checked selector on it.
       -->
-      <input type="checkbox"/>
+      <input type="checkbox" />
 
       <!--Some spans to act as a hamburger.-->
       <span></span>
@@ -69,7 +71,7 @@
 
       <!--Too bad the menu has to be inside of the button but hey, it's pure CSS magic.  -->
       <ul id="menu">
-        <li><a href="/index.html" >HEM</a></li>
+        <li><a href="/index.html">HEM</a></li>
         <li id="myProfileMob" class="hidden"><a href="/profil.html">MIN PROFIL</a></li>
         <li><a href="/events.html">ALLA EVENTS</a></li>
         <li><a href="#contactUs">KONTAKTA OSS</a></li>
@@ -77,57 +79,61 @@
       </ul>
     </div>
   </nav>
+
+  <div id="menuDiv"></div>
   <!-- Menu End -->
 
   <main>
     <div class="user">
-      <div class="image-background" style="background-image:url('img/simple-purple-wallpapers.jpg'); background-repeat: no-repeat; background-size: cover">
+      <!-- <div class="image-background" style="background-image:url('img/simple-purple-wallpapers.jpg'); background-repeat: no-repeat; background-size: cover"> -->
+      <div class="image-background" style="background-color:#09035F">
         <img id="user-img" src="img/user.png" alt="Profilbild">
       </div>
 
       <h3 id="user-name"></h3>
+      <p id="genderInfo">Kön: </p>
 
       <form class="user-story">
         <span class="section">
           <span class="bigLabel">Användarnamn:</span>
-          <input type="text" placeholder="" id="nameOnUser" name="nameForUser" value="">
+        <input type="text" placeholder="" id="nameOnUser" name="nameForUser" value="">
         </span>
         <span class="section">
           <span class="bigLabel">Kön:</span>
-          <span class="parentInput">
+        <span class="parentInput">
             <span class="childInput">
               <label for="kvinna">Kvinna</label>
               <label for="man">Man</label>
               <label for="other">Other</label>
             </span>
-            <span class="childRadio">
+        <span class="childRadio">
               <input type="radio" id="kvinna" name="gender" value="kvinna"> <br>
               <input type="radio" id="man" name="gender" value="man"> <br>
               <input type="radio" id="other" name="gender" value="other">
             </span>
-          </span>
+        </span>
         </span>
         <!-- <label for="">Födelsedag</label>
         <input type="date" name="" value=""> -->
         <span class="section">
           <span class="bigLabel">Välj dina favoritfäger till din:</span>
-          <span class="parentInput">
+        <span class="parentInput">
             <span class="childColor">
               <input type="color" id="profileCard" name="profileColor" value="#606060">
               <input type="color" id="createMeetColor" name="createColor" value="#606060">
               <input type="color" id="joindColor" name="joinColor" value="#606060">
             </span>
-            <span class="childInput">
+        <span class="childInput">
               <label for="profileCard">Profil</label>
               <label for="createMeetColor">Skapade Meetups</label>
               <label for="joindColor">Joinade Meetups</label>
             </span>
-          </span>
+        </span>
         </span>
 
         <span class="section">
           <span class="bigLabel">Berätta om dig själv</span>
-          <textarea id="yourStory" name="name" rows="8" cols="80" placeholder="vem är du?..."></textarea>
+        <textarea id="yourStory" name="name" rows="8" cols="80" placeholder="vem är du?..."></textarea>
         </span>
       </form>
 
@@ -140,8 +146,9 @@
 
         </div>
         <div class="buttonContainer">
-          <button id="closeTellMeMore" type="button" name="button">Avbryt</button>
+          <!-- <button id="closeTellMeMore" type="button" name="button">Avbryt</button> -->
           <button id="tellMeMore" type="button" name="button">Berätta om dig själv</button>
+          <button id="save" type="button" name="button">Spara</button>
         </div>
 
       </div>
@@ -316,7 +323,7 @@
       </div>
 
       <div class="joind-meetups-container">
-        <h2>Joind Meetups</h2>
+        <h2>Joinade Meetups</h2>
 
         <!-- <div class="single-meetup">
           <div class="event-backgound-joind">
@@ -462,52 +469,52 @@
   </footer> -->
 
   <footer class="footer-box">
-      <div class="adress">
-        <img id="footer-logo" src="img/logo-design4.png" alt="meWent logo">
-        <div class="adress-menu">
-          <div class="adress-box">
-            <div class="place">
-              <i class="mdi mdi-home mdi-24px"></i>
-              <div class="route">
-                <p>Mölndalsvägen 81 </p>
-                <p>421 42 Göteborg</p>
-              </div>
-            </div>
-            <div class="phone">
-              <i class="mdi mdi-phone mdi-24px"></i>
-              <p>00 - 030 53 52 51</p>
-            </div>
-            <div class="mail">
-                <i class="mdi mdi-email-outline mdi-24px"></i>
-              <p>info@mewent.com </p>
+    <div class="adress">
+      <img id="footer-logo" src="img/logo-design4.png" alt="meWent logo">
+      <div class="adress-menu">
+        <div class="adress-box">
+          <div class="place">
+            <i class="mdi mdi-home mdi-24px"></i>
+            <div class="route">
+              <p>Mölndalsvägen 81 </p>
+              <p>421 42 Göteborg</p>
             </div>
           </div>
-          <div class="menu-box">
-            <div class="footer-menu">
-              <ul>
-                <li><a href="/index.html">HEM</a></li>
-                <li><a href="/events.html">ALLA EVENTS</a></li>
-                <li><a id="faqBtn" href="#contactUs">FAQ</a></li>
-              </ul>
-            </div>
+          <div class="phone">
+            <i class="mdi mdi-phone mdi-24px"></i>
+            <p>00 - 030 53 52 51</p>
+          </div>
+          <div class="mail">
+            <i class="mdi mdi-email-outline mdi-24px"></i>
+            <p>info@mewent.com </p>
           </div>
         </div>
-        <div id="contactUs" class="contact-form">
-          <h4>Kontakta oss</h4>
-          <input type="text" name="namn" value="" placeholder="Namn" >
-          <input type="email" name="e-post" value="" placeholder="E-post">
-          <textarea name="name" rows="8" cols="50" placeholder="Meddelande"></textarea>
-          <button id="contact-send" type="button" name="button">Skicka</button>
+        <div class="menu-box">
+          <div class="footer-menu">
+            <ul>
+              <li><a href="/index.html">HEM</a></li>
+              <li><a href="/events.html">ALLA EVENTS</a></li>
+              <li><a id="faqBtn" href="">FAQ</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="social-links">
-        <a href="#"><i class="mdi mdi-facebook-box mdi-36px" ></i></a>
-        <a href="#"><i class="mdi mdi-instagram mdi-36px"></i></a>
-        <a href="#"><i class="mdi mdi-twitter-box mdi-36px"></i></a>
+      <div id="contactUs" class="contact-form">
+        <h4>Kontakta oss</h4>
+        <input type="text" name="namn" value="" placeholder="Namn">
+        <input type="email" name="e-post" value="" placeholder="E-post">
+        <textarea name="name" rows="8" cols="50" placeholder="Meddelande"></textarea>
+        <button id="contact-send" type="button" name="button">Skicka</button>
       </div>
-      <div class="copyright">
-        <h4 >Copyright &copy; 2018 meWent. All rigths reserved </h4>
-      </div>
+    </div>
+    <div class="social-links">
+      <a href="#"><i class="mdi mdi-facebook-box mdi-36px" ></i></a>
+      <a href="#"><i class="mdi mdi-instagram mdi-36px"></i></a>
+      <a href="#"><i class="mdi mdi-twitter-box mdi-36px"></i></a>
+    </div>
+    <div class="copyright">
+      <h4>Copyright &copy; 2018 meWent. All rigths reserved </h4>
+    </div>
 
   </footer>
 
