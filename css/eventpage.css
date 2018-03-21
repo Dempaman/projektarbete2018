@@ -215,6 +215,9 @@ button.purple:hover {
 #meetupWrapper > div > div.infoDiv {
   margin: -3px 90px;
 }
+#meetupWrapper > div > div.infoDiv > p {
+  max-width: 240px;
+}
 
 div.meetupInfo {
   margin: -38px 0px 0px;
@@ -417,7 +420,7 @@ div.googleMapDiv > img {
   word-wrap: break-word;
 }
 .textmessageWrapper > p > a {
-  color: red;
+  color: #597dbc;
 }
 .textmessageWrapper span {
   margin-bottom: -2px;
@@ -443,7 +446,11 @@ div.googleMapDiv > img {
   font-size: 0.7em;
   color: #b6b6b6;
 }
-
+#meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:first-child > iframe {
+  border: none;
+  outline: none;
+  margin: 4px 0px;
+}
 #meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:first-child {
   margin: 0px 4px;
   width: calc(100% - 33px);

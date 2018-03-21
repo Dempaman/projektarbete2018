@@ -903,39 +903,62 @@ function listenToChat(chattWrapperDiv, meetupKey, joinedTime){
         // Create the actual message
         let textmessage = document.createElement('p');
         let actualMessage = message.textmessage;
+        let failed = false, onlyOneSpotify = true;
 
         if(actualMessage.includes('>') || actualMessage.includes('<') || actualMessage.includes('&')){
-          textmessage.innerText = 'Detta meddelande kunde inte visas';
+          actualMessage = 'Oops, nåt gick fel.';
+          failed = true;
         }
 
         /* Add links to message */
-        if(message.textmessage.includes('https://')){
+        if(message.textmessage.includes('https://') || message.textmessage.includes('http://') || message.textmessage.includes('spotify:track')&& !failed){
 
-          /* Dela vid länkens början */
-          let splitStr = message.textmessage.split('https://');
+          /* Om meddelandet innehåller en länk av någon typ, dela upp den och skapa länkar. */
+          let splittedMessage = actualMessage.split(' ');
+          actualMessage = [];
+          for(let word of splittedMessage){
+            if(word.includes('http://') || word.includes('https://')){
+              if(word.includes('https://open.spotify.com/embed/') && onlyOneSpotify){
+                word = '<iframe src="' + word + '" width="300" height="80"> frameborder="0" allowtransparency="true" allow="encrypted-media" </iframe>';
+                onlyOneSpotify = false;
+              } else {
+                word = '<a href="' + word + '">' + word + '</a>';
+              }
+            } else if(word.includes('spotify:track:') && onlyOneSpotify){
+              onlyOneSpotify = false;
+              word = word.split('spotify:track:')[1];
+              word = '<iframe src="https://open.spotify.com/embed/track/' + word + '" width="300" height="80"> frameborder="0" allowtransparency="true" allow="encrypted-media" </iframe>';
+            }
 
-          /* Dela meddelandet och ta ut länken */
-          let link = 'https://';
-
-          /* Kolla om det inte enbart är en länk vi skickar */
-          if(splitStr[1].includes(' ')){
-
-            /* Kolla om resten av meddelandet innehåller ett mellanslag */
-            /* Om meddelandet innehåller ett mellanslag, byt ut det så vi kan dela det. */
-            splitStr[1] = splitStr[1].replace(' ', '#');
-
-            /* Plocka ut länken */
-            link += splitStr[1].split('#')[0];
-
-            /* Sätt ihop meddelandet */
-            actualMessage = splitStr[0] + '<a href="' + link + '"> ' + link + '</a> ' + splitStr[1].split('#')[1];
-
-
-          } else {
-            /* Om det inte finns ett till mellanslag. Så är länken meddelandet. */
-            link += splitStr[1];
-            actualMessage = splitStr[0] + '<a href="' + link + '"> ' + link + '</a>';
+            actualMessage.push(word);
           }
+          actualMessage = actualMessage.join(' ');
+          //
+          // /* Dela vid länkens början */
+          // let splitStr = message.textmessage.split('https://');
+          //
+          // /* Dela meddelandet och ta ut länken */
+          // let link = 'https://';
+          //
+          // /* Kolla om det inte enbart är en länk vi skickar */
+          // if(splitStr[1].includes(' ')){
+          //
+          //   /* Kolla om resten av meddelandet innehåller ett mellanslag */
+          //   /* Om meddelandet innehåller ett mellanslag, byt ut det så vi kan dela det. */
+          //   splitStr[1] = splitStr[1].replace(' ', '#');
+          //
+          //   /* Plocka ut länken */
+          //   link += splitStr[1].split('#')[0];
+          //
+          //   /* Sätt ihop meddelandet */
+          //   actualMessage = splitStr[0] + '<a href="' + link + '"> ' + link + '</a> ' + splitStr[1].split('#')[1];
+          //
+          //
+          // } else {
+          //   /* Om det inte finns ett till mellanslag. Så är länken meddelandet. */
+          //   link += splitStr[1];
+          //   actualMessage = splitStr[0] + '<a href="' + link + '"> ' + link + '</a>';
+          // }
         }
 
         textmessage.innerHTML = actualMessage;
