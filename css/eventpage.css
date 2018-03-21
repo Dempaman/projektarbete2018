@@ -34,7 +34,6 @@ html, body {
   .eventImage, .googleMapImg {
     height: 100%;
     width: 305px;
-
   }
 
   #imageHolder {
@@ -423,7 +422,7 @@ div.googleMapDiv > img {
   color: #597dbc;
 }
 .textmessageWrapper span {
-  margin-bottom: -2px;
+  margin-bottom: -5px;
   display: flex;
   align-items: end;
 }
@@ -451,6 +450,9 @@ div.googleMapDiv > img {
   outline: none;
   margin: 4px 0px;
   height: 80px;
+}
+iframe .main {
+  border: 1px solid #f2f2f2;
 }
 #meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:first-child {
   margin: 0px 4px;
@@ -523,7 +525,7 @@ div.googleMapDiv > img {
   margin: 0px;
   padding: 0px;
 }
-.dropDownWrapper > ul > li {
+.dropDownWrapper ul > li {
   cursor: pointer;
   margin: 0px;
   padding: 13px 18px;
@@ -531,7 +533,7 @@ div.googleMapDiv > img {
   background-color: #f8f8f8;
   border-bottom: 1px solid #efefef;
 }
-.dropDownWrapper > ul > li:hover {
+.dropDownWrapper ul > li:hover {
   color: #ededed;
   background-color: #8f8f8f;
   border-bottom: 1px solid #7e7e7e;
@@ -639,7 +641,7 @@ div.googleMapDiv > img {
   animation-name: fadein;
   animation-duration: 0.5s;
 }
-.dropDownWrapper > ul > li {
+.dropDownWrapper  ul > li {
   padding: 17px 35px;
   margin: 0px;
   color: #6e6e6e;
@@ -649,14 +651,27 @@ div.googleMapDiv > img {
 .dropDownWrapper > ul > li:first-child {
   border-top: 2px solid #878787;
 }
-.dropDownWrapper > ul > li:hover {
+.dropDownWrapper ul > li:hover {
   color: #222;
   background-color: #fff;
   border-bottom: 1px solid #efefef;
 }
 
+/* Share Menu */
+div.shareMenu {
+  position: absolute;
+  width: 100%;
+  right: 100%;
+  top: 33%;
+  margin: 0px 4px;
+  border-top: 2px solid #878787;
+  box-shadow: -3px 5px 7px #bcbcbc;
+  animation-name: fadein;
+  animation-duration: 0.5s;
+}
+
 /* Icons */
-.dropDownWrapper > ul > li > i {
+.dropDownWrapper ul > li > i {
   margin-right: 6px;
   font-size: 1.2em;
 }
@@ -787,6 +802,12 @@ div.googleMapDiv > img {
   #meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:first-child > iframe {
     width: 80px;
   }
+  div.shareMenu {
+    right: auto;
+    top: auto;
+    bottom: auto;
+    margin: 4px 0px;
+  }
 }
 
 /* MEDIA QUERIES ENSKILT EVENT */
@@ -803,7 +824,7 @@ div.googleMapDiv > img {
   #meetupWrapper > div div.meetupInfo p:nth-child(2){
     max-width: 370px;
     word-wrap: break-word;
-    max-height: 337px;
+    max-height: 275px;
     overflow-y: auto;
   }
 

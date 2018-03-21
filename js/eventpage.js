@@ -1614,7 +1614,10 @@ function pageLoaded(){
     // Interesting ? https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
     let htmlScroll = document.getElementsByTagName('html')[0];
 
-    recursiveScroll();
+    if(getLocationInfo()[1]){
+      recursiveScroll();
+    }
+
     function recursiveScroll(count = 0){
       console.log('Scrolling: ' + count);
       let meetup = document.getElementById('meetup-' + getLocationInfo()[1]);

@@ -262,8 +262,10 @@ function printMessage(type, message, timer = 8000, delay = 0, limit = 2){
 
     // Remove it after the timer.
     setTimeout(function(){
-      messageHolder.removeChild(messageWrapper);
-      count--;
+      if(messageWrapper){
+        messageHolder.removeChild(messageWrapper);
+        count--;
+      }
     }, 440)
   });
 

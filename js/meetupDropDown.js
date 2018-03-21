@@ -13,6 +13,7 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
       }
       if(!target.className.includes('doNotCloseThis')){
         toggleWrapper(true);
+        toggleShareMenu(true, meetupKey);
         window.removeEventListener('click', printCloseIfNotCenter);
         console.log('Closed with closeIfNotCenter');
       }
@@ -61,16 +62,13 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
     /* Skapa "Dela" */
     let dropDownShare = document.createElement('li');
     dropDownShare.innerHTML = '<i class="mdi mdi-share-variant"></i> Dela';
+    dropDownShare.classList.add('doNotCloseThis');
     dropDownList.appendChild(dropDownShare);
 
     /* EventListener för "Notiser" */
-    dropDownShare.addEventListener('click', function(){
-
-      var strWindowFeatures = "height=550,width=530";
-
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=https://dempaman.github.io/projektarbete2018-meWent/eventpage.html?event=${eventID}&meetup=${meetupKey}&whyDoesThisNotWork=sadFace`, '', strWindowFeatures);
-
-    });
+    dropDownShare.eventID = eventID;
+    dropDownShare.meetupKey = meetupKey;
+    dropDownShare.addEventListener('click', openShareMenu);
 
 
     /* Gör enbart nedanstående om personen är admin eller creator */
@@ -129,7 +127,6 @@ function toggleMeetupDropDown(event, meetupKey, eventID, admin, creator){
           console.log('Removing listener');
           window.removeEventListener('click', printCloseIfNotCenter);
       }
-
   }
 
   /* Remove Meetup function */
@@ -282,3 +279,120 @@ function listenForBellChanges(htmlObj, meetupKey){
     console.error('No user logged in');
   }
 }
+function openShareMenu(event){
+    let target = event.target;
+    if(target.nodeName == 'I'){
+      target = target.parentNode;
+    }
+
+    let eventID = target.eventID;
+    let meetupKey = target.meetupKey;
+
+    let shareMenuDiv = document.getElementById('shareMenu' + meetupKey);
+    if(shareMenuDiv){
+        toggleShareMenu(false, meetupKey);
+    } else {
+       shareMenuDiv = document.createElement('div');
+
+       shareMenuDiv.setAttribute('id', 'shareMenu' + meetupKey);
+       shareMenuDiv.classList.add('shareMenu');
+       let shareMenuUL = document.createElement('ul');
+
+       let shareMenuFacebook = document.createElement('li');
+       shareMenuFacebook.innerHTML = '<i class="mdi mdi-facebook"></i> Facebook';
+
+       let shareMenuCopy = document.createElement('li');
+       shareMenuCopy.innerHTML = '<i class="mdi mdi-content-copy"></i> Kopiera länk';
+
+       let shareMenuSlack = document.createElement('li');
+       shareMenuSlack.innerHTML = '<i class="mdi mdi-slack"></i> Slack';
+
+       /* append */
+       shareMenuUL.appendChild(shareMenuFacebook);
+       //shareMenuUL.appendChild(shareMenuSlack); // Slack is disabled for now!
+       shareMenuUL.appendChild(shareMenuCopy);
+
+
+       shareMenuDiv.appendChild(shareMenuUL);
+
+       event.target.parentNode.parentNode.appendChild(shareMenuDiv);
+       /* EventListeners */
+
+       /* Facebook */
+       shareMenuFacebook.addEventListener('click', function(){
+         var strWindowFeatures = "height=550,width=530";
+
+         window.open(`https://www.facebook.com/sharer/sharer.php?u=https://dempaman.github.io/projektarbete2018-meWent/eventpage.html?event=${eventID}&meetup=${meetupKey}&whyDoesThisNotWork=sadFace`, '', strWindowFeatures);
+
+         shareMenuDiv.parentNode.removeChild(shareMenuDiv);
+       });
+
+       /* Slack */
+       shareMenuSlack.addEventListener('click', function(){
+         printMessage('default', 'Delad på slack');
+         shareMenuDiv.parentNode.removeChild(shareMenuDiv);
+       });
+
+       /* Copy Pasta */
+       shareMenuCopy.addEventListener('click', function(){
+         fallbackCopyTextToClipboard('https://dempaman.github.io/projektarbete2018-meWent/eventpage.html?event=' + eventID + '&meetup='+meetupKey);
+         printMessage('default', 'Copied to clipboard');
+         shareMenuDiv.parentNode.removeChild(shareMenuDiv);
+       });
+    }
+  }
+
+  function toggleShareMenu(close = false, meetupKey){
+
+      let shareMenuDiv = document.getElementById('shareMenu' + meetupKey);
+      if(shareMenuDiv){
+        if(shareMenuDiv.className.includes('hidden') && !close){
+          //window.addEventListener('click', printCloseIfNotCenter);
+          shareMenuDiv.classList.remove('hidden');
+        } else if(!shareMenuDiv.className.includes('hidden')){
+            shareMenuDiv.classList.add('hidden');
+            console.log('Removing listener');
+            //window.removeEventListener('click', printCloseIfNotCenter);
+        }
+      }
+  }
+
+  function fallbackCopyTextToClipboard(text) {
+    var textArea = document.createElement("textarea");
+
+    // Place in top-left corner of screen regardless of scroll position.
+    textArea.style.position = 'fixed';
+    textArea.style.top = 0;
+    textArea.style.left = 0;
+
+    // Ensure it has a small width and height. Setting to 1px / 1em
+    // doesn't work as this gives a negative w/h on some browsers.
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+
+    // We don't need padding, reducing the size if it does flash render.
+    textArea.style.padding = 0;
+
+    // Clean up any borders.
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+
+    // Avoid flash of white box if rendered for any reason.
+    textArea.style.background = 'transparent';
+
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      var successful = document.execCommand('copy');
+      var msg = successful ? 'successful' : 'unsuccessful';
+      console.log('Fallback: Copying text command was ' + msg);
+    } catch (err) {
+      console.error('Fallback: Oops, unable to copy', err);
+    }
+
+    document.body.removeChild(textArea);
+  }
