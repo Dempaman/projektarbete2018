@@ -21,7 +21,7 @@
 
 .profileHolder > div > div:first-child {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   padding: 0px 3px 0px 4px;
 }
 
@@ -40,7 +40,6 @@
 /* Information (Name + sid) */
 .profileHolder > div > div > span:nth-child(2), .friendWrapper .nameAndSidHolder > span:last-child  {
   color: #8f8f8f;
-  margin-left: 4px;
 }
 
 .profileHolder > div > div > span:first-child, .friendWrapper .nameAndSidHolder > span:first-child {
