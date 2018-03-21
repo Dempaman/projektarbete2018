@@ -450,6 +450,7 @@ div.googleMapDiv > img {
   border: none;
   outline: none;
   margin: 4px 0px;
+  height: 80px;
 }
 #meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:first-child {
   margin: 0px 4px;
@@ -780,6 +781,13 @@ div.googleMapDiv > img {
     max-height: 337px;
     overflow-y: auto;
   }
+
+/* Spotify MEDIA QUERY */
+@media screen and (max-width: 470px){
+  #meetupWrapper > div > div.moreMeetupInfoDiv div.messageWrapper p:first-child > iframe {
+    width: 80px;
+  }
+}
 
 /* MEDIA QUERIES ENSKILT EVENT */
 @media screen and (min-width: 1000px){
