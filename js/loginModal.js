@@ -426,7 +426,7 @@ function retrieveLoginModalContent(){
     promise
     .catch(function(error){
       console.log(error.message);
-      //printMessage('error', 'ah ah ah you didnt say the magic word..') // If some error occurs it will print the message
+      printMessage('error', error.message);
     });
   });
 
@@ -442,7 +442,7 @@ function retrieveLoginModalContent(){
         printMessage('error', ' fel lösenordet matchar inte');
         txtPassword.classList.add('errorBorder')
         txtPassword2.classList.add('errorBorder')
-        
+
       }else if (name.length < 3){
         printMessage('error', 'för kort namn');
       }else if (name.length > 24){
