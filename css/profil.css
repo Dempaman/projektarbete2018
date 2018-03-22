@@ -76,6 +76,7 @@ main>h2 {
 }
 
 #tellMeMore {
+  display: hidden;
   cursor: pointer;
   outline: none;
   /* display: inline-block; */
@@ -176,9 +177,11 @@ main>h2 {
   justify-content: center;
   align-items: center;
   text-align: center;
+  margin-bottom: 2rem;
 }
 
 .userDefaultText {
+  display: none;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -452,9 +455,10 @@ main>h2 {
 .attending>h4, .created>h4 {
   /* margin-top: 1rem; */
   text-transform: capitalize;
+  font-size: 1.1rem;
   margin-bottom: 0.5rem;
   font-weight: bold;
-  color: green;
+  color: #232323;
 }
 
 .meetups-container {
@@ -476,6 +480,7 @@ main>h2 {
 }
 
 .created-meetups-container>h2 {
+  display: none;
   margin-top: 2rem;
   align-self: center;
 }
@@ -491,6 +496,7 @@ main>h2 {
 }
 
 .joind-meetups-container>h2 {
+  display: none;
   margin-top: 2rem;
   align-self: center;
 }
@@ -585,7 +591,7 @@ main>h2 {
   font-weight: lighter;
   margin-bottom: 1rem;
   width: 80%;
-  max-width: 320px;
+  max-width: 265px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -624,7 +630,7 @@ main>h2 {
   margin-left: -5px;
   border-width: 10px;
   border-style: solid;
-  border-color: #232323 transparent transparent transparent;
+  border-color: #606060 transparent transparent transparent;
 }
 
 .meetup-name:hover+.hide, .hide:hover {
@@ -634,8 +640,20 @@ main>h2 {
   -o-transition: 0.5s;
   transition: 0.5s;
   visibility: visible;
-  background-color: #232323;
-  top: -80%;
+  background-color: #606060;
+  top: -40%;
+  transform: translate(-50%, -100%);
+}
+
+.hide.show{
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s;
+  visibility: visible;
+  background-color: #606060;
+  top: -40%;
   transform: translate(-50%, -100%);
 }
 
@@ -730,6 +748,8 @@ main>h2 {
   transform: translate(-50%, -100%);
 }
 
+
+
 /* .meetup-name:hover + .hide, .hide:hover{
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
@@ -753,6 +773,8 @@ main>h2 {
   margin-bottom: 1rem;
   margin-left: 6rem;
   padding-right: 1rem;
+
+  text-transform: capitalize;
 }
 
 .text-holder {
