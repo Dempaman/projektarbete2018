@@ -1,119 +1,10 @@
 window.addEventListener('load', profilFunction);
 
-//eventpage.html?eventid=501710&meetup=-z1458127xasd
-//VIKTIG
+var dataList = [];
+var createMeetupIdList = [];
 
-function saveUserInfo(event) {
-
-    let coloProfile = '#09035F';
-    let joinMeetupColor = '#333333';
-    let createMeetupColor = '#C05454';
-    let toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
-    let genderTrue = false;
-
-    let info = {
-      profilcolor: coloProfile,
-      meetupcolor: joinMeetupColor,
-      createcolor: createMeetupColor,
-      story: toldStory,
-      gender: genderTrue
-    }
-  
-
-    // if (user.info) {
-    //   console.log('user.info is true');
-    //   const userInfo = user.info;
-    //
-    //   if (userInfo.story) {
-    //     console.log('user.info.story is true ');
-    //     userDescription.firstElementChild.innerText = userInfo.story;
-    //     nameOnUser.setAttribute("placeholder", userInfo.story);
-    //     toldStory = userInfo.story;
-    //   } else {
-    //     userDescription.firstElementChild.innerText = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
-    //     nameOnUser.setAttribute("placeholder", 'Vem är du?');
-    //     toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
-    //   }
-    //
-    //
-    //   if (userInfo.gender) {
-    //     genderInfo.style.display = 'block';
-    //
-    //     console.log('userinfo.gender is true');
-    //     //nameOnUser.setAttribute("placeholder", 'Vem är du?');
-    //     if (userInfo.gender === "kvinna") {
-    //       female.checked = true;
-    //       genderInfo.innerText = userInfo.gender;
-    //       genderTrue = userInfo.gender;
-    //
-    //       // var genders = document.getElementsByName("gender");
-    //       // var selectedGender;
-    //       //
-    //       // for (var i = 0; i < genders.length; i++) {
-    //       //   if (genders[i].checked)
-    //       //     selectedGender = genders[i].value;
-    //     } else if (userInfo.gender === "man") {
-    //       man.checked = true;
-    //       genderInfo.innerText = userInfo.gender;
-    //       genderTrue = userInfo.gender;
-    //     } else if (userInfo.gender === "other") {
-    //       other.checked = true;
-    //       genderInfo.innerText = userInfo.gender;
-    //       genderTrue = userInfo.gender;
-    //     }
-    //   } else {
-    //     genderInfo.style.display = 'none';
-    //   }
-    //
-    // } else {
-    //   console.log('user.info is false');
-    //   userDescription.firstElementChild.innerText = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
-    // }
-    //
-    // saveFormBtn.addEventListener('click', function() {
-    //   console.log(event.type);
-    //   for (var i = 0; i < genders.length; i++) {
-    //     if (genders[i].checked)
-    //       genderTrue = genders[i].value;
-    //   }
-    //   coloProfile = profileInputColor.value;
-    //   joinMeetupColor = meetupInputColor.value;
-    //   createMeetupColor = createInputColor.value;
-    //
-    //   if (yourStory.value !== '') {
-    //     toldStory = yourStory.value;
-    //   } else {
-    //     toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...'
-    //   }
-    //
-    //   if (nameOnUser.value !== '') {
-    //     db.ref('/users/' + user.uniqueID + '/fullname').set(nameOnUser.value);
-    //   } else {
-    //     nameOnUser.value = user.fullname;
-    //     db.ref('/users/' + user.uniqueID + '/fullname').set(nameOnUser.value);
-    //   }
-    //
-    //     db.ref('/users/' + user.uniqueID + '/info').set(info);
-    //
-    // });
-
-
-}
-
-
-
-function fetchUserInfo(userId) {
-  // Display user info tags
-  let fullName = document.getElementById('user-name');
-  let genderInfo = document.getElementById('genderInfo');
-  let genderSelect = document.getElementById('genderSelect');
-  let userDescription = document.getElementById('user-description');
-  let userDefaultText = document.getElementsByClassName('userDefaultText')[0];
-
-  // CARD COLORS
-  let jonidCards = document.getElementsByClassName('join-single-meetup');
-  let createdCards = document.getElementsByClassName('create-single-meetup');
-  let profileColorCard = document.getElementsByClassName('user')[0];
+function saveUserInfo(user) {
+  console.log('inside saveuserinfo :)');
 
   // user info input tags
   let nameOnUser = document.getElementById('nameOnUser');
@@ -128,33 +19,218 @@ function fetchUserInfo(userId) {
   let meetupInputColor = document.getElementById('joindColor');
   let createInputColor = document.getElementById('createMeetColor');
 
-  // SAVE BUTTON VIKTIG
-  let saveFormBtn = document.getElementById('save');
+
+
+  if (nameOnUser.value !== '') {
+    db.ref('/users/' + user.uniqueID + '/fullname').set(nameOnUser.value);
+    //console.log('curent datalist ', dataList);
+    createMeetupIdList;
+
+    for (var z = 0; z < createMeetupIdList.length; z++) {
+      db.ref('meetups/' + createMeetupIdList[z]).on('value', function(snapshot) {
+        let creation = snapshot.val();
+
+        dataList;
+        //  console.log(creation);
+
+        for (var i = 0; i < dataList.length; i++) {
+          let eventMeetupId = createMeetupIdList[z];
+          let myMeetupId = dataList[i];
+          for (let x in creation) {
+            if (x === myMeetupId) {
+              db.ref('/meetups/' + eventMeetupId + '/' + myMeetupId + '/creator/fullname').set(nameOnUser.value);
+            }
+          }
+        }
+
+      });
+    }
+  } else {
+    db.ref('/users/' + user.uniqueID + '/fullname').set(user.fullname);
+
+  }
+
+  let coloProfile = '#09035F';
+  let joinMeetupColor = '#333333';
+  let createMeetupColor = '#C05454';
+  let toldStory = '';
+  let genderTrue = false;
+  console.log(profileInputColor.value);
+  console.log(meetupInputColor.value);
+  console.log(createInputColor.value);
+
+
+  for (var i = 0; i < genders.length; i++) {
+    if (genders[i].checked)
+      console.log(genders[i].value);
+    genderTrue = genders[i].value;
+  }
+
+  if (yourStory.value !== '') {
+      toldStory = yourStory.value;
+    } else {
+      toldStory = '';
+    }
+
+
+  let info = {
+    profilcolor: coloProfile,
+    meetupcolor: joinMeetupColor,
+    createcolor: createMeetupColor,
+    story: toldStory,
+    gender: genderTrue
+  }
+
+
+ db.ref('/users/' + user.uniqueID + '/info').set(info);
+
+ fetchUserInfo(user.uniqueID);
+
+
+  // if (user.info) {
+  //   console.log('user.info is true');
+  //   const userInfo = user.info;
+  //
+  //   if (userInfo.story) {
+  //     console.log('user.info.story is true ');
+  //     userDescription.firstElementChild.innerText = userInfo.story;
+  //     nameOnUser.setAttribute("placeholder", userInfo.story);
+  //     toldStory = userInfo.story;
+  //   } else {
+  //     userDescription.firstElementChild.innerText = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
+  //     nameOnUser.setAttribute("placeholder", 'Vem är du?');
+  //     toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
+  //   }
+  //
+  //
+  //   if (userInfo.gender) {
+  //     genderInfo.style.display = 'block';
+  //
+  //     console.log('userinfo.gender is true');
+  //     //nameOnUser.setAttribute("placeholder", 'Vem är du?');
+  //     if (userInfo.gender === "kvinna") {
+  //       female.checked = true;
+  //       genderInfo.innerText = userInfo.gender;
+  //       genderTrue = userInfo.gender;
+  //
+  //       // var genders = document.getElementsByName("gender");
+  //       // var selectedGender;
+  //       //
+  //       // for (var i = 0; i < genders.length; i++) {
+  //       //   if (genders[i].checked)
+  //       //     selectedGender = genders[i].value;
+  //     } else if (userInfo.gender === "man") {
+  //       man.checked = true;
+  //       genderInfo.innerText = userInfo.gender;
+  //       genderTrue = userInfo.gender;
+  //     } else if (userInfo.gender === "other") {
+  //       other.checked = true;
+  //       genderInfo.innerText = userInfo.gender;
+  //       genderTrue = userInfo.gender;
+  //     }
+  //   } else {
+  //     genderInfo.style.display = 'none';
+  //   }
+  //
+  // } else {
+  //   console.log('user.info is false');
+  //   userDescription.firstElementChild.innerText = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...';
+  // }
+  //
+  // saveFormBtn.addEventListener('click', function() {
+  //   console.log(event.type);
+  //   for (var i = 0; i < genders.length; i++) {
+  //     if (genders[i].checked)
+  //       genderTrue = genders[i].value;
+  //   }
+  //   coloProfile = profileInputColor.value;
+  //   joinMeetupColor = meetupInputColor.value;
+  //   createMeetupColor = createInputColor.value;
+  //
+  //   if (yourStory.value !== '') {
+  //     toldStory = yourStory.value;
+  //   } else {
+  //     toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...'
+  //   }
+  //
+  //   if (nameOnUser.value !== '') {
+  //     db.ref('/users/' + user.uniqueID + '/fullname').set(nameOnUser.value);
+  //   } else {
+  //     nameOnUser.value = user.fullname;
+  //     db.ref('/users/' + user.uniqueID + '/fullname').set(nameOnUser.value);
+  //   }
+  //
+  //     db.ref('/users/' + user.uniqueID + '/info').set(info);
+  //
+  // });
+
+
+}
+
+
+// Hämtar och skriver ut informatuionen som du har om det finns någon
+function fetchUserInfo(userId) {
+  // Display user info tags
+  let fullName = document.getElementById('user-name');
+  let genderInfo = document.getElementById('genderInfo');
+  let genderSelect = document.getElementById('genderSelect');
+  let userDescription = document.getElementById('user-description');
+  let userDefaultText = document.getElementsByClassName('userDefaultText')[0];
+
+  // CARD COLORS
+  let jonidCards = document.getElementsByClassName('join-single-meetup');
+  let createdCards = document.getElementsByClassName('create-single-meetup');
+  let profileColorCard = document.getElementsByClassName('user')[0];
+
+
+  // user info input tags
+  let nameOnUser = document.getElementById('nameOnUser');
+  let yourStory = document.getElementById('yourStory');
+  // radio
+  let genders = document.getElementsByName('gender');
+  let female = document.getElementById('kvinna');
+  let man = document.getElementById('man');
+  let other = document.getElementById('other');
+  // color input tags
+  let profileInputColor = document.getElementById('profileCard');
+  let meetupInputColor = document.getElementById('joindColor');
+  let createInputColor = document.getElementById('createMeetColor');
+
+
   console.log('inside fetchUserInfo function');
 
 
   db.ref('/users/' + userId).on('value', function(snapshot) {
     let userInfo = snapshot.val();
-    console.log(userInfo);
+    //console.log(userInfo);
 
-    nameOnUser.setAttribute("placeholder", userInfo.fullname);
+    nameOnUser.setAttribute("value", userInfo.fullname);
     fullName.innerText = userInfo.fullname;
 
     if (userInfo.info) {
-      if (userInfo.info.gender) {
-        console.log();
-        for (var i = 0; i < genders.length; i++) {
-          if (genders[i].checked)
-          genderInfo.style.display = 'block';
-          genderSelect.innerText = genders[i].value;
-        }
-      }else {
-        genderInfo.style.display = 'none';
+
+      yourStory.setAttribute("placeholder", userInfo.info.story);
+      yourStory.setAttribute("value", userInfo.info.story);
+      if (userInfo.info.story) {
+        userDescription.style.display = 'block';
+        userDescription.innerText = userInfo.info.story;
+        userDefaultText.style.display = 'none';
       }
 
-      profileInputColor.value =  userInfo.info.profilcolor;
-      meetupInputColor.value =  userInfo.info.meetupcolor;
-      createInputColor.value = userInfo.info.createcolor;
+      // if (userInfo.info.gender) {
+      //   console.log();
+      //   for (var i = 0; i < genders.length; i++) {
+      //     if (genders[i].checked)
+      //       genderInfo.style.display = 'block';
+      //     genderSelect.innerText = genders[i].value;
+      //   }
+      // } else {
+        genderInfo.style.display = 'none';
+      // }
+
+      // profileInputColor.value = userInfo.info.profilcolor;
+      // meetupInputColor.value = userInfo.info.meetupcolor;
+      // createInputColor.value = userInfo.info.createcolor;
 
       if (jonidCards) {
         for (var i = 0; i < jonidCards.length; i++) {
@@ -166,67 +242,59 @@ function fetchUserInfo(userId) {
           createdCards[i].firstElementChild.style.backgroundColor = userInfo.info.createcolor;
         }
       }
-
       profileColorCard.firstElementChild.style.backgroundColor = userInfo.info.profilcolor;
 
-
-    }else {
+    } else {
       userDescription.style.display = 'none';
       genderInfo.style.display = 'none';
     }
 
   });
 
-
 }
 
+//
+// function ellisisTrue(event) {
+//
+//   let labelClick = event.target;
+//   let textFakeWidth = event.target.offsetWidth;
+//   let textRealWidth = event.target.parentElement.lastElementChild.offsetWidth;
+//   let tooltip = event.target.parentElement.children[2];
+//
+//
+//   if (textFakeWidth < textRealWidth) {
+//     //console.log('textFakeWidth is smaller');
+//
+//     labelClick.addEventListener('click', function(event) {
+//
+//       if (tooltip.className === 'hide-small') {
+//         tooltip.classList.add('show');
+//         //console.log('added show classname = ', tooltip.className);
+//         //console.log(event.target);
+//       } else {
+//         tooltip.classList.remove('show');
+//         //console.log('removed show classname = ', tooltip.className);
+//       }
+//     });
+//
+//     tooltip.addEventListener('click', function(event) {
+//
+//       if (tooltip.className === 'hide-small') {
+//         tooltip.classList.add('show');
+//         //console.log(event.target.className);
+//       } else {
+//         tooltip.classList.remove('show');
+//         // console.log(event.target.className);
+//       }
+//     });
+//   } else {
+//     tooltip.style.display = "none";
+//     //console.log('textFakeWidth is NOT smaller');
+//   }
+// }
 
-function profilePage() {
-  // console.log(window.location.href);
-  // console.log(window.location.pathname);
-  // console.log('test ' + window.location.search);
 
-}
-
-function ellisisTrue(event) {
-
-  let labelClick = event.target;
-  let textFakeWidth = event.target.offsetWidth;
-  let textRealWidth = event.target.parentElement.lastElementChild.offsetWidth;
-  let tooltip = event.target.parentElement.children[2];
-
-
-  if (textFakeWidth < textRealWidth) {
-    //console.log('textFakeWidth is smaller');
-
-    labelClick.addEventListener('click', function(event) {
-
-      if (tooltip.className === 'hide-small') {
-        tooltip.classList.add('show');
-        //console.log('added show classname = ', tooltip.className);
-        //console.log(event.target);
-      } else {
-        tooltip.classList.remove('show');
-        //console.log('removed show classname = ', tooltip.className);
-      }
-    });
-
-    tooltip.addEventListener('click', function(event) {
-
-      if (tooltip.className === 'hide-small') {
-        tooltip.classList.add('show');
-        //console.log(event.target.className);
-      } else {
-        tooltip.classList.remove('show');
-        // console.log(event.target.className);
-      }
-    });
-  } else {
-    tooltip.style.display = "none";
-    //console.log('textFakeWidth is NOT smaller');
-  }
-}
-
+// TOLTIP hover funktion
 function ellipsisEvents(mainText, hide) {
   // console.log(mainText);
   // console.log('inside ellipsisEvents function' );
@@ -301,6 +369,7 @@ function ifUserIsTrue() {
 
   if (pageUserId && userLog) {
 
+
     joindContainer.style.display = "none";
 
     db.ref('/users/').once('value', function(snapshot) {
@@ -315,6 +384,17 @@ function ifUserIsTrue() {
           userName.innerText = allUsers[x].fullname;
           userImg.src = allUsers[x].avatarURL;
           uniqueID = allUsers[x].uniqueID;
+              document.getElementsByClassName('userDefaultText')[0].style.display = 'none';
+              document.getElementById('tellMeMore').disabled = true;
+            document.getElementById('tellMeMore').style.display = 'none';
+           fetchUserInfo(uniqueID);
+
+           // if (allUsers[x].info.story) {
+           //   console.log('You have a story, good for you');
+           // }else {
+           //   document.getElementsByClassName('user-presentation-container')[0].style.marginBottom = '5rem';
+           // }
+
 
           userCreated = allUsers[x].createdMeetups;
           meetups = allUsers[x].meetups;
@@ -324,30 +404,37 @@ function ifUserIsTrue() {
             let counter = 0;
             let otherEventId;
             let otherMeetUpId;
+            dataList = [];
             for (let obj in userCreated) {
               counter += Object.keys(userCreated[obj]).length;
 
               otherEventId = obj;
               otherMeetUpId = userCreated[obj];
 
+
               for (let z in otherMeetUpId) {
+                dataList.push(z);
+                console.log('dataList later ', dataList);
 
                 db.ref('meetups/' + otherEventId).once('value', function(snapshot) {
                   let snap = snapshot.val();
                   // console.log(z);
-                  // console.log(snap[z]);
+                  let date;
+
                   if (z) {
+                    date = snap[z].eventDate.split('kl')[0] + 'kl ';
                     let div = document.createElement('div');
+                    div.id = 'meetup-' + snap[z].key;
                     div.className = "create-single-meetup";
                     div.innerHTML = `<div class="event-backgound">
                         <div class="meetup-holder">
                           <p class="meetup-min">Meetup</p>
 
                             <p class="meetup-name">${snap[z].name}</p>
-                            <p class="hide">${snap[z].name}<br> <br>
-                                ~ Av ${snap[z].creator.fullname}
+                            <p class="hide"><span>${snap[z].name}</span><br> <br>
+                                ~ Av <span> ${snap[z].creator.fullname} </span>
                              </p>
-                             <p class="main-allways-hidden">eventnamn</p>
+                             <p class="main-allways-hidden">${snap[z].creator.fullname}</p>
                           <p class="meetup-creator">~ Av ${snap[z].creator.fullname}</p>
                         </div>
                       </div>
@@ -358,9 +445,9 @@ function ifUserIsTrue() {
                         <div class="user-meetup-text">
                           <div class="event-holder">
                             <p class="min-text">Event</p>
-                            <p class="main-text">eventnamn</p>
-                            <p class="hide-small">eventnamn</p>
-                            <p class="main-allways-hidden">eventnamn</p>
+                            <p class="main-text">${snap[z].eventName}</p>
+                            <p class="hide-small">${snap[z].eventName}</p>
+                            <p class="main-allways-hidden">${snap[z].eventName}</p>
                           </div>
                           <div class="time-holder">
                             <p class="min-text">Tid</p>
@@ -415,43 +502,100 @@ function ifUserIsTrue() {
 
     fetchUserInfo(userLog.uniqueID);
 
+    // Form display button
+    let userEdit = document.getElementById('tellMeMore');
+    let userStory = document.getElementsByClassName('user-story')[0];
+    let userDescription = document.getElementById('user-description');
+    // let closeTellMeMore = document.getElementById('closeTellMeMore');
+    let saveBtn = document.getElementById('save');
+    // console.log(saveBtn);
+    //console.log('userEdit ' + userEdit);
+    userEdit.addEventListener('click', function(event) {
+
+      if (userStory.className === 'user-story') {
+        userStory.classList.add('show');
+        userDescription.style.display = 'none';
+        userEdit.classList.add('abort');
+        userEdit.innerText = 'Avbryt';
+        saveBtn.style.display = 'block';
+      } else {
+        userStory.classList.remove('show');
+        userDescription.style.display = 'block';
+        userEdit.classList.remove('abort');
+        userEdit.innerText = 'Berätta om dig själv';
+        saveBtn.style.display = 'none';
+      }
+    });
+
+    // let saveFormBtn = document.getElementById('save');
+    saveBtn.addEventListener('click', function(event) {
+      saveUserInfo(userLog);
+
+      if (userStory.className === 'user-story') {
+        userStory.classList.add('show');
+        userDescription.style.display = 'none';
+        userEdit.classList.add('abort');
+        userEdit.innerText = 'Avbryt';
+        saveBtn.style.display = 'block';
+      } else {
+        userStory.classList.remove('show');
+        userDescription.style.display = 'block';
+        userEdit.classList.remove('abort');
+        userEdit.innerText = 'Berätta om dig själv';
+        saveBtn.style.display = 'none';
+      }
+
+    });
+
+
+
 
     // Form information
     userName.innerText = userLog.fullname;
     userImg.src = userLog.avatarURL;
     uniqueID = userLog.uniqueID;
 
+
     // Hämta alla skapade Meetups
     db.ref('users/' + uniqueID + '/createdMeetups').once('value', function(snapshot) {
       let eventObjects = snapshot.val();
+
+      createMeetupIdList = [];
 
       if (eventObjects) {
         let counter = 0;
         let eventId;
         let meetupId;
+        dataList = [];
+
         for (let obj in eventObjects) {
           counter += Object.keys(eventObjects[obj]).length;
 
           eventId = obj;
           meetupId = eventObjects[obj];
+          createMeetupIdList.push(obj);
 
           for (let x in meetupId) {
+            dataList.push(x);
 
             db.ref('meetups/' + eventId).once('value', function(snapshot) {
               let snap = snapshot.val();
+              let date;
 
               if (x) {
+                date = snap[x].eventDate.split('kl')[0] + 'kl ';
                 let div = document.createElement('div');
+                div.id = 'meetup-' + x;
                 div.className = "create-single-meetup";
                 div.innerHTML = `<div class="event-backgound">
                     <div class="meetup-holder">
                       <p class="meetup-min">Meetup</p>
 
                         <p class="meetup-name">${snap[x].name}</p>
-                        <p class="hide">${snap[x].name}<br> <br>
-                            ~ Av ${snap[x].creator.fullname}
+                        <p class="hide"><span>${snap[x].name}</span><br> <br>
+                            ~ Av <span> ${snap[x].creator.fullname} </span>
                          </p>
-                         <p class="main-allways-hidden">eventnamn</p>
+                         <p class="main-allways-hidden"> ${snap[x].creator.fullname}</p>
                       <p class="meetup-creator">~ Av ${snap[x].creator.fullname}</p>
                     </div>
                   </div>
@@ -462,13 +606,13 @@ function ifUserIsTrue() {
                     <div class="user-meetup-text">
                       <div class="event-holder">
                         <p class="min-text">Event</p>
-                        <p class="main-text">eventnamn</p>
-                        <p class="hide-small">eventnamn</p>
-                        <p class="main-allways-hidden">eventnamn</p>
+                        <p class="main-text">${snap[x].eventName}</p>
+                        <p class="hide-small">${snap[x].eventName}</p>
+                        <p class="main-allways-hidden"> ${date + snap[x].eventName}</p>
                       </div>
                       <div class="time-holder">
                         <p class="min-text">Tid</p>
-                        <p class="small-main-text ">${snap[x].time}</p>
+                        <p class="small-main-text ">${date +snap[x].time}</p>
                       </div>
                       <div class="adress-holder">
                         <p class="min-text">Adress</p>
@@ -517,21 +661,25 @@ function ifUserIsTrue() {
 
             db.ref('meetups/' + joindEventId).once('value', function(snapshot) {
               let snap = snapshot.val();
+              let date;
+
+              //  joindContainer.innerText = '';
 
               if (x) {
-
+                date = snap[x].eventDate.split('kl')[0] + 'kl ';
                 //  console.log('joind snap ',snap[x]);
                 let div = document.createElement('div');
+                div.id = 'meetup-' + snap[x].key;
                 div.className = "join-single-meetup";
                 div.innerHTML = `<div class="event-backgound-joind">
                 <div class="meetup-holder">
                   <p class="meetup-min">Meetup</p>
 
                     <p class="meetup-name">${snap[x].name}</p>
-                    <p class="hide">${snap[x].name}<br> <br>
-                        ~ Av ${snap[x].creator.fullname}
+                    <p class="hide"><span>${snap[x].name}</span><br> <br>
+                        ~ Av <span>${snap[x].creator.fullname} </span>
                      </p>
-                     <p class="main-allways-hidden">eventnamn</p>
+                     <p class="main-allways-hidden">${snap[x].creator.fullname}</p>
                   <p class="meetup-creator">~ Av ${snap[x].creator.fullname}</p>
                 </div>
               </div>
@@ -542,13 +690,13 @@ function ifUserIsTrue() {
                 <div class="user-meetup-text">
                   <div class="event-holder">
                     <p class="min-text">Event</p>
-                    <p class="main-text">eventnamn</p>
-                    <p class="hide-small">eventnamn</p>
-                    <p class="main-allways-hidden">eventnamn</p>
+                    <p class="main-text">${snap[x].eventName}</p>
+                    <p class="hide-small">${snap[x].eventName}</p>
+                    <p class="main-allways-hidden">${snap[x].eventName}</p>
                   </div>
                   <div class="time-holder">
                     <p class="min-text">Tid</p>
-                    <p class="small-main-text ">${snap[x].time}</p>
+                    <p class="small-main-text ">${date + snap[x].time}</p>
                   </div>
                   <div class="adress-holder">
                     <p class="min-text">Adress</p>
@@ -577,12 +725,7 @@ function ifUserIsTrue() {
     });
 
   } else {
-    //  console.log('Sorry! No Web Storage support');
-    //let indexPage = '/index.html';
-    //let testLocalHost = window.location.protocol + '//' + window.location.hostname + ':8000' + indexPage;
-    //let relocate = window.location.href
-    //console.log(window.location.href);
-    //console.log(testLocalHost);
+
     window.location.assign('index.html'); // kan komma att ändras i framtiden
   }
 }
@@ -590,34 +733,110 @@ function ifUserIsTrue() {
 function profilFunction(event) {
 
 
+  // console.log('datalist beging ',dataList);
   ifUserIsTrue();
 
-  // Form display button
-  let userEdit = document.getElementById('tellMeMore');
-  let userStory = document.getElementsByClassName('user-story')[0];
-  let userDescription = document.getElementById('user-description');
-  // let closeTellMeMore = document.getElementById('closeTellMeMore');
-  let saveBtn = document.getElementById('save');
-  console.log(saveBtn);
-  //console.log('userEdit ' + userEdit);
-  userEdit.addEventListener('click', function(event) {
-    console.log(event.type);
-    console.log(userStory.className);
+  // db.ref('meetups/').on('child_added', function(snapshot) {
+  //   let added = snapshot.val();
+  //   console.log(added);
+  // });
+  db.ref('meetups/').on('child_changed', function(snapshot) {
+    let changed = snapshot.val();
 
-    if (userStory.className === 'user-story') {
-      userStory.classList.add('show');
-      userDescription.style.display = 'none';
-      userEdit.classList.add('abort');
-      userEdit.innerText = 'Avbryt';
-      saveBtn.style.display = 'block';
-    } else {
-      userStory.classList.remove('show');
-      userDescription.style.display = 'block';
-      userEdit.classList.remove('abort');
-      userEdit.innerText = 'Berätta om dig själv';
-      saveBtn.style.display = 'none';
+    //    let createdDomObjects = document.getElementsByClassName('created-meetups-container')[0].children;
+
+    // for (var i = 0; i < createdDomObjects.length; i++) {
+    //   array[i]
+    // }
+
+    for (var i = 0; i < dataList.length; i++) {
+
+      for (let x in changed) {
+        if (x === dataList[i]) {
+          date = changed[x].eventDate.split('kl')[0] + 'kl ';
+          console.log(date);
+          let update = document.getElementById('meetup-' + x);
+          let meetupHolder = update.firstElementChild.firstElementChild.children;
+          let adressHolder = update.children[1].lastElementChild.lastElementChild.children;
+          let time = update.children[1].children[1].children[1].children[1];
+          console.log('time ', time);
+
+          let meetupName = meetupHolder[1];
+          let meetupNameHidden = meetupHolder[2].firstElementChild;
+          let creatorNameInHide = meetupHolder[2].lastElementChild;
+          let creatorName = meetupHolder[4];
+          let creatorNameHidden = meetupHolder[3];
+          console.log(changed[x]);
+          meetupName.innerText = changed[x].name;
+          meetupNameHidden.innerText = changed[x].name;
+          creatorNameInHide.innerText = changed[x].creator.fullname;
+          creatorName.innerText = '~ Av ' + changed[x].creator.fullname;
+          creatorNameHidden.innerText = changed[x].creator.fullname;
+
+          time.innerText = date + changed[x].time;
+
+          let adressName = adressHolder[1];
+          let adressHide = adressHolder[2];
+          let adressAleaysHiden = adressHolder[3];
+
+          adressName.innerText = changed[x].address;
+          adressHide.innerText = changed[x].address;
+          adressAleaysHiden.innerText = changed[x].address;
+
+
+
+
+          console.log('meetupName ', meetupName);
+          console.log('meetupNameHidden ', meetupNameHidden);
+          console.log('creatorNameInHide ', creatorNameInHide);
+          console.log('creatorName ', creatorName);
+          console.log('creatorNameHidden ', creatorNameHidden);
+        }
+
+      }
     }
+    //onsole.log('dataList in child changed ', dataList);
+    //console.log(changed);
 
   });
+
+  //  let meetupWrapper = document.getElementById('meetup-' + meetupKey);
+
+  // SAVE BUTTON VIKTIG
+  // let saveFormBtn = document.getElementById('save');
+  // saveFormBtn.addEventListener('click', function() {
+  //   console.log(event.type);
+  //   for (var i = 0; i < genders.length; i++) {
+  //     if (genders[i].checked)
+  //       genderTrue = genders[i].value;
+  //   }
+  //   coloProfile = profileInputColor.value;
+  //   joinMeetupColor = meetupInputColor.value;
+  //   createMeetupColor = createInputColor.value;
+  //
+  //   if (yourStory.value !== '') {
+  //     toldStory = yourStory.value;
+  //   } else {
+  //     toldStory = 'Hej och välkommeen till din Profilsida! Vi skulle gärna veta mer om dig så...'
+  //   }
+  //
+  //   if (nameOnUser.value !== '') {
+  //     db.ref('/users/' + user.uniqueID + '/fullname').set(nameOnUser.value);
+  //   } else {
+  //     nameOnUser.value = user.fullname;
+  //     db.ref('/users/' + user.uniqueID + '/fullname').set(nameOnUser.value);
+  //   }
+  //
+  //     db.ref('/users/' + user.uniqueID + '/info').set(info);
+  //
+  // });
+
+
+
+
+
+
+
+
 
 }
