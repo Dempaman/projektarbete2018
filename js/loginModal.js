@@ -460,6 +460,8 @@ function retrieveLoginModalContent(){
       const password = txtPassword.value;
       const password2 = txtPassword2.value;
       const name = nameInput.value;
+      const regexp = /^[a-zA-ZäöåÄÖÅ\s]+$/;
+
       if (password != password2) {
         //console.log('Lösenordet matchar inte')
         printMessage('error', ' fel lösenordet matchar inte');
@@ -470,6 +472,8 @@ function retrieveLoginModalContent(){
         printMessage('error', 'för kort namn');
       }else if (name.length > 24){
         printMessage('error', 'för långt namn');
+      }else if (!name.match(regexp)){
+        printMessage('error', 'använda bara bokstäver');
       }else{
         //Sign-up user if password match
         firebase.auth().createUserWithEmailAndPassword(email, password)
