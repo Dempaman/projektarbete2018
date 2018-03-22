@@ -271,7 +271,7 @@ function createMeetupListener(event){
 
     if(checkLength('Namnet', name.length, 6, 36)){
         if(checkLength('Platsnamnet', placeName.length, 4, 48)){
-            if(checkForNumber('Antal plantser', spots)){
+            if(checkForNumber('Antal platser', spots)){
                 if(checkForTime('Tid', time)){
 
                   // Skapa meetupet.
@@ -443,7 +443,7 @@ function checkForNumber(type, number){
       printMessage('error', type + ' är för få platser');
       return false;
     } else if ( number > 100){
-      printMessage('error', type + ' är för många platser');
+      printMessage('error', type + ' är för många platser, max 100st');
       return false;
     }
       return true;
