@@ -799,10 +799,12 @@ main>h2 {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
+  margin-top: 0.5rem;
   padding: 0 1rem 1rem 1rem;
 }
 
 .change-status>a {
+  position: absolute;
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
   -ms-transition: 0.5s;
