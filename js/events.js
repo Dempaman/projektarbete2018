@@ -28,24 +28,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	searchBtn.addEventListener('click', (event) => {
 		testOutPut.innerHTML = '';
-		retrieveSearchEventInfo();
+		retrieveSearchEventInfo(event);
 	})
 	selectedEvents.addEventListener('change', (event) => {
 		testOutPut.innerHTML = '';
-		defaultSearchEventInfo();
+		defaultSearchEventInfo(event);
 	})
 	selectedCity.addEventListener('change', (event) => {
 		testOutPut.innerHTML = '';
-		defaultSearchEventInfo();
+		defaultSearchEventInfo(event);
 	})
 	selectedWhen.addEventListener('change', (event) => {
 		testOutPut.innerHTML = '';
-		defaultSearchEventInfo();
+		defaultSearchEventInfo(event);
 	})
 
 	/********************Fetch from TicketMaster Api/********************/
-	function retrieveSearchEventInfo() {
-		event.preventDefault();
+	function retrieveSearchEventInfo(e) {
+		e.preventDefault();
 		let userSearch;
 		let userSearchValue = searchValue[0].value;
 		userSearchValue = userSearchValue.toLowerCase();
@@ -95,13 +95,34 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		//Fetch from TicketMaster Api in search field
-		fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?&city_ids=${userSearchValue}&rows=10&sort_by=popularity&apikey=${apiKey}`).then((response) => {
+		fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?&city_ids=${userSearchValue}&rows=20&sort_by=popularity&apikey=${apiKey}`).then((response) => {
 			return response.json();
 		}).then((json) => {
 			//spara objektet
 			let event = json.events;
-			//loopa igenom listan och ta ut den info du vill ha
-			event.forEach((event) => {
+			/* Here we sort this shit out. Willkommen ser */
+
+			/* Skapa listan */
+			var sortingArray = [];
+
+			/* Gå igenom objektet */
+			for (var obj in event) {
+					/* Skapa Tid av skiten */
+					let tidfan = new Date(event[obj].localeventdate).getTime();
+					sortingArray.push([event[obj], tidfan]);
+					console.log('Array is: ', sortingArray);
+			}
+
+			sortingArray.sort(function(a,b){
+					return a[1] - b[1];
+			});
+
+			console.log('Sorted array: ', sortingArray);
+
+			// Loopa igenom listan och ta ut den info du vill ha
+			sortingArray.forEach((event) => {
+				/* [Obj, tid] */
+				event = event[0];
 				let eventId = event.id;
 				let eventName = event.name;
 				let eventPlace = event.venue.name;
@@ -250,16 +271,36 @@ ALLA: https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&sort_by=pop
 		}
 
 
-		fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&category_ids=${selCategory}&city_ids=${selCity}&eventdate_from=${today}&eventdate_to=${selWhen}&rows=15&sort_by=popularity&apikey=${apiKey}`).then((response) => {
+		fetch(`https://app.ticketmaster.eu/mfxapi/v1/events?domain_ids=sweden&category_ids=${selCategory}&city_ids=${selCity}&eventdate_from=${today}&eventdate_to=${selWhen}&rows=20&sort_by=popularity&apikey=${apiKey}`).then((response) => {
 
 			return response.json();
 
 		}).then((json) => {
 
 			let event = json.events;
+			/* Here we sort this shit out. Willkommen ser */
 
-			event.forEach((event) => {
+			/* Skapa listan */
+			var sortingArray = [];
 
+			/* Gå igenom objektet */
+			for (var obj in event) {
+					/* Skapa Tid av skiten */
+					let tidfan = new Date(event[obj].localeventdate).getTime();
+					sortingArray.push([event[obj], tidfan]);
+					console.log('Array is: ', sortingArray);
+			}
+
+			sortingArray.sort(function(a,b){
+					return a[1] - b[1];
+			});
+
+			console.log('Sorted array: ', sortingArray);
+
+			// Loopa igenom listan och ta ut den info du vill ha
+			sortingArray.forEach((event) => {
+				/* [Obj, tid] */
+				event = event[0];
 				let eventId = event.id;
 				let eventName = event.name;
 				let eventPlace = event.venue.name;
