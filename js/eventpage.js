@@ -40,7 +40,6 @@ function retrieveMeetupInfo(eventDate){
   // This one listens to new Meetups and posts them in the DOM!
     db.ref('meetups/'+eventID).on('child_added', function(snapshot){
 
-
       let localUser = JSON.parse(localStorage.getItem('loggedInUser'));
       let eventID = getLocationInfo()[0];
       let obj = snapshot.val();
@@ -53,6 +52,9 @@ function retrieveMeetupInfo(eventDate){
       ////console.log(obj);
 
       if(!meetupKey.includes('info')){
+
+        console.log('Posting a meetup to the dom');
+
         // Skapa funktion här som lägger till ett meetupkort!
         let md = document.createElement('div');
         md.setAttribute('id', 'meetup-' + meetupKey);
@@ -61,7 +63,10 @@ function retrieveMeetupInfo(eventDate){
         meetupDivTitle.innerText = obj.name;
 
         let meetupDivDate = document.createElement('p');
-        meetupDivDate.innerText = eventDate + ' - ' + obj.time;
+        meetupDivDate.innerText = eventDate + obj.time;
+
+        console.log('Time: ' + obj.time);
+        console.log('Date: ' + eventDate);
 
 
         // Namn på skaparen av meetup och label med bild.
@@ -175,7 +180,7 @@ function retrieveMeetupInfo(eventDate){
         let cardDateLabel = document.createElement('p');
         let cardDate = document.createElement('p');
         cardDateLabel.innerText = 'Datum & Tid';
-        cardDate.innerText = eventDate + ' kl ' + obj.time;
+        cardDate.innerText = eventDate + obj.time;
 
         // Splice latitude and longitude
         let latitude = obj.latitude.substring(0,9);
@@ -190,21 +195,21 @@ function retrieveMeetupInfo(eventDate){
         googleMapDiv.setAttribute('lat', latitude);
         googleMapDiv.setAttribute('lng', longitude);
         // Just src
-        googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+        googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=16&size=400x300&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
         googleMap.setAttribute('zoom', '16');
 
         googleMap.addEventListener('click', function(){
           let currentZoom = googleMap.getAttribute('zoom');
           let newZoom = (currentZoom-0) + 1;
           googleMap.setAttribute('zoom', newZoom);
-          googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+          googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=400x300&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
         });
         googleMap.addEventListener('contextmenu', function(event){
           event.preventDefault();
           let currentZoom = googleMap.getAttribute('zoom');
           let newZoom = (currentZoom-0) - 1;
           googleMap.setAttribute('zoom', newZoom);
-          googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=600x400&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
+          googleMap.setAttribute('src', `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=${newZoom}&size=400x300&maptype=roadmap&markers=color:red%7C${latitude},${longitude}&key=${googleApiKey2}`);
         });
 
         // Data-src - Debug shit
@@ -1226,7 +1231,7 @@ function displayEventInfo(event){
 
   eventInfoText.innerHTML = `<p>${attractionText}</p>`;
 
-  retrieveMeetupInfo(event.date);
+  retrieveMeetupInfo(displayDate(event.date, event.weekDay, event.offsale, false, true));
   //updateEventInfo(event);
 }
 
@@ -1313,7 +1318,7 @@ function retrieveEventInfo(){
 
 
 //Funktion för att visa datumet lite finare :)
-function displayDate(dateStr, weekDay, offsale, attractionText = false){
+function displayDate(dateStr, weekDay, offsale, attractionText = false, meetupText = false){
 
   let date, time, year, month, day;
 
@@ -1375,6 +1380,9 @@ function displayDate(dateStr, weekDay, offsale, attractionText = false){
     }
   }
 
+  if(meetupText){
+    time = '';
+  }
 
   if(attractionText){
     if(weekDay){
