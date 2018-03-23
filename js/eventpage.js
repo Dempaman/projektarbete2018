@@ -1255,7 +1255,7 @@ function retrieveEventInfo(){
         return response.json();
       })
       .then(function(json){
-        ////console.log('EVENTOBJECT without formatting:',json);
+        console.log('EVENTOBJECT without formatting:',json);
 
         if(json.errors){
           printMessage('error', json.errors[0].description);
@@ -1284,6 +1284,11 @@ function retrieveEventInfo(){
           if(!date){
             date = event.date;
           }
+          if(!priceRanges){
+            priceRanges = 'Inga priser hittades';
+          } else {
+            priceRanges = [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max];
+          }
 
           if(!imageURL){
             ////console.log('ImageURL:', imageURL);
@@ -1293,7 +1298,7 @@ function retrieveEventInfo(){
           // createMarker(latitude, longitude);
           ////console.log('ImageUrl', imageURL);
 
-          let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale, mainCategory, event.attractions, promoter);
+          let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, priceRanges, event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale, mainCategory, event.attractions, promoter);
 
           ////console.log('EVENTOBJECT: ',eventObject);
 
