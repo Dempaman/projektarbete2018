@@ -5,25 +5,78 @@ var createMeetupIdList = [];
 var userStoryInfo;
 
 function saveUserInfo(user) {
-  console.log('inside saveuserinfo :)');
-  //fetchUserInfo(user.uniqueID);
-
   // user info input tags
   let nameOnUser = document.getElementById('nameOnUser');
   let yourStory = document.getElementById('yourStory');
+  let textarea = document.getElementsByTagName('textarea')[0];
 
-  // direct dispaly changes
+  // Display user info tags
+  let fullName = document.getElementById('user-name');
+  let genderInfo = document.getElementById('genderInfo');
+  let genderSelect = document.getElementById('genderSelect');
   let userDescription = document.getElementById('user-description');
+  let userDefaultText = document.getElementsByClassName('userDefaultText')[0];
+
+  // CARD COLORS
+  let jonidCards = document.getElementsByClassName('join-single-meetup');
+  let createdCards = document.getElementsByClassName('create-single-meetup');
+  let profileColorCard = document.getElementsByClassName('user')[0];
 
   // radio
   let genders = document.getElementsByName('gender');
   let female = document.getElementById('kvinna');
   let man = document.getElementById('man');
   let other = document.getElementById('other');
+
   // color input tags
   let profileInputColor = document.getElementById('profileCard');
   let meetupInputColor = document.getElementById('joindColor');
   let createInputColor = document.getElementById('createMeetColor');
+  //  console.log('inside fetchUserInfo function');
+
+
+  let coloProfile = '#09035F';
+  let joinMeetupColor = '#333333';
+  let createMeetupColor = '#C05454';
+  let toldStory = 'hej';
+  let genderTrue = false;
+
+  if (user.info) {
+    if (user.info.gender) {
+      genderInfo.style.display = 'block';
+      genderSelect.innerText = user.info.gender;
+
+      if (user.info.gender == 'kvinna') {
+
+        female.setAttribute('checked', true);
+      }
+      if (user.info.gender == 'man') {
+
+        man.setAttribute('checked', true);
+      }
+      if (user.info.gender == 'other') {
+
+        other.setAttribute('checked', true);
+      }
+    } else {
+      genderTrue = false;
+      genderInfo.style.display = 'none';
+    }
+
+    // if (user.info.story) {
+    //   console.log(user.info.story);
+    // //  userDescription.style.display = 'none';
+    //   toldStory = user.info.story;
+    //   userDefaultText.style.display = 'none';
+    // } else {
+    //   //console.log(userInfo.info.story);
+    // //yourStory.setAttribute("placeholder", 'vem är du?');
+    // //  userDescription.style.display = 'none';
+    // //  userDefaultText.style.display = 'none';
+    //   //userDescription.innerText = '';
+    //   //userDefaultText.style.display = 'block';
+    // }
+  }
 
   // Om du ändrar ditt namn
   if (nameOnUser.value !== '') {
@@ -52,12 +105,6 @@ function saveUserInfo(user) {
     db.ref('/users/' + user.uniqueID + '/fullname').set(user.fullname);
   }
 
-  let coloProfile = '#09035F';
-  let joinMeetupColor = '#333333';
-  let createMeetupColor = '#C05454';
-  let toldStory = 'hej';
-  let genderTrue = false;
-
 
   // color value change
   if (profileInputColor.value) {
@@ -75,9 +122,9 @@ function saveUserInfo(user) {
 
 
   if (female.checked) {
-    console.log(female.value);
+    //console.log(female.value);
     genderTrue = female.value;
-    female.setAttribute('checked', true); // är osäker på den här men den fungerar och är ett existerande attribute
+    female.setAttribute('checked', true);
   }
   if (man.checked) {
     genderTrue = man.value;
@@ -88,21 +135,19 @@ function saveUserInfo(user) {
     other.setAttribute('checked', true);
   }
 
-  // for (var i = 0; i < genders.length; i++) {
-  //   if (genders[i].checked) {
-  //     console.log(genders[i].value);
-  //     genderTrue = genders[i].value;
-  //     genders[i].setAttribute('checked', true); // är osäker på den här men den fungerar och är ett existerande attribute
-  //
-  //   }
-  // }
-
   if (yourStory.value) {
     toldStory = yourStory.value;
-  } else{
+  } else {
     toldStory = false;
-    userDescription.style.display = 'none';
+    //userDescription.style.display = 'none';
   }
+
+  // if (textarea.innerText) {
+  //   toldStory = yourStory.value;
+  // } else {
+  //   toldStory = false;
+  //   //userDescription.style.display = 'none';
+  // }
 
 
   let info = {
@@ -148,38 +193,33 @@ function fetchUserInfo(userId) {
   let profileInputColor = document.getElementById('profileCard');
   let meetupInputColor = document.getElementById('joindColor');
   let createInputColor = document.getElementById('createMeetColor');
-  console.log('inside fetchUserInfo function');
+  //  console.log('inside fetchUserInfo function');
 
 
   db.ref('/users/' + userId).on('value', function(snapshot) {
     let userInfo = snapshot.val();
-    console.log(userInfo);
+  //  console.log(userInfo);
 
 
     nameOnUser.setAttribute("value", userInfo.fullname);
     fullName.innerText = userInfo.fullname;
     if (userInfo.info) {
 
-    //  console.log(userInfo.info.story);
-      //document.getElementById('tellMeMore').innerText = 'Ändra din infortmation'
-      //  yourStory.setAttribute("placeholder", 'vem är du?');
       if (userInfo.info.story) {
-        console.log(userInfo.info.story);
-        //yourStory.setAttribute("value", userInfo.info.story);
+      //  console.log(userInfo.info.story);
         yourStory.innerText = userInfo.info.story;
         userDescription.style.display = 'block';
         userDescription.innerText = userInfo.info.story;
         userDefaultText.style.display = 'none';
       } else {
-        console.log(userInfo.info.story);
+      //  console.log(userInfo.info.story);
         yourStory.setAttribute("placeholder", 'vem är du?');
         userDescription.style.display = 'none';
-        userDescription.innerText = '';
-        //userDefaultText.style.display = 'block';
-      }
-      console.log(userInfo.info.gender);
+       userDescription.innerText = '';
+        userDefaultText.style.display = 'block';
+    }
+    // console.log(userInfo.info.gender);
       if (userInfo.info.gender) {
-
         genderInfo.style.display = 'block';
         genderSelect.innerText = userInfo.info.gender;
 
@@ -195,13 +235,6 @@ function fetchUserInfo(userId) {
 
           other.setAttribute('checked', true);
         }
-
-        // for (var i = 0; i < genders.length; i++) {
-        //   if (genders[i].checked)
-        //
-        //   genderInfo.style.display = 'block';
-        //   genderSelect.innerText = genders[i].value;
-
       } else {
         genderInfo.style.display = 'none';
       }
@@ -295,11 +328,11 @@ function ellipsisEvents(mainText, hide) {
 
         if (tooltip.className === hide) {
           tooltip.classList.add('show');
-          console.log('added show classname = ', tooltip.className);
-          console.log(event.target);
+          // console.log('added show classname = ', tooltip.className);
+          // console.log(event.target);
         } else {
           tooltip.classList.remove('show');
-          console.log('removed show classname = ', tooltip.className);
+        //  console.log('removed show classname = ', tooltip.className);
         }
       });
 
@@ -399,7 +432,7 @@ function ifUserIsTrue() {
 
               for (let z in otherMeetUpId) {
                 dataList.push(z);
-                console.log('dataList later ', dataList);
+            //    console.log('dataList later ', dataList);
 
                 db.ref('meetups/' + otherEventId).once('value', function(snapshot) {
                   let snap = snapshot.val();
@@ -483,7 +516,7 @@ function ifUserIsTrue() {
 
             if (createdCards) {
               for (var i = 0; i < createdCards.length; i++) {
-                console.log('color ', allUsers[x].info.createcolor);
+              //  console.log('color ', allUsers[x].info.createcolor);
                 createdCards[i].firstElementChild.style.backgroundColor = allUsers[x].info.createcolor;
               }
             }
@@ -530,7 +563,7 @@ function ifUserIsTrue() {
       fetchUserInfo(userLog.uniqueID);
 
       if (userStory.className === 'user-story') {
-          userDefaultText.style.display = 'none';
+        userDefaultText.style.display = 'none';
         userStory.classList.add('show');
         userDescription.style.display = 'block';
         userEdit.classList.add('abort');
@@ -538,8 +571,8 @@ function ifUserIsTrue() {
         saveBtn.style.display = 'block';
       } else {
         userStory.classList.remove('show');
-        userDescription.style.display = 'none';
-          userDefaultText.style.display = 'none';
+        userDescription.style.display = 'block';
+        userDefaultText.style.display = 'none';
         userStory.classList.remove('show');
         userEdit.classList.remove('abort');
         userEdit.innerText = 'Ändra din information';
@@ -753,19 +786,19 @@ function profilFunction(event) {
       for (let x in changed) {
         if (x === dataList[i]) {
           date = changed[x].eventDate.split('kl')[0] + 'kl ';
-          console.log(date);
+          //console.log(date);
           let update = document.getElementById('meetup-' + x);
           let meetupHolder = update.firstElementChild.firstElementChild.children;
           let adressHolder = update.children[1].lastElementChild.lastElementChild.children;
           let time = update.children[1].children[1].children[1].children[1];
-          console.log('time ', time);
+          //console.log('time ', time);
 
           let meetupName = meetupHolder[1];
           let meetupNameHidden = meetupHolder[2].firstElementChild;
           let creatorNameInHide = meetupHolder[2].lastElementChild;
           let creatorName = meetupHolder[3];
           let creatorNameHidden = meetupHolder[4];
-          console.log(changed[x]);
+        //  console.log(changed[x]);
           meetupName.innerText = changed[x].name;
           meetupNameHidden.innerText = changed[x].name;
           creatorNameInHide.innerText = changed[x].creator.fullname;
@@ -784,12 +817,12 @@ function profilFunction(event) {
 
 
 
-
-          console.log('meetupName ', meetupName);
-          console.log('meetupNameHidden ', meetupNameHidden);
-          console.log('creatorNameInHide ', creatorNameInHide);
-          console.log('creatorName ', creatorName);
-          console.log('creatorNameHidden ', creatorNameHidden);
+          //
+          // console.log('meetupName ', meetupName);
+          // console.log('meetupNameHidden ', meetupNameHidden);
+          // console.log('creatorNameInHide ', creatorNameInHide);
+          // console.log('creatorName ', creatorName);
+          // console.log('creatorNameHidden ', creatorNameHidden);
         }
 
       }
