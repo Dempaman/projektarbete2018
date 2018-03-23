@@ -1236,7 +1236,7 @@ function displayEventInfo(event){
   eventInfoText.innerHTML = `<p>${attractionText}</p>`;
 
   retrieveMeetupInfo(displayDate(event.date, event.weekDay, event.offsale, false, true));
-  //updateEventInfo(event);
+  updateEventInfo(event);
 }
 
 function retrieveEventInfo(){
