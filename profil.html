@@ -8,7 +8,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1">
 
   <!--Google fonts-->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet">
   <link href="icons/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
   <!--Title of page-->
   <title>Profil</title>
@@ -40,7 +42,7 @@
   <nav id="navigation">
     <!--<a href="#"><img src="./img/logo-design3.png"></a>-->
     <div class="header">
-      <a href="/index.html"> <img src="img/logo-design3.png" alt="Event"></a>
+      <a href="index.html"><img src="img/logo-design3.png" alt="Event"></a>
       <div id="helloUser" class="hidden">
         <span id="userName"></span>
         <span id="notificationBell" class="hidden">
@@ -49,9 +51,9 @@
       </div>
       <!-- HTML för desktopläge i nav -->
       <ul class="deskNav">
-        <li><a href="/index.html">HEM</a></li>
-        <li id="myProfile" class="hidden"><a href="/profil.html">MIN PROFIL</a></li>
-        <li><a href="/events.html">ALLA EVENTS</a></li>
+        <li><a href="index.html">HEM</a></li>
+        <li id="myProfile" class="hidden"><a href="profil.html">MIN PROFIL</a></li>
+        <li><a href="events.html">ALLA EVENTS</a></li>
         <li><a href="#contactUs">KONTAKTA OSS</a></li>
         <li class="loginInMenu">LOGGA IN</li>
       </ul>
@@ -62,23 +64,29 @@
       A fake / hidden checkbox is used as click reciever,
       so you can use the :checked selector on it.
       -->
-      <input type="checkbox" />
+      <input type="checkbox"/>
 
-      <!--Some spans to act as a hamburger.-->
+      <!--
+      Some spans to act as a hamburger.
+      -->
       <span></span>
       <span></span>
       <span></span>
 
-      <!--Too bad the menu has to be inside of the button but hey, it's pure CSS magic.  -->
+      <!--
+      Too bad the menu has to be inside of the button
+      but hey, it's pure CSS magic.
+      -->
       <ul id="menu">
-        <li><a href="/index.html">HEM</a></li>
-        <li id="myProfileMob" class="hidden"><a href="/profil.html">MIN PROFIL</a></li>
-        <li><a href="/events.html">ALLA EVENTS</a></li>
+        <li><a href="index.html" >HEM</a></li>
+        <li id="myProfileMob" class="hidden"><a href="profil.html">MIN PROFIL</a></li>
+        <li><a href="events.html">ALLA EVENTS</a></li>
         <li><a href="#contactUs">KONTAKTA OSS</a></li>
         <li class="loginInMenu"><a>LOGGA IN</a></li>
       </ul>
     </div>
   </nav>
+
 
   <div id="menuDiv"></div>
   <!-- Menu End -->

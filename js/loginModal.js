@@ -471,7 +471,7 @@ function retrieveLoginModalContent(){
       }else if (name.length < 3){
         printMessage('error', 'för kort namn');
       }else if (name.length > 24){
-        printMessage('error', 'för långt namn');
+        printMessage('error', 'för långt namn, max 24 tecken');
       }else if (!name.match(regexp)){
         printMessage('error', 'använda bara bokstäver');
       }else{
