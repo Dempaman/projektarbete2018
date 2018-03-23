@@ -183,10 +183,14 @@ function retrieveMeetupInfo(eventDate){
         cardDate.innerText = eventDate + obj.time;
 
         // Splice latitude and longitude
-        let latitude = obj.latitude.substring(0,9);
-        let longitude = obj.longitude.substring(0,9);
-        ////console.log('LATITUDE!!', latitude);
-        ////console.log('LONGITUDE!!', longitude);
+        let latitude = obj.latitude;
+        if(latitude){
+          latitude = latitude.substring(0,9);
+        }
+        let longitude = obj.longitude;
+        if(longitude){
+          longitude = longitude.substring(0,9);
+        }
 
 
         let googleMapDiv = document.createElement('div');
