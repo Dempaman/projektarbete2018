@@ -183,10 +183,14 @@ function retrieveMeetupInfo(eventDate){
         cardDate.innerText = eventDate + obj.time;
 
         // Splice latitude and longitude
-        let latitude = obj.latitude.substring(0,9);
-        let longitude = obj.longitude.substring(0,9);
-        ////console.log('LATITUDE!!', latitude);
-        ////console.log('LONGITUDE!!', longitude);
+        let latitude = obj.latitude;
+        if(latitude){
+          latitude = latitude.substring(0,9);
+        }
+        let longitude = obj.longitude;
+        if(longitude){
+          longitude = longitude.substring(0,9);
+        }
 
 
         let googleMapDiv = document.createElement('div');
@@ -1255,7 +1259,7 @@ function retrieveEventInfo(){
         return response.json();
       })
       .then(function(json){
-        ////console.log('EVENTOBJECT without formatting:',json);
+        console.log('EVENTOBJECT without formatting:',json);
 
         if(json.errors){
           printMessage('error', json.errors[0].description);
@@ -1284,6 +1288,11 @@ function retrieveEventInfo(){
           if(!date){
             date = event.date;
           }
+          if(!priceRanges){
+            priceRanges = 'Inga priser hittades';
+          } else {
+            priceRanges = [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max];
+          }
 
           if(!imageURL){
             ////console.log('ImageURL:', imageURL);
@@ -1293,7 +1302,7 @@ function retrieveEventInfo(){
           // createMarker(latitude, longitude);
           ////console.log('ImageUrl', imageURL);
 
-          let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, [priceRanges.including_ticket_fees.min, priceRanges.including_ticket_fees.max], event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale, mainCategory, event.attractions, promoter);
+          let eventObject = new EventClass(eventid, event.name, date, venue.name, address.address, address.city, event.properties.seats_avail, event.properties.minimum_age_required, priceRanges, event.currency, 'EventInformation', event.images[0].url, event.day_of_week, offsale, mainCategory, event.attractions, promoter);
 
           ////console.log('EVENTOBJECT: ',eventObject);
 
